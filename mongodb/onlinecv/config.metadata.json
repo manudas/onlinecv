@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"onlinecv.config"},{"v":2,"unique":true,"key":{"key":1},"name":"_key_index","ns":"onlinecv.config"}],"uuid":"e23ea0c95c804de5b0168a986485138b"}

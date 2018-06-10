@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"onlinecv.hobbies"},{"v":2,"unique":true,"key":{"language":1,"name":1},"name":"_hobbies_language_index","ns":"onlinecv.hobbies"},{"v":2,"key":{"name":1},"name":"_hobbies_index","ns":"onlinecv.hobbies"}],"uuid":"8a39f38532e14dea8da12083d2285431"}

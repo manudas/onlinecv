@@ -1,0 +1,11 @@
+{
+  "name": "manu.app",
+  "version": "1.0.0",
+  "description": "Your online resume with React-Redux and NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Manuel José Pulgar Anguita",
+  "license": "ISC"
+}

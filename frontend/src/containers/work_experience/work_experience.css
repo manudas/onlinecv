@@ -1,0 +1,38 @@
+/* ==========================================================
+! 9. Section: Education and Work Experience
+========================================================== */
+
+.line-content-education {
+    padding-bottom: 10px;
+}
+
+@media (min-width:992px) {
+    .line-content-education {
+        min-height: 150px;
+    }
+}
+
+.graduation-time,
+.job {
+    font-size: 14px;
+    font-weight: bold;
+    color: #999999;
+}
+
+.graduation-date,
+.job-date {
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 200;
+}
+
+.graduation-description,
+.job-description {
+    font-size: 13px;
+}
+
+.graduation-description p,
+.job-description p {
+    font-size: 13px;
+    line-height: 19px;
+}

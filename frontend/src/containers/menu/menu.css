@@ -1,0 +1,155 @@
+/* ==========================================================
+! 5. Side Menu
+========================================================== */
+
+.side-menu-open {
+    position: fixed;
+    left: 0;
+    height: 100%;
+    cursor: pointer;
+    z-index: 777;
+}
+
+.side-menu-button {
+    font-weight: bold;
+    display: block;
+    top: 80px;
+    margin-top: 40px;
+    height: 60px;
+    line-height: 60px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background: #333;
+    border-radius: 0;
+    opacity: 0.9;
+}
+
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background: #111;
+    color: #fafafa;
+    padding: 60px 22px;
+    z-index: 888;
+    opacity: 0.9;
+}
+
+.side-menu a {
+    color: #fafafa;
+}
+
+.side-menu p {
+    color: #fafafa;
+}
+
+.side-menu-nav {
+    list-style: none;
+    width: 100%;
+    margin-bottom: 45px;
+}
+
+.side-menu-nav li {
+    display: block;
+    width: 100%;
+    font-size: 14px;
+    border-bottom: 1px dotted #616161;
+    background: none !important;
+}
+
+.side-menu-nav li a {
+    color: #d8d8d8;
+    background: none !important;
+    display: block;
+    width: 100%;
+    font-weight: 200;
+    height: 35px;
+    line-height: 35px;
+    padding: 0 !important;
+    text-transform: uppercase;
+    transition: all 0.3s ease-in-out;
+}
+
+.side-menu-nav li a:hover {
+    padding-left: 5px !important;
+    color: #fff;
+    font-weight: 300;
+    text-decoration: none;
+}
+
+.side-menu-nav li.active a {
+    padding-left: 5px !important;
+    color: #fff;
+    font-weight: 300;
+    text-decoration: none;
+    background: none !important;
+}
+
+.nav>li>a {
+    padding: 0;
+}
+
+.nav>li>a:hover {
+    background: none;
+}
+
+.side-menu-name {
+    border: 2px solid #fafafa;
+    color: #fafafa;
+    opacity: 0.9;
+    text-align: center;
+    font-size: 22px;
+    text-transform: uppercase;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-weight: 200;
+}
+
+.side-menu-job {
+    margin-bottom: 40px;
+    text-align: center;
+    font-weight: 200;
+    font-size: 12px;
+    margin-top: 5px;
+    color: #d8d8d8;
+}
+
+#side-menu-close {
+    font-size: 18px;
+    color: #fff;
+    opacity: 0.5;
+    transition: all 0.2s ease-in-out;
+    position: absolute;
+    right: 8px;
+    top: 3px;
+    cursor: pointer;
+}
+
+#side-menu-close:hover {
+    opacity: 1;
+}
+
+.btn-side-menu {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: none;
+    border: 1px solid #ffffff;
+    border-radius: 0;
+    height: 40px;
+    line-height: 40px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    font-weight: 200;
+    font-size: 10px;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-side-menu:hover {
+    background: #ffffff;
+    opacity: 0.8;
+}

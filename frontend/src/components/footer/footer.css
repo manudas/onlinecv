@@ -1,0 +1,27 @@
+/* ==========================================================
+! 14. Footer
+========================================================== */
+
+#footer {
+    background: #ce5f5f;
+    color: #fff;
+    padding-top: 17px;
+    padding-bottom: 17px;
+    text-align: center;
+    margin-top: 130px;
+}
+
+#footer p {
+    color: #fff;
+}
+
+#footer .quote {
+    font-size: 22px;
+    font-weight: 200;
+    margin-bottom: 5px;
+}
+
+#footer .author {
+    font-size: 14px;
+    font-weight: bold;
+}
