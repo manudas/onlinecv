@@ -11,6 +11,7 @@
   "dependencies": {
     "express": "^4.16.3",
     "mongoose": "^5.1.2",
-    "node-datetime": "^2.0.6"
+    "node-datetime": "^2.0.6",
+    "npm": "^6.9.0"
   }
 }

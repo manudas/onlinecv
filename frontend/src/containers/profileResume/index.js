@@ -2,17 +2,46 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 
-import { getBase64ImageMimeType } from './../../helpers/image';
+import { getBase64ImageMimeType, bufferToBase64 } from './../../helpers/image';
 
 import './profileResume.css';
 
 class ProfileResume extends Component {
     constructor(props) {
         super(props);
+	}
+	
+    translateString(string) {
+        let translations = this.props.translations
+            ? this.props.translations
+            : null;
+        let result = translations && translations[string] ? translations[string] : null;
+        if (result) {
+            return result["text"];
+        } else {
+            return string + "_translation";
+        }
     }
 
     render() {
-        let _profilePicture = this.props.profilePicture ? `data:${getBase64ImageMimeType(this.props.profilePicture)};base64,${this.props.profilePicture}` : null;
+        if (!this.props.details) {
+            return null;
+        }
+        
+        const _profilePicture = this.props.profilePicture ? `data:${getBase64ImageMimeType(this.props.profilePicture)};base64,${this.props.profilePicture}` : null;
+        
+        let name = this.props.details && this.props.details.name ? this.props.details.name : 'Name ex.';
+        let surname = this.props.details && this.props.details.surname ? this.props.details.surname : 'LastName ex.';
+        name = name.split(' ')[0];
+        surname = surname.split(' ')[0];
+        
+        const primaryJobName = this.props.details && this.props.details.primaryJobName ? this.props.details.primaryJobName : null;
+        const secondaryJobName = this.props.details && this.props.details.secondaryJobName ? this.props.details.secondaryJobName : null;
+        
+        const smallDescription = this.props.details && this.props.details.smallDescription ? 
+                                    this.props.details.smallDescription
+                                    : null;
+
         /* =============== PROFILE INTRO ====================*/
         return (
             <div className="profile-intro row">
@@ -37,13 +66,17 @@ class ProfileResume extends Component {
                 {/* Right Columm */}
                 <div className="col-md-7">
                     {/* Welcome Title*/}
-                    <h1 className="intro-title1">Hi, i'm <span className="color1 bold">John Rex!</span></h1>
-                    {/* /Welcome Title */}
+                    <h1 className="intro-title1">{this.translateString('salutations')} 
+                        <span className="color1 bold"> {name} {surname}!</span>
+                    </h1>
+                    {/* Welcome Title */}
                     {/* Job - */}
-                    <h2 className="intro-title2">Designer / Web Developer</h2>
-                    {/* /job */}
+                    <h2 className="intro-title2">
+                        {primaryJobName} {(primaryJobName && secondaryJobName) ? '/' : ''} {secondaryJobName}
+                    </h2>
+                    {/* job */}
                     {/* Description */}
-                    <p><strong>Turpis, sit amet iaculis dui consectetur at.</strong> Cras sagittis molestie orci. <strong>Suspendisse ut laoreet mi</strong>. Phasellus eu tortor vehicula, blandit enim eu, auctor massa. Nulla ultricies tortor dolor, sit amet suscipit enim <strong>condimentum id</strong>. Etiam eget iaculis tellus.  Varius sit amet.</p>
+                    <p className="text-justify" dangerouslySetInnerHTML={{__html: smallDescription}}></p>
                 {/* /Description */}
                 </div>
             {/* /Right Collum */}
@@ -54,12 +87,24 @@ class ProfileResume extends Component {
 }
 
 function mapStateToProps(state) {
-    let data = (state && state.data) ? state.data : null;
-    let profile_picture = (data && data.images && data.images.profile_picture) ? data.images.profile_picture : null;
-    let resume = (data && data.resume) ? data.resume : null;
+    const data = (state && state.data) ? state.data : null;
+    const profile_picture = (data && data.images && data.images.profile_picture) ? data.images.profile_picture : null;
+    const resume = (data && data.resume) ? data.resume : null;
+    const details = (data && data.details) ? data.details : null;
+    const language = (state && state.language) ? state.language : null;
+    const translations =
+        data &&
+        data.translations &&
+        data.translations[language] &&
+        data.translations[language]['ProfileResume']
+            ? data.translations[language]['ProfileResume']
+            : null;
     return {
-        profilePicture: profile_picture ? Buffer.from(profile_picture.value.data).toString('base64') : null,
-        resume: resume
+        profilePicture: profile_picture ? bufferToBase64(profile_picture.value) : null,
+        resume: resume,
+        details: details,
+        translations: translations,
+        language: language,
     };
 }
 

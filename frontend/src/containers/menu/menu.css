@@ -34,7 +34,7 @@
     color: #fafafa;
     padding: 60px 22px;
     z-index: 888;
-    opacity: 0.9;
+	opacity: 0.9;
 }
 
 .side-menu a {
@@ -153,3 +153,34 @@
     background: #ffffff;
     opacity: 0.8;
 }
+
+
+/* ANIMATION CSS */
+
+@keyframes menuMouseEnter {
+	0%		{ left: -250px; }
+	100% 	{ left: 0px; }
+}
+
+@keyframes menuClose {
+	0% 		{ left: 0px; }
+	100%	{ left: -250px; }
+}
+
+.side-menu-open_hover {
+	animation-name: menuMouseEnter;
+	animation-duration: 0.6s;
+	animation-timing-function: ease-out;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards
+}
+
+.side-menu-close-animation {
+	animation-name: menuClose;
+	animation-duration: 0.6s;
+	animation-timing-function: ease-out;
+	animation-iteration-count: 1;
+	animation-fill-mode: forwards
+}
+
+/* END OF ANIMATION CSS */

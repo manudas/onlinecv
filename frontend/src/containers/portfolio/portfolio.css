@@ -12,7 +12,8 @@
     width: 200px;
     height: 180px;
     overflow: hidden;
-    background: none;
+	background: none;
+	margin-right: 5px;
 }
 
 .portfolio-item:hover img {
@@ -81,35 +82,44 @@
     font-weight: 200;
 }
 
-.bx-controls-direction {
-    margin-top: 5px;
+/* Gallery */
+.ril-caption-content {
+	margin-right: auto;
+	margin-left: auto
+}
+/* End of Gallery */
+
+/* Special effects */
+.portfolio-item:hover .hover {
+	display: block;
+}
+.portfolio-item:hover .hover-bg {
+	display: block;
+}
+.portfolio-item:hover .hover-bg-wrapper {
+	display: block;
 }
 
-.bx-controls-direction .disabled {
-    opacity: 0.3;
-    cursor: default;
-    background: #333;
-}
 
-.bx-controls-direction .disabled:hover {
-    background: #333;
-}
+@keyframes fadeInUp {
+	0% {
+	  opacity: 0;
+	  transform: translateY(20px);
+	}
+  
+	100% {
+	  opacity: 1;
+	  transform: translateY(0);
+	}
+  }
+  
+  .fadeInUp:hover {
+	animation-name: fadeInUp;
+  }
 
-.bx-prev,
-.bx-next {
-    display: inline-block;
-    height: 30px;
-    width: 40px;
-    background: #3b658a;
-    color: #fafafa;
-    text-align: center;
-    line-height: 30px;
-    margin-right: 3px;
-    transition: all 0.2s ease-in-out;
-}
+  .animated {
+	animation-duration: 1s;
+	animation-fill-mode: both;
+  }
 
-.bx-prev:hover,
-.bx-next:hover {
-    color: #fff;
-    background: #083257;
-}
+/* End of special effects */

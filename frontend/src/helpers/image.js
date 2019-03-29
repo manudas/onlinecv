@@ -15,3 +15,7 @@ export function getBase64ImageMimeType(base64_image_string){
     }
     return null;
 }
+
+export function bufferToBase64(buffer) {
+    return Buffer.from(buffer.data).toString('base64')
+}

@@ -22,6 +22,37 @@ class ScrollBar extends Component {
         this.bindedOnMove = this.onMouseMove.bind(this);
         this.bindedOnUp = this.onMouseUp.bind(this);
 
+        this.windowHeight = window.innerHeight;
+        this.innerBarHeight = this.windowHeight / 10;
+
+         /**
+         * @TODO register touchEvent and related behaviour
+         */
+
+        // this.wheel_movement_quantity = this.windowHeight / 10; 
+        this.registerWheelEvent();
+        // this.registerTouchEvent();
+
+    }
+    
+    componentDidMount() {
+       
+    }
+
+    registerWheelEvent(){
+        // window.onWheel = this.onMouseWheel.bind(this);
+        window.addEventListener("wheel", this.onMouseWheel.bind(this));
+    }
+
+    onMouseWheel(event) {
+        const mousedownEvent = document.createEvent('HTMLEvents');
+        mousedownEvent.initEvent('mousedown', true, false);
+        mousedownEvent.clientY = event.deltaY + parseInt(this.state.inner_bar1.top);
+        this._externalBar.dispatchEvent(mousedownEvent);
+
+        const mouseupEvent = document.createEvent('HTMLEvents');
+        mouseupEvent.initEvent('mouseup', true, false);
+        this._externalBar.dispatchEvent(mouseupEvent);
     }
 
     onMouseEnterFunction() {
@@ -66,10 +97,10 @@ class ScrollBar extends Component {
         const inner_bar1_struct = this.state.inner_bar1;
 
         return (
-
             <div key='bar1'
                 id="ascrail2000"
                 className="nicescroll-rails"
+                ref={this.attachExternalBar}
                 style={{
                     width: '12px',
                     zIndex: 'auto',
@@ -85,12 +116,7 @@ class ScrollBar extends Component {
                 onMouseEnter={this.onMouseEnterFunction.bind(this)}
                 onMouseLeave={this.onMouseLeaveFunction.bind(this)}
                 onMouseDown={this.onMouseDown.bind(this)}
-            /* 
-             this two events are asigned to document
-             onMouseMove={this.onMouseMove.bind(this)}
-             
-             */
-            onMouseUp={this.bindedOnUp} 
+                onMouseUp={this.bindedOnUp} 
             >
                 <div
                     onMouseDown={this.onInnerMouseDown.bind(this)}
@@ -98,7 +124,7 @@ class ScrollBar extends Component {
                     style={{
                         position: 'relative',
                         float: 'right',
-                        height: '95px',
+                        height: `${this.innerBarHeight}px`,
                         backgroundColor: 'rgb(0, 0, 0)',
                         border: '1px solid rgb(255, 255, 255)',
                         backgroundClip: 'padding-box',
@@ -110,8 +136,24 @@ class ScrollBar extends Component {
         );
     }
 
-    componentDidMount() {
+    componentDidUpdate() {
+        this.updateDocumentScroll();
+    }
 
+    updateDocumentScroll() {
+        const top_inner_bar = parseInt(this.state.inner_bar1.top);
+        const bottom_inner = top_inner_bar + this.innerBarHeight;
+        const inner_bar_middle_point = (bottom_inner + top_inner_bar) / 2;
+
+        const document_height = document.documentElement.scrollHeight;
+
+        const min_inner_middle_point_allowed = 0 + (this.innerBarHeight / 2);
+        const max_inner_middle_bar_allowed = this.windowHeight - (this.innerBarHeight / 2);
+
+        const _top_scroll_to_percentage = (inner_bar_middle_point - min_inner_middle_point_allowed ) / max_inner_middle_bar_allowed;
+        let _top_scroll_to = ( document_height - this.windowHeight ) * _top_scroll_to_percentage;
+
+        window.scroll(0, _top_scroll_to);
     }
 
     componentWillUpdate = (nextProps, nextState) => {
@@ -203,15 +245,9 @@ class ScrollBar extends Component {
     }
 
     onMouseDown = (event) => {
-        /*
-        const getScrollF = this.getScroll.bind(this);
-        let new_scroll_top = getScrollF(event);
-        */
+        event.preventDefault();
         let new_scroll_top = this.getScroll(event);
         this.setNewPosition(new_scroll_top);
-
-
-
 
         const scroller_bar_height = this._scroller.parentElement.clientHeight;
         const scroller_controller_height = this._scroller.clientHeight;
@@ -229,7 +265,7 @@ class ScrollBar extends Component {
     getRelativeHeight(ev) {
         const element = ev.currentTarget;
         const rect = element.getBoundingClientRect();
-        // var left = ev.clientX - rect.left - element.clientLeft + element.scrollLeft;
+
         const top = ev.clientY - rect.top - element.clientTop + element.scrollTop;
         return top;
     }
@@ -237,6 +273,10 @@ class ScrollBar extends Component {
     attachScroller = (scroller) => {
         this._scroller = scroller;
     };
+
+    attachExternalBar = (bar) => {
+        this._externalBar = bar;
+    }
 }
 
 export default ScrollBar;

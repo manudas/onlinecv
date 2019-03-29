@@ -1,0 +1,153 @@
+import React, { Component } from "react";
+
+import { connect } from "react-redux";
+
+import { bindActionCreators } from 'redux';
+
+import { cvComponentsWereLoadedActionCreator } from '../../actions';
+
+import "./cvcontainer.css";
+
+import ProfileResume from "../../containers/profileResume";
+import ProfileDetail from "../../containers/profileDetails";
+import RegulatedTraining from "../../containers/regulated_training";
+import WorkExperience from "../../containers/work_experience";
+import Skill from "../../containers/skills";
+import Interest from "../../containers/interests";
+import PortFolio from "../../containers/portfolio";
+import ContactForm from "../../containers/contact_form";
+import ThankYou from "../../containers/thank_you";
+import Footer from "../../containers/footer";
+
+class CVContainer extends Component {
+    constructor(props) {
+		super(props);
+		this.refList = [];
+	}
+
+	componentDidUpdate(){
+		this.props.componentsWereLoaded(this.refList);
+	}
+
+    renderHeaderColors() {
+        /* Header Colors */
+        return (
+            <div className="col-md-10 col-sm-10  col-md-offset-2 col-sm-offset-1 clearfix top-colors">
+                <div className="top-color top-color1" />
+                <div className="top-color top-color2" />
+                <div className="top-color top-color3" />
+                <div className="top-color top-color1" />
+                <div className="top-color top-color2" />
+            </div>
+        );
+        /* /Header Colors */
+    }
+
+    renderHeaderButtons() {
+        /* Header Buttons */
+        return (
+            <div className="row">
+                <div className="header-buttons col-md-10 col-md-offset-1">
+                    {/* Download Resume Button */}
+                    <a href="#" className="btn btn-default btn-top-resume">
+                        <i className="fa fa-download" />
+                        <span className="btn-hide-text">
+                            Download my resume
+                        </span>
+                    </a>
+                    {/* /Download Resume Button */}
+                    {/* Mail Button */}
+                    <a href="#" className="btn btn-default btn-top-message">
+                        <i className="fa fa-envelope-o" />
+                        <span className="btn-hide-text">Send me a message</span>
+                    </a>
+                    {/* /Mail Button */}
+                </div>
+            </div>
+        );
+        /* /Header Buttons */
+    }
+
+	addToList(elem, component_name) {
+		const name = this.getComponentTranslatedName(component_name);
+		this.refList.push({
+			component: elem,
+			translated_name: name
+		});
+	}
+
+	getComponentTranslatedName(component_name) {
+		let translations = this.props.translations ? this.props.translations : null;
+		let module_translations = translations && translations[component_name] ? translations[component_name] : null;
+		let result = module_translations && module_translations['name'] ? module_translations['name'] : null;
+		if (result) {
+			return result['text'];
+		} else {
+			return component_name + '_translation';
+		}
+	}
+
+    render() {
+		if (!this.props.data_is_loaded) {
+			return null;
+		}
+        /* CONTENT
+	========================================================= */
+		this.refList.length = 0; // lets reset the array reference before setting it again
+        return (
+            <section id="content-body" className="container animated">
+                <div className="row" id="intro">
+                    {this.renderHeaderColors()}
+                    {/* Beginning of Content */}
+                    <div className="col-md-10 col-sm-10 col-md-offset-2 col-sm-offset-1 resume-container">
+                        {this.renderHeaderButtons()}
+                        <ProfileResume ref={elem => this.addToList(elem, 'ProfileResume')} name={this.getComponentTranslatedName('ProfileResume')}/>
+                        {/* ============  TIMELINE ================= */}
+                        <div className="timeline-wrap">
+                            <div className="timeline-bg">
+                                <ProfileDetail ref={elem => this.addToList(elem, 'ProfileDetail')} name={this.getComponentTranslatedName('ProfileDetail')}/>
+                                <RegulatedTraining ref={elem => this.addToList(elem, 'RegulatedTraining')} name={this.getComponentTranslatedName('RegulatedTraining')}/>
+                                <WorkExperience raf={elem => this.addToList(elem, 'WorkExperience')} name={this.getComponentTranslatedName('WorkExperience')}/>
+                                <Skill ref={elem => this.addToList(elem, 'Skill')} name={this.getComponentTranslatedName('Skill')}/>
+                                <Interest ref={elem => this.addToList(elem, 'Interest')} name={this.getComponentTranslatedName('Interest')}/>
+                                <PortFolio ref={elem => this.addToList(elem, 'PortFolio')} name={this.getComponentTranslatedName('PortFolio')} />
+                                <ContactForm ref={elem => this.addToList(elem, 'ContactForm')} name={this.getComponentTranslatedName('ContactForm')}/>
+                                <ThankYou />
+                            </div>
+                        </div>
+                        {/* ============  /TIMELINE ================= */}
+                        <Footer />
+                    </div>
+                </div>
+            </section>
+        );
+        /* /CONTENT
+    ========================================================= */
+    }
+}
+
+function mapStateToProps(state) {
+    const data = state && state.data ? state.data : null;
+    
+	const data_is_loaded = data !== null;
+	const language = state && state.language ? state.language : null;
+	const translations =
+        data &&
+        data.translations &&
+        data.translations[language]
+            ? data.translations[language]
+            : null;
+    return {
+		data_is_loaded: data_is_loaded,
+		translations: translations,
+		language: language
+    };
+}
+
+function mapDistpatchToProps(dispatch) {
+	return bindActionCreators({
+	  componentsWereLoaded: cvComponentsWereLoadedActionCreator
+	}, dispatch);
+  }
+
+export default connect(mapStateToProps, mapDistpatchToProps)(CVContainer);

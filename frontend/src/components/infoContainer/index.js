@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Menu from '../../containers/menu';
-import CVContainer from '../cvcontainer';
+import CVContainer from '../../containers/cvcontainer';
 import ScrollBar from '../scrollBar';
 
 class InfoContainer extends Component {
@@ -16,7 +16,7 @@ class InfoContainer extends Component {
     return (
       [
         <Menu key='Menu' />,
-        <CVContainer key='CVContainer' />,
+        <CVContainer key='CVContainer' language={this.props.language} />,
         <ScrollBar key='ScrollBar' />
       ]
     );

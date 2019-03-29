@@ -1,177 +1,140 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-import './skills.css';
+import "./skills.css";
 
 class Skill extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            height_title1: 0,
-            height_title2: 0,
-            height_skillItem: null
-        };
-    }
-
-    componentDidMount() {
-        const height_titleRef1 = this.titleRef1.clientHeight;
-        const height_titleRef2 = this.titleRef2.clientHeight;
-        let height_skillItem = [];
-        if (this.skillItem) {
-            this.skillItem.map(
-                (skill_ref, index) => {
-                    height_skillItem[index] = skill_ref.clientHeight;
-                });
+	}
+	
+    translateString(string) {
+        let translations = this.props.translations
+            ? this.props.translations
+            : null;
+        let result = translations && translations[string] ? translations[string] : null;
+        if (result) {
+            return result["text"];
         } else {
-            height_skillItem = null;
+            return string + "_translation";
         }
-        this.setState({
-            height_title1: height_titleRef1,
-            height_title2: height_titleRef2,
-            height_skillItem
-        });
     }
 
     renderSkillItem(skill_item, index) {
+        /* we have three diferent kinds of progress bar
+         * and depending on its index we will assing
+         * one or another
+         */
+
+        const progressBarType = (index + 1) % 3;
+        const skillLevel = skill_item.skill_level
+            ? skill_item.skill_level
+            : "NO DATA ";
+        const skillName = skill_item.name ? skill_item.name : "NO NAME ";
+        const skillDescription = skill_item.description
+            ? skill_item.description
+            : null;
         /* SECTION ITEM */
         return (
-            <div className="line row">
+            <li key={index}>
+                <div className="progress" title={`${skillDescription}`}>
+                    <div
+                        className={`progress-bar progress-bar-${progressBarType}`}
+                        role="progressbar"
+                        data-percent={`${skillLevel}%`}
+                        style={{ width: `${skillLevel}%` }}>
+                        <span className="sr-only">{skillLevel}% Complete</span>
+                    </div>
+                    <span className="progress-type">{skillName}</span>
+                    <span className="progress-completed">{skillLevel}%</span>
+                </div>
+            </li>
+        );
+        /* SECTION ITEM */
+    }
+
+    renderSkillItems(element, index) {
+        
+        return (
+            <div key={element._id} className="line row d-flex">
                 {/* Margin Collums (necessary for the timeline effect) */}
-                <div 
-                style={{ height: this.state.height_skillItem[index] }}
-                className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs"></div>
-                <div 
-                style={{ height: this.state.height_skillItem[index] }}
-                className="col-md-2 timeline-progress hidden-sm hidden-xs full-height timeline-point "></div>
+                <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
+                <div className="col-md-2 timeline-progress hidden-sm hidden-xs full-height timeline-point " />
                 {/* / Margin Collums */}
                 {/* Item Content */}
-                <div 
-                ref={skillItem => this.skillItem[index] = skillItem}
-                className="col-md-8 content-wrap bg1">
+                <div className="col-md-8 content-wrap bg1">
                     <div className="line-content">
                         {/* Subtitle */}
-                        <h3 className="section-item-title-1">Professional Skills</h3>
+                        <h3 className="section-item-title-1">
+                            {element._id}{" "}
+                            {
+								this.translateString('skills')
+							}
+                        </h3>
                         {/* /Subtitle */}
                         {/* content */}
                         <ul className="skills-list">
                             {/* item-list */}
-                            <li>
-                                <div className="progress">
-                                    <div className="progress-bar" role="progressbar" data-percent="70%" style="width: 70%;">
-                                        <span className="sr-only">70% Complete</span>
-                                    </div>
-                                    <span className="progress-type">Comunication</span>
-                                    <span className="progress-completed">70%</span>
-                                </div>
-                            </li>
-                            {/* /item list */}
-                            {/* item-list */}
-                            <li>
-                                <div className="progress">
-                                    <div className="progress-bar progress-bar-2" role="progressbar" data-percent="90%" style="width: 90%;">
-                                        <span className="sr-only">90% Complete</span>
-                                    </div>
-                                    <span className="progress-type">Leadership</span>
-                                    <span className="progress-completed">90%</span>
-                                </div>
-                            </li>
-                            {/* /item list */}
-                            {/* item-list */}
-                            <li>
-                                <div className="progress" title="Doing my best!">
-                                    <div className="progress-bar progress-bar-3" role="progressbar" data-percent="85%" style="width: 85%;">
-                                        <span className="sr-only">85% Complete</span>
-                                    </div>
-                                    <span className="progress-type">Confidence</span>
-                                    <span className="progress-completed">85%</span>
-                                </div>
-                            </li>
-                        {/* /item list */}
+                            {element.value.map((skill, index) =>
+                                this.renderSkillItem(skill, index)
+                            )}
+                            {/* item list */}
                         </ul>
-                    {/* /Content */}
+                        {/* /Content */}
                     </div>
                 </div>
                 {/* /Item Content */}
                 {/* Margin Collum*/}
-                <div 
-                style={{ height: this.state.height_skillItem[index] }}
-                className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs"></div>
-            {/* /Margin Collum*/}
+                <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
+                {/* /Margin Collum*/}
             </div>
         );
-        /* /SECTION ITEM */
-    }
-
-    renderSkillItems() {
-        if (!this.props.skills) {
-            return null;
-        } else {
-            return (
-                this.props.skills.map((skill, index) => {
-                    return this.renderSkillItem(skill, index)
-                })
-            );
-        }
     }
 
     renderTitle() {
-        return (
-            [
-                /* VERTICAL MARGIN (necessary for the timeline effect) */
-                <div key='1' className="line row timeline-margin">
-                    <div 
-                    ref={titleRef1 => this.titleRef1 = titleRef1}
-                    className="content-wrap">
-                        <div 
-                        style={{ height: this.state.height_title1 }}
-                        className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs"></div>
-                        <div 
-                        style={{ height: this.state.height_title1 }}
-                        className="col-md-2 timeline-progress hidden-sm hidden-xs full-height"></div>
-                        <div 
-                        style={{ height: this.state.height_title1 }}
-                        className="col-md-9 bg1 full-height"></div>
-                    </div>
-                </div> ,
-                /* /VERTICAL MARGIN */
-                /* SECTION TITLE */
-                <div key='2' className="line row">
-                    {/* VERTICAL MARGIN (necessary for the timeline effect) */}
-                    <div 
-                    style={{ height: this.state.height_title2 }}
-                    className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs"></div>
-                    <div 
-                    style={{ height: this.state.height_title2 }}
-                    className="col-md-2 timeline-progress hidden-sm hidden-xs timeline-title full-height"></div>
-                    {/* /VERTICAL MARGIN (necessary for the timeline effect) */}
-                    {/* Item Content */}
-                    <div 
-                    ref={titleRef2 => this.titleRef2 = titleRef2}
-                    className="col-md-8 content-wrap bg1">
-                        {/* Section title */}
-                        <h2 className="section-title">Skills</h2>
+        return [
+            /* VERTICAL MARGIN (necessary for the timeline effect) */
+            <div key="1" className="line row timeline-margin content-wrap">
+                <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
+                <div className="col-md-2 timeline-progress hidden-sm hidden-xs full-height" />
+                <div className="col-md-9 bg1 full-height" />
+            </div>,
+            /* /VERTICAL MARGIN */
+            /* SECTION TITLE */
+            <div key="2" className="line row d-flex">
+                {/* VERTICAL MARGIN (necessary for the timeline effect) */}
+                <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
+                <div className="col-md-2 timeline-progress hidden-sm hidden-xs timeline-title full-height" />
+                {/* /VERTICAL MARGIN (necessary for the timeline effect) */}
+                {/* Item Content */}
+                <div className="col-md-8 content-wrap bg1">
+                    {/* Section title */}
+                    <h2 className="section-title">
+                        {this.props.name}
+                    </h2>
                     {/* /Section title */}
-                    </div>
-                    {/* /Item Content */}
-                    {/* Margin Collum*/}
-                    <div 
-                    style={{ height: this.state.height_title2 }}
-                    className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs"></div>
-                {/* /Margin Collum*/}
                 </div>
-                /* /SECTION TITLE */
-            ]
-        );
+                {/* /Item Content */}
+                {/* Margin Collum*/}
+                <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
+                {/* /Margin Collum*/}
+            </div>
+            /* /SECTION TITLE */
+        ];
     }
 
     render() {
+        if (!this.props.skills) {
+            return null;
+        }
         /* ====>> SECTION: SKILLS <<====*/
         return (
             <section className="timeline skills" id="skills">
                 {this.renderTitle()}
-                {this.renderSkillItems()}
+                {this.props.skills.map((skill, index) =>
+                    this.renderSkillItems(skill, index)
+                )}
             </section>
         );
         /* ==>> /SECTION: SKILLS */
@@ -179,11 +142,22 @@ class Skill extends Component {
 }
 
 function mapStateToProps(state) {
+    const data = state && state.data ? state.data : null;
+    const skills = data && data.skills ? data.skills : null;
+    const language = state && state.language ? state.language : null;
+    const translations =
+        data &&
+        data.translations &&
+        data.translations[language] &&
+        data.translations[language]['Skill']
+            ? data.translations[language]['Skill']
+            : null;
+
     return {
-        computer_knowledge: state.computer_knowledge,
-        knowledge: state.knowledge,
-        languages: state.languages
+        skills: skills,
+        translations: translations,
+        language: state.language
     };
 }
-  
+
 export default connect(mapStateToProps)(Skill);

@@ -5,7 +5,7 @@ export default function (state = null, action) {
     let payload = action.payload;
     switch (action.type) {
         case dataLoaded:
-            var result = {...payload};
+            let result = {...payload};
             if (!payload.images || !payload.images.bgimage) {
                 result.images.bgimage = (state && state.images && state.images.bgimage) 
                                             ? state.images.bgimage : null;

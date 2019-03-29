@@ -52,16 +52,6 @@ body {
     padding: 10px;
 }
 
-@media (min-width: 240px) and (max-width: 719px) {
-    body {
-        background-image: none;
-    }
-}
-
-@media (min-width:992px) {
-    padding: 0px;
-}
-
 ul {
     margin: 0;
     padding: 0;
@@ -90,12 +80,12 @@ h3 {
 }
 
 .btn:hover .btn-hide-text {
-    width: 125px;
+    max-width: 100%;
     padding-left: 6px;
 }
 
 .btn-top-message:hover .btn-hide-text {
-    width: 105px;
+    max-width: 100%;
     padding-left: 6px;
 }
 
@@ -134,14 +124,15 @@ h3 {
 
 .btn-hide-text {
     display: inline-block;
-    width: 0;
+    max-width: 0;
     overflow: hidden;
     transition: all 0.3s ease-in-out;
     text-align: left;
     line-height: 30px;
     vertical-align: middle;
     text-transform: uppercase;
-    font-size: 10px;
+	font-size: 10px;
+	white-space:nowrap;
 }
 
 .nicescroll-rails {
@@ -241,4 +232,49 @@ p {
     text-transform: uppercase;
     font-size: 20px;
     margin-top: 14px;
+}
+
+.App {
+	padding-bottom: 50%;
+}
+
+.timeline-margin.content-wrap {
+    height: 40px;
+}
+
+@media (min-width:992px) {
+    .timeline-margin.content-wrap {
+        height: 80px;
+    }
+}
+
+@media (min-width:992px) {
+    .timeline-margin-big.content-wrap {
+        height: 260px;
+    }
+}
+
+.line-content {
+    color: #555555;
+    font-size: 16px;
+}
+
+@media (min-width:992px) {
+    .line-content {
+        margin-left: -15px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .line-content {
+        margin-left: -35px;
+    }
+}
+
+.line-content p {
+    font-size: 14px;
+}
+
+a {
+	color: #4683c3;
 }

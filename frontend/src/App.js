@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 
-import './assets/bootstrap/css/bootstrap.css';
-import './assets/font-awesome/css/font-awesome.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
+
 import './App.css';
 
 import PageLoader from './components/pageloader';
 import InfoContainer from './components/infoContainer';
 
-import { getBase64ImageMimeType } from './helpers/image';
+import { getBase64ImageMimeType, bufferToBase64 } from './helpers/image';
 
 import { connect } from 'react-redux';
 
@@ -15,16 +16,19 @@ import { dataDidLoad } from './actions';
 
 import { bindActionCreators } from 'redux';
 
+import { setLanguageAC } from './actions';
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showPageLoader: true,
     }
+    this.props.setLanguage('en'); // in the future, look for a cookie with language content to assign
   }
 
   componentDidMount() {
-    const language = this.props.selectedLanguage ? this.props.selectedLanguage : 'en';
+    const language = this.props.language ? this.props.language : 'en';
     const url = `api/getcontent/${language}?first_time_load`;
     let component = this;
     fetch(url) // Call the fetch function passing the url of the API as a parameter
@@ -61,10 +65,10 @@ class App extends Component {
         className="App">
 
         <PageLoader 
-          onTransitionEnd={this.transitionEnd______________________________________________} 
+          onTransitionEnd={this.transitionEnd} 
           mounted={this.state.showPageLoader} 
-          userData={window.dataSet.userData} />
-        <InfoContainer />
+          userData={this.props.userData} />
+        <InfoContainer language={this.props.language} userData={this.props.userData} />
 
       </div>
     );
@@ -72,16 +76,20 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  let data = (state && state.data) ? state.data : null;
-  let bgimage = (data && data.images && data.images.bgimage) ? data.images.bgimage : null;
+  const data = (state && state.data) ? state.data : null;
+  const bgimage = (data && data.images && data.images.bgimage) ? data.images.bgimage : null;
+  const language = (data && data.language) ? data.language : null;
   return {
-    background: bgimage ? Buffer.from(bgimage.value.data).toString('base64') : null
+    background: bgimage ? bufferToBase64(bgimage.value) : null,
+    language: language,
+    userData: window.dataSet.userData
   };
 }
 
 function mapDistpatchToProps(dispatch) {
   return bindActionCreators({
-    dataLoaded: dataDidLoad
+    dataLoaded: dataDidLoad,
+    setLanguage: setLanguageAC
   }, dispatch);
 }
 
