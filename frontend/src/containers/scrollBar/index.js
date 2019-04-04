@@ -84,7 +84,12 @@ class ScrollBar extends Component {
         body.style.overflowY = "hidden";
 
         this.bindedOnMove = this.onMouseMove.bind(this);
-        this.bindedOnUp = this.onMouseUp.bind(this);
+		this.bindedOnUp = this.onMouseUp.bind(this);
+		
+		this.onInnerMouseDown = this._onInnerMouseDown.bind(this);
+		this.onMouseDown = this._onMouseDown.bind(this);
+		this.onMouseLeaveFunction = this._onMouseLeaveFunction.bind(this);
+		this.onMouseEnterFunction = this._onMouseEnterFunction.bind(this);
 
         this.windowHeight = window.innerHeight;
         this.innerBarHeight = this.windowHeight / 10;
@@ -104,18 +109,20 @@ class ScrollBar extends Component {
     }
 
     onMouseWheel(event) {
-        const mousedownEvent = document.createEvent("HTMLEvents");
-        mousedownEvent.initEvent("mousedown", true, false);
-        mousedownEvent.clientY =
-            event.deltaY + parseInt(this.state.inner_bar1.top, 10);
-        this._externalBar.dispatchEvent(mousedownEvent);
+		if (!this.state.isSoftScrolling) {
+			const mousedownEvent = document.createEvent("HTMLEvents");
+			mousedownEvent.initEvent("mousedown", true, false);
+			mousedownEvent.clientY =
+				event.deltaY + parseInt(this.state.inner_bar1.top, 10);
+			this._externalBar.dispatchEvent(mousedownEvent);
 
-        const mouseupEvent = document.createEvent("HTMLEvents");
-        mouseupEvent.initEvent("mouseup", true, false);
-        this._externalBar.dispatchEvent(mouseupEvent);
+			const mouseupEvent = document.createEvent("HTMLEvents");
+			mouseupEvent.initEvent("mouseup", true, false);
+			this._externalBar.dispatchEvent(mouseupEvent);
+		}
     }
 
-    onMouseEnterFunction() {
+    _onMouseEnterFunction() {
         this.setState({
             bar1: {
                 backgroundColor: "rgb(206, 208, 211)"
@@ -126,7 +133,7 @@ class ScrollBar extends Component {
         });
     }
 
-    onMouseLeaveFunction() {
+    _onMouseLeaveFunction() {
         if (!this.state.isScrolling) {
             this.setState({
                 bar1: {
@@ -166,12 +173,12 @@ class ScrollBar extends Component {
                     borderRadius: "10px",
                     ...bar1_struct
                 }}
-                onMouseEnter={this.onMouseEnterFunction.bind(this)}
-                onMouseLeave={this.onMouseLeaveFunction.bind(this)}
-                onMouseDown={this.onMouseDown.bind(this)}
+                onMouseEnter={this.onMouseEnterFunction}
+                onMouseLeave={this.onMouseLeaveFunction}
+                onMouseDown={this.onMouseDown}
                 onMouseUp={this.bindedOnUp}>
                 <div
-                    onMouseDown={this.onInnerMouseDown.bind(this)}
+                    onMouseDown={this.onInnerMouseDown}
                     ref={this.attachScroller}
                     style={{
                         position: "relative",
@@ -189,37 +196,9 @@ class ScrollBar extends Component {
     }
 
     updateDocumentScroll(updateScroll = true, scrollTo = null) {
-
-
 		const _scrollTo = scrollTo || this.state.scrollTop
 
-		const top_inner_bar = parseInt(
-			
-			
-			_scrollTo, // will it be correct?
-			
-			
-			
-			
-			10);
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		const top_inner_bar = _scrollTo;
 
         const bottom_inner = top_inner_bar + this.innerBarHeight;
         const inner_bar_middle_point = (bottom_inner + top_inner_bar) / 2;
@@ -263,7 +242,7 @@ class ScrollBar extends Component {
     };
 
     onMouseMove = event => {
-        if (this.state.isScrolling) {
+        if (this.state.isScrolling && !this.state.isSoftScrolling) {
             let new_scroll_top = this.getScroll(event);
             this.setNewPosition(new_scroll_top);
 
@@ -340,6 +319,7 @@ class ScrollBar extends Component {
 				!ScrollBar.alreadyScrolledToComponent(nextProps.scrollToComponentData, prevState) &&
 				!ScrollBar.alreadyScrollingToAnotherComponent(nextProps.scrollToComponentData, prevState)) {
 			const currentMillseconds = Date.now();
+			
 			if (!prevState.isSoftScrolling) { // hey, it is deactivated, let's activate it!
 				newDerivedState = {...prevState};
 				newDerivedState.lastScrollingUpdateTime = currentMillseconds;
@@ -424,84 +404,86 @@ class ScrollBar extends Component {
 
 		if (this.state.isSoftScrolling === true) {
 			const timeOutFunction = () => { 
-				const lastScrollingUpdateTime = this.state.lastScrollingUpdateTime;
-				const firstScrollingUpdateTime = this.state.firstScrollingUpdateTime;
-							
-				const scrollToComponent = this.state.scrollToComponentData.component;
-				const positionObj = scrollToComponent.current.getBoundingClientRect();
-				const scrollingUniqueID = scrollToComponent.unique_id;
+				if (this.state.isSoftScrolling === true) { // double checking as we are inside an asynchronous timeout block
+					const lastScrollingUpdateTime = this.state.lastScrollingUpdateTime;
+					const firstScrollingUpdateTime = this.state.firstScrollingUpdateTime;
 
-				/*	
-					100 -> x
-					2000 -> 900 window.innerHeight
+					const scrollToComponent = this.state.scrollToComponentData.component;
+					const positionObj = scrollToComponent.current.getBoundingClientRect();
+					const scrollingUniqueID = this.state.scrollToComponentData.unique_id;
 
-					x = (900*100) / 2000
-							
+					/*	
+						100 -> x
+						2000 -> 900 window.innerHeight
+
+						x = (900*100) / 2000
+								
+						const document_height = document.documentElement.scrollHeight;
+						x = (window.innerHeight * 100 ) / document_height
+						
+						siendo 100 la altura proporcional del ejemplo tenemos si la sustituimos por la profundidad buscada del documento:
+						x = (window.innerHeight * y ) / document_height
+
+					*/
+
+					const height_to_scroll_to = (positionObj.top + window.scrollY) + (this.innerBarHeight/2);
+
 					const document_height = document.documentElement.scrollHeight;
-					x = (window.innerHeight * 100 ) / document_height
-					
-					siendo 100 la altura proporcional del ejemplo tenemos si la sustituimos por la profundidad buscada del documento:
-					x = (window.innerHeight * y ) / document_height
+					const calculated_height_top_innerScrollbar_to_top_component = (window.innerHeight * height_to_scroll_to ) / document_height ;
 
-				*/
+					const scrollBarTop = this.updateDocumentScroll(false, calculated_height_top_innerScrollbar_to_top_component );	
+					const normalizedScrollBarTop = (window.innerHeight * scrollBarTop ) / document_height;
 
-				const height_to_scroll_to = (positionObj.top + window.scrollY) + (this.innerBarHeight/2);
+					const diff = (normalizedScrollBarTop - calculated_height_top_innerScrollbar_to_top_component) ;
 
-				const document_height = document.documentElement.scrollHeight;
-				const calculated_height_top_innerScrollbar_to_top_component = (window.innerHeight * height_to_scroll_to ) / document_height ;
+					const calculated_height = (calculated_height_top_innerScrollbar_to_top_component - diff) ;
 
-				const scrollBarTop = this.updateDocumentScroll(false, calculated_height_top_innerScrollbar_to_top_component );	
-				const normalizedScrollBarTop = (window.innerHeight * scrollBarTop ) / document_height;
-
-				const diff = (normalizedScrollBarTop - calculated_height_top_innerScrollbar_to_top_component) ;
-
-				const calculated_height = (calculated_height_top_innerScrollbar_to_top_component - diff) ;
-
-				let newDerivedState = {};
-				if (lastScrollingUpdateTime > firstScrollingUpdateTime + ScrollBar.softScrollingTime) { // we went so far, we will fix it
-					newDerivedState.lastScrollingUpdateTime = firstScrollingUpdateTime + ScrollBar.softScrollingTime;
-					newDerivedState = Object.assign(newDerivedState,
-													{
-														// isScrolling: true,
-														scrollTop: calculated_height,
-														inner_bar1: Object.assign({}, this.state.inner_bar1, {
-															top: `${calculated_height}px`
-														})
-													}
-					);
-				} else if (lastScrollingUpdateTime ===
-								firstScrollingUpdateTime + ScrollBar.softScrollingTime) { // did we go so far last time? let's fix it
-					newDerivedState.isSoftScrolling = false;
-					newDerivedState.isScrolling = false;
-					// newDerivedState.finishedScrollingTo = scrollToComponent;
-					newDerivedState.lastFinishedSoftScrollingUniqueID = scrollingUniqueID;
-					// newDerivedState.newSoftScrollingUniqueID = null;
-					newDerivedState.scrollFrom = null;
-					newDerivedState.scrollToComponentData = null ;
-				} else {
-					const currentMillseconds = Date.now();
-					const scrollFrom = this.state.scrollFrom;
-					const next_scrolling_step = ScrollBar.calculateSoftScrollToStep(
-						calculated_height - scrollFrom,
-						firstScrollingUpdateTime,
-						currentMillseconds,
-						firstScrollingUpdateTime + ScrollBar.softScrollingTime
-					) + scrollFrom;
-					
+					let newDerivedState = {};
+					if (lastScrollingUpdateTime > firstScrollingUpdateTime + ScrollBar.softScrollingTime) { // we went so far, we will fix it
+						newDerivedState.lastScrollingUpdateTime = firstScrollingUpdateTime + ScrollBar.softScrollingTime;
+						newDerivedState = Object.assign(newDerivedState,
+														{
+															// isScrolling: true,
+															scrollTop: calculated_height,
+															inner_bar1: Object.assign({}, this.state.inner_bar1, {
+																top: `${calculated_height}px`
+															})
+														}
+						);
+					} else if (lastScrollingUpdateTime ===
+									firstScrollingUpdateTime + ScrollBar.softScrollingTime) { // did we go so far last time? let's fix it
+						newDerivedState.isSoftScrolling = false;
+						newDerivedState.isScrolling = false;
+						// newDerivedState.finishedScrollingTo = scrollToComponent;
+						newDerivedState.lastFinishedSoftScrollingUniqueID = scrollingUniqueID;
+						// newDerivedState.newSoftScrollingUniqueID = null;
+						newDerivedState.scrollFrom = null;
+						newDerivedState.scrollToComponentData = null ;
+					} else {
+						const currentMillseconds = Date.now();
+						const scrollFrom = this.state.scrollFrom;
+						const next_scrolling_step = ScrollBar.calculateSoftScrollToStep(
+							calculated_height - scrollFrom,
+							firstScrollingUpdateTime,
+							currentMillseconds,
+							firstScrollingUpdateTime + ScrollBar.softScrollingTime
+						) + scrollFrom;
+						
 
 
-					newDerivedState.lastScrollingUpdateTime = currentMillseconds;
-					newDerivedState = Object.assign(newDerivedState,
-													{
-														isScrolling: true,
-														scrollTop: next_scrolling_step,
-														inner_bar1: Object.assign({}, this.state.inner_bar1, {
-															top: `${next_scrolling_step}px`
-														})
-													}
-					);
+						newDerivedState.lastScrollingUpdateTime = currentMillseconds;
+						newDerivedState = Object.assign(newDerivedState,
+														{
+															isScrolling: true,
+															scrollTop: next_scrolling_step,
+															inner_bar1: Object.assign({}, this.state.inner_bar1, {
+																top: `${next_scrolling_step}px`
+															})
+														}
+						);
+					}
+					this.setState(newDerivedState);
 				}
-				this.setState(newDerivedState);
 			};
 			const bindedTimeOutFunction = timeOutFunction.bind(this);
 			setTimeout(bindedTimeOutFunction
@@ -509,22 +491,26 @@ class ScrollBar extends Component {
 		}
     }
 
-    onMouseDown = event => {
-        event.preventDefault();
-        let new_scroll_top = this.getScroll(event);
-        this.setNewPosition(new_scroll_top);
+    _onMouseDown = event => {
+		if (!this.state.isSoftScrolling) {
+			event.preventDefault();
+			let new_scroll_top = this.getScroll(event);
+			this.setNewPosition(new_scroll_top);
 
-        const scroller_bar_height = this._scroller.parentElement.clientHeight;
-        const scroller_controller_height = this._scroller.clientHeight;
-        if (new_scroll_top + scroller_controller_height > scroller_bar_height) {
-            console.log("ha superado el maximo en down");
-        }
+			const scroller_bar_height = this._scroller.parentElement.clientHeight;
+			const scroller_controller_height = this._scroller.clientHeight;
+			if (new_scroll_top + scroller_controller_height > scroller_bar_height) {
+				console.log("ha superado el maximo en down");
+			}
+		}
     };
 
-    onInnerMouseDown(event) {
-        let relative_height = this.getRelativeHeight(event);
-        this.innerClientY = relative_height;
-        this.innerMouseIsDown = true;
+    _onInnerMouseDown(event) {
+		if (!this.state.isSoftScrolling) {
+			let relative_height = this.getRelativeHeight(event);
+			this.innerClientY = relative_height;
+			this.innerMouseIsDown = true;
+		}
     }
 
     getRelativeHeight(ev) {

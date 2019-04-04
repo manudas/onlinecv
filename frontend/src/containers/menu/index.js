@@ -16,9 +16,23 @@ class Menu extends Component {
             initialState: true
         };
         this.onMouseEnter = this._onMouseEnter.bind(this);
-        this.closeMenu = this._closeMenu.bind(this);
-        this.componentRefs = [];
-    }
+		this.closeMenu = this._closeMenu.bind(this);
+
+		this.componentRefs = [];
+
+		/** Initializing code needed to debounce dispatching to
+		 * action creator cvComponentsWereClicked, so as to not
+		 * flood the application
+		 */
+		this.timestamp = new Date();
+		this.debouncedCvComponentsWereClicked = this._debouncedCvComponentsWereClicked.bind(this);
+	}
+
+	/** Initializing code needed to debounce dispatching to
+	 * action creator cvComponentsWereClicked, so as to not
+	 * flood the application
+	 */
+	static delay = 1500; // how many milliseconds should pass between executions
 
     _closeMenu(event) {
         this.setState({
@@ -56,6 +70,28 @@ class Menu extends Component {
             : "side-menu-close-animation";
     }
 
+	/**
+	 * Debouncing dispatchs to
+	 * cvComponentsWereClicked
+	 * as sometimes the user can
+	 * click different options 
+	 * quickly and therefore
+	 * flood the app
+	 */
+	_debouncedCvComponentsWereClicked(index) {
+		let now = new Date();
+		let timeDistance = (now.getTime() - this.timestamp.getTime());
+		if(timeDistance <= Menu.delay) {
+			return;
+		}
+		this.timestamp = new Date();
+
+		// Your code
+		this.props.cvComponentsWereClicked(
+			this.componentRefs[index]
+		)
+	}
+
     renderComponent(componentWrapper, index) {
         const { component, translated_name } = componentWrapper;
         return (
@@ -63,11 +99,7 @@ class Menu extends Component {
                 <a
                     href="#addAnchor?"
                     ref={(ref) => this.componentRefs[index] = component}
-                    onClick={() =>
-                        this.props.cvComponentsWereClicked(
-                            this.componentRefs[index]
-                        )
-                    }>
+                    onClick={() => this.debouncedCvComponentsWereClicked(index)}>
                     <i className="fa fa-angle-right" /> {translated_name}
                 </a>
             </li>
