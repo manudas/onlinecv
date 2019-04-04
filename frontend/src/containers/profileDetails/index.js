@@ -5,9 +5,6 @@ import { connect } from "react-redux";
 import "./profileDetails.css";
 
 class ProfileDetail extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     renderProfileDetailItem(profile_detail_item, index) {
         /* SECTION ITEM */
@@ -149,7 +146,7 @@ class ProfileDetail extends Component {
         }
         /* ====>> SECTION: PROFILE INFOS <<====*/
         return (
-            <section className="timeline profile-infos">
+            <section ref={ this.props.reference } className="timeline profile-infos">
                 {this.renderTitle()}
                 {this.renderProfileDetailsItems()}
                 {this.renderSocialNetworks()}

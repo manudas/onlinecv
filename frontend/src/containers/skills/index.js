@@ -5,9 +5,6 @@ import { connect } from "react-redux";
 import "./skills.css";
 
 class Skill extends Component {
-    constructor(props) {
-        super(props);
-	}
 	
     translateString(string) {
         let translations = this.props.translations
@@ -130,7 +127,7 @@ class Skill extends Component {
         }
         /* ====>> SECTION: SKILLS <<====*/
         return (
-            <section className="timeline skills" id="skills">
+            <section ref={ this.props.reference } className="timeline skills" id="skills">
                 {this.renderTitle()}
                 {this.props.skills.map((skill, index) =>
                     this.renderSkillItems(skill, index)

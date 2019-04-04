@@ -2,9 +2,9 @@ import React, { Component } from "react";
 
 import { connect } from "react-redux";
 
-import { bindActionCreators } from 'redux';
+import { bindActionCreators } from "redux";
 
-import { cvComponentsWereLoadedActionCreator } from '../../actions';
+import { cvComponentsWereLoadedActionCreator } from "../../actions";
 
 import "./cvcontainer.css";
 
@@ -21,13 +21,13 @@ import Footer from "../../containers/footer";
 
 class CVContainer extends Component {
     constructor(props) {
-		super(props);
-		this.refList = [];
-	}
+        super(props);
+        this.refList = [];
+    }
 
-	componentDidUpdate(){
-		this.props.componentsWereLoaded(this.refList);
-	}
+    componentDidUpdate() {
+        this.props.componentsWereLoaded(this.refList);
+    }
 
     renderHeaderColors() {
         /* Header Colors */
@@ -49,7 +49,7 @@ class CVContainer extends Component {
             <div className="row">
                 <div className="header-buttons col-md-10 col-md-offset-1">
                     {/* Download Resume Button */}
-                    <a href="#" className="btn btn-default btn-top-resume">
+                    <a className="btn btn-default btn-top-resume">
                         <i className="fa fa-download" />
                         <span className="btn-hide-text">
                             Download my resume
@@ -57,7 +57,7 @@ class CVContainer extends Component {
                     </a>
                     {/* /Download Resume Button */}
                     {/* Mail Button */}
-                    <a href="#" className="btn btn-default btn-top-message">
+                    <a className="btn btn-default btn-top-message">
                         <i className="fa fa-envelope-o" />
                         <span className="btn-hide-text">Send me a message</span>
                     </a>
@@ -68,32 +68,41 @@ class CVContainer extends Component {
         /* /Header Buttons */
     }
 
-	addToList(elem, component_name) {
-		const name = this.getComponentTranslatedName(component_name);
-		this.refList.push({
-			component: elem,
-			translated_name: name
-		});
-	}
+    addToList(elem, component_name) {
+        const name = this.getComponentTranslatedName(component_name);
+        this.refList.push({
+            component: elem,
+            translated_name: name
+        });
+        return elem;
+    }
 
-	getComponentTranslatedName(component_name) {
-		let translations = this.props.translations ? this.props.translations : null;
-		let module_translations = translations && translations[component_name] ? translations[component_name] : null;
-		let result = module_translations && module_translations['name'] ? module_translations['name'] : null;
-		if (result) {
-			return result['text'];
-		} else {
-			return component_name + '_translation';
-		}
-	}
+    getComponentTranslatedName(component_name) {
+        let translations = this.props.translations
+            ? this.props.translations
+            : null;
+        let module_translations =
+            translations && translations[component_name]
+                ? translations[component_name]
+                : null;
+        let result =
+            module_translations && module_translations["name"]
+                ? module_translations["name"]
+                : null;
+        if (result) {
+            return result["text"];
+        } else {
+            return component_name + "_translation";
+        }
+    }
 
     render() {
-		if (!this.props.data_is_loaded) {
-			return null;
-		}
+        if (!this.props.data_is_loaded) {
+            return null;
+        }
         /* CONTENT
 	========================================================= */
-		this.refList.length = 0; // lets reset the array reference before setting it again
+        this.refList.length = 0; // lets reset the array reference before setting it again
         return (
             <section id="content-body" className="container animated">
                 <div className="row" id="intro">
@@ -101,17 +110,73 @@ class CVContainer extends Component {
                     {/* Beginning of Content */}
                     <div className="col-md-10 col-sm-10 col-md-offset-2 col-sm-offset-1 resume-container">
                         {this.renderHeaderButtons()}
-                        <ProfileResume ref={elem => this.addToList(elem, 'ProfileResume')} name={this.getComponentTranslatedName('ProfileResume')}/>
+                        <ProfileResume />
                         {/* ============  TIMELINE ================= */}
                         <div className="timeline-wrap">
                             <div className="timeline-bg">
-                                <ProfileDetail ref={elem => this.addToList(elem, 'ProfileDetail')} name={this.getComponentTranslatedName('ProfileDetail')}/>
-                                <RegulatedTraining ref={elem => this.addToList(elem, 'RegulatedTraining')} name={this.getComponentTranslatedName('RegulatedTraining')}/>
-                                <WorkExperience raf={elem => this.addToList(elem, 'WorkExperience')} name={this.getComponentTranslatedName('WorkExperience')}/>
-                                <Skill ref={elem => this.addToList(elem, 'Skill')} name={this.getComponentTranslatedName('Skill')}/>
-                                <Interest ref={elem => this.addToList(elem, 'Interest')} name={this.getComponentTranslatedName('Interest')}/>
-                                <PortFolio ref={elem => this.addToList(elem, 'PortFolio')} name={this.getComponentTranslatedName('PortFolio')} />
-                                <ContactForm ref={elem => this.addToList(elem, 'ContactForm')} name={this.getComponentTranslatedName('ContactForm')}/>
+                                <ProfileDetail
+                                    reference={this.addToList(
+                                        React.createRef(),
+                                        "ProfileDetail"
+                                    )}
+                                    name={this.getComponentTranslatedName(
+                                        "ProfileDetail"
+                                    )}
+                                />
+                                <RegulatedTraining
+                                    reference={this.addToList(
+                                        React.createRef(),
+                                        "RegulatedTraining"
+                                    )}
+                                    name={this.getComponentTranslatedName(
+                                        "RegulatedTraining"
+                                    )}
+                                />
+                                <WorkExperience
+                                    reference={this.addToList(
+                                        React.createRef(),
+                                        "WorkExperience"
+                                    )}
+                                    name={this.getComponentTranslatedName(
+                                        "WorkExperience"
+                                    )}
+                                />
+                                <Skill
+                                    reference={this.addToList(
+                                        React.createRef(),
+                                        "Skill"
+                                    )}
+                                    name={this.getComponentTranslatedName(
+                                        "Skill"
+                                    )}
+                                />
+                                <Interest
+                                    reference={this.addToList(
+                                        React.createRef(),
+                                        "Interest"
+                                    )}
+                                    name={this.getComponentTranslatedName(
+                                        "Interest"
+                                    )}
+                                />
+                                <PortFolio
+                                    reference={this.addToList(
+                                        React.createRef(),
+                                        "PortFolio"
+                                    )}
+                                    name={this.getComponentTranslatedName(
+                                        "PortFolio"
+                                    )}
+                                />
+                                <ContactForm
+                                    reference={this.addToList(
+                                        React.createRef(),
+                                        "ContactForm"
+                                    )}
+                                    name={this.getComponentTranslatedName(
+                                        "ContactForm"
+                                    )}
+                                />
                                 <ThankYou />
                             </div>
                         </div>
@@ -128,26 +193,30 @@ class CVContainer extends Component {
 
 function mapStateToProps(state) {
     const data = state && state.data ? state.data : null;
-    
-	const data_is_loaded = data !== null;
-	const language = state && state.language ? state.language : null;
-	const translations =
-        data &&
-        data.translations &&
-        data.translations[language]
+
+    const data_is_loaded = data !== null;
+    const language = state && state.language ? state.language : null;
+    const translations =
+        data && data.translations && data.translations[language]
             ? data.translations[language]
             : null;
     return {
-		data_is_loaded: data_is_loaded,
-		translations: translations,
-		language: language
+        data_is_loaded: data_is_loaded,
+        translations: translations,
+        language: language
     };
 }
 
 function mapDistpatchToProps(dispatch) {
-	return bindActionCreators({
-	  componentsWereLoaded: cvComponentsWereLoadedActionCreator
-	}, dispatch);
-  }
+    return bindActionCreators(
+        {
+            componentsWereLoaded: cvComponentsWereLoadedActionCreator
+        },
+        dispatch
+    );
+}
 
-export default connect(mapStateToProps, mapDistpatchToProps)(CVContainer);
+export default connect(
+    mapStateToProps,
+    mapDistpatchToProps
+)(CVContainer);

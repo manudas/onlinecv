@@ -14,7 +14,8 @@ export default function (state = null, action) {
                 result.images.profileImage = (state && state.images && state.images.profileImage)
                                                 ? state.images.profileImage : null;
             }
-            return result;
+			return result;
+		default:	
     }
     return state;
 }

@@ -10,7 +10,8 @@ export default function (state = null, action) {
                 result.language = (state && state.language ) 
                                             ? state.language : null;
             }
-            return result;
+			return result;
+		default:
     }
     return state;
 }

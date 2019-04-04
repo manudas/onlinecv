@@ -2,13 +2,9 @@ import React, { Component } from 'react';
 
 import Menu from '../../containers/menu';
 import CVContainer from '../../containers/cvcontainer';
-import ScrollBar from '../scrollBar';
+import ScrollBar from '../../containers/scrollBar';
 
 class InfoContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
 
   render() {
     /* CV container

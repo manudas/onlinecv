@@ -21,3 +21,12 @@ export function cvComponentsWereLoadedActionCreator(data) {
         payload: data
     }
 }
+
+export const cvComponentsWereClicked = 'cvComponentsWereClicked';
+export function cvComponentsWereClickedActionCreator(data) {
+	const id = Date.now();
+	return  {
+        type: cvComponentsWereClicked,
+        payload: {component: data, unique_id: id}
+    }
+}

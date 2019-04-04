@@ -282,7 +282,7 @@ class PortFolio extends Component {
         }
         /* ====>> SECTION: PORTFOLIO <<====*/
         return (
-            <section className="timeline portfolio" id="portfolio">
+            <section ref={ this.props.reference } className="timeline portfolio" id="portfolio">
                 {this.renderTitle()}
                 {this.renderSection()}
                 {this.renderGallerySlider()}

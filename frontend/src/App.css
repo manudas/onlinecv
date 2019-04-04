@@ -91,7 +91,7 @@ h3 {
 
 .btn-default {
     background: #3b658a;
-    color: #fafafa;
+    color: #fafafa!important;
     border: #3b658a;
 }
 

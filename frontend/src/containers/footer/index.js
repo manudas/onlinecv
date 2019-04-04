@@ -5,9 +5,6 @@ import { connect } from 'react-redux';
 import './footer.css';
 
 class Footer extends Component {
-    constructor(props) {
-        super(props);
-	}
 	
     translateString(string) {
         let translations = this.props.translations

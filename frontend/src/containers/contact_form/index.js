@@ -63,8 +63,7 @@ class ContactForm extends Component {
                 <form
                     id="contactForm"
                     method="post"
-                    className="form"
-                    role="form">
+                    className="form">
                     {/* Form Field */}
                     <div className="form-group">
                         <input
@@ -141,7 +140,7 @@ class ContactForm extends Component {
     renderContactInfo() {
         if (
             !this.props.contact_details ||
-            this.props.contact_details.length == 0
+            this.props.contact_details.length === 0
         ) {
             return null;
         }
@@ -204,7 +203,7 @@ class ContactForm extends Component {
         }
         /* ====>> SECTION: CONTACT <<====*/
         return (
-            <section className="timeline" id="contact">
+            <section ref={ this.props.reference } className="timeline" id={this.constructor.name}>
                 {this.renderTitle()}
                 {this.renderSection()}
             </section>

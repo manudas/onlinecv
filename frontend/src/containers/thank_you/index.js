@@ -5,9 +5,6 @@ import { connect } from "react-redux";
 import "./thank_you.css";
 
 class ThankYou extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     translateString(string) {
         let translations = this.props.translations

@@ -3,9 +3,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 class Interest extends Component {
-    constructor(props) {
-        super(props);
-	}
 
     renderInterestItem(interest_item, index) {
         /* SECTION ITEM */
@@ -94,7 +91,7 @@ class Interest extends Component {
         }
         /* ====>> SECTION: INTERESTS <<==== */
         return (
-            <section className="timeline" id="interests">
+            <section ref={ this.props.reference } className="timeline" id="interests">
                 {this.renderTitle()}
                 {this.renderInterestItems()}
             </section>

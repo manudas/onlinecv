@@ -5,10 +5,7 @@ import { connect } from "react-redux";
 import "./regulatedTraining.css";
 
 class RegulatedTraining extends Component {
-    constructor(props) {
-        super(props);
-    }
-
+	
     translateString(string) {
         let translations = this.props.translations
             ? this.props.translations
@@ -173,7 +170,7 @@ class RegulatedTraining extends Component {
         }
         /* ====>> SECTION: TRAINING <<====*/
         return (
-            <section className="timeline training" id="training">
+            <section ref={ this.props.reference } className="timeline training" id="training">
                 {this.renderTitle()}
                 {this.renderRegulatedTrainingItems()}
             </section>

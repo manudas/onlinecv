@@ -7,9 +7,6 @@ import { getBase64ImageMimeType, bufferToBase64 } from './../../helpers/image';
 import './profileResume.css';
 
 class ProfileResume extends Component {
-    constructor(props) {
-        super(props);
-	}
 	
     translateString(string) {
         let translations = this.props.translations

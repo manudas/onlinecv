@@ -5,9 +5,6 @@ import { connect } from "react-redux";
 import "./work_experience.css";
 
 class WorkExperience extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     translateString(string) {
         let translations = this.props.translations
@@ -165,7 +162,7 @@ class WorkExperience extends Component {
         }
         /* ====>> SECTION: WORK EXPERIENCE <<====*/
         return (
-            <section className="timeline work-experience" id="works">
+            <section ref={ this.props.reference } className="timeline work-experience" id="works">
                 {this.renderTitle()}
                 {this.renderWorkExperienceItems()}
             </section>
