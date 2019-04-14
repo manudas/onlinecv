@@ -78,10 +78,11 @@ class ScrollBar extends Component {
             scrollTop: 0
         };
         this.innerClientY = 0;
-        this.innerMouseIsDown = false;
-
+		this.innerMouseIsDown = false;
+		
         const body = document.getElementsByTagName("body")[0];
-        body.style.overflowY = "hidden";
+		body.style.overflowY = "hidden";
+		// body.style.maxHeight = '100%';
 
         this.bindedOnMove = this.onMouseMove.bind(this);
 		this.bindedOnUp = this.onMouseUp.bind(this);
@@ -90,62 +91,28 @@ class ScrollBar extends Component {
 		this.onMouseDown = this._onMouseDown.bind(this);
 		this.onMouseLeaveFunction = this._onMouseLeaveFunction.bind(this);
 		this.onMouseEnterFunction = this._onMouseEnterFunction.bind(this);
+		this.onMouseWheel = this._onMouseWheel.bind(this);
+		this.onFirstTouch = this._onFirstTouch.bind(this);
+		this.onTouchEnd = this._onTouchEnd.bind(this);
+		this.onTouchMove = this._onTouchMove.bind(this);
 
         this.windowHeight = window.innerHeight;
         this.innerBarHeight = this.windowHeight / 10;
 
-        /**
-         * @TODO register touchEvent and related behaviour
-         */
-
-        // this.wheel_movement_quantity = this.windowHeight / 10;
         this.registerWheelEvent();
-        // this.registerTouchEvent();
+        this.registerTouchEvents();
     }
 
     registerWheelEvent() {
         // window.onWheel = this.onMouseWheel.bind(this);
-        window.addEventListener("wheel", this.onMouseWheel.bind(this));
-    }
-
-    onMouseWheel(event) {
-		if (!this.state.isSoftScrolling) {
-			const mousedownEvent = document.createEvent("HTMLEvents");
-			mousedownEvent.initEvent("mousedown", true, false);
-			mousedownEvent.clientY =
-				event.deltaY + parseInt(this.state.inner_bar1.top, 10);
-			this._externalBar.dispatchEvent(mousedownEvent);
-
-			const mouseupEvent = document.createEvent("HTMLEvents");
-			mouseupEvent.initEvent("mouseup", true, false);
-			this._externalBar.dispatchEvent(mouseupEvent);
-		}
-    }
-
-    _onMouseEnterFunction() {
-        this.setState({
-            bar1: {
-                backgroundColor: "rgb(206, 208, 211)"
-            },
-            inner_bar1: Object.assign({}, this.state.inner_bar1, {
-                width: "10px"
-            })
-        });
-    }
-
-    _onMouseLeaveFunction() {
-        if (!this.state.isScrolling) {
-            this.setState({
-                bar1: {
-                    backgroundColor: "transparent"
-                },
-                inner_bar1: Object.assign({}, this.state.inner_bar1, {
-                    width: "6px",
-                    transition: "width 0.15s"
-                })
-            });
-        }
-    }
+        window.addEventListener("wheel", this.onMouseWheel);
+	}
+	
+	registerTouchEvents(){
+		window.addEventListener('touchstart', this.onFirstTouch);
+		window.addEventListener('touchend', this.onTouchEnd);
+		window.addEventListener('touchmove', this.onTouchMove);
+	}
 
     render() {
         const bar1_bc =
@@ -267,7 +234,10 @@ class ScrollBar extends Component {
         ) {
             this.onMouseLeaveFunction(event);
         }
-        event.stopPropagation();
+		event.stopPropagation();
+		if (this.isScollWithMouseWheel) {
+			this.isScollWithMouseWheel = false;
+		}
     };
 
     resetScollerMovementStatus() {
@@ -281,8 +251,10 @@ class ScrollBar extends Component {
     getScroll(event) {
         let new_scroll_top = 0;
         const scroller_bar_height = this._scroller.parentElement.clientHeight;
-        const scroller_controller_height = this._scroller.clientHeight;
-        if (this.innerMouseIsDown) {
+		const scroller_controller_height = this._scroller.clientHeight;
+		if (this.isScollWithMouseWheel) {
+			new_scroll_top = event.clientY;
+		} else if (this.innerMouseIsDown) {
             new_scroll_top =
                 +event.clientY - this.innerClientY; // nueva zona de la barra de scroll donde se ha hecho click // zona dentro del manejador de scroll donde se hizo click
         } else {
@@ -489,6 +461,73 @@ class ScrollBar extends Component {
 			setTimeout(bindedTimeOutFunction
 							, ScrollBar.softScrollingTime / ScrollBar.updateFrequencySoftScrolling);
 		}
+    }
+
+	_onFirstTouch(event){
+		// console.log(event);
+		this.userIsTouching = true;
+		this.lastY_TouchPosition = event.touches[0].clientY;
+	}
+	_onTouchEnd(event){
+		this.userIsTouching = false;
+		this.lastY_TouchPosition = null;
+		// console.log(event);
+	}
+	_onTouchMove(event){
+		
+		if (!this.state.isSoftScrolling) {
+			const currentY = event.touches[0].clientY;
+			const deltaY = this.lastY_TouchPosition - currentY;
+
+			console.log(`Deb: Last: ${this.lastY_TouchPosition}. Current: ${currentY}. DeltaY: ${deltaY}`);
+
+			const mousewheelEvent = document.createEvent("HTMLEvents");
+			mousewheelEvent.initEvent("wheel", true, false);
+			mousewheelEvent.deltaY = deltaY;
+			window.dispatchEvent(mousewheelEvent);
+
+			this.lastY_TouchPosition = event.touches[0].clientY;
+		}
+	}
+
+	_onMouseWheel(event) {
+		if (!this.state.isSoftScrolling) {
+			this.isScollWithMouseWheel = true;
+			const mousedownEvent = document.createEvent("HTMLEvents");
+			mousedownEvent.initEvent("mousedown", true, false);
+			mousedownEvent.clientY =
+				event.deltaY + this.state.scrollTop;
+			this._externalBar.dispatchEvent(mousedownEvent);
+
+			const mouseupEvent = document.createEvent("HTMLEvents");
+			mouseupEvent.initEvent("mouseup", true, false);
+			this._externalBar.dispatchEvent(mouseupEvent);
+		}
+    }
+
+    _onMouseEnterFunction() {
+        this.setState({
+            bar1: {
+                backgroundColor: "rgb(206, 208, 211)"
+            },
+            inner_bar1: Object.assign({}, this.state.inner_bar1, {
+                width: "10px"
+            })
+        });
+    }
+
+    _onMouseLeaveFunction() {
+        if (!this.state.isScrolling) {
+            this.setState({
+                bar1: {
+                    backgroundColor: "transparent"
+                },
+                inner_bar1: Object.assign({}, this.state.inner_bar1, {
+                    width: "6px",
+                    transition: "width 0.15s"
+                })
+            });
+        }
     }
 
     _onMouseDown = event => {

@@ -1,12 +1,12 @@
-var mongoose = require('mongoose');
-var {
+let mongoose = require('mongoose');
+let {
     Schema,
     Model
 } = require('mongoose');
-var promisedProperties = require('../helpers/promisedProperties');
+let promisedProperties = require('../helpers/promisedProperties');
 
-const mongodb_settings = require('./mongo_settings');
-// console.log(mongodb_settings);
+const mongodb_settings = require('/data/config/mongo/mongo_settings');
+// console.log(mongodb_settings); user admin pass Manu3 database admin, onlinecv para onlinecv db
 
 const {
     user,
@@ -18,7 +18,7 @@ const credentials_str = (user && user.length > 0 &&
         password && password.lenght > 0) ?
     `${user}:${password}@` :
     '';
-const connetion_string = `mongodb://${credentials_str}${host}/${database}`;
+const connetion_string = `mongodb://${credentials_str}${host}/${database}?authSource=${database}`;
 
 //mongoose.connect('mongodb://localhost/test');
 //mongoose.connect('mongodb://username:password@host:port/database?options...');
@@ -34,23 +34,31 @@ class api_engine {
     get(command, parameter, query_parameters) {
         let return_val = null;
         switch (command) {
-            case api_engine.command_list.get_content:
+            case this.command_list.get_content:
                 return_val = this.getContent(parameter, query_parameters);
-                break;
-        }
+				break;
+			case this.command_list.get_details:
+				const details = this.getDetails(parameter);
+				const result_promises = new Object();
+				result_promises['details'] = details;
+				return_val = promisedProperties(result_promises).catch(console.error);
+				break;
+		}
+		/*
+		    const details = this.getDetails(language);
+        	result_promises['details'] = details;
+		*/
         return return_val;
     }
 
     getContent(language, query_parameters) {
         const result_promises = new Object();
         // check if string is defined altough empty
-        if (typeof query_parameters.first_time_load !== 'undefined') {
-            var load_images = true;
-            var images = this.load_images();
+        if (typeof query_parameters.load_images !== 'undefined') {
+            let images = this.load_images();
             result_promises['images'] = images;
-        } else {
-            var load_images = false;
-        }
+		}
+		
         /* DATA TO SEND TO REACT FRONTEND:
         <ProfileResume />
         <ProfileDetail />
@@ -60,6 +68,7 @@ class api_engine {
         <Interest />
         <PortFolio />
         */
+
         const resume = this.getResume(language);
         result_promises['resume'] = resume;
 
@@ -115,7 +124,7 @@ class api_engine {
         }
         let translations_schema = api_engine.translations_shema;
         let translations_model = mongoose.model('translations', translations_schema);
-        return translations_model.find(filter).then((promise_resolution) => {
+        return translations_model.find(filter).lean().then((promise_resolution) => {
             const _translations_ = {};
             promise_resolution.forEach(function (value, index) {
                 const current_module = value.module;
@@ -129,7 +138,7 @@ class api_engine {
                 if (!_translations_[_language][current_module][current_tag]) {
                     _translations_[_language][current_module][current_tag] = {};
                 }
-                Object.assign(_translations_[_language][current_module][current_tag], value.toObject());
+                Object.assign(_translations_[_language][current_module][current_tag], value);
             });
             return _translations_;
         }).catch((error) => {
@@ -146,7 +155,7 @@ class api_engine {
             }, {
                 'key': 'profile_picture'
             }]
-        }).then((result) => {
+        }).lean().then((result) => {
             if (result && result.length > 0) {
                 let named_result = {};
                 result.forEach((row) => {
@@ -166,7 +175,7 @@ class api_engine {
         let resume_model = mongoose.model('resume', resume_schema);
         return resume_model.findOne({
             language: _language
-        }).then((result) => {
+        }).lean().then((result) => {
             return result;
         }).catch((error) => {
             console.log(error);
@@ -179,7 +188,7 @@ class api_engine {
         let details_model = mongoose.model('personal_details', details_schema);
         return details_model.findOne({
             language: _language
-        }).then((result) => {
+        }).lean().then((result) => {
             if (result) {
                 result.qr_code = 'remember to implement an "on the fly" qr generator, remove from mongodb';
             }
@@ -194,7 +203,7 @@ class api_engine {
         let regulated_training_model = mongoose.model('regulated_training', regulated_training_schema);
         return regulated_training_model.find({
             language: _language
-        }).then((result) => {
+        }).lean().then((result) => {
             return result;
         }).catch((error) => {
             console.log(error);
@@ -208,7 +217,7 @@ class api_engine {
             language: _language
         }).sort({
             start_date: -1
-        }).then((result) => {
+        }).lean().then((result) => {
             return result;
         }).catch((error) => {
             console.log(error);
@@ -218,40 +227,6 @@ class api_engine {
     getSkills(_language) {
         let skills_schema = api_engine.skills_schema;
         let skills_model = mongoose.model('skills', skills_schema);
-        /*
-        var o = {};
-        o.map = function () { emit(this.type, this) }
-        o.reduce = function (k, vals) {
-            return {array: vals}
-        }
-        o.finalize = function (index, value) {
-            // return index;
-            if (!value.array) {
-                return [value];
-            }
-            else { 
-                return value.array
-            }
-        }
-        o.query = {language : _language};
-        // o.out = { replace: 'createdCollectionNameForResults' }
-        // o.verbose = true;
-        let returned_result = skills_model.mapReduce(o).then(result => result.results);
-        return returned_result;
-        /*
-        return skills_model.aggregate(
-            {"$group" : {_id:{type:"$type"}}},
-            {$sort:{"_id.source":1}}
-        ) .catch((error) => {
-            console.log(error);
-        });
-*/
-        /*
-        // find({ language: _language }).sort({order:1}).then((result) => {
-            return result;
-        })
-        */
-
 
         return skills_model.aggregate([{
                 $lookup: {
@@ -318,7 +293,7 @@ class api_engine {
                     "order": 1
                 }
             }
-        ]).exec();
+        ]).exec(); // no need to lean() as aggrete objects are already plain javascript objects
     }
 
     getLanguages(_language) {
@@ -326,7 +301,7 @@ class api_engine {
         let languages_model = mongoose.model('languages', languages_schema);
         return languages_model.find({
             language: _language
-        }).then((result) => {
+        }).lean().then((result) => {
             return result;
         }).catch((error) => {
             console.log(error);
@@ -338,7 +313,7 @@ class api_engine {
         let interests_model = mongoose.model('interests', interests_schema);
         return interests_model.find({
             language: _language
-        }).then((result) => {
+        }).lean().then((result) => {
             return result;
         }).catch((error) => {
             console.log(error);
@@ -350,7 +325,7 @@ class api_engine {
         let portfolio_model = mongoose.model('portfolio', portfolio_schema);
         return portfolio_model.find({
             language: _language
-        }).then((result) => {
+        }).lean().then((result) => {
             return result;
         }).catch((error) => {
             console.log(error);
@@ -364,7 +339,7 @@ class api_engine {
             language: _language, profile: {$eq: true}
         }).sort({
             order: 1
-        }).then((result) => {
+        }).lean().then((result) => {
             return result;
         }).catch((error) => {
             console.log(error);
@@ -378,7 +353,7 @@ class api_engine {
             language: _language, contact: {$eq: true}
         }).sort({
             order: 1
-        }).then((result) => {
+        }).lean().then((result) => {
             return result;
         }).catch((error) => {
             console.log(error);
@@ -392,17 +367,17 @@ class api_engine {
             language: _language
         }).sort({
             order: 1
-        }).then((result) => {
+        }).lean().then((result) => {
             return result;
         }).catch((error) => {
             console.log(error);
         });
     }
-
 }
 
-api_engine.command_list = {
-    get_content: 'getcontent'
+api_engine.prototype.command_list = {
+	get_content: 'getcontent',
+	get_details: 'getdetails'
 }
 
 api_engine.social_networks_schema = new Schema({
@@ -446,7 +421,10 @@ api_engine.details_schema = new Schema({
     email: String,
     // qr_code: String, // qr_code will be made on the fly
     keywords: [],
-    language: String
+	language: String,
+	primaryJobName: String,
+	secondaryJobName: String,
+	nickname: String
 }, {
     collection: 'personal_details'
 });

@@ -17,5 +17,16 @@ export function getBase64ImageMimeType(base64_image_string){
 }
 
 export function bufferToBase64(buffer) {
-    return Buffer.from(buffer.data).toString('base64')
+	/* Data base may have returned a base64 string,
+	 * so no need to convert it here. Check for it
+	 * and return either the orignal string o the 
+	 * buffer string conversion
+	 */
+	let result = null;
+	if (Buffer.isBuffer(buffer)) {
+		result = Buffer.from(buffer.data).toString('base64');
+	} else if (typeof buffer === 'string' || buffer instanceof String) {
+		result = buffer;
+	}
+	return result;
 }

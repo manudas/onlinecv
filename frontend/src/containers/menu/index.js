@@ -110,7 +110,18 @@ class Menu extends Component {
         if (!this.props.components || this.props.components.length === 0) {
             return null;
         }
-        const components = this.props.components;
+		const components = this.props.components;
+
+		let name = this.props.details && this.props.details.name ? this.props.details.name : 'Name ex.';
+        let surname = this.props.details && this.props.details.surname ? this.props.details.surname : 'LastName ex.';
+        name = name.split(' ')[0];
+        surname = surname.split(' ')[0];
+        
+        const primaryJobName = this.props.details && this.props.details.primaryJobName ? this.props.details.primaryJobName : null;
+		const secondaryJobName = this.props.details && this.props.details.secondaryJobName ? this.props.details.secondaryJobName : null;
+		
+		const jobNames = primaryJobName ? primaryJobName + (secondaryJobName ? `/ ${secondaryJobName}` : '') : ''
+
         return (
             <div className={"side-menu " + this.getSideMenuOpenedStateClass()}>
                 {/*<!-- close button -->*/}
@@ -122,11 +133,11 @@ class Menu extends Component {
                 {/*<!-- Menu header -->*/}
                 <div className="side-menu-name">
                     {/*<!-- edit with your name -->*/}
-                    John <strong>Rex</strong>
+                    {name} <strong>{surname}</strong>
                     {/*<!-- /edit with your name -->*/}
                 </div>
                 {/*<!-- edit with your Job -->*/}
-                <p className="side-menu-job">Designer / Web Developer</p>
+                <p className="side-menu-job">{jobNames}</p>
                 {/*<!-- /edit with your job -->*/}
                 {/*<!-- /Menu Header -->*/}
 
@@ -177,25 +188,14 @@ function mapStateToProps(state) {
     const data = state && state.data ? state.data : null;
 
     const data_is_loaded = data !== null;
-
-    //    const resume = (data && data.resume) ? data.resume : null;
-    //    const details = (data && data.details) ? data.details : null;
+    const details = (data && data.details) ? data.details : null;
     const language = state && state.language ? state.language : null;
-    /*
-	const menu_translations = (data && data.translations 
-                                    && data.translations[language]
-                                    && data.translations[language]['menu']) ? 
-            data.translations[language]['menu']
-			: null;
-	*/
     const component_list =
         state && state.component_list ? state.component_list : null;
 
     return {
         data_is_loaded: data_is_loaded,
-        //        resume: resume,
-        //        details: details,
-        //        translations: {[language]: menu_translations},
+        details: details,
         language: language,
         components: component_list
     };

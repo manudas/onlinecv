@@ -29,7 +29,7 @@ class App extends Component {
 
     componentDidMount() {
         const language = this.props.language ? this.props.language : "en";
-        const url = `api/getcontent/${language}?first_time_load`;
+        const url = `api/getcontent/${language}?load_images`;
         let component = this;
         fetch(url) // Call the fetch function passing the url of the API as a parameter
             .then(response => response.json())
