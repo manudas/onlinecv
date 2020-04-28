@@ -1,0 +1,63 @@
+version: '3.7' #version of docker compose format
+services:
+  db:
+    build: 
+        context: mongo
+        dockerfile: DockerfileDB
+    container_name: db
+    ports:
+     - "27017:27017"
+    volumes:
+     - ./data/mongo/db:/data/db #data/db is where mongo stores database files
+    # uncomment when you have created an admin user & a DB user
+    # command:
+    # - mongod --bind_ip 0.0.0.0 --auth
+    healthcheck:
+      test: ["CMD-SHELL", "db.runCommand('ping').ok", "|", "mongo", "db:27017/onlinecv", "--quiet", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: on-failure
+  web:
+    build: 
+        context: backend
+        dockerfile: DockerfileWeb
+    container_name: web
+    ports:
+     - "80:80"
+     - "443:443"
+    restart: on-failure
+    depends_on:
+      - db
+    volumes:
+      - ./data/backend_static:/opt/app/static
+      - ./data:/data
+  # certbot:
+  #   build:
+  #     context: letsencrypt-autorenew
+  #     dockerfile: DockerfileLE
+  #   container_name: certbot
+  #   #ports:
+  #   #  - "443:443"
+  #   volumes:
+  #     - ./data/certs:/certs
+  #     - ./data/letsencrypt:/etc/letsencrypt
+  #     - ./data/var_log_letsencrypt:/var/log/letsencrypt
+  #     - ./data/backend_static:/webroot
+  #   restart: always
+  #   depends_on:
+  #     - web
+  #   environment:
+  #     - WEBROOT=/webroot
+  #     - LOGFILE=/var/log/letsencrypt/certrenewal.log
+  #     - DEBUG=false
+  #     - STAGING=false
+  #     - DOMAINS=manu.app
+  #     - EMAIL=dev@manu.app
+  #     - CONCAT=false
+  #     - HEALTH_CHECK_URL=web:80
+  #     - PREFERRED_CHALLENGES=http-01
+
+#docker run -d --name mongo -p 27017:27017 -v /data/mongo/:/data/mongo mvertes/alpine-mongo
+#docker run -d -p 80:80 -v /data:/data --name onlinecv onlinecv

@@ -11,6 +11,9 @@
 /frontend/build
 /production-set
 
+# root folder, usually with dev utilities
+node_modules
+
 # misc
 .DS_Store
 .env.local
