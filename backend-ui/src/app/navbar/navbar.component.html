@@ -1,0 +1,68 @@
+<section [className]="'navbar navbar-default'" id='navbar'>
+    <a [className]="'navbar-brand'" href='#'>
+        <fa-icon [icon]="faBeer" flip="horizontal"></fa-icon> user.name || application.name
+    </a>
+
+    <nav ngbDropdown>
+        <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="navbarDropdownMessages" role="button">
+            <fa-icon [icon]="faEnvelope"></fa-icon> Messages
+            <span [className]="'badge'">5</span>
+            <b [className]="'caret'">mirar de copiar estilos</b>
+        </a>
+        <div ngbDropdownMenu aria-labelledby="navbarDropdownMessages" [ngClass]="
+                        {
+                            'open': false
+                        }">
+            <a ngbDropdownItem href="#" (click)="$event.preventDefault()">New message</a>
+            <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Inbox</a>
+            <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Outbox</a>
+            <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Trash</a>
+        </div>
+    </nav>
+
+
+
+    <ul class='nav navbar-nav pull-right'>
+        <li class='dropdown'>
+            <a class='dropdown-toggle'>
+                <i class='icon-envelope'></i> Messages
+                <span class='badge'>5</span>
+                <b class='caret'></b>
+            </a>
+            <ul class='dropdown-menu'>
+                <li>
+                    <a href='#'>New message</a>
+                </li>
+                <li>
+                    <a href='#'>Inbox</a>
+                </li>
+                <li>
+                    <a href='#'>Outbox</a>
+                </li>
+                <li>
+                    <a href='#'>Trash</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a>
+                <i class='icon-cog'></i> Settings
+            </a>
+        </li>
+        <li class='dropdown user'>
+            <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
+                <i class='icon-user'></i>
+                <strong>John DOE</strong>
+                <b class='caret'></b>
+            </a>
+            <ul class='dropdown-menu'>
+                <li>
+                    <a href='#'>Edit Profile</a>
+                </li>
+                <li class='divider'></li>
+                <li>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</section>
