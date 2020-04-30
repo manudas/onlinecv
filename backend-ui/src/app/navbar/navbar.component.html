@@ -3,66 +3,39 @@
         <fa-icon [icon]="faBeer" flip="horizontal"></fa-icon> user.name || application.name
     </a>
 
-    <nav ngbDropdown>
-        <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="navbarDropdownMessages" role="button">
-            <fa-icon [icon]="faEnvelope"></fa-icon> Messages
-            <span [className]="'badge'">5</span>
-            <b [className]="'caret'">mirar de copiar estilos</b>
-        </a>
-        <div ngbDropdownMenu aria-labelledby="navbarDropdownMessages" [ngClass]="
-                        {
-                            'open': false
-                        }">
-            <a ngbDropdownItem href="#" (click)="$event.preventDefault()">New message</a>
-            <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Inbox</a>
-            <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Outbox</a>
-            <a ngbDropdownItem href="#" (click)="$event.preventDefault()">Trash</a>
+    <nav [className]="'nav navbar-nav navigation-bar float-right'">
+        <div ngbDropdown>
+            <a [ngClass]="'navigation-bar_nav-link'" ngbDropdownToggle id="navbarDropdownMessages" role="button">
+                <fa-icon [icon]="faEnvelope"></fa-icon> Messages
+                <span [className]="'navigation-bar_badge'">5</span>
+            </a>
+            <div ngbDropdownMenu aria-labelledby="navbarDropdownMessages" [ngClass]="
+                            {
+                                'dropdown-menu': true,
+                                'open': false
+                            }">
+                <a ngbDropdownItem href="#" (click)="$event.preventDefault()" [ngClass]="'dropdown-menu-item'">New message</a>
+                <a ngbDropdownItem href="#" (click)="$event.preventDefault()" [ngClass]="'dropdown-menu-item'">Inbox</a>
+                <a ngbDropdownItem href="#" (click)="$event.preventDefault()" [ngClass]="'dropdown-menu-item'">Outbox</a>
+                <a ngbDropdownItem href="#" (click)="$event.preventDefault()" [ngClass]="'dropdown-menu-item'">Trash</a>
+            </div>
+        </div>
+        <div>
+            <a [ngClass]="'navigation-bar_nav-link'">
+                <fa-icon [icon]="faCog"></fa-icon> Settings
+            </a>
+        </div>
+        <div ngbDropdown [ngClass]="'user'">
+            <a [ngClass]="'navigation-bar_nav-link'" ngbDropdownToggle id="navbarDropdownUser" role="button">
+                <fa-icon [icon]="faUser"></fa-icon>
+                <strong> Username here </strong>
+                <img [className]="'navigation-bar_user-picture'" src="http://placehold.it/20x20/ccc/777">
+            </a>
+            <div ngbDropdownMenu aria-labelledby="navbarDropdownUser" [ngClass]="'dropdown-menu'">
+                <a ngbDropdownItem href='#' [ngClass]="'dropdown-menu-item'">Edit Profile</a>
+                <div [className]="'dropdown-menu_divider'"></div>
+                <a ngbDropdownItem href='#' [ngClass]="'dropdown-menu-item'">Sign out</a>
+            </div>
         </div>
     </nav>
-
-
-
-    <ul class='nav navbar-nav pull-right'>
-        <li class='dropdown'>
-            <a class='dropdown-toggle'>
-                <i class='icon-envelope'></i> Messages
-                <span class='badge'>5</span>
-                <b class='caret'></b>
-            </a>
-            <ul class='dropdown-menu'>
-                <li>
-                    <a href='#'>New message</a>
-                </li>
-                <li>
-                    <a href='#'>Inbox</a>
-                </li>
-                <li>
-                    <a href='#'>Outbox</a>
-                </li>
-                <li>
-                    <a href='#'>Trash</a>
-                </li>
-            </ul>
-        </li>
-        <li>
-            <a>
-                <i class='icon-cog'></i> Settings
-            </a>
-        </li>
-        <li class='dropdown user'>
-            <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
-                <i class='icon-user'></i>
-                <strong>John DOE</strong>
-                <b class='caret'></b>
-            </a>
-            <ul class='dropdown-menu'>
-                <li>
-                    <a href='#'>Edit Profile</a>
-                </li>
-                <li class='divider'></li>
-                <li>
-                </li>
-            </ul>
-        </li>
-    </ul>
 </section>
