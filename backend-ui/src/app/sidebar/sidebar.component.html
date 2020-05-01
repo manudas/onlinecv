@@ -1,18 +1,22 @@
-<section id='sidebar'>
+<section id='sidebar' [className]="'sidebar'">
+    <fa-icon [icon]="faBars" size="lg" [ngClass]="['sidebar_menu-icon', sidebar_icon]"></fa-icon>
     <i class='icon-align-justify icon-large' id='toggle'></i>
-    <ul id='dock'>
-        <li class='launcher'>
-            <i class='icon-dashboard'></i>
+    <ul id='dock' [className]="'sidebar_dock'">
+        <li [className]="'sidebar_dock_launcher'">
+            <fa-icon [icon]="faTachometerAlt" size="2x" [className]="sidebar_icon"></fa-icon>
+            <a [className]="'sidebar_dock_link'">Dashboard</a>
         </li>
-        <li class='launcher'>
-            <i class='icon-file-text-alt'></i>
+        <li [className]="'sidebar_dock_launcher'">
+            <fa-icon [icon]="faFileAlt" size="2x" [className]="sidebar_icon"></fa-icon>
+            <a [className]="'sidebar_dock_link'">Forms</a>
         </li>
-        <li class='launcher'>
-            <i class='icon-table'></i>
+        <li [className]="'sidebar_dock_launcher'">
+            <fa-icon [icon]="faTable" size="2x" [className]="sidebar_icon"></fa-icon>
+            <a [className]="'sidebar_dock_link'">Tables</a>
         </li>
-        <li class='launcher dropdown hover'>
-            <i class='icon-flag'></i>
-            <a>Reports</a>
+        <li [className]="'sidebar_dock_launcher dropdown hover'">
+            <fa-icon [icon]="faFlagCheckered" size="2x" [className]="sidebar_icon"></fa-icon>
+            <a [className]="'sidebar_dock_link'">Reports</a>
             <ul class='dropdown-menu'>
                 <li class='dropdown-header'>Launcher description</li>
                 <li>
@@ -26,18 +30,18 @@
                 </li>
             </ul>
         </li>
-        <li class='launcher'>
-            <i class='icon-bookmark'></i>
-            <a>Bookmarks</a>
+        <li [className]="'sidebar_dock_launcher'">
+            <fa-icon [icon]="faBookmark" size="2x" [className]="sidebar_icon"></fa-icon>
+            <a [className]="'sidebar_dock_link'">Bookmarks</a>
         </li>
-        <li class='launcher'>
-            <i class='icon-cloud'></i>
-            <a>Backup</a>
+        <li [className]="'sidebar_dock_launcher'">
+            <fa-icon [icon]="faCloud" size="2x" [className]="sidebar_icon"></fa-icon>
+            <a [className]="'sidebar_dock_link'">Backup</a>
         </li>
-        <li class='launcher'>
-            <i class='icon-bug'></i>
-            <a>Feedback</a>
+        <li [className]="'sidebar_dock_launcher'">
+            <fa-icon [icon]="faBug" size="2x" [className]="sidebar_icon"></fa-icon>
+            <a [className]="'sidebar_dock_link'">Feedback</a>
         </li>
     </ul>
-    <div id='beaker'></div>
+    <fa-icon [icon]="faFlask" id='beaker' [ngClass]="['sidebar_breaker', sidebar_icon]" placement="top" ngbTooltip="Made by lab2023. Angularised by Manu"></fa-icon>
 </section>
