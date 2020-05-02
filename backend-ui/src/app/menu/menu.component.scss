@@ -2,6 +2,7 @@
 
 @import '~bootstrap/scss/bootstrap';
 .dropdown {
+    color: #777777;
     &-menu {
         @extend .dropdown-menu;
         font-size: 14px;
@@ -9,15 +10,23 @@
         border: 1px solid #1a242f;
         border-radius: 4px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-        &:after {
-            content: "";
+        &_arrow {
             display: inline-block;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-bottom: 6px solid #2c3e50;
             position: absolute;
-            top: -6px;
-            right: 20px;
+            &.bottom {
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+                border-bottom: 6px solid #2c3e50;
+                top: -6px;
+                right: 20px;
+            }
+            &.right {
+                border-right: 6px solid #2c3e50;
+                border-top: 6px solid transparent;
+                border-bottom: 6px solid transparent;
+                left: -7px;
+                top: 20px;
+            }
         }
         &_divider {
             height: 1px;
@@ -25,13 +34,13 @@
             overflow: hidden;
             background-color: #1a242f;
         }
-        &-item {
-            @extend .dropdown-menu-item;
+        &_option {
+            // @extend .dropdown-menu-item;
             display: block;
             padding: 3px 20px;
             clear: both;
             font-weight: normal;
-            line-height: 1.428571429;
+            line-height: 1.4em;
             color: #ecf0f1;
             white-space: nowrap;
             &:hover,
@@ -41,14 +50,26 @@
                 background-color: whitesmoke
             }
         }
+        &_header {
+            cursor: pointer;
+            color: #1abc9c;
+            display: block;
+            margin-top: -3px;
+            padding: 3px 20px;
+            font-size: 0.85em;
+            line-height: 1.43em;
+        }
     }
-    &-toggle {
+    &_nav-link {
         cursor: pointer;
         padding: 10px 15px;
         &:hover,
         &:focus {
             background-color: rgba(0, 0, 0, 0);
             color: #555555
+        }
+        &.noCaret::after {
+            display: none;
         }
     }
     &_badge {
@@ -61,5 +82,14 @@
         border-radius: 10px;
         height: 1rem;
         vertical-align: middle;
+    }
+    &_image {
+        border-radius: 6px;
+        margin: 0px 5px 0 5px;
+        width: 20px;
+        height: 20px;
+        border: 1px solid;
+        padding: 1px;
+        background-color: rgba(255, 255, 255, 0.6)
     }
 }

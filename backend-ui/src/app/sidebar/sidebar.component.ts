@@ -33,6 +33,48 @@ export class SidebarComponent implements OnInit {
 
   sidebar_icon = 'sidebar_icons';
 
+  reportMenu = {
+    name: 'ReportDropdown',
+    start_icon: faFlagCheckered,
+    title: 'Reports',
+    caret: false,
+    stylesStartIcon: 
+        `font-size: 2.8em;
+        display:block;
+        width:100%;`,
+    stylesDropToggle: 
+        `
+        padding:0;
+        font-size: 0.8em; 
+        display: block;
+        width: 100%;
+        border-right: 5px solid transparent;
+        color: #ecf0f1;
+        box-sizing: content-box;
+        `,
+    options: [
+        {
+            name: 'Launcher description',
+            type: 'header',
+        },
+        {
+          name: 'Action',
+          url: '/Action',
+          type: 'option',
+        },
+        {
+          name: 'Another action',
+          url: '/another-action',
+          type: 'option',
+        },
+        {
+          name: 'Something else here',
+          url: '/something-else-here',
+          type: 'option',
+        }
+      ]
+  } 
+
   constructor() { }
 
   ngOnInit(): void {

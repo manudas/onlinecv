@@ -28,6 +28,20 @@
                 list-style: none;
                 margin-top: 20px;
                 cursor: pointer;
+                // indicador de opcion
+                 :hover:before,
+                .active:before {
+                    transform: rotate(45deg);
+                    content: "";
+                    display: inline-block;
+                    width: 10px;
+                    height: 10px;
+                    background-color: white;
+                    position: absolute;
+                    right: -6px;
+                    margin-top: 22px
+                }
+                // fin de indicador de opcion
             }
              :hover,
             .active {
@@ -52,4 +66,17 @@
             z-index: 1;
         }
     }
+}
+
+#sidebar ul#dock li.launcher:hover:before,
+#sidebar ul#dock li.launcher.active:before {
+    transform: rotate(45deg);
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    position: absolute;
+    right: -6px;
+    margin-top: 22px
 }

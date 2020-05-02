@@ -5,71 +5,22 @@
         <fa-icon [icon]="faBeer"
             flip="horizontal"></fa-icon> user.name || application.name
     </a>
-    <app-menu name="MessagesDropdown"
-        title="Messages"
-        badge="5"
-        [options]="userMenu"></app-menu>
     <nav [className]="'nav navbar-nav navigation-bar float-right'">
-        <div ngbDropdown>
-            <a [ngClass]="'navigation-bar_nav-link'"
-                ngbDropdownToggle
-                id="navbarDropdownMessages"
-                role="button">
-                <fa-icon [icon]="faEnvelope"></fa-icon> Messages
-                <span [className]="'navigation-bar_badge'">5</span>
-            </a>
-            <div ngbDropdownMenu
-                aria-labelledby="navbarDropdownMessages"
-                [ngClass]="
-                            {
-                                'dropdown-menu': true,
-                                'open': false
-                            }">
-                <a ngbDropdownItem
-                    href="#"
-                    (click)="$event.preventDefault()"
-                    [ngClass]="'dropdown-menu-item'">New message</a>
-                <a ngbDropdownItem
-                    href="#"
-                    (click)="$event.preventDefault()"
-                    [ngClass]="'dropdown-menu-item'">Inbox</a>
-                <a ngbDropdownItem
-                    href="#"
-                    (click)="$event.preventDefault()"
-                    [ngClass]="'dropdown-menu-item'">Outbox</a>
-                <a ngbDropdownItem
-                    href="#"
-                    (click)="$event.preventDefault()"
-                    [ngClass]="'dropdown-menu-item'">Trash</a>
-            </div>
-        </div>
+        <app-menu [name]="messageMenu.name"
+            [start_icon]="messageMenu.start_icon"
+            [title]="messageMenu.title"
+            [badge]="messageMenu.badge"
+            [options]="messageMenu.options"></app-menu>
         <div>
             <a [ngClass]="'navigation-bar_nav-link'">
                 <fa-icon [icon]="faCog"></fa-icon> Settings
             </a>
         </div>
-        <div ngbDropdown
-            [ngClass]="'user'">
-            <a [ngClass]="'navigation-bar_nav-link'"
-                ngbDropdownToggle
-                id="navbarDropdownUser"
-                role="button">
-                <fa-icon [icon]="faUser"></fa-icon>
-                <strong> Username here </strong>
-                <img [className]="'navigation-bar_user-picture'"
-                    src="http://placehold.it/20x20/ccc/777">
-            </a>
-            <div ngbDropdownMenu
-                aria-labelledby="navbarDropdownUser"
-                [ngClass]="'dropdown-menu'">
-                <a ngbDropdownItem
-                    href='#'
-                    [ngClass]="'dropdown-menu-item'">Edit Profile</a>
-                <div [className]="'dropdown-menu_divider'"></div>
-                <a ngbDropdownItem
-                    href='#'
-                    [ngClass]="'dropdown-menu-item'">Sign out</a>
-            </div>
-        </div>
+        <app-menu [name]="userMenu.name"
+            [start_icon]="userMenu.start_icon"
+            [title]="userMenu.title"
+            [image]="userMenu.image"
+            [options]="userMenu.options"
+            [stylesDropToggle]="'font-weight: bolder;'"></app-menu>
     </nav>
 </section>

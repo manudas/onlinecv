@@ -11,27 +11,45 @@ import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 export class MenuComponent implements OnInit {
 
   MenuItem = MenuItemType;
+  dropDownToggleFocused
 
   @Input() title: string = '';
   @Input() name: string = '';
   @Input() start_icon: IconDefinition = null;
   @Input() end_icon: IconDefinition = null;
-  @Input() placement: string = 'bottom-left bottom-right top-left top-right';
+  @Input() placement: string = 'bottom';
   @Input() options: OptionsType[] = [];
   @Input() badge: string = null;
   @Input() image: string = null; // either data or url
+  @Input() caret: boolean = true;
 
   // Personalisation
-  @Input() classBadge: string = '';
-  @Input() classDropTongle: string = '';
-  @Input() classStartIcon: string = '';
-  @Input() classEndIcon: string = '';
-  @Input() classDropDown: string = '';
-  @Input() classHeader: string = '';
-  @Input() classDivider: string = '';
-  @Input() classImage: string = '';
+  @Input() stylesBadge: string = '';
+  @Input() stylesDropToggle: string = '';
+  @Input() stylesDropToggleOnFocus: string = '';
+  @Input() stylesStartIcon: string = '';
+  @Input() stylesEndIcon: string = '';
+  @Input() stylesDropDown: string = '';
+  @Input() stylesHeader: string = '';
+  @Input() stylesOption: string = '';
+  @Input() stylesDivider: string = '';
+  @Input() stylesImage: string = '';
+  @Input() stylesDropDownMenu: string = '';
 
   constructor() { }
+
+  onDropDownToggleMouseOver(){
+    this.dropDownToggleFocused = true;
+    console.log("dentro");
+  }
+  onDropDownToggleClick(){
+    this.dropDownToggleFocused = true;
+    console.log("dentro");
+  }
+  onDropDownToggleMouseLeave(){
+    this.dropDownToggleFocused = false;
+    console.log("sale");
+  }
 
   ngOnInit(): void {
   }

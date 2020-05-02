@@ -1,90 +1,90 @@
 <div *ngIf="options && options.length > 0"
     ngbDropdown
-    [ngClass]="{classDropDown: !!classDropDown}"
+    [style]="stylesDropDown"
     [placement]="placement">
-    <a [ngClass]="{classDropTongle: !!classDropTongle}"
+    <span [style]="stylesDropToggle"
+        (mouseover)="onDropDownToggleMouseOver()"
+        (click)="onDropDownToggleClick()"
+        (mouseleave)="onDropDownToggleMouseLeave()"
         ngbDropdownToggle
-        [id]="name || title">
-        <fa-icon *ngIf="start_icon"
-            [icon]="start_icon"
-            [ngClass]="
-                    {
-                        'dropdown_start_icon': !classStartIcon,
-                        classStartIcon: !!classStartIcon
-                    }"></fa-icon>
-        {{ title }}
-        <span *ngIf="badge"
-            [ngClass]="
-                {
-                    'dropdown_badge': !classBadge,
-                    classBadge: !!classBadge
-                }">
-            {{ badge }}
-        </span>
-        <fa-icon *ngIf="end_icon"
-            [icon]="end_icon"
-            [ngClass]="
+        [id]="name || title"
+        [ngClass]="
             {
-                'dropdown_end_icon': !classEndIcon,
-                classEndIcon: !!classEndIcon
-            }"></fa-icon>
-        <img *ngIf="image"
-            [src]="image"
-            [ngClass]="
-            {
-                'dropdown_image': !classImage,
-                classImage: !!classImage
-            }" />
-    </a>
-    <div ngbDropdownMenu>
+                'dropdown_nav-link': true,
+                'noCaret': !caret
+            }"> 
+        <ng-container *ngTemplateOutlet="dropDownNavLinkContent"></ng-container>
+    </span>
+    <div [style]="stylesDropDownMenu"
+        ngbDropdownMenu>
         <ng-template ngFor
             let-option
             [ngForOf]="options">
 
-            <span [ngClass]="
-                        {
-                            'dropdown-menu_header': !classHeader,
-                            classHeader: !!classHeader
-                        }"
+            <div [ngClass]="'dropdown-menu_header'"
+                [style]="stylesHeader"
                 *ngIf="
                         (
                             option.type.toString() ==  MenuItem.header.toString()
-                            || MenuItem[option.type].toString() == MenuItem.header.toString()
-                            
+                            || MenuItem[option.type].toString() == MenuItem.header.toString()          
                         )">
                 {{ option.name }}
-            </span>
-
+            </div>
             <a *ngIf="
                     (
                         option.type.toString() ==  MenuItem.option.toString()
                         || MenuItem[option.type].toString() == MenuItem.option.toString()
-                        
                     ) 
                     && !option.onclick"
                 ngbDropdownItem
                 href="option.url"
                 (click)="$event.preventDefault()"
-                [className]="'dropdown-menu-item'">{{ option.name }}</a>
-
+                [ngClass]="'dropdown-menu_option'"
+                [style]="stylesOption">{{ option.name }}</a>
             <a *ngIf="
                     (
                         option.type.toString() ==  MenuItem.option.toString()
-                        || MenuItem[option.type].toString() == MenuItem.option.toString()
-                        
-                    ) 
+                        || MenuItem[option.type].toString() == MenuItem.option.toString()   
+                    )
                     && option.onclick"
                 ngbDropdownItem
                 (click)="option.onclick"
-                [className]="'dropdown-menu-item'">{{ option.name }}</a>
-
-            <div *ngIf="option.type ===  MenuItem.separator"
-                [ngClass]="
-                    {
-                        'dropdown-menu_divider': !classDivider,
-                        classDivider: !!classDivider
-                    }"></div>
-
+                [ngClass]="'dropdown-menu_option'"
+                [style]="stylesOption">{{ option.name }}</a>
+            <div *ngIf="
+                        (
+                            option.type.toString() ==  MenuItem.separator.toString()
+                            || MenuItem[option.type].toString() == MenuItem.separator.toString()
+                        )"
+                [ngClass]="'dropdown-menu_divider'"
+                [style]="stylesDivider"></div>
         </ng-template>
+        <span [ngClass]="
+            {
+                'dropdown-menu_arrow': true,
+                'bottom': !placement || placement.toLowerCase().startsWith('bottom'),
+                'right': placement && placement.toLowerCase().startsWith('right')
+            }"></span>
     </div>
 </div>
+
+<ng-template #dropDownNavLinkContent>
+    <fa-icon *ngIf="start_icon"
+        [icon]="start_icon"
+        [ngClass]="'dropdown_start_icon'"
+        [style]="stylesStartIcon"></fa-icon>
+    {{ title }}
+    <span *ngIf="badge"
+        [ngClass]="'dropdown_badge'"
+        [style]="stylesBadge">
+    {{ badge }}
+</span>
+    <fa-icon *ngIf="end_icon"
+        [icon]="end_icon"
+        [ngClass]="'dropdown_end_icon'"
+        [style]="stylesEndIcon"></fa-icon>
+    <img *ngIf="image"
+        [src]="image"
+        [ngClass]="'dropdown_image'"
+        [style]="stylesImage" />
+</ng-template>

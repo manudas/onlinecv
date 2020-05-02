@@ -1,47 +1,62 @@
-<section id='sidebar' [className]="'sidebar'">
-    <fa-icon [icon]="faBars" size="lg" [ngClass]="['sidebar_menu-icon', sidebar_icon]"></fa-icon>
-    <i class='icon-align-justify icon-large' id='toggle'></i>
-    <ul id='dock' [className]="'sidebar_dock'">
+<section id='sidebar'
+    [className]="'sidebar'">
+    <fa-icon [icon]="faBars"
+        size="lg"
+        [ngClass]="['sidebar_menu-icon', sidebar_icon]"></fa-icon>
+    <i class='icon-align-justify icon-large'
+        id='toggle'></i>
+    <ul id='dock'
+        [className]="'sidebar_dock'">
         <li [className]="'sidebar_dock_launcher'">
-            <fa-icon [icon]="faTachometerAlt" size="2x" [className]="sidebar_icon"></fa-icon>
+            <fa-icon [icon]="faTachometerAlt"
+                size="2x"
+                [className]="sidebar_icon"></fa-icon>
             <a [className]="'sidebar_dock_link'">Dashboard</a>
         </li>
         <li [className]="'sidebar_dock_launcher'">
-            <fa-icon [icon]="faFileAlt" size="2x" [className]="sidebar_icon"></fa-icon>
+            <fa-icon [icon]="faFileAlt"
+                size="2x"
+                [className]="sidebar_icon"></fa-icon>
             <a [className]="'sidebar_dock_link'">Forms</a>
         </li>
         <li [className]="'sidebar_dock_launcher'">
-            <fa-icon [icon]="faTable" size="2x" [className]="sidebar_icon"></fa-icon>
+            <fa-icon [icon]="faTable"
+                size="2x"
+                [className]="sidebar_icon"></fa-icon>
             <a [className]="'sidebar_dock_link'">Tables</a>
         </li>
         <li [className]="'sidebar_dock_launcher dropdown hover'">
-            <fa-icon [icon]="faFlagCheckered" size="2x" [className]="sidebar_icon"></fa-icon>
-            <a [className]="'sidebar_dock_link'">Reports</a>
-            <ul class='dropdown-menu'>
-                <li class='dropdown-header'>Launcher description</li>
-                <li>
-                    <a href='#'>Action</a>
-                </li>
-                <li>
-                    <a href='#'>Another action</a>
-                </li>
-                <li>
-                    <a href='#'>Something else here</a>
-                </li>
-            </ul>
+            <app-menu [name]="reportMenu.name"
+                [start_icon]="reportMenu.start_icon"
+                [title]="reportMenu.title"
+                [options]="reportMenu.options"
+                [caret]="reportMenu.caret"
+                [stylesStartIcon]="reportMenu.stylesStartIcon"
+                [stylesDropToggle]="reportMenu.stylesDropToggle"
+                [placement]="'right-top'"></app-menu>
         </li>
         <li [className]="'sidebar_dock_launcher'">
-            <fa-icon [icon]="faBookmark" size="2x" [className]="sidebar_icon"></fa-icon>
+            <fa-icon [icon]="faBookmark"
+                size="2x"
+                [className]="sidebar_icon"></fa-icon>
             <a [className]="'sidebar_dock_link'">Bookmarks</a>
         </li>
         <li [className]="'sidebar_dock_launcher'">
-            <fa-icon [icon]="faCloud" size="2x" [className]="sidebar_icon"></fa-icon>
+            <fa-icon [icon]="faCloud"
+                size="2x"
+                [className]="sidebar_icon"></fa-icon>
             <a [className]="'sidebar_dock_link'">Backup</a>
         </li>
         <li [className]="'sidebar_dock_launcher'">
-            <fa-icon [icon]="faBug" size="2x" [className]="sidebar_icon"></fa-icon>
+            <fa-icon [icon]="faBug"
+                size="2x"
+                [className]="sidebar_icon"></fa-icon>
             <a [className]="'sidebar_dock_link'">Feedback</a>
         </li>
     </ul>
-    <fa-icon [icon]="faFlask" id='beaker' [ngClass]="['sidebar_breaker', sidebar_icon]" placement="top" ngbTooltip="Made by lab2023. Angularised by Manu"></fa-icon>
+    <fa-icon [icon]="faFlask"
+        id='beaker'
+        [ngClass]="['sidebar_breaker', sidebar_icon]"
+        placement="top"
+        ngbTooltip="Made by lab2023. Angularised by Manu"></fa-icon>
 </section>

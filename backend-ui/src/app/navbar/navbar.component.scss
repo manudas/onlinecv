@@ -10,57 +10,6 @@
     .navigation-bar {
         color: #777777;
         flex-direction: row;
-        &_badge {
-            @extend .badge;
-            @extend .badge-secondary;
-            min-width: 10px;
-            padding: 3px 7px;
-            font-size: 0.8rem;
-            background-color: #999999;
-            border-radius: 10px;
-            height: 1rem;
-            vertical-align: middle;
-        }
-        .dropdown-menu {
-            @extend .dropdown-menu;
-            font-size: 14px;
-            background-color: #2c3e50;
-            border: 1px solid #1a242f;
-            border-radius: 4px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-            &:after {
-                content: "";
-                display: inline-block;
-                border-left: 6px solid transparent;
-                border-right: 6px solid transparent;
-                border-bottom: 6px solid #2c3e50;
-                position: absolute;
-                top: -6px;
-                right: 20px;
-            }
-            &_divider {
-                height: 1px;
-                margin: 9px 0;
-                overflow: hidden;
-                background-color: #1a242f;
-            }
-            &-item {
-                @extend .dropdown-menu-item;
-                display: block;
-                padding: 3px 20px;
-                clear: both;
-                font-weight: normal;
-                line-height: 1.428571429;
-                color: #ecf0f1;
-                white-space: nowrap;
-                &:hover,
-                &:focus {
-                    text-decoration: none;
-                    color: #262626;
-                    background-color: whitesmoke
-                }
-            }
-        }
         &_nav-link {
             cursor: pointer;
             padding: 10px 15px;
@@ -69,15 +18,9 @@
                 background-color: rgba(0, 0, 0, 0);
                 color: #555555
             }
-        }
-        &_user-picture {
-            border-radius: 6px;
-            margin: 0px 5px 0 5px;
-            width: 20px;
-            height: 20px;
-            border: 1px solid;
-            padding: 1px;
-            background-color: rgba(255, 255, 255, 0.6)
+            &-bold {
+                font-weight: bolder;
+            }
         }
     }
 }
