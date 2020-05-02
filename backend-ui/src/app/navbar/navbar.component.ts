@@ -17,6 +17,21 @@ export class NavbarComponent implements OnInit {
   faEnvelope = faEnvelope;
   faCog = faCog;
   faUser = faUser;
+  userMenu = [
+      {
+          name: 'option',
+          url: '/testoption',
+          type: 'option',
+      },
+      {
+        type: 'separator',
+      },
+      {
+          name: 'option3',
+          url: '/testoption',
+          type: 'header',
+      }
+  ];
 
   constructor() { }
 

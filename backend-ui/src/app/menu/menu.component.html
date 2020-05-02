@@ -1,0 +1,90 @@
+<div *ngIf="options && options.length > 0"
+    ngbDropdown
+    [ngClass]="{classDropDown: !!classDropDown}"
+    [placement]="placement">
+    <a [ngClass]="{classDropTongle: !!classDropTongle}"
+        ngbDropdownToggle
+        [id]="name || title">
+        <fa-icon *ngIf="start_icon"
+            [icon]="start_icon"
+            [ngClass]="
+                    {
+                        'dropdown_start_icon': !classStartIcon,
+                        classStartIcon: !!classStartIcon
+                    }"></fa-icon>
+        {{ title }}
+        <span *ngIf="badge"
+            [ngClass]="
+                {
+                    'dropdown_badge': !classBadge,
+                    classBadge: !!classBadge
+                }">
+            {{ badge }}
+        </span>
+        <fa-icon *ngIf="end_icon"
+            [icon]="end_icon"
+            [ngClass]="
+            {
+                'dropdown_end_icon': !classEndIcon,
+                classEndIcon: !!classEndIcon
+            }"></fa-icon>
+        <img *ngIf="image"
+            [src]="image"
+            [ngClass]="
+            {
+                'dropdown_image': !classImage,
+                classImage: !!classImage
+            }" />
+    </a>
+    <div ngbDropdownMenu>
+        <ng-template ngFor
+            let-option
+            [ngForOf]="options">
+
+            <span [ngClass]="
+                        {
+                            'dropdown-menu_header': !classHeader,
+                            classHeader: !!classHeader
+                        }"
+                *ngIf="
+                        (
+                            option.type.toString() ==  MenuItem.header.toString()
+                            || MenuItem[option.type].toString() == MenuItem.header.toString()
+                            
+                        )">
+                {{ option.name }}
+            </span>
+
+            <a *ngIf="
+                    (
+                        option.type.toString() ==  MenuItem.option.toString()
+                        || MenuItem[option.type].toString() == MenuItem.option.toString()
+                        
+                    ) 
+                    && !option.onclick"
+                ngbDropdownItem
+                href="option.url"
+                (click)="$event.preventDefault()"
+                [className]="'dropdown-menu-item'">{{ option.name }}</a>
+
+            <a *ngIf="
+                    (
+                        option.type.toString() ==  MenuItem.option.toString()
+                        || MenuItem[option.type].toString() == MenuItem.option.toString()
+                        
+                    ) 
+                    && option.onclick"
+                ngbDropdownItem
+                (click)="option.onclick"
+                [className]="'dropdown-menu-item'">{{ option.name }}</a>
+
+            <div *ngIf="option.type ===  MenuItem.separator"
+                [ngClass]="
+                    {
+                        'dropdown-menu_divider': !classDivider,
+                        classDivider: !!classDivider
+                    }"></div>
+
+        </ng-template>
+    </div>
+</div>
