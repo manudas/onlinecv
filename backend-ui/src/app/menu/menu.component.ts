@@ -24,31 +24,59 @@ export class MenuComponent implements OnInit {
   @Input() caret: boolean = true;
 
   // Personalisation
-  @Input() stylesBadge: string = '';
-  @Input() stylesDropToggle: string = '';
-  @Input() stylesDropToggleOnFocus: string = '';
-  @Input() stylesStartIcon: string = '';
-  @Input() stylesEndIcon: string = '';
-  @Input() stylesDropDown: string = '';
-  @Input() stylesHeader: string = '';
-  @Input() stylesOption: string = '';
-  @Input() stylesDivider: string = '';
-  @Input() stylesImage: string = '';
+  @Input() stylesBadge: string | object= '';
+  @Input() stylesDropToggle: string | object= '';
+  @Input() stylesDropToggleOnFocus: string | object= '';
+  @Input() stylesStartIcon: string | object= '';
+  @Input() stylesEndIcon: string | object= '';
+  @Input() stylesDropDown: string | object= '';
+  @Input() stylesHeader: string | object= '';
+  @Input() stylesOption: string | object= '';
+  @Input() stylesDivider: string | object= '';
+  @Input() stylesImage: string | object= '';
   @Input() stylesDropDownMenu: string = '';
+  // On special events styles
+  @Input() dropDownActiveOrFocusedToggleStyles: object = {};
 
   constructor() { }
 
   onDropDownToggleMouseOver(){
     this.dropDownToggleFocused = true;
-    console.log("dentro");
   }
   onDropDownToggleClick(){
     this.dropDownToggleFocused = true;
-    console.log("dentro");
   }
   onDropDownToggleMouseLeave(){
     this.dropDownToggleFocused = false;
-    console.log("sale");
+  }
+  onDropDownActiveOrFocusedToggleStyles(){
+    if (this.dropDownToggleFocused) {
+      let previousStyles = null;
+      if (typeof this.stylesDropToggle == 'string' || this.stylesDropToggle instanceof String) {
+        previousStyles = this.parseStyleStringToObject(this.stylesDropToggle);
+      } else {
+        previousStyles = this.stylesDropToggle;
+      }
+      return {...previousStyles, ...this.dropDownActiveOrFocusedToggleStyles};
+    } else {
+      if (typeof this.stylesDropToggle == 'string' || this.stylesDropToggle instanceof String) {
+        return this.parseStyleStringToObject(this.stylesDropToggle);
+      }
+      // is an object and is not emtpy
+      return this.stylesDropToggle;
+    }
+  }
+
+  private parseStyleStringToObject(styleString: String){
+    const result = {},
+    attributes = styleString.trim().split(';');
+
+    for (let i = 0; i < attributes.length; i++) {
+        if (attributes[i].trim().length == 0) continue;
+        var entry = attributes[i].split(':').map(attr => attr.trim());
+        result[entry.splice(0,1)[0]] = entry.join(':');
+    }
+    return result;
   }
 
   ngOnInit(): void {

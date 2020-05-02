@@ -3,6 +3,7 @@
     [style]="stylesDropDown"
     [placement]="placement">
     <span [style]="stylesDropToggle"
+        [ngStyle]="onDropDownActiveOrFocusedToggleStyles()"
         (mouseover)="onDropDownToggleMouseOver()"
         (click)="onDropDownToggleClick()"
         (mouseleave)="onDropDownToggleMouseLeave()"

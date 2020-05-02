@@ -52,6 +52,13 @@ export class SidebarComponent implements OnInit {
         color: #ecf0f1;
         box-sizing: content-box;
         `,
+    dropDownActiveOrFocusedToggleStyles:    
+        {
+          'transition-property': 'color',
+          'transition-duration': '0.4s',
+          'transition-timing-function': 'ease-in-out',
+          'color': '#1abc9c'
+        },
     options: [
         {
             name: 'Launcher description',
