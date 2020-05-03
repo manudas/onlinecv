@@ -40,14 +40,23 @@ export class MenuComponent implements OnInit {
 
   constructor() { }
 
-  onDropDownToggleMouseOver(){
+  onDropDownToggleMouseOver(e){
     this.dropDownToggleFocused = true;
+    e.stopPropagation();
+    e.preventDefault();
+    return false;
   }
-  onDropDownToggleClick(){
+  onDropDownToggleClick(e){
     this.dropDownToggleFocused = true;
+    e.stopPropagation();
+    e.preventDefault();
+    return false;
   }
-  onDropDownToggleMouseLeave(){
+  onDropDownToggleMouseLeave(e){
     this.dropDownToggleFocused = false;
+    e.stopPropagation();
+    e.preventDefault();
+    return false;
   }
   onDropDownActiveOrFocusedToggleStyles(){
     if (this.dropDownToggleFocused) {
