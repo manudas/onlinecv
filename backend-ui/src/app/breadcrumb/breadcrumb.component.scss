@@ -1,0 +1,26 @@
+.breadcrumb {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.428571429;
+    padding: 15px 20px;
+    list-style: none;
+    background-color: #ecf0f1;
+    &_element {
+        display: inline-block;
+        &:not(:first-child):before {
+            content: "/\00a0";
+            padding: 0 5px;
+            color: #cccccc
+        }
+        &.active {
+            font-weight: bold;
+        }
+        &.title {
+            font-weight: 800;
+            color: #1abc9c;
+        }
+    }
+    &_link {
+        color: #869198;
+    }
+}

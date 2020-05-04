@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { WrapperComponent } from './wrapper.component';
 
 import { SidebarModule } from '../sidebar/sidebar.module';
+import { ToolbarModule } from '../toolbar/toolbar.module';
 
 @NgModule({
   declarations: [WrapperComponent],
   imports: [
     CommonModule,
-    SidebarModule
+    SidebarModule,
+    ToolbarModule
   ],
   exports: [
     WrapperComponent,
