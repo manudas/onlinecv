@@ -1,3 +1,45 @@
+@import '~bootstrap/scss/bootstrap';
 :host {
     width: 100%;
+    height: fit-content;
+    .tools {
+        background-color: #ecf0f1;
+        display: flex;
+        border-bottom: 1px solid #dddddd;
+        .toolbar {
+            padding: 8px;
+            align-self: center;
+            flex-grow: 1;
+            text-align: right;
+            &_badge {
+                margin-right: 5px;
+                padding: 5px;
+            }
+            .btn-group {
+                .btn {
+                    color: white;
+                    background-color: #1abc9c;
+                    border-color: #17a689;
+                    &:hover,
+                    &.active {
+                        transition-duration: 0.4s;
+                        transition-timing-function: ease-in-out;
+                        background-color: #148f77;
+                        border-color: #0f705d;
+                    }
+                    .badge {
+                        margin-left: 10px;
+                        padding: 0;
+                        border-radius: 10px;
+                        height: 1rem;
+                        width: max-content;
+                        min-width: 1rem;
+                        display: inline-flex;
+                        flex-direction: column;
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+    }
 }

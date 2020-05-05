@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarModule } from './navbar/navbar.module';
 import { WrapperModule } from './wrapper/wrapper.module';
@@ -12,7 +11,6 @@ import { WrapperModule } from './wrapper/wrapper.module';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     NavbarModule,
     WrapperModule
   ],

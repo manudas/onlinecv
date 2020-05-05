@@ -1,42 +1,38 @@
-<section id='tools'>
+<section class='tools'>
     <app-breadcrumb></app-breadcrumb>
-    <div id="toolbar">
+    <div class="toolbar">
+        <span class="toolbar_badge badge badge-info">Info</span>
+        <span class="toolbar_badge badge badge-danger">Danger</span>
         <div class="btn-group">
             <a class="btn"
                 data-toggle="toolbar-tooltip"
                 href="#"
-                title=""
-                data-original-title="Building">
-                <i class="icon-building"></i>
+                placement="bottom"
+                ngbTooltip="Building">
+                <fa-icon [icon]="faBuilding"></fa-icon>
             </a>
             <a class="btn"
                 data-toggle="toolbar-tooltip"
                 href="#"
-                title=""
-                data-original-title="Laptop">
-                <i class="icon-laptop"></i>
+                placement="bottom"
+                ngbTooltip="Laptop">
+                <fa-icon [icon]="faLaptopCode"></fa-icon>
             </a>
             <a class="btn"
                 data-toggle="toolbar-tooltip"
                 href="#"
-                title=""
-                data-original-title="Calendar">
-                <i class="icon-calendar"></i>
-                <span class="badge">3</span>
+                placement="bottom"
+                ngbTooltip="Calendar">
+                <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                <span class="badge badge-dark">3</span>
             </a>
             <a class="btn"
                 data-toggle="toolbar-tooltip"
                 href="#"
-                title=""
-                data-original-title="Lemon">
-                <i class="icon-lemon"></i>
+                placement="bottom"
+                ngbTooltip="Lemon">
+                <fa-icon [icon]="faLemon"></fa-icon>
             </a>
-        </div>
-        <div class="label label-danger">
-            Danger
-        </div>
-        <div class="label label-info">
-            Info
         </div>
     </div>
 </section>

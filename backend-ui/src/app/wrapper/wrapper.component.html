@@ -1,9 +1,12 @@
-<div id='wrapper'>
+<div class='wrapper'>
     <!-- Sidebar -->
     <app-sidebar></app-sidebar>
-    <!-- Tools -->
-    <app-toolbar></app-toolbar>
     <!-- Content -->
-    <div id='content'>
+    <div class="wrapper-right-side">
+        <!-- Tools -->
+        <app-toolbar></app-toolbar>
+        <section class='wrapper-right-side_content'>
+            <router-outlet></router-outlet>
+        </section>
     </div>
 </div>

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { BreadcrumbComponent } from './breadcrumb.component';
 
 
-
 @NgModule({
   declarations: [BreadcrumbComponent],
   imports: [

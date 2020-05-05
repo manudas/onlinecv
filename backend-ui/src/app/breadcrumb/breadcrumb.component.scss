@@ -5,6 +5,7 @@
     padding: 15px 20px;
     list-style: none;
     background-color: #ecf0f1;
+    margin-bottom: 0;
     &_element {
         display: inline-block;
         &:not(:first-child):before {
