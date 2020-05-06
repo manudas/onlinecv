@@ -51,7 +51,9 @@ export class SidebarComponent implements OnInit {
         border-right: 5px solid transparent;
         color: #ecf0f1;
         box-sizing: content-box;
+        z-index: 2;
         `,
+    stylesDropDownMenu: 'z-index: 3',
     dropDownActiveOrFocusedToggleStyles:    
         {
           'transition-property': 'color',
