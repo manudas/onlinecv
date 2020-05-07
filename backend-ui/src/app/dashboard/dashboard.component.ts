@@ -16,6 +16,28 @@ export class DashboardComponent implements OnInit {
   faBeer = faBeer;
   faSyncAlt= faSyncAlt;
   faChevronDown = faChevronDown;
+
+
+  progressBar = {
+    barType: 'multiple',
+    // barType: 'simple',
+    value: 60,
+    type: 'warning',
+    // optionList: null,
+    
+    optionList: [
+      {
+        value: 10,
+        type: 'warning'
+      },
+      {
+        value: 80,
+        type: 'info',
+        text: 'test'
+      },
+    ]
+    
+  }
   
   constructor() { }
 

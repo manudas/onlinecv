@@ -19,11 +19,9 @@
         <div class='page-header'>
             <h4>System usage</h4>
         </div>
-        <div class='progress'>
-            <div class='progress-bar progress-bar-success'></div>
-            <div class='progress-bar progress-bar-warning'></div>
-            <div class='progress-bar progress-bar-danger'></div>
-        </div>
+        <app-progress-bar [barType]="progressBar.barType"
+            [value]="progressBar.value"
+            [optionList]="progressBar.optionList"></app-progress-bar>
         <div class='page-header'>
             <h4>User statics</h4>
         </div>

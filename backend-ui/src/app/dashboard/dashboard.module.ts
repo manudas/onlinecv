@@ -5,12 +5,15 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { DashboardComponent } from './dashboard.component';
 
+import { WidgetsModule } from '@app/widgets/widgets.module'
+
 
 @NgModule({
   declarations: [DashboardComponent],
   imports: [
     CommonModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    WidgetsModule
   ],
   exports: [DashboardComponent]
 })

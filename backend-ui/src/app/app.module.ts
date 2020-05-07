@@ -7,7 +7,7 @@ import { WrapperModule } from './wrapper/wrapper.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,

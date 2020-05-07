@@ -1,0 +1,27 @@
+<div class='progress'>
+    <ngb-progressbar *ngIf="(
+        barType.toString() ==  ProgressBarType.simple.toString()
+        || ProgressBarType[barType].toString() == ProgressBarType.simple.toString()
+    )"
+        [type]="type"
+        [value]="value"
+        [ngStyle]="{
+            width: '100%'
+        }">{{ text }}</ngb-progressbar>
+
+
+    <ng-template *ngIf="(
+        barType.toString() ==  ProgressBarType.multiple.toString()
+        || ProgressBarType[barType].toString() == ProgressBarType.multiple.toString()
+    )"
+        ngFor
+        let-progres_bar
+        [ngForOf]="optionList">
+        <ngb-progressbar [type]="progres_bar.type"
+            [value]="'100'"
+            [ngStyle]="{
+                width: progres_bar.value + '%',
+                display: 'inline-block'
+            }">{{ progres_bar.text }}</ngb-progressbar>
+    </ng-template>
+</div>
