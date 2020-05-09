@@ -4,15 +4,21 @@ import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ProgressBarComponent } from '@app/progress-bar/progress-bar.component';
+import { DoughnutChartComponent } from '@app/doughnutchart/doughnutchart.component';
+
 
 @NgModule({
-  declarations: [ProgressBarComponent],
+  declarations: [
+    ProgressBarComponent,
+    DoughnutChartComponent
+  ],
   imports: [
     CommonModule,
     NgbModule,
   ],
   exports: [
-    ProgressBarComponent
+    ProgressBarComponent,
+    DoughnutChartComponent,
   ]
 })
 export class WidgetsModule { }

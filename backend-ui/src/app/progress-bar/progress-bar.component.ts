@@ -18,7 +18,7 @@ export class ProgressBarComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.value);
+    // console.log(this.value);
   }
 
 }
