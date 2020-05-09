@@ -1,23 +1,20 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { WidgetsModule } from '@app/widgets/widgets.module'
 import { CardModule } from '@app/card/card.module'
 
-import { DashboardComponent } from './dashboard.component';
+import { DetailsComponent } from './details.component';
 
 
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [DetailsComponent],
   imports: [
     CommonModule,
-    WidgetsModule,
     FontAwesomeModule,
     CardModule
   ],
-  exports: [DashboardComponent]
+  exports: [DetailsComponent],
 })
-export class DashboardModule { }
+export class DetailsModule { }

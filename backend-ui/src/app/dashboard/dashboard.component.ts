@@ -17,7 +17,6 @@ export class DashboardComponent implements OnInit {
   faSyncAlt= faSyncAlt;
   faChevronDown = faChevronDown;
 
-
   progressBar = {
     barType: 'multiple',
     // barType: 'simple',

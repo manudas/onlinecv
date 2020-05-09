@@ -7,17 +7,25 @@
         id='toggle'></i>
     <ul id='dock'
         [className]="'sidebar_dock'">
-        <li [className]="'sidebar_dock_launcher'">
+        <li [ngClass]="{
+            'sidebar_dock_launcher': true,
+            'active': getRoute('dashboard')
+        }"
+            [routerLink]="'dashboard'">
             <fa-icon [icon]="faTachometerAlt"
                 size="2x"
                 [className]="sidebar_icon"></fa-icon>
             <a [className]="'sidebar_dock_link'">Dashboard</a>
         </li>
-        <li [className]="'sidebar_dock_launcher'">
+        <li [ngClass]="{
+            'sidebar_dock_launcher': true,
+            'active': getRoute('details')
+        }"
+            [routerLink]="'details'">
             <fa-icon [icon]="faFileAlt"
                 size="2x"
                 [className]="sidebar_icon"></fa-icon>
-            <a [className]="'sidebar_dock_link'">Forms</a>
+            <a [className]="'sidebar_dock_link'">Details</a>
         </li>
         <li [className]="'sidebar_dock_launcher'">
             <fa-icon [icon]="faTable"
@@ -25,7 +33,7 @@
                 [className]="sidebar_icon"></fa-icon>
             <a [className]="'sidebar_dock_link'">Tables</a>
         </li>
-        <li [className]="'sidebar_dock_launcher dropdown hover'">
+        <li [className]="'sidebar_dock_launcher'">
             <app-menu [name]="reportMenu.name"
                 [start_icon]="reportMenu.start_icon"
                 [title]="reportMenu.title"

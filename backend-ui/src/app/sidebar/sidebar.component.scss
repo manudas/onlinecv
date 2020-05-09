@@ -26,7 +26,7 @@
                 cursor: pointer;
                 // indicador de opcion
                  :hover:before,
-                .active:before {
+                &.active:before {
                     width: 0;
                     height: 0;
                     border-top: 5px solid transparent;

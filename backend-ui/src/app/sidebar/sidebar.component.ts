@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import {
   faBars,
   faTachometerAlt,
@@ -82,7 +84,14 @@ export class SidebarComponent implements OnInit {
       ]
   } 
 
-  constructor() { }
+  constructor(private router: Router) { }
+
+  getRoute(elementName){
+    if (this.router.url === `\/${elementName}`){
+      return "active";
+    }
+    return null;
+  }
 
   ngOnInit(): void {
   }

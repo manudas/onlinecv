@@ -1,0 +1,15 @@
+<div class='card'>
+    <div class='card-header'>
+        <fa-icon *ngIf="icon"
+            [icon]="icon"
+            [flip]="iconFlip"
+            [className]="iconClass"
+            [size]="iconSize"></fa-icon> {{ cardTitle }}
+        <div class='panel-tools'>
+            <ng-container *ngIf="panelTools; then panelTools"></ng-container>
+        </div>
+    </div>
+    <div class='panel-body'>
+        <ng-container *ngIf="panelBody; then panelBody"></ng-container>
+    </div>
+</div>

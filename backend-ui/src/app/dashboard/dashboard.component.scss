@@ -2,44 +2,25 @@
 
 @import '~bootstrap/scss/bootstrap';
 :host {
-    .card {
-        .card-header {
-            background-color: #f5f7f7;
-            display: flex;
-            align-items: center;
-            padding: 0px 15px;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 14px;
-            line-height: 1.428571429;
-            .panel-tools {
-                flex-grow: 1;
-                display: flex;
-                justify-content: flex-end;
-                .btn-group {
-                    .btn {
-                        font-size: inherit;
-                        padding-top: 8px;
-                        padding-bottom: 8px;
-                        padding-right: 6px;
-                        padding-left: 6px;
-                    }
-                    .btn:hover {
-                        color: #1abc9c;
-                    }
-                }
-            }
+    .btn-group {
+        .btn {
+            font-size: inherit;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            padding-right: 6px;
+            padding-left: 6px;
         }
-        .panel-body {
-            padding: 15px;
-            .page-header {
-                padding-bottom: 9px;
-                margin: 40px 0 20px;
-                border-bottom: 1px solid #eeeeee;
-                h4,
-                .h4 {
-                    font-size: 18px;
-                }
-            }
+        .btn:hover {
+            color: #1abc9c;
+        }
+    }
+    .page-header {
+        padding-bottom: 9px;
+        margin: 40px 0 20px;
+        border-bottom: 1px solid #eeeeee;
+        h4,
+        .h4 {
+            font-size: 18px;
         }
     }
 }

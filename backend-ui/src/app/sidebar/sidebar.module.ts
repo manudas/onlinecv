@@ -1,9 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SidebarComponent } from './sidebar.component';
+import { RouterModule } from '@angular/router'
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 import { MenuModule } from '../menu/menu.module'
+
+import { SidebarComponent } from './sidebar.component';
 
 @NgModule({
   declarations: [SidebarComponent],
@@ -11,7 +15,8 @@ import { MenuModule } from '../menu/menu.module'
     CommonModule,
     FontAwesomeModule,
     NgbModule,
-    MenuModule
+    MenuModule,
+    RouterModule
   ],
   exports: [SidebarComponent]
 })
