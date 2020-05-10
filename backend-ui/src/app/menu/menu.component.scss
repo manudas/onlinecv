@@ -71,17 +71,21 @@
         &.noCaret::after {
             display: none;
         }
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     &_badge {
         @extend .badge;
         @extend .badge-secondary;
-        min-width: 10px;
-        padding: 3px 7px;
         font-size: 0.8rem;
-        background-color: #999999;
+        padding: 3px 7px;
+        display: inline-flex;
+        margin-left: 10px;
         border-radius: 10px;
         height: 1rem;
-        vertical-align: middle;
+        width: max-content;
+        min-width: 1rem;
     }
     &_image {
         border-radius: 6px;

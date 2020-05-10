@@ -14,7 +14,8 @@
             [options]="messageMenu.options"></app-menu>
         <div>
             <a [ngClass]="'navigation-bar_nav-link'">
-                <fa-icon [icon]="faCog"></fa-icon> Settings
+                <fa-icon [className]="'mr-1'"
+                    [icon]="faCog"></fa-icon> Settings
             </a>
         </div>
         <app-menu [name]="userMenu.name"

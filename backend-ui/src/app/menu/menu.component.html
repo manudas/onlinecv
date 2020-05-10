@@ -72,14 +72,12 @@
 <ng-template #dropDownNavLinkContent>
     <fa-icon *ngIf="start_icon"
         [icon]="start_icon"
-        [ngClass]="'dropdown_start_icon'"
+        [ngClass]="'dropdown_start_icon mr-2'"
         [style]="stylesStartIcon"></fa-icon>
     {{ title }}
     <span *ngIf="badge"
         [ngClass]="'dropdown_badge'"
-        [style]="stylesBadge">
-    {{ badge }}
-</span>
+        [style]="stylesBadge">{{badge}}</span>
     <fa-icon *ngIf="end_icon"
         [icon]="end_icon"
         [ngClass]="'dropdown_end_icon'"

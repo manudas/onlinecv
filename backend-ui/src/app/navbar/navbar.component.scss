@@ -10,6 +10,7 @@
     .navigation-bar {
         color: #777777;
         flex-direction: row;
+        align-items: center;
         &_nav-link {
             cursor: pointer;
             padding: 10px 15px;
