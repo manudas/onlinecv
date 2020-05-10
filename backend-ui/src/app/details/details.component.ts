@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import {
   faEdit,
@@ -12,6 +12,8 @@ import {
 export class DetailsComponent implements OnInit {
 
   faEdit = faEdit
+
+  @Input() title: string = 'Personal details';
 
   constructor() { }
 
