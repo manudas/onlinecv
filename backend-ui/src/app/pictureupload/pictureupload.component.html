@@ -1,0 +1,22 @@
+<div class="picture">
+    <div class="modalBox">
+        <div id="profile"
+            [ngClass]="{
+                'dragging': dragging,
+                'hasImage': hasImage
+            }"
+            [ngStyle]="{
+                'background-image': 'url(' + imageData + ')'
+            }"
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)"
+            (drop)="onDrop($event)">
+            <div [className]="'dashes'"></div>
+            <label>Click to browse or drag an image here</label></div>
+        <div class="username">
+            <h1>{{'Yournamehere'}}</h1>
+        </div>
+    </div>
+    <input type="file"
+        id="mediaFile" />
+</div>

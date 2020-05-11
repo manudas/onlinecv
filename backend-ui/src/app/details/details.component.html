@@ -10,7 +10,7 @@
             <legend>Personal details</legend>
             <div class="form-group">
                 <label class="control-label">Your photo</label>
-                <ng-container *ngTemplateOutlet="picture"></ng-container>
+                <app-pictureupload></app-pictureupload>
             </div>
             <div class='form-group'>
                 <label class='control-label'>Full name</label>
@@ -80,20 +80,5 @@
         <input class='form-control'
             placeholder='Enter a FontAwesome 5 icon name'>
         <p class='help-block'>E.g.: linkedin, paper-plane-o and so on...</p>
-    </div>
-</ng-template>
-
-<ng-template #picture>
-    <div class="picture">
-        <div class="modalBox">
-            <div id="profile">
-                <div class="dashes"></div>
-                <label>Click to browse or drag an image here</label></div>
-            <div class="username">
-                <h1>{{'Yournamehere'}}</h1>
-            </div>
-        </div>
-        <input type="file"
-            id="mediaFile" />
     </div>
 </ng-template>
