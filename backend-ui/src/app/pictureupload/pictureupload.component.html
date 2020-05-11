@@ -6,11 +6,12 @@
                 'hasImage': hasImage
             }"
             [ngStyle]="{
-                'background-image': 'url(' + imageData + ')'
+                'background-image': imageData ? 'url(' + imageData + ')' : 'none'
             }"
             (dragover)="onDragOver($event)"
             (dragleave)="onDragLeave($event)"
-            (drop)="onDrop($event)">
+            (drop)="onReceiveFile($event)"
+            (click)="mediaFile.click()">
             <div [className]="'dashes'"></div>
             <label>Click to browse or drag an image here</label></div>
         <div class="username">
@@ -18,5 +19,7 @@
         </div>
     </div>
     <input type="file"
-        id="mediaFile" />
+        id="mediaFile"
+        #mediaFile
+        (change)="onReceiveFile($event)" />
 </div>

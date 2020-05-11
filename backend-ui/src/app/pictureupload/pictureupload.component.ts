@@ -10,6 +10,7 @@ export class PictureuploadComponent implements OnInit {
   dragging: boolean = false
   hasImage:boolean = false;
   imageData: Blob = null;
+  file: File = null;
 
   constructor() { }
 
@@ -26,27 +27,30 @@ export class PictureuploadComponent implements OnInit {
     this.dragging = false;
   }
 
-  onDrop($event) {
+  onReceiveFile($event) {
     // $('#profile').removeClass('dragging hasImage');
     this.dragging = false;
-    this.hasImage = false;
+    // this.hasImage = false;
 
-    var file = $event.dataTransfer.files[0];
-    console.log(file);
+    const file = $event.dataTransfer ? 
+                    $event.dataTransfer.files[0] 
+                    :  $event.target ? $event.target.files[0] 
+                      : null;
 
-    var reader = new FileReader();
+    if (file) {
+      // could be null when no file has been selected
+      const reader = new FileReader();
 
-    //attach event handlers here...
-    reader.readAsDataURL(file);
-    reader.onload = function(e) {
-      console.log(reader.result);
-      // $('#profile').css('background-image', 'url(' + reader.result + ')').addClass('hasImage');
-      this.hasImage = true;
-      this.imageData = reader.result;
-    }.bind(this);
+      //attach event handlers here...
+      reader.readAsDataURL(file);
+      reader.onload = function(e) {
+        this.hasImage = true;
+        this.imageData = reader.result;
+        this.file = file
+      }.bind(this);
+    }
     $event.preventDefault();
   }
-
 
   @HostListener('document:dragover', ['$event'])
   @HostListener('drop', ['$event'])
@@ -61,55 +65,12 @@ export class PictureuploadComponent implements OnInit {
       event.dataTransfer.dropEffect = 'none'
     }
   }
-  
 }
 
 
 
-
 /*
-// ----- On render -----
-$(function() {
 
-  $('#profile').addClass('dragging').removeClass('dragging');
-});
-
-$('#profile').on('dragover', function() {
-  $('#profile').addClass('dragging')
-}).on('dragleave', function() {
-  $('#profile').removeClass('dragging')
-}).on('drop', function(e) {
-  $('#profile').removeClass('dragging hasImage');
-
-  if (e.originalEvent) {
-    var file = e.originalEvent.dataTransfer.files[0];
-    console.log(file);
-
-    var reader = new FileReader();
-
-    //attach event handlers here...
-
-    reader.readAsDataURL(file);
-    reader.onload = function(e) {
-      console.log(reader.result);
-      $('#profile').css('background-image', 'url(' + reader.result + ')').addClass('hasImage');
-
-    }
-
-  }
-})
-$('#profile').on('click', function(e) {
-  console.log('clicked')
-  $('#mediaFile').click();
-});
-window.addEventListener("dragover", function(e) {
-  e = e || event;
-  e.preventDefault();
-}, false);
-window.addEventListener("drop", function(e) {
-  e = e || event;
-  e.preventDefault();
-}, false);
 $('#mediaFile').change(function(e) {
 
   var input = e.target;
