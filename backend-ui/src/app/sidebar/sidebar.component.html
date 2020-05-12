@@ -28,10 +28,15 @@
             <a [className]="'sidebar_dock_link'">Details</a>
         </li>
         <li [className]="'sidebar_dock_launcher'">
-            <fa-icon [icon]="faTable"
-                size="2x"
-                [className]="sidebar_icon"></fa-icon>
-            <a [className]="'sidebar_dock_link'">Tables</a>
+            <app-menu [name]="trainingMenu.name"
+                [start_icon]="trainingMenu.start_icon"
+                [title]="trainingMenu.title"
+                [options]="trainingMenu.options"
+                [caret]="trainingMenu.caret"
+                [stylesStartIcon]="trainingMenu.stylesStartIcon"
+                [stylesDropToggle]="trainingMenu.stylesDropToggle"
+                [placement]="'right-top'"
+                [dropDownActiveOrFocusedToggleStyles]="trainingMenu.dropDownActiveOrFocusedToggleStyles"></app-menu>
         </li>
         <li [className]="'sidebar_dock_launcher'">
             <app-menu [name]="reportMenu.name"

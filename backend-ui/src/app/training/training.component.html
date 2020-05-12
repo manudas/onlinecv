@@ -1,0 +1,40 @@
+<ng-container *ngIf="regulated; then regulatedTemplate"></ng-container>
+<ng-container *ngIf="computer; then computerTemplate"></ng-container>
+<ng-container *ngIf="others; then othersTemplate"></ng-container>
+
+
+<ng-template #regulatedTemplate>
+    <app-card [icon]="faTable"
+        [iconClass]="'mr-1'"
+        [panelBody]="panelBodyRegulated"
+        [cardTitle]="title">
+    </app-card>
+</ng-template>
+
+<ng-template #computerTemplate>
+    <app-card [icon]="faTable"
+        [iconClass]="'mr-1'"
+        [panelBody]="panelBodyComputer"
+        [cardTitle]="title">
+    </app-card>
+</ng-template>
+
+<ng-template #othersTemplate>
+    <app-card [icon]="faTable"
+        [iconClass]="'mr-1'"
+        [panelBody]="panelBodyOthers"
+        [cardTitle]="title">
+    </app-card>
+</ng-template>
+
+<ng-template #panelBodyRegulated>
+    regulated training
+</ng-template>
+
+<ng-template #panelBodyComputer>
+    computer skills or training
+</ng-template>
+
+<ng-template #panelBodyOthers>
+    other skills
+</ng-template>

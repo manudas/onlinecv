@@ -35,6 +35,65 @@ export class SidebarComponent implements OnInit {
 
   sidebar_icon = 'sidebar_icons';
 
+
+
+  trainingMenu = {
+    name: 'TrainingDropdown',
+    start_icon: faTable,
+    title: 'Training',
+    caret: false,
+    stylesStartIcon: 
+        `font-size: 2.7em;
+        display:block;
+        width:100%;`,
+    stylesDropToggle: 
+        `
+        padding:0;
+        font-size: 0.8em; 
+        display: block;
+        width: 100%;
+        border-right: 5px solid transparent;
+        color: #ecf0f1;
+        box-sizing: content-box;
+        `,
+    dropDownActiveOrFocusedToggleStyles:    
+        {
+          'transition-property': 'color',
+          'transition-duration': '0.4s',
+          'transition-timing-function': 'ease-in-out',
+          'color': '#1abc9c'
+        },
+    options: [
+        {
+            name: 'Training',
+            type: 'header',
+        },
+        {
+          name: 'All',
+          url: '/training',
+          type: 'option',
+        },
+        {
+          name: 'Regulated',
+          url: '/training/regulated',
+          type: 'option',
+        },
+        {
+          name: 'Computer skills',
+          url: '/training/computer',
+          type: 'option',
+        },
+        {
+          name: 'Other skills',
+          url: '/training/others',
+          type: 'option',
+        }
+      ]
+  }
+
+
+
+
   reportMenu = {
     name: 'ReportDropdown',
     start_icon: faFlagCheckered,
