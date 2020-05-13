@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core'
+import { NgModule, isDevMode } from '@angular/core'
 import { RouterModule } from '@angular/router'
 
 import { DashboardModule } from '@app/dashboard/dashboard.module';
@@ -12,7 +12,7 @@ import { routes } from './config/routes'
     DashboardModule,
     DetailsModule,
     TrainingModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes, { enableTracing: isDevMode() }),
   ],
   exports: [RouterModule]
 })

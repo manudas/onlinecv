@@ -31,18 +31,17 @@
                         )">
                 {{ option.name }}
             </div>
-            <a *ngIf="
+            <button *ngIf="
                     (
                         option.type.toString() ==  MenuItem.option.toString()
                         || MenuItem[option.type].toString() == MenuItem.option.toString()
                     ) 
                     && !option.onclick"
                 ngbDropdownItem
-                href="option.url"
-                (click)="$event.preventDefault()"
+                [routerLink]="getRouterUrl(option)"
                 [ngClass]="'dropdown-menu_option'"
-                [style]="stylesOption">{{ option.name }}</a>
-            <a *ngIf="
+                [style]="stylesOption">{{ option.name }}</button>
+            <button *ngIf="
                     (
                         option.type.toString() ==  MenuItem.option.toString()
                         || MenuItem[option.type].toString() == MenuItem.option.toString()   
@@ -51,7 +50,7 @@
                 ngbDropdownItem
                 (click)="option.onclick"
                 [ngClass]="'dropdown-menu_option'"
-                [style]="stylesOption">{{ option.name }}</a>
+                [style]="stylesOption">{{ option.name }}</button>
             <div *ngIf="
                         (
                             option.type.toString() ==  MenuItem.separator.toString()

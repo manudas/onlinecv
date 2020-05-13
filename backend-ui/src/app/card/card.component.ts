@@ -14,6 +14,7 @@ export class CardComponent implements OnInit {
   @Input() iconSize : string = "lg"
   @Input() iconClass : string = null;
   @Input() cardTitle : string = null;
+  @Input() cardStyle : string | {} = null;
   @Input() panelTools : TemplateRef<any> = null;
   @Input() panelBody : TemplateRef<any> = null;
 

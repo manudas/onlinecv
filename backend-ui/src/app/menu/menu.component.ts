@@ -88,6 +88,17 @@ export class MenuComponent implements OnInit {
     return result;
   }
 
+  getRouterUrl(option) {
+    const routerLinkAddress = [];
+    if (option.url) {
+      routerLinkAddress.push(option.url);
+      if (option.urlSegments) {
+        routerLinkAddress.push(option.urlSegments);
+      }
+    }
+    return routerLinkAddress;
+  }
+
   ngOnInit(): void {
   }
 

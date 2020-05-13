@@ -70,22 +70,25 @@ export class SidebarComponent implements OnInit {
         },
         {
           name: 'All',
-          url: '/training',
+          url: 'training',
           type: 'option',
         },
         {
           name: 'Regulated',
-          url: '/training/regulated',
+          url: 'training',
+          urlSegments: 'regulated',
           type: 'option',
         },
         {
           name: 'Computer skills',
-          url: '/training/computer',
+          url: 'training',
+          urlSegments: 'computer',
           type: 'option',
         },
         {
           name: 'Other skills',
-          url: '/training/others',
+          url: 'training',
+          urlSegments: 'others',
           type: 'option',
         }
       ]

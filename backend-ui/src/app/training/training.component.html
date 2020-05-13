@@ -1,6 +1,8 @@
-<ng-container *ngIf="regulated; then regulatedTemplate"></ng-container>
-<ng-container *ngIf="computer; then computerTemplate"></ng-container>
-<ng-container *ngIf="others; then othersTemplate"></ng-container>
+<ng-container *ngIf="isTrainingActive('regulated'); then regulatedTemplate"></ng-container>
+<ng-container *ngIf="isTrainingActive('regulated') && isTrainingActive('computer'); then separator"></ng-container>
+<ng-container *ngIf="isTrainingActive('computer'); then computerTemplate"></ng-container>
+<ng-container *ngIf="(isTrainingActive('regulated') || isTrainingActive('computer')) && isTrainingActive('others'); then separator"></ng-container>
+<ng-container *ngIf="isTrainingActive('others'); then othersTemplate"></ng-container>
 
 
 <ng-template #regulatedTemplate>
@@ -28,13 +30,17 @@
 </ng-template>
 
 <ng-template #panelBodyRegulated>
-    regulated training
+    usar angular materials https://material.angular.io/components/table/overview
 </ng-template>
 
 <ng-template #panelBodyComputer>
-    computer skills or training
+    usar angular materials https://material.angular.io/components/table/overview
 </ng-template>
 
 <ng-template #panelBodyOthers>
-    other skills
+    usar angular materials https://material.angular.io/components/table/overview
+</ng-template>
+
+<ng-template #separator>
+    <div [className]="'separator'"></div>
 </ng-template>

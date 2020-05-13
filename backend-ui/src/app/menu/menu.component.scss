@@ -47,7 +47,8 @@
             &:focus {
                 text-decoration: none;
                 color: #262626;
-                background-color: whitesmoke
+                background-color: whitesmoke;
+                outline: none;
             }
         }
         &_header {
