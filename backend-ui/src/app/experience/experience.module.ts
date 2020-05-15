@@ -19,4 +19,4 @@ import { ExperienceComponent } from './experience.component';
   ],
   exports: [ExperienceComponent]
 })
-export class ExperiencegModule { }
+export class ExperienceModule { }

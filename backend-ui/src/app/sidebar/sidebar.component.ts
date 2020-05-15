@@ -95,12 +95,10 @@ export class SidebarComponent implements OnInit {
   }
 
 
-
-
-  reportMenu = {
-    name: 'ReportDropdown',
+  experienceMenu = {
+    name: 'ExperienceDropdown',
     start_icon: faFlagCheckered,
-    title: 'Reports',
+    title: 'Experience',
     caret: false,
     stylesStartIcon: 
         `font-size: 2.8em;
@@ -125,22 +123,30 @@ export class SidebarComponent implements OnInit {
         },
     options: [
         {
-            name: 'Launcher description',
+            name: 'Professional & others',
             type: 'header',
         },
         {
-          name: 'Action',
-          url: '/Action',
+          name: 'All',
+          url: 'experience',
           type: 'option',
         },
         {
-          name: 'Another action',
-          url: '/another-action',
+          name: 'Professional',
+          url: 'training',
+          experience: 'professional',
           type: 'option',
         },
         {
-          name: 'Something else here',
-          url: '/something-else-here',
+          name: 'Ongs',
+          url: 'experience',
+          urlSegments: 'ong',
+          type: 'option',
+        },
+        {
+          name: 'Other experiences',
+          url: 'experience',
+          urlSegments: 'others',
           type: 'option',
         }
       ]

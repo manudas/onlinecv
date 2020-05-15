@@ -17,7 +17,7 @@ export class ExperienceComponent implements OnInit {
 
   professionalData: string[] = null;
   ongData: string[] = null;
-  othersData: string[] = null;
+  otherData: string[] = null;
 
   @Input() title: string = 'Experience';
 
@@ -33,9 +33,9 @@ export class ExperienceComponent implements OnInit {
     });
   }
 
-  public isExperienceActive(ExperienceType: string) {
-    return this.type === ExperienceType.all 
-            || this.type === ExperienceType[ExperienceType];
+  public isExperienceActive(experience: string) {
+    return this.type === ExperienceType.all
+            || this.type === ExperienceType[experience];
   }
 
   ngOnInit(): void {
