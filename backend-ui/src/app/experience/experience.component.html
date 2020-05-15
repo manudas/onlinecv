@@ -1,22 +1,22 @@
-<ng-container *ngIf="isTrainingActive('regulated'); then regulatedTemplate"></ng-container>
-<ng-container *ngIf="isTrainingActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isTrainingActive('computer'); then computerTemplate"></ng-container>
-<ng-container *ngIf="isTrainingActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isTrainingActive('others'); then othersTemplate"></ng-container>
+<ng-container *ngIf="isExperienceActive('professional'); then professionalTemplate"></ng-container>
+<ng-container *ngIf="isExperienceActive('all'); then separator"></ng-container>
+<ng-container *ngIf="isExperienceActive('ong'); then ongTemplate"></ng-container>
+<ng-container *ngIf="isExperienceActive('all'); then separator"></ng-container>
+<ng-container *ngIf="isExperienceActive('others'); then othersTemplate"></ng-container>
 
 
-<ng-template #regulatedTemplate>
+<ng-template #professionalTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
-        [panelBody]="panelBodyRegulated"
+        [panelBody]="panelBodyProfessional"
         [cardTitle]="title">
     </app-card>
 </ng-template>
 
-<ng-template #computerTemplate>
+<ng-template #ongTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
-        [panelBody]="panelBodyComputer"
+        [panelBody]="panelBodyOng"
         [cardTitle]="title">
     </app-card>
 </ng-template>
@@ -29,12 +29,12 @@
     </app-card>
 </ng-template>
 
-<ng-template #panelBodyRegulated>
+<ng-template #panelBodyProfessional>
     <mat-table class=""
         [dataSource]="regulatedData"></mat-table>
 </ng-template>
 
-<ng-template #panelBodyComputer>
+<ng-template #panelBodyOng>
     <mat-table class=""
         [dataSource]="computerData"></mat-table>
 </ng-template>

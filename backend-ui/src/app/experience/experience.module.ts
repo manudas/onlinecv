@@ -7,16 +7,16 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { CardModule } from '@app/card/card.module'
 
-import { TrainingComponent } from './training.component';
+import { ExperienceComponent } from './experience.component';
 
 @NgModule({
-  declarations: [TrainingComponent],
+  declarations: [ExperienceComponent],
   imports: [
     CommonModule,
     MatTableModule,
     FontAwesomeModule,
     CardModule
   ],
-  exports: [TrainingComponent]
+  exports: [ExperienceComponent]
 })
-export class TrainingModule { }
+export class ExperiencegModule { }

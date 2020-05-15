@@ -15,6 +15,10 @@ export class TrainingComponent implements OnInit {
   faTable = faTable;
   type: TrainingType = null;
 
+  regulatedData: string[] = null;
+  computerData: string[] = null;
+  otherData: string[] = null;
+
   @Input() title: string = 'Training';
 
   constructor(private activatedRoute:ActivatedRoute) {

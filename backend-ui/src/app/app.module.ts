@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { NavbarModule } from './navbar/navbar.module';
 import { WrapperModule } from './wrapper/wrapper.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -12,7 +13,8 @@ import { WrapperModule } from './wrapper/wrapper.module';
   imports: [
     BrowserModule,
     NavbarModule,
-    WrapperModule
+    WrapperModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
