@@ -1,21 +1,33 @@
 {
-  "name": "cv-backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Manuel José Pulgar Anguita",
-  "license": "ISC",
-  "dependencies": {
-    "compression": "^1.7.4",
-    "cookie-parser": "^1.4.5",
-    "ejs": "^3.1.2",
-    "express": "^4.17.1",
-    "mongoose": "^5.9.10",
-    "node-datetime": "^2.1.2",
-    "npm": "^6.14.4"
-  }
+    "name": "cv-backend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Manuel José Pulgar Anguita",
+    "license": "ISC",
+    "dependencies": {
+        "apollo-server": "^2.13.1",
+        "apollo-server-express": "^2.13.1",
+        "compression": "^1.7.4",
+        "cookie-parser": "^1.4.5",
+        "ejs": "^3.1.2",
+        "express": "^4.17.1",
+        "graphql": "^15.0.0",
+        "module-alias": "^2.2.2",
+        "mongoose": "^5.9.10",
+        "node-datetime": "^2.1.2",
+        "npm": "^6.14.4"
+    },
+    "_moduleAliases": {
+        "@app": ".",
+        "@models": "models",
+        "@views": "views",
+        "@data": "data",
+        "@helpers": "helpers",
+        "@config": "data/config"
+    }
 }
