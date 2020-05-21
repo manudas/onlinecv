@@ -10,6 +10,8 @@ export default {
         }, info) => {
             const interestList = await interestsModel.findById({
                 language: language
+            }).sort({
+                order: 1
             }).exec();
             return interestList;
         },
@@ -53,7 +55,7 @@ export default {
             const WriteResult = await interestsModel.remove({
                 id
             }, true); // true == remove one
-            return WriteResult.nRemoved === 1 ? true : false;
+            return WriteResult.nRemoved === 1;
         },
     },
 };

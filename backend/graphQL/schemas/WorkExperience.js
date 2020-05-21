@@ -29,7 +29,6 @@ export default gql
 
   type Query {
     workExperiences(language: String!): [WorkExperience]!
-    workExperience(id: ID!, language: String!): WorkExperience
   }
 
   type Mutation {

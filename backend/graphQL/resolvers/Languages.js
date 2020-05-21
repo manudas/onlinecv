@@ -1,17 +1,19 @@
 // import { AuthenticationError } from 'apollo-server';
 export default {
     Query: {
-        image: async(parent, {
-            key
+        languages: async(parent, {
+            language
         }, {
             models: {
-                imageModel // configModel
+                languagesModel // configModel
             },
         }, info) => {
-            const image = await imageModel.findById({
-                key: key
+            const languageList = await languagesModel.findById({
+                language
+            }).sort({
+                order: 1
             }).exec();
-            return image;
+            return languageList;
         },
     },
     Mutation: {
@@ -26,33 +28,31 @@ export default {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putImage: async(parent, {
-            Image,
+        putLanguage: async(parent, {
+            Language,
         }, {
             models: {
-                imageModel // configModel
+                languagesModel
             },
         }, info) => {
-            const WriteResult = await imageModel.update({
-                key: key
-            }, { // the object values to insert in DB
-                key: Image.key,
-                value: Image.value
-            }, {
+            const WriteResult = await languagesModel.update({
+                name: Language.name,
+                language: Language.language,
+            }, Language, {
                 upsert: true // if no details found, create a new entry
             });
             return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? Image : false;
+                1) ? Language : false;
         },
-        removeImage: async(parent, {
-            key,
+        removeLanguage: async(parent, {
+            id,
         }, {
             models: {
-                imageModel // configModel
+                languagesModel
             },
         }, info) => {
-            const WriteResult = await imageModel.remove({
-                key
+            const WriteResult = await languagesModel.remove({
+                id
             }, true); // true == remove one
             return WriteResult.nRemoved === 1;
         },

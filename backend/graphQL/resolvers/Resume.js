@@ -1,17 +1,16 @@
-// import { AuthenticationError } from 'apollo-server';
 export default {
     Query: {
-        image: async(parent, {
-            key
+        resume: async(parent, {
+            language
         }, {
             models: {
-                imageModel // configModel
+                resumeModel
             },
         }, info) => {
-            const image = await imageModel.findById({
-                key: key
+            const resume = await resumeModel.findById({
+                language
             }).exec();
-            return image;
+            return resume;
         },
     },
     Mutation: {
@@ -26,33 +25,30 @@ export default {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putImage: async(parent, {
-            Image,
+        putResume: async(parent, {
+            Resume,
         }, {
             models: {
-                imageModel // configModel
+                resumeModel
             },
         }, info) => {
-            const WriteResult = await imageModel.update({
-                key: key
-            }, { // the object values to insert in DB
-                key: Image.key,
-                value: Image.value
-            }, {
+            const WriteResult = await resumeModel.update({
+                id: Resume.id,
+            }, Resume, {
                 upsert: true // if no details found, create a new entry
             });
             return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? Image : false;
+                1) ? Resume : false;
         },
-        removeImage: async(parent, {
-            key,
+        removeResume: async(parent, {
+            id,
         }, {
             models: {
-                imageModel // configModel
+                resumeModel
             },
         }, info) => {
-            const WriteResult = await imageModel.remove({
-                key
+            const WriteResult = await resumeModel.remove({
+                id
             }, true); // true == remove one
             return WriteResult.nRemoved === 1;
         },

@@ -27,7 +27,6 @@ export default gql
 
   type Query {
     skills(language: String!): [Skill]!
-    skill(id: ID!, language: String!): Skill
   }
 
   type Mutation {

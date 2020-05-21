@@ -1,17 +1,18 @@
-// import { AuthenticationError } from 'apollo-server';
 export default {
     Query: {
-        image: async(parent, {
-            key
+        workExperiences: async(parent, {
+            language
         }, {
             models: {
-                imageModel // configModel
+                workExperienceModel
             },
         }, info) => {
-            const image = await imageModel.findById({
-                key: key
+            const workExperienceList = await workExperienceModel.findById({
+                language
+            }).sort({
+                order: 1
             }).exec();
-            return image;
+            return workExperienceList;
         },
     },
     Mutation: {
@@ -26,33 +27,30 @@ export default {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putImage: async(parent, {
-            Image,
+        putWorkExperience: async(parent, {
+            WorkExperience,
         }, {
             models: {
-                imageModel // configModel
+                workExperienceModel
             },
         }, info) => {
-            const WriteResult = await imageModel.update({
-                key: key
-            }, { // the object values to insert in DB
-                key: Image.key,
-                value: Image.value
-            }, {
+            const WriteResult = await workExperienceModel.update({
+                id: WorkExperience.id,
+            }, WorkExperience, {
                 upsert: true // if no details found, create a new entry
             });
             return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? Image : false;
+                1) ? WorkExperience : false;
         },
-        removeImage: async(parent, {
-            key,
+        removeWorkExperience: async(parent, {
+            id,
         }, {
             models: {
-                imageModel // configModel
+                workExperienceModel
             },
         }, info) => {
-            const WriteResult = await imageModel.remove({
-                key
+            const WriteResult = await workExperienceModel.remove({
+                id
             }, true); // true == remove one
             return WriteResult.nRemoved === 1;
         },

@@ -1,17 +1,18 @@
-// import { AuthenticationError } from 'apollo-server';
 export default {
     Query: {
-        image: async(parent, {
-            key
+        regulatedTrainings: async(parent, {
+            language
         }, {
             models: {
-                imageModel // configModel
+                regulatedTrainingModel
             },
         }, info) => {
-            const image = await imageModel.findById({
-                key: key
+            const regulatedTrainingList = await regulatedTrainingModel.findById({
+                language
+            }).sort({
+                order: 1
             }).exec();
-            return image;
+            return regulatedTrainingList;
         },
     },
     Mutation: {
@@ -26,33 +27,30 @@ export default {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putImage: async(parent, {
-            Image,
+        putRegulatedTraining: async(parent, {
+            RegulatedTraining,
         }, {
             models: {
-                imageModel // configModel
+                regulatedTrainingModel
             },
         }, info) => {
-            const WriteResult = await imageModel.update({
-                key: key
-            }, { // the object values to insert in DB
-                key: Image.key,
-                value: Image.value
-            }, {
+            const WriteResult = await regulatedTrainingModel.update({
+                id: RegulatedTraining.id,
+            }, RegulatedTraining, {
                 upsert: true // if no details found, create a new entry
             });
             return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? Image : false;
+                1) ? RegulatedTraining : false;
         },
-        removeImage: async(parent, {
-            key,
+        removeRegulatedTraining: async(parent, {
+            id,
         }, {
             models: {
-                imageModel // configModel
+                regulatedTrainingModel
             },
         }, info) => {
-            const WriteResult = await imageModel.remove({
-                key
+            const WriteResult = await regulatedTrainingModel.remove({
+                id
             }, true); // true == remove one
             return WriteResult.nRemoved === 1;
         },

@@ -19,7 +19,6 @@ export default gql
 
   type Query {
     socialNetworks(language: String!): [SocialNetwork]!
-    socialNetwork(id: ID!, language: String!): SocialNetwork
   }
 
   type Mutation {

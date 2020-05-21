@@ -1,17 +1,19 @@
 // import { AuthenticationError } from 'apollo-server';
 export default {
     Query: {
-        image: async(parent, {
-            key
+        languages: async(parent, {
+            language
         }, {
             models: {
-                imageModel // configModel
+                portfolioModel // configModel
             },
         }, info) => {
-            const image = await imageModel.findById({
-                key: key
+            const portfolioList = await portfolioModel.findById({
+                language
+            }).sort({
+                order: 1
             }).exec();
-            return image;
+            return portfolioList;
         },
     },
     Mutation: {
@@ -26,33 +28,30 @@ export default {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putImage: async(parent, {
-            Image,
+        putPortfolio: async(parent, {
+            Portfolio,
         }, {
             models: {
-                imageModel // configModel
+                portfolioModel
             },
         }, info) => {
-            const WriteResult = await imageModel.update({
-                key: key
-            }, { // the object values to insert in DB
-                key: Image.key,
-                value: Image.value
-            }, {
+            const WriteResult = await portfolioModel.update({
+                id: Portfolio.id,
+            }, Portfolio, {
                 upsert: true // if no details found, create a new entry
             });
             return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? Image : false;
+                1) ? Portfolio : false;
         },
-        removeImage: async(parent, {
-            key,
+        removePortfolio: async(parent, {
+            id,
         }, {
             models: {
-                imageModel // configModel
+                portfolioModel
             },
         }, info) => {
-            const WriteResult = await imageModel.remove({
-                key
+            const WriteResult = await portfolioModel.remove({
+                id
             }, true); // true == remove one
             return WriteResult.nRemoved === 1;
         },

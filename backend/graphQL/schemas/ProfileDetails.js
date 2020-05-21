@@ -18,7 +18,6 @@ export default gql
   }
 
   type Query {
-    profileDetail(id: ID!, language: String!): ProfileDetail
     profileDetails(language: String!): [ProfileDetail]!
   }
 

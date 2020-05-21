@@ -1,17 +1,18 @@
-// import { AuthenticationError } from 'apollo-server';
 export default {
     Query: {
-        image: async(parent, {
-            key
+        socialNetworks: async(parent, {
+            language
         }, {
             models: {
-                imageModel // configModel
+                socialNetworksModel
             },
         }, info) => {
-            const image = await imageModel.findById({
-                key: key
+            const socialNetworkList = await socialNetworksModel.findById({
+                language
+            }).sort({
+                order: 1
             }).exec();
-            return image;
+            return socialNetworkList;
         },
     },
     Mutation: {
@@ -26,33 +27,30 @@ export default {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putImage: async(parent, {
-            Image,
+        putSocialNetwork: async(parent, {
+            SocialNetwork,
         }, {
             models: {
-                imageModel // configModel
+                socialNetworksModel
             },
         }, info) => {
-            const WriteResult = await imageModel.update({
-                key: key
-            }, { // the object values to insert in DB
-                key: Image.key,
-                value: Image.value
-            }, {
+            const WriteResult = await socialNetworksModel.update({
+                id: SocialNetwork.id,
+            }, SocialNetwork, {
                 upsert: true // if no details found, create a new entry
             });
             return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? Image : false;
+                1) ? SocialNetwork : false;
         },
-        removeImage: async(parent, {
-            key,
+        removeSocialNetwork: async(parent, {
+            id,
         }, {
             models: {
-                imageModel // configModel
+                socialNetworksModel
             },
         }, info) => {
-            const WriteResult = await imageModel.remove({
-                key
+            const WriteResult = await socialNetworksModel.remove({
+                id
             }, true); // true == remove one
             return WriteResult.nRemoved === 1;
         },

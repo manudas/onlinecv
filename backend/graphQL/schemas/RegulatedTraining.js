@@ -32,7 +32,6 @@ export default gql
   }
 
   type Query {
-    regulatedTraining(id: ID!, language: String!): RegulatedTraining
     regulatedTrainings(language: String!): [RegulatedTraining]!
   }
 

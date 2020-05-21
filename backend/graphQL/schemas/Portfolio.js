@@ -25,7 +25,6 @@ export default gql
   }
 
   type Query {
-    portfolio(id: ID!, language: String!): Portfolio
     portfolios(language: String!): [Portfolio]!
   }
 

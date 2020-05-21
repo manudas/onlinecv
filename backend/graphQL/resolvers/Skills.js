@@ -1,17 +1,18 @@
-// import { AuthenticationError } from 'apollo-server';
 export default {
     Query: {
-        image: async(parent, {
-            key
+        skills: async(parent, {
+            language
         }, {
             models: {
-                imageModel // configModel
+                skillsModel
             },
         }, info) => {
-            const image = await imageModel.findById({
-                key: key
+            const skillList = await skillsModel.findById({
+                language
+            }).sort({
+                order: 1
             }).exec();
-            return image;
+            return skillList;
         },
     },
     Mutation: {
@@ -26,33 +27,30 @@ export default {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putImage: async(parent, {
-            Image,
+        putSkill: async(parent, {
+            Skill,
         }, {
             models: {
-                imageModel // configModel
+                skillsModel
             },
         }, info) => {
-            const WriteResult = await imageModel.update({
-                key: key
-            }, { // the object values to insert in DB
-                key: Image.key,
-                value: Image.value
-            }, {
+            const WriteResult = await skillsModel.update({
+                id: Skill.id,
+            }, Skill, {
                 upsert: true // if no details found, create a new entry
             });
             return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? Image : false;
+                1) ? Skill : false;
         },
-        removeImage: async(parent, {
-            key,
+        removeSkill: async(parent, {
+            id,
         }, {
             models: {
-                imageModel // configModel
+                skillsModel
             },
         }, info) => {
-            const WriteResult = await imageModel.remove({
-                key
+            const WriteResult = await skillsModel.remove({
+                id
             }, true); // true == remove one
             return WriteResult.nRemoved === 1;
         },

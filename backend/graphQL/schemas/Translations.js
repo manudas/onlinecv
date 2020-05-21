@@ -19,7 +19,7 @@ export default gql
 
   type Query {
     translations(language: String!): [Translation]!
-    translation(id: ID!, language: String!): Translation
+    translation(tag: string!, module: string, language: String!): Translation
   }
 
   type Mutation {
