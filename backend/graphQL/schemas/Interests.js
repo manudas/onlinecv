@@ -18,7 +18,6 @@ export default gql
   }
 
   type Query {
-    interest(id: ID!, language: String!): Interest
     interests(language: String!): [Interest]!
   }
 
