@@ -1,6 +1,3 @@
-import {
-    gql
-} from 'apollo-server';
 /*
     name: String,
     description: String,
@@ -9,8 +6,7 @@ import {
     url: String,
     picture: Buffer
 */
-export default gql
-    `
+export default `
   type Portfolio {
     id: ID!
     name: String!,
@@ -24,11 +20,11 @@ export default gql
     picture: String
   }
 
-  type Query {
+  extend type Query {
     portfolios(language: String!): [Portfolio]!
   }
 
-  type Mutation {
+  extend type Mutation {
     putPortfolio(Portfolio!): Portfolio!
     removePortfolio(id: ID!): Boolean!
   }

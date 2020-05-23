@@ -1,14 +1,10 @@
-import {
-    gql
-} from 'apollo-server';
 /*
     language: String,
     module: String,
     tag: String,
     text: String
 */
-export default gql
-    `
+export default `
   type Translation {
     id: ID!
     language: String!,
@@ -17,12 +13,12 @@ export default gql
     text: String!
   }
 
-  type Query {
+  extend type Query {
     translations(language: String!): [Translation]!
     translation(tag: string!, module: string, language: String!): Translation
   }
 
-  type Mutation {
+  extend type Mutation {
     putTranslation(Translation!): Translation!
     removeTranslation(id: ID!): Boolean!
   }

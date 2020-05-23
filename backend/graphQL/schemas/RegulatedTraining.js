@@ -1,6 +1,3 @@
-import {
-    gql
-} from 'apollo-server';
 /*
     name: String,
     description: String,
@@ -14,8 +11,7 @@ import {
     keywords: [],
     language: String
 */
-export default gql
-    `
+export default `
   type RegulatedTraining {
     id: ID!
     name: String!,
@@ -31,11 +27,11 @@ export default gql
     language: String!
   }
 
-  type Query {
+  extend type Query {
     regulatedTrainings(language: String!): [RegulatedTraining]!
   }
 
-  type Mutation {
+  extend type Mutation {
     putRegulatedTraining(RegulatedTraining!): RegulatedTraining!
     removeRegulatedTraining(id: ID!): Boolean!
   }

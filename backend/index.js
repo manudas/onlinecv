@@ -1,45 +1,72 @@
 import 'module-alias/register';
-const port = 80;
-const secure_port = 443;
-const development_port = 4000;
-let fs = require('fs');
-let http = require('http');
-let https = require('https');
+
+const {
+    port,
+    development_port,
+    secure_port,
+    default_language
+} = require('@config/backend/app');
+
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+const express = require("express");
+const compression = require('compression');
+const zlib = require('zlib');
+const cookieParser = require('cookie-parser')
+const path = require("path");
+
+const rest = require("./api/rest");
+const graphql = require("./api/graphql");
+
 let certs = null;
 let privateKey = null;
 let certificate = null;
 let credentials = null;
-if (fs.existsSync('/data/config/certs')) {
-    certs = require('/data/config/certs');
+
+if (fs.existsSync('@config/certs')) {
+    certs = require('@config/certs');
     if (certs.key &&
         certs.crt &&
         fs.existsSync(certs.key) &&
         fs.existsSync(certs.crt)) {
         privateKey = fs.readFileSync(certs.key, 'utf8');
         certificate = fs.readFileSync(certs.crt, 'utf8');
-        credentials = { key: privateKey, cert: certificate };
+        credentials = {
+            key: privateKey,
+            cert: certificate
+        };
     }
 }
-const express = require("express");
+
+// We set our enviroment. Either production or development
+const env = process.env.NODE_ENV || 'development';
+
+// let's create the express app
 const app = express();
-const compression = require('compression');
+
 // let's setup gzip compression with the middleware compression
-const zlib = require('zlib');
-app.use(compression({ level: zlib.constants.Z_BEST_COMPRESSION }));
+app.use(compression({
+    level: zlib.constants.Z_BEST_COMPRESSION
+}));
+
 // we set up cookie parser for being able to manage cookies
-const cookieParser = require('cookie-parser')
-const path = require("path");
 // lets parse cookies with cookie-parser midleware
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'static'))); //  "static" static folder files
+
+//  "static" static folder files
+app.use(express.static(path.join(__dirname, 'static')));
+
 // set the view engine to ejs
 app.set("view engine", "ejs");
-const api = require("./api");
+
+// set the Routes
+// Route for first load
 app.get("/", function(req, res) {
-    const api_engine = api.engine;
+    const api_engine = rest.engine;
     let language = req.cookies.language;
     if (language === undefined) { // no language cookie
-        language = 'en';
+        language = default_language;
     }
     const command = api_engine.command_list.get_details;
     const homeData = api_engine.get(command, language);
@@ -60,26 +87,51 @@ app.get("/", function(req, res) {
     }).catch(e => console.log(e));
     // res.send("Hello World!"); 
 });
-app.use("/api", api.router); // route to api if url starts with /api
+
+/* 
+ * Route to api if url starts with /api
+ * Used in the front end, mainly to display
+ * information
+ */
+app.use("/api", rest.router);
+
+/*
+ * Route to graphQL api if url starts with
+ * /graphql. Used mainly in the backend to
+ * modify the data and make consultations
+ */
+app.use("/graphql", graphql(env));
+
+/**
+ * Route for no found response. Used
+ * when the other routers had been exhausted
+ * and none of them matched the request url
+ */
 app.use(function(req, res) {
+    // May it be worthwhile to add a personalised 404 page ?
     res.status(404).send("<h1>404/Not found</h1>");
 });
+
+// let's create the server
 const httpServer = http.createServer(app);
-var env = process.env.NODE_ENV || 'development';
-if ('development' == env) {
-    // configure stuff here
-    httpServer.listen(development_port, function() {
-        console.log(`Online resume backend app listening on port ${development_port}!`);
-    });
-} else { // production
-    const httpsServer = https.createServer(credentials, app);
-    httpServer.listen(port, function() {
-        console.log(`Online resume backend app listening on port ${port}!`);
-    });
+const port_to_use = env === 'development' ? development_port : port;
+httpServer.listen(port_to_use, function() {
+    console.log(
+        `Online resume backend app listening on port ${port_to_use}!`
+    );
+});
+
+// if the server is in production mode, let's enable the secure port
+if (env !== 'development') { // production, add secure port
+    const httpsServer = https.createServer(app);
     httpsServer.listen(secure_port, function() {
-        console.log(`Online resume backend app listening on port ${secure_port}!`);
+        console.log(
+            `Online resume backend app listening on port ${secure_port}!`
+        );
     });
 }
+
+// in case some uncontrolled exception is caught, don't exit
 process.on('uncaughtException', function(err) {
     console.error(err);
     console.log("Node NOT Exiting...");

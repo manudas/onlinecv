@@ -1,6 +1,3 @@
-import {
-    gql
-} from 'apollo-server';
 /*
     name: String,
     description: String,
@@ -12,8 +9,7 @@ import {
     keywords: [],
     language: String
 */
-export default gql
-    `
+export default `
   type WorkExperience {
     id: ID!
     name: String!,
@@ -27,11 +23,11 @@ export default gql
     language: String!
   }
 
-  type Query {
+  extend type Query {
     workExperiences(language: String!): [WorkExperience]!
   }
 
-  type Mutation {
+  extend type Mutation {
     putWorkExperience(WorkExperience!): WorkExperience!
     removeWorkExperience(id: ID!): Boolean!
   }

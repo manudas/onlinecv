@@ -1,14 +1,10 @@
-import {
-    gql
-} from 'apollo-server';
 /*
     language: String,
     label: String,
     text: String,
     order: Number
 */
-export default gql
-    `
+export default `
   type ProfileDetail {
     id: ID!
     language: String!,
@@ -17,11 +13,11 @@ export default gql
     order: Number!
   }
 
-  type Query {
+  extend type Query {
     profileDetails(language: String!): [ProfileDetail]!
   }
 
-  type Mutation {
+  extend type Mutation {
     putProfileDetail(ProfileDetail!): ProfileDetail!
     removeProfileDetail(id: ID!): Boolean!
   }

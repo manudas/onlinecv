@@ -1,6 +1,3 @@
-import {
-    gql
-} from 'apollo-server';
 /*
     name: String,
     description: String,
@@ -11,8 +8,7 @@ import {
     keywords: [],
     language: String
 */
-export default gql
-    `
+export default `
   type Skill {
     id: ID!
     name: String!,
@@ -25,11 +21,11 @@ export default gql
     language: String!
   }
 
-  type Query {
+  extend type Query {
     skills(language: String!): [Skill]!
   }
 
-  type Mutation {
+  extend type Mutation {
     putSkill(Skill!): Skill!
     removeSkill(id: ID!): Boolean!
   }

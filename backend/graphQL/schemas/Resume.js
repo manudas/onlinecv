@@ -1,13 +1,9 @@
-import {
-    gql
-} from 'apollo-server';
 /*
     resume: String,
     keywords: [],
     language: String
 */
-export default gql
-    `
+export default `
   type Resume {
     id: ID!
     resume: String!
@@ -15,11 +11,11 @@ export default gql
     language: String!
   }
 
-  type Query {
+  extend type Query {
     resume(language: String!): Resume
   }
 
-  type Mutation {
+  extend type Mutation {
     putResume(Resume!): Resume!
     removeResume(id: ID!): Boolean!
   }

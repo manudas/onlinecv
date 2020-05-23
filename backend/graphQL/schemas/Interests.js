@@ -1,14 +1,10 @@
-import {
-    gql
-} from 'apollo-server';
 /*
     name: String,
     description: String,
     keywords: [],
     language: String
 */
-export default gql
-    `
+export default `
   type Interest {
     id: ID!
     name: String!
@@ -17,11 +13,11 @@ export default gql
     language: String!
   }
 
-  type Query {
+  extend type Query {
     interests(language: String!): [Interest]!
   }
 
-  type Mutation {
+  extend type Mutation {
     putInterest(Interest!): Interest!
     removeInterest(id: ID!): Boolean!
   }

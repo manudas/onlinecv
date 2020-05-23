@@ -1,6 +1,3 @@
-import {
-    gql
-} from 'apollo-server';
 /*
     name: String,
     surname: String,
@@ -16,8 +13,7 @@ import {
     secondaryJobName: String,
     nickname: String
 */
-export default gql
-    `
+export default `
   type Details {
     id: ID!
     name: String!
@@ -36,11 +32,11 @@ export default gql
     nickname: String
   }
 
-  type Query {
+  extend type Query {
     details(language: String!): Details!
   }
 
-  type Mutation {
+  extend type Mutation {
     putDetails(Details!): Details!
   }
 `;

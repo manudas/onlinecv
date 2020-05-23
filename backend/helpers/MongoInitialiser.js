@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-const mongodb_settings = require('@config/mongo/mongo_settings');
+const mongodb_settings = require('@config/backend/mongo_settings');
 const {
     user,
     password,

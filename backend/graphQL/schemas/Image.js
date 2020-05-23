@@ -1,12 +1,8 @@
-import {
-    gql
-} from 'apollo-server';
 /*
     value: Buffer,
     key: String
 */
-export default gql
-    `
+export default `
   type Image {
     id: ID!
     key: String!
@@ -16,11 +12,11 @@ export default gql
     value: String!
   }
 
-  type Query {
+  extend type Query {
     image(key: String!): Image
   }
 
-  type Mutation {
+  extend type Mutation {
     putImage(Image!): Image!
     removeImage(id: ID!): Boolean!
   }

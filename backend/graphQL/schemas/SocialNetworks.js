@@ -1,14 +1,10 @@
-import {
-    gql
-} from 'apollo-server';
 /*
     language: String,
     label: String,
     text: String,
     order: Number
 */
-export default gql
-    `
+export default `
   type SocialNetwork {
     id: ID!
     language: String!,
@@ -17,11 +13,11 @@ export default gql
     order: Int!
   }
 
-  type Query {
+  extend type Query {
     socialNetworks(language: String!): [SocialNetwork]!
   }
 
-  type Mutation {
+  extend type Mutation {
     putSocialNetwork(SocialNetwork!): SocialNetwork!
     removeSocialNetwork(id: ID!): Boolean!
   }
