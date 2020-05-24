@@ -13,7 +13,8 @@
     secondaryJobName: String,
     nickname: String
 */
-export default `
+module.exports =
+    `
   type Details {
     id: ID!
     name: String!
@@ -37,6 +38,6 @@ export default `
   }
 
   extend type Mutation {
-    putDetails(Details!): Details!
+    putDetails(details: Details!): Details!
   }
 `;

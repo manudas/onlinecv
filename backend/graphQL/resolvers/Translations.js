@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     Query: {
         // translation(tag: string!, module: string, language: String!)
         translation: async(parent, {

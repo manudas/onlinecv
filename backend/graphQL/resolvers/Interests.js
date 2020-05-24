@@ -1,5 +1,5 @@
 // import { AuthenticationError } from 'apollo-server';
-export default {
+module.exports = {
     Query: {
         interests: async(parent, {
             language

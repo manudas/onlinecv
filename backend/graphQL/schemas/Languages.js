@@ -9,7 +9,8 @@
     keywords: [],
     language: String
 */
-export default `
+module.exports =
+    `
   type Language {
     id: ID!
     name: String!,
@@ -28,7 +29,7 @@ export default `
   }
 
   extend type Mutation {
-    putLanguage(Language!): Language!
+    putLanguage(language: Language!): Language!
     removeLanguage(id: ID!): Boolean!
   }
 `;

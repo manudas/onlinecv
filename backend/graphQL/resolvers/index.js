@@ -1,62 +1,16 @@
-export {
-    default as Details
-}
-from './Details';
-export {
-    default as Image
-}
-from './Image';
-export {
-    default as Interests
-}
-from './Interests';
-export {
-    default as Languages
-}
-from './Languages';
-export {
-    default as Portfolio
-}
-from './Portfolio';
-export {
-    default as ProfileDetails
-}
-from './ProfileDetails';
-export {
-    default as RegulatedTraining
-}
-from './RegulatedTraining';
-export {
-    default as Resume
-}
-from './Resume';
-export {
-    default as Skills
-}
-from './Skills';
-export {
-    default as SocialNetworks
-}
-from './SocialNetworks';
-export {
-    default as Translations
-}
-from './Translations';
-export {
-    default as WorkExperience
-}
-from './WorkExperience';
-export default [
-    Details,
-    Image,
-    Interests,
-    Languages,
-    Portfolio,
-    ProfileDetails,
-    RegulatedTraining,
-    Resume,
-    Skills,
-    SocialNetworks,
-    Translations,
-    WorkExperience
-];
+const fs = require('fs');
+const path = require('path');
+
+module.exports = {};
+
+fs.readdirSync(__dirname).forEach(function(file) {
+    // let's not include this same file
+    if (file !== path.parse(__filename).base) {
+        const filename = path.parse(file).name;
+        const fileContent = require(`./${filename}`);
+        // Let's export individual resolvers by name
+        module[`${filename}Resolver`] = fileContent;
+        // Lets include it in the list of all resolvers (default export)
+        module.exports[`${filename}Resolver`] = fileContent;
+    }
+});

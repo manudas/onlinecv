@@ -8,16 +8,24 @@
     keywords: [],
     language: String
 */
-export default `
+module.exports =
+    `
+  enum RelatedKnowledge {
+    """
+    TO BE FILLED WITH MORE
+    """
+    RegulatedTraining,
+  }
+
   type Skill {
     id: ID!
     name: String!,
     description: String,
     skill_level: Int,
-    related_knowledge: [],
+    related_knowledge: [RelatedKnowledge]!,
     type: String,
-    developed_projects: [],
-    keywords: [],
+    developed_projects: [String]!,
+    keywords: [String]!,
     language: String!
   }
 
@@ -26,7 +34,7 @@ export default `
   }
 
   extend type Mutation {
-    putSkill(Skill!): Skill!
+    putSkill(skill: Skill!): Skill!
     removeSkill(id: ID!): Boolean!
   }
 `;

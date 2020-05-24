@@ -1,4 +1,4 @@
-import 'module-alias/register';
+require('module-alias/register');
 
 const {
     port,
@@ -16,8 +16,10 @@ const zlib = require('zlib');
 const cookieParser = require('cookie-parser')
 const path = require("path");
 
-const rest = require("./api/rest");
-const graphql = require("./api/graphql");
+const {
+    rest,
+    graphql
+} = require("./api");
 
 let certs = null;
 let privateKey = null;
@@ -63,13 +65,13 @@ app.set("view engine", "ejs");
 // set the Routes
 // Route for first load
 app.get("/", function(req, res) {
-    const api_engine = rest.engine;
+    const rest_engine = rest.engine;
     let language = req.cookies.language;
     if (language === undefined) { // no language cookie
         language = default_language;
     }
-    const command = api_engine.command_list.get_details;
-    const homeData = api_engine.get(command, language);
+    const command = rest_engine.command_list.get_details;
+    const homeData = rest_engine.get(command, language);
     const defaultData = {
         webTitle: 'Online Resume - Change it on config collection',
         name: 'Your name here - Change it on the personal_details collection',

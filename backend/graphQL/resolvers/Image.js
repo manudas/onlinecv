@@ -1,5 +1,5 @@
 // import { AuthenticationError } from 'apollo-server';
-export default {
+module.exports = {
     Query: {
         image: async(parent, {
             key

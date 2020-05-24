@@ -1,8 +1,10 @@
-import {
+const {
     Schema,
     model,
-} from 'mongoose';
+} = require('mongoose');
+
 const collection = 'professional_experience';
+
 const WorkExperienceSchema = new Schema({
     name: String,
     description: String,
@@ -16,8 +18,10 @@ const WorkExperienceSchema = new Schema({
 }, {
     collection,
 });
+
 const WorkExperienceModel = model(collection, WorkExperienceSchema);
-export {
+
+module.exports = {
     WorkExperienceSchema,
     WorkExperienceModel,
 };

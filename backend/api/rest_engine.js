@@ -1,4 +1,4 @@
-import {
+const {
     DetailsModel,
     ImageModel,
     InterestsModel,
@@ -11,15 +11,12 @@ import {
     SocialNetworksModel,
     TranslationsModel,
     WorkExperienceModel,
-} from '@models';
-import {
-    Init as MongoInitialiser
-} from '@helpers/NodeInitialiser';
+} = require('@models');
+
 const promisedProperties = require('@helpers/promisedProperties');
+
 class api_engine {
-    constructor() {
-        MongoInitialiser();
-    }
+    constructor() {}
     get(command, parameter, query_parameters) {
         let return_val = null;
         switch (command) {
@@ -313,4 +310,5 @@ class api_engine {
         get_details: 'getdetails'
     }
 }
+
 module.exports = new api_engine();

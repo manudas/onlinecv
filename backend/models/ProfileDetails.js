@@ -1,8 +1,10 @@
-import {
+const {
     Schema,
     model,
-} from 'mongoose';
+} = require('mongoose');
+
 const collection = 'profile';
+
 const ProfileDetailsSchema = new Schema({
     language: String,
     label: String,
@@ -11,8 +13,10 @@ const ProfileDetailsSchema = new Schema({
 }, {
     collection,
 });
+
 const ProfileDetailsModel = model(collection, ProfileDetailsSchema);
-export {
+
+module.exports = {
     ProfileDetailsSchema,
     ProfileDetailsModel,
 };

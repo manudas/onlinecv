@@ -1,8 +1,10 @@
-import {
+const {
     Schema,
     model,
-} from 'mongoose';
+} = require('mongoose');
+
 const collection = 'interests';
+
 const InterestsSchema = new Schema({
     name: String,
     description: String,
@@ -11,8 +13,10 @@ const InterestsSchema = new Schema({
 }, {
     collection,
 });
+
 const InterestsModel = model(collection, InterestsSchema);
-export {
+
+module.exports = {
     InterestsSchema,
     InterestsModel,
 };

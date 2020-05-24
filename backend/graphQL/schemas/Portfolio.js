@@ -6,12 +6,13 @@
     url: String,
     picture: Buffer
 */
-export default `
+module.exports =
+    `
   type Portfolio {
     id: ID!
     name: String!,
     description: String,
-    keywords: [],
+    keywords: [String]!,
     language: String!,
     url: String,
     """
@@ -25,7 +26,7 @@ export default `
   }
 
   extend type Mutation {
-    putPortfolio(Portfolio!): Portfolio!
+    putPortfolio(portfolio: Portfolio!): Portfolio!
     removePortfolio(id: ID!): Boolean!
   }
 `;

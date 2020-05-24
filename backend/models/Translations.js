@@ -1,8 +1,10 @@
-import {
+const {
     Schema,
     model,
-} from 'mongoose';
+} = require('mongoose');
+
 const collection = 'translations';
+
 const TranslationsSchema = new Schema({
     language: String,
     module: String,
@@ -11,8 +13,10 @@ const TranslationsSchema = new Schema({
 }, {
     collection,
 });
+
 const TranslationsModel = model(collection, TranslationsSchema);
-export {
+
+module.exports = {
     TranslationsSchema,
     TranslationsModel,
 };

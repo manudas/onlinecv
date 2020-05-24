@@ -3,7 +3,8 @@
     keywords: [],
     language: String
 */
-export default `
+module.exports =
+    `
   type Resume {
     id: ID!
     resume: String!
@@ -16,7 +17,7 @@ export default `
   }
 
   extend type Mutation {
-    putResume(Resume!): Resume!
+    putResume(resume: Resume!): Resume!
     removeResume(id: ID!): Boolean!
   }
 `;

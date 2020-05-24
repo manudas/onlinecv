@@ -1,9 +1,11 @@
-import {
+const {
     Schema,
     model,
-} from 'mongoose';
+} = require('mongoose');
+
 const collection = 'regulated_training';
-const RegulatedTraining = new Schema({
+
+const RegulatedTrainingSchema = new Schema({
     name: String,
     description: String,
     type: String,
@@ -18,8 +20,10 @@ const RegulatedTraining = new Schema({
 }, {
     collection,
 });
+
 const RegulatedTrainingModel = model(collection, RegulatedTrainingSchema);
-export {
-    RegulatedTraining,
+
+module.exports = {
+    RegulatedTrainingSchema,
     RegulatedTrainingModel,
 };

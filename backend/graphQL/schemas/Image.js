@@ -2,7 +2,8 @@
     value: Buffer,
     key: String
 */
-export default `
+module.exports =
+    `
   type Image {
     id: ID!
     key: String!
@@ -17,7 +18,7 @@ export default `
   }
 
   extend type Mutation {
-    putImage(Image!): Image!
+    putImage(image: Image!): Image!
     removeImage(id: ID!): Boolean!
   }
 `;

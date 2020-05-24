@@ -4,13 +4,15 @@
     text: String,
     order: Number
 */
-export default `
+module.exports =
+    `
   type ProfileDetail {
     id: ID!
     language: String!,
     label: String!,
     text: String,
-    order: Number!
+    keywords: [String]!,
+    order: Int!
   }
 
   extend type Query {
@@ -18,7 +20,7 @@ export default `
   }
 
   extend type Mutation {
-    putProfileDetail(ProfileDetail!): ProfileDetail!
+    putProfileDetail(profileDetail: ProfileDetail!): ProfileDetail!
     removeProfileDetail(id: ID!): Boolean!
   }
 `;

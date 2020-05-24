@@ -1,8 +1,10 @@
-import {
+const {
     Schema,
     model,
-} from 'mongoose';
+} = require('mongoose');
+
 const collection = 'skills';
+
 const SkillsSchema = new Schema({
     name: String,
     description: String,
@@ -15,8 +17,10 @@ const SkillsSchema = new Schema({
 }, {
     collection,
 });
+
 const SkillsModel = model(collection, SkillsSchema);
-export {
+
+module.exports = {
     SkillsSchema,
     SkillsModel,
 };

@@ -4,7 +4,8 @@
     keywords: [],
     language: String
 */
-export default `
+module.exports =
+    `
   type Interest {
     id: ID!
     name: String!
@@ -18,7 +19,7 @@ export default `
   }
 
   extend type Mutation {
-    putInterest(Interest!): Interest!
+    putInterest(interest: Interest!): Interest!
     removeInterest(id: ID!): Boolean!
   }
 `;

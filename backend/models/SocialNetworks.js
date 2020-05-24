@@ -1,8 +1,10 @@
-import {
+const {
     Schema,
     model,
-} from 'mongoose';
+} = require('mongoose');
+
 const collection = 'social_networks';
+
 const SocialNetworksSchema = new Schema({
     language: String,
     label: String,
@@ -11,8 +13,10 @@ const SocialNetworksSchema = new Schema({
 }, {
     collection,
 });
+
 const SocialNetworksModel = model(collection, SocialNetworksSchema);
-export {
+
+module.exports = {
     SocialNetworksSchema,
     SocialNetworksModel,
 };

@@ -11,7 +11,8 @@
     keywords: [],
     language: String
 */
-export default `
+module.exports =
+    `
   type RegulatedTraining {
     id: ID!
     name: String!,
@@ -23,7 +24,7 @@ export default `
     final_project: String,
     school_url: String,
     average_school: Float,
-    keywords: [],
+    keywords: [String]!,
     language: String!
   }
 
@@ -32,7 +33,7 @@ export default `
   }
 
   extend type Mutation {
-    putRegulatedTraining(RegulatedTraining!): RegulatedTraining!
+    putRegulatedTraining(regulatedTraining: RegulatedTraining!): RegulatedTraining!
     removeRegulatedTraining(id: ID!): Boolean!
   }
 `;

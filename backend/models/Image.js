@@ -1,8 +1,10 @@
-import {
+const {
     Schema,
     model,
-} from 'mongoose';
+} = require('mongoose');
+
 const collection = 'config';
+
 // config collection but using buffer / binary schema
 const ImageSchema = new Schema({
     value: Buffer,
@@ -10,8 +12,10 @@ const ImageSchema = new Schema({
 }, {
     collection,
 });
+
 const ImageModel = model(collection, ImageSchema);
-export {
+
+module.exports = {
     ImageSchema,
     ImageModel,
 };

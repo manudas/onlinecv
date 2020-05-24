@@ -9,7 +9,8 @@
     keywords: [],
     language: String
 */
-export default `
+module.exports =
+    `
   type WorkExperience {
     id: ID!
     name: String!,
@@ -19,7 +20,7 @@ export default `
     post: String,
     company: String,
     company_url: String,
-    keywords: [String],
+    keywords: [String]!,
     language: String!
   }
 
@@ -28,7 +29,7 @@ export default `
   }
 
   extend type Mutation {
-    putWorkExperience(WorkExperience!): WorkExperience!
+    putWorkExperience(workExperience: WorkExperience!): WorkExperience!
     removeWorkExperience(id: ID!): Boolean!
   }
 `;

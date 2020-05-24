@@ -1,8 +1,10 @@
-import {
+const {
     Schema,
     model,
-} from 'mongoose';
+} = require('mongoose');
+
 const collection = 'resume';
+
 const ResumeSchema = new Schema({
     resume: String,
     keywords: [],
@@ -10,8 +12,10 @@ const ResumeSchema = new Schema({
 }, {
     collection,
 });
+
 const ResumeModel = model(collection, ResumeSchema);
-export {
+
+module.exports = {
     ResumeSchema,
     ResumeModel,
 };

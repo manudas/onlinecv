@@ -4,7 +4,8 @@
     tag: String,
     text: String
 */
-export default `
+module.exports =
+    `
   type Translation {
     id: ID!
     language: String!,
@@ -15,11 +16,11 @@ export default `
 
   extend type Query {
     translations(language: String!): [Translation]!
-    translation(tag: string!, module: string, language: String!): Translation
+    translation(tag: String!, module: String, language: String!): Translation
   }
 
   extend type Mutation {
-    putTranslation(Translation!): Translation!
+    putTranslation(translation: Translation!): Translation!
     removeTranslation(id: ID!): Boolean!
   }
 `;

@@ -4,12 +4,14 @@
     text: String,
     order: Number
 */
-export default `
+module.exports =
+    `
   type SocialNetwork {
     id: ID!
     language: String!,
     label: String!,
     text: String,
+    keywords: [String]!,
     order: Int!
   }
 
@@ -18,7 +20,7 @@ export default `
   }
 
   extend type Mutation {
-    putSocialNetwork(SocialNetwork!): SocialNetwork!
+    putSocialNetwork(socialNetwork: SocialNetwork!): SocialNetwork!
     removeSocialNetwork(id: ID!): Boolean!
   }
 `;
