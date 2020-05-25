@@ -24,12 +24,25 @@ module.exports =
     language: String!
   }
 
+  input WorkExperienceInput {
+    id: ID
+    name: String!,
+    description: String,
+    start_date: String,
+    finish_date: String,
+    post: String,
+    company: String,
+    company_url: String,
+    keywords: [String]!,
+    language: String!
+  }
+
   extend type Query {
     workExperiences(language: String!): [WorkExperience]!
   }
 
   extend type Mutation {
-    putWorkExperience(workExperience: WorkExperience!): WorkExperience!
+    putWorkExperience(workExperience: WorkExperienceInput!): WorkExperience!
     removeWorkExperience(id: ID!): Boolean!
   }
 `;

@@ -21,12 +21,25 @@ module.exports =
     picture: String
   }
 
+  input PortfolioInput {
+    id: ID
+    name: String!,
+    description: String,
+    keywords: [String]!,
+    language: String!,
+    url: String,
+    """
+    picture is String in GraphQL but Buffer in JS
+    """
+    picture: String
+  }
+
   extend type Query {
     portfolios(language: String!): [Portfolio]!
   }
 
   extend type Mutation {
-    putPortfolio(portfolio: Portfolio!): Portfolio!
+    putPortfolio(portfolio: PortfolioInput!): Portfolio!
     removePortfolio(id: ID!): Boolean!
   }
 `;

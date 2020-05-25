@@ -29,12 +29,24 @@ module.exports =
     language: String!
   }
 
+  input SkillInput {
+    id: ID
+    name: String!,
+    description: String,
+    skill_level: Int,
+    related_knowledge: [RelatedKnowledge]!,
+    type: String,
+    developed_projects: [String]!,
+    keywords: [String]!,
+    language: String!
+  }
+
   extend type Query {
     skills(language: String!): [Skill]!
   }
 
   extend type Mutation {
-    putSkill(skill: Skill!): Skill!
+    putSkill(skill: SkillInput!): Skill!
     removeSkill(id: ID!): Boolean!
   }
 `;

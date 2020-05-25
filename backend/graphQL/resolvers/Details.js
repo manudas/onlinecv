@@ -1,16 +1,17 @@
 // import { AuthenticationError } from 'apollo-server';
 module.exports = {
     Query: {
-        details: async(parent, {
+        details: async({ // 1st arg: arguments
             language
-        }, {
+        }, { // 2nd arg: context
             models: {
-                detailsModel
-            },
-        }, info) => {
-            const details = await detailsModel.findById({
+                DetailsModel,
+            }
+        }) => {
+            const details = await DetailsModel.findOne({
                 language: language
             }).exec();
+
             return details;
         },
     },
@@ -30,10 +31,10 @@ module.exports = {
             Details,
         }, {
             models: {
-                detailsModel
+                DetailsModel
             },
-        }, info) => {
-            const WriteResult = await detailsModel.update({
+        }) => {
+            const WriteResult = await DetailsModel.update({
                     language: language
                 },
                 Details, {

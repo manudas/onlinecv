@@ -16,7 +16,25 @@
 module.exports =
     `
   type Details {
-    id: ID!
+    _id: ID!
+    name: String!
+    surname: String
+    address: String
+    phone_number: String
+    birth_date: String
+    email: String
+    """
+    // qr_code: String, // qr_code will be made on the fly
+    """
+    keywords: [String]!
+    language: String!
+    primaryJobName: String!
+    secondaryJobName: String
+    nickname: String
+  }
+
+  input DetailsInput {
+    id: ID
     name: String!
     surname: String
     address: String
@@ -38,6 +56,6 @@ module.exports =
   }
 
   extend type Mutation {
-    putDetails(details: Details!): Details!
+    putDetails(details: DetailsInput!): Details!
   }
 `;

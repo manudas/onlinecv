@@ -12,12 +12,19 @@ module.exports =
     language: String!
   }
 
+  input ResumeInput {
+    id: ID
+    resume: String!
+    keywords: [String]!
+    language: String!
+  }
+
   extend type Query {
     resume(language: String!): Resume
   }
 
   extend type Mutation {
-    putResume(resume: Resume!): Resume!
+    putResume(resume: ResumeInput!): Resume!
     removeResume(id: ID!): Boolean!
   }
 `;
