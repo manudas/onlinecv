@@ -1,14 +1,14 @@
 // import { AuthenticationError } from 'apollo-server';
 module.exports = {
     Query: {
-        languages: async(parent, {
+        languages: async({
             language
         }, {
             models: {
-                portfolioModel // configModel
+                PortfolioModel // configModel
             },
         }, info) => {
-            const portfolioList = await portfolioModel.findById({
+            const portfolioList = await PortfolioModel.find({
                 language
             }).sort({
                 order: 1

@@ -1,13 +1,13 @@
 module.exports = {
     Query: {
-        regulatedTrainings: async(parent, {
+        regulatedTrainings: async({
             language
         }, {
             models: {
-                regulatedTrainingModel
+                RegulatedTrainingModel
             },
         }, info) => {
-            const regulatedTrainingList = await regulatedTrainingModel.findById({
+            const regulatedTrainingList = await RegulatedTrainingModel.find({
                 language
             }).sort({
                 order: 1

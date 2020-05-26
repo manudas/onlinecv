@@ -1,13 +1,13 @@
 module.exports = {
     Query: {
-        socialNetworks: async(parent, {
+        socialNetworks: async({
             language
         }, {
             models: {
-                socialNetworksModel
+                SocialNetworksModel
             },
         }, info) => {
-            const socialNetworkList = await socialNetworksModel.findById({
+            const socialNetworkList = await SocialNetworksModel.find({
                 language
             }).sort({
                 order: 1

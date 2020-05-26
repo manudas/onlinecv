@@ -1,13 +1,13 @@
 module.exports = {
     Query: {
-        workExperiences: async(parent, {
+        workExperiences: async({
             language
         }, {
             models: {
-                workExperienceModel
+                WorkExperienceModel
             },
         }, info) => {
-            const workExperienceList = await workExperienceModel.findById({
+            const workExperienceList = await WorkExperienceModel.find({
                 language
             }).sort({
                 order: 1

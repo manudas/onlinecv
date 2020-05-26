@@ -1,14 +1,14 @@
 // import { AuthenticationError } from 'apollo-server';
 module.exports = {
     Query: {
-        interests: async(parent, {
+        interests: async({ // 1st arg: arguments
             language
-        }, {
+        }, { // 2nd arg: context
             models: {
-                interestsModel
+                InterestsModel
             },
         }, info) => {
-            const interestList = await interestsModel.findById({
+            const interestList = await InterestsModel.find({
                 language: language
             }).sort({
                 order: 1

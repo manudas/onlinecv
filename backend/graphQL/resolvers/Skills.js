@@ -1,13 +1,13 @@
 module.exports = {
     Query: {
-        skills: async(parent, {
+        skills: async({
             language
         }, {
             models: {
-                skillsModel
+                SkillsModel
             },
         }, info) => {
-            const skillList = await skillsModel.findById({
+            const skillList = await SkillsModel.find({
                 language
             }).sort({
                 order: 1

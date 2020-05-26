@@ -1,30 +1,30 @@
 module.exports = {
     Query: {
         // translation(tag: string!, module: string, language: String!)
-        translation: async(parent, {
+        translation: async({
             tag,
             module,
             language
         }, {
             models: {
-                translationsModel
+                TranslationsModel
             },
         }, info) => {
-            const translation = await translationsModel.findById({
+            const translation = await TranslationsModel.findOne({
                 tag,
                 module,
                 language
             }).exec();
             return translation;
         },
-        translations: async(parent, {
+        translations: async({
             language
         }, {
             models: {
-                translationsModel
+                TranslationsModel
             },
         }, info) => {
-            const translationList = await translationsModel.findById({
+            const translationList = await TranslationsModel.find({
                 language
             }).sort({
                 module: 1,

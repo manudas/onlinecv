@@ -1,14 +1,14 @@
 // import { AuthenticationError } from 'apollo-server';
 module.exports = {
     Query: {
-        image: async(parent, {
+        image: async({ // 1st arg: arguments
             key
-        }, {
+        }, { // 2nd arg: context
             models: {
-                imageModel // configModel
+                ImageModel // configModel
             },
         }, info) => {
-            const image = await imageModel.findById({
+            const image = await ImageModel.findOne({
                 key: key
             }).exec();
             return image;

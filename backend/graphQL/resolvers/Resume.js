@@ -1,13 +1,13 @@
 module.exports = {
     Query: {
-        resume: async(parent, {
+        resume: async({
             language
         }, {
             models: {
-                resumeModel
+                ResumeModel
             },
         }, info) => {
-            const resume = await resumeModel.findById({
+            const resume = await ResumeModel.findOne({
                 language
             }).exec();
             return resume;
