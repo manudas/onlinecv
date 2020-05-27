@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { ProgressBarComponent } from '@app/progress-bar/progress-bar.component';
-import { DoughnutChartComponent } from '@app/doughnutchart/doughnutchart.component';
+import { ProgressBarComponent } from '@app/ui/progress-bar/progress-bar.component';
+import { DoughnutChartComponent } from '@app/ui/doughnutchart/doughnutchart.component';
 
 
 @NgModule({

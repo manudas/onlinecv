@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { CardComponent } from '@app/card/card.component'
+import { CardComponent } from '@app/ui/card/card.component'
 
 @NgModule({
   declarations: [CardComponent],

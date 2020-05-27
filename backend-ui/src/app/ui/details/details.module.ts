@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { CardModule } from '@app/card/card.module'
-import { PictureuploadModule } from '@app/pictureupload/pictureupload.module'
+import { CardModule } from '@app/ui/card/card.module'
+import { PictureuploadModule } from '@app/ui/pictureupload/pictureupload.module'
 
 import { DetailsComponent } from './details.component';
 

@@ -5,18 +5,18 @@ import { MatTableModule } from "@angular/material/table";
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { CardModule } from '@app/card/card.module'
+import { CardModule } from '@app/ui/card/card.module'
 
-import { ExperienceComponent } from './experience.component';
+import { TrainingComponent } from './training.component';
 
 @NgModule({
-  declarations: [ExperienceComponent],
+  declarations: [TrainingComponent],
   imports: [
     CommonModule,
     MatTableModule,
     FontAwesomeModule,
     CardModule
   ],
-  exports: [ExperienceComponent]
+  exports: [TrainingComponent]
 })
-export class ExperienceModule { }
+export class TrainingModule { }

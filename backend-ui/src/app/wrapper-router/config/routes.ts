@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router'; // CLI imports router
-import { DashboardComponent } from '@app/dashboard/dashboard.component';
-import { DetailsComponent } from '@app/details/details.component';
-import { TrainingComponent } from '@app/training/training.component';
-import { ExperienceComponent } from '@app/experience/experience.component';
+import { DashboardComponent } from '@app/ui/dashboard/dashboard.component';
+import { DetailsComponent } from '@app/ui/details/details.component';
+import { TrainingComponent } from '@app/ui/training/training.component';
+import { ExperienceComponent } from '@app/ui/experience/experience.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // redirect to `DashboardComponent`

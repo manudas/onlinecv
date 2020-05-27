@@ -18,7 +18,7 @@
         "express-graphql": "^0.9.0",
         "graphql": "^15.0.0",
         "module-alias": "^2.2.2",
-        "mongoose": "^5.9.15",
+        "mongoose": "^5.9.16",
         "node-datetime": "^2.1.2"
     },
     "_moduleAliases": {

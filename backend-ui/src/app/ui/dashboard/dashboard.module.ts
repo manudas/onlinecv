@@ -4,8 +4,8 @@ import { CommonModule } from '@angular/common';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { WidgetsModule } from '@app/widgets/widgets.module'
-import { CardModule } from '@app/card/card.module'
+import { WidgetsModule } from '@app/ui/widgets/widgets.module'
+import { CardModule } from '@app/ui/card/card.module'
 
 import { DashboardComponent } from './dashboard.component';
 
