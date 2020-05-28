@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, from, throwError } from 'rxjs';
-// import queries from '@services/data/queries';
+import { Observable, throwError } from 'rxjs';
+// import { Details } from '@services/data/queries';
 
 import { map, catchError } from 'rxjs/operators';
 

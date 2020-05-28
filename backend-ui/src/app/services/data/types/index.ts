@@ -1,0 +1,4 @@
+export {
+    DetailsType
+}
+from './Details';

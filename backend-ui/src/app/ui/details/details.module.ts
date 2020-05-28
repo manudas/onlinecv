@@ -9,6 +9,7 @@ import { PictureuploadModule } from '@app/ui/pictureupload/pictureupload.module'
 
 import { DetailsComponent } from './details.component';
 
+import { DataService } from '@services/data/data.service'
 
 @NgModule({
   declarations: [DetailsComponent],
@@ -20,5 +21,6 @@ import { DetailsComponent } from './details.component';
     PictureuploadModule
   ],
   exports: [DetailsComponent],
+  providers: [DataService]
 })
 export class DetailsModule { }
