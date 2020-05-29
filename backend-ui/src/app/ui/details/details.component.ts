@@ -19,16 +19,18 @@ import { DetailsType } from '@data_types/Details'
 export class DetailsComponent implements OnInit {
 
   faEdit: IconDefinition = faEdit
-  details: Observable<DetailsType> = this.store.pipe(select(state => state.details));
+  details: Observable<DetailsType> = this.store.pipe(
+    select(
+      state => state.details
+    )
+  );
 
   @Input() title: string = 'Personal details';
 
   constructor(private store: Store<{ details: DetailsType }>) { }
 
   ngOnInit(): void {
-    this.store.dispatch({
-      type: ACTION_DETAILS.FETCH_DETAILS.type
-    })
+    this.store.dispatch(ACTION_DETAILS.FETCH_DETAILS())
   }
 
 }

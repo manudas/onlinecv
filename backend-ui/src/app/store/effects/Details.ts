@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 
-import { switchMap, map, catchError } from 'rxjs/operators';
+import { switchMap, map, tap, catchError } from 'rxjs/operators';
 
 import * as DETAILS from '@store_actions/Details'
 
@@ -24,19 +24,49 @@ export class DetailsEffects {
      */
     @Effect()
     public fetchDetailsEffect$: Observable<any> = this.actions$.pipe(
+
+
+
+
+
+
+
+
+
+
+
+
         ofType(DETAILS.FETCH_DETAILS),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        tap((action) => console.log('Action caught in DetailsEffects:', action)),
         switchMap(() => // if a new Actions arrives, the old Observable will be canceled
             this.dataService.readData(DetailsQuery).pipe(
                 map((details: DetailsType) => {
                     return {
-                        type: DETAILS.DETAILS_FETCHED,
+                        type: DETAILS.DETAILS_FETCHED.type,
                         payload: { details }
                     };
                 }),
                 // handle failure in todoListService.fetchTodoList()
                 catchError((error) => {
                     return of({
-                        type: DETAILS.DETAILS_FETCH_FAILED,
+                        type: DETAILS.DETAILS_FETCH_FAILED.type,
                         payload: { error }
                     });
                 })

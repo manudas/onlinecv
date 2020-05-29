@@ -1,14 +1,15 @@
 import { createReducer, on } from '@ngrx/store';
-import { fetchDetails, saveDetails, resetDetails } from '@store_reducers/Details';
+import * as DETAIL_ACTIONS from '@store_actions/Details';
  
-export const initialState = 0;
+export const initialState = {};
  
-const _counterReducer = createReducer(initialState,
-  on(increment, state => state + 1),
-  on(decrement, state => state - 1),
-  on(reset, state => 0),
-);
- 
-export function counterReducer(state, action) {
-  return _counterReducer(state, action);
+export function detailsReducer(state: object, action) {
+  // return _counterReducer(state, action);
+
+
+
+  return createReducer(
+    initialState,
+    on(DETAIL_ACTIONS.DETAILS_FETCHED, state => ({ ...state, ...action.payload })),
+  )(state, action)
 }
