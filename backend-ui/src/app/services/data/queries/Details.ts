@@ -20,7 +20,7 @@
  *
  */
 export const Details =
-    `{
+    `
         query Details($language: String!) {
             details(language: $language) {
                 id: _id
@@ -37,4 +37,4 @@ export const Details =
                 nickname
             }
         }
-    }`;
+    `;
