@@ -6,7 +6,7 @@
       "@app/*": ["src/app/*"],
       "@ui/*": ["src/app/ui/*"],
       "@services/*": ["src/app/services/*"],
-      "@data_types/*": ["src/app/services/data/types/*"],
+      "@data_types/*": ["src/app/types/*"],
       "@store/*": ["src/app/store/*"],
       "@store_reducers/*": ["src/app/store/reducers/*"],
       "@store_actions/*": ["src/app/store/actions/*"],

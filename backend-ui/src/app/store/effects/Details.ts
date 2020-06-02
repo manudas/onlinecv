@@ -8,7 +8,7 @@ import * as DETAILS from '@store_actions/Details'
 
 import { DataService } from '@services/data/data.service'
 import { Details as DetailsQuery } from '@services/data/queries'
-import { DetailsType } from '@data_types/Details'
+import { DetailsType } from '@app/types/Details'
 
 @Injectable()
 export class DetailsEffects {
@@ -24,36 +24,7 @@ export class DetailsEffects {
      */
     @Effect()
     public fetchDetailsEffect$: Observable<any> = this.actions$.pipe(
-
-
-
-
-
-
-
-
-
-
-
-
         ofType(DETAILS.FETCH_DETAILS),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         tap((action) => console.log('Action caught in DetailsEffects:', action)),
         switchMap(() => // if a new Actions arrives, the old Observable will be canceled
             this.dataService.readData(DetailsQuery).pipe(

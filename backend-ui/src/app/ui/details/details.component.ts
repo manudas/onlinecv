@@ -9,7 +9,7 @@ import {
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 import * as ACTION_DETAILS from '@store_actions/Details'
-import { DetailsType } from '@data_types/Details'
+import { DetailsType } from '@app/types/Details'
 
 @Component({
   selector: 'app-details',
