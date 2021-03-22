@@ -11,6 +11,10 @@
         </div>
     </div>
     <div class='panel-body'>
-        <ng-container *ngIf="panelBody; then panelBody"></ng-container>
+        <ng-container
+            *ngIf="panelBody"
+            [ngTemplateOutlet]="panelBody"
+            [ngTemplateOutletContext]="panelParameters"
+        ></ng-container>
     </div>
 </div>

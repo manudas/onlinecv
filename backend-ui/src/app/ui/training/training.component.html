@@ -1,47 +1,55 @@
-<ng-container *ngIf="isTrainingActive('regulated'); then regulatedTemplate"></ng-container>
+<ng-container *ngIf="isTrainingActive('official'); then officialTemplate"></ng-container>
 <ng-container *ngIf="isTrainingActive('all'); then separator"></ng-container>
 <ng-container *ngIf="isTrainingActive('computer'); then computerTemplate"></ng-container>
 <ng-container *ngIf="isTrainingActive('all'); then separator"></ng-container>
 <ng-container *ngIf="isTrainingActive('others'); then othersTemplate"></ng-container>
 
 
-<ng-template #regulatedTemplate>
+<ng-template #officialTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
-        [panelBody]="panelBodyRegulated"
-        [cardTitle]="title">
+        [panelBody]="panel"
+        [panelParameters]="{source: officialData}"
+        [cardTitle]="'Official'">
     </app-card>
 </ng-template>
 
 <ng-template #computerTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
-        [panelBody]="panelBodyComputer"
-        [cardTitle]="title">
+        [panelBody]="panel"
+        [panelParameters]="{source: computerData}"
+        [cardTitle]="'Computer'">
     </app-card>
 </ng-template>
 
 <ng-template #othersTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
-        [panelBody]="panelBodyOthers"
-        [cardTitle]="title">
+        [panelBody]="panel"
+        [panelParameters]="{source: otherData}"
+        [cardTitle]="'Other'">
     </app-card>
 </ng-template>
 
-<ng-template #panelBodyRegulated>
+<ng-template #panel
+    let-source="source"
+>
+    dar estilo fijandote como se hace aqui https://blog.angular-university.io/angular-material-data-table/
     <mat-table class=""
-        [dataSource]="regulatedData"></mat-table>
-</ng-template>
+        [dataSource]="source">
+        <ng-container *ngFor="let col of colsToRender; let colIndex = index" matColumnDef="{{col}}">
+            <div
+                *matHeaderCellDef
+            >
+                {{col === 'id' ? '#' : col}}
+            </div>
+            <div *matCellDef="let row">{{row[col]}}</div>
+        </ng-container>
 
-<ng-template #panelBodyComputer>
-    <mat-table class=""
-        [dataSource]="computerData"></mat-table>
-</ng-template>
-
-<ng-template #panelBodyOthers>
-    <mat-table class=""
-        [dataSource]="otherData"></mat-table>
+        <mat-header-row *matHeaderRowDef="colsToRender"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: colsToRender"></mat-row>
+    </mat-table>
 </ng-template>
 
 <ng-template #separator>

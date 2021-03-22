@@ -17,6 +17,7 @@ export class CardComponent implements OnInit {
   @Input() cardStyle : string | {} = null;
   @Input() panelTools : TemplateRef<any> = null;
   @Input() panelBody : TemplateRef<any> = null;
+  @Input() panelParameters : any = null;
 
   constructor() { }
 
