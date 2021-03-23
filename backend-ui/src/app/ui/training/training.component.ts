@@ -35,7 +35,7 @@ export class TrainingComponent implements OnInit {
   title: string = 'Training';
 
   constructor(private activatedRoute:ActivatedRoute) {
-    this.activatedRoute.paramMap.subscribe(params => { 
+    this.activatedRoute.paramMap.subscribe(params => {
       const passedType: string = params.get('type');
       if (!(passedType in TrainingType)) {
         this.type = TrainingType.all;

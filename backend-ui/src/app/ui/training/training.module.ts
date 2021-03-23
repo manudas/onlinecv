@@ -7,15 +7,20 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { CardModule } from '@app/ui/card/card.module'
 
+import { TranslationsModule } from '@services/translation';
+
 import { TrainingComponent } from './training.component';
 
 @NgModule({
-  declarations: [TrainingComponent],
+  declarations: [
+    TrainingComponent,
+  ],
   imports: [
     CommonModule,
     MatTableModule,
     FontAwesomeModule,
-    CardModule
+    CardModule,
+    TranslationsModule,
   ],
   exports: [TrainingComponent]
 })

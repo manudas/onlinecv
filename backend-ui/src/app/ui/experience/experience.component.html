@@ -8,40 +8,50 @@
 <ng-template #professionalTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
-        [panelBody]="panelBodyProfessional"
-        [cardTitle]="title">
+        [panelBody]="panel"
+        [panelParameters]="{source: professionalData}"
+        [cardTitle]="'professional' | translate"
+    >
     </app-card>
 </ng-template>
 
 <ng-template #ongTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
-        [panelBody]="panelBodyOng"
-        [cardTitle]="title">
+        [panelBody]="panel"
+        [panelParameters]="{source: ongData}"
+        [cardTitle]="'ong' | translate"
+    >
     </app-card>
 </ng-template>
 
 <ng-template #othersTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
-        [panelBody]="panelBodyOthers"
-        [cardTitle]="title">
+        [panelBody]="panel"
+        [panelParameters]="{source: otherData}"
+        [cardTitle]="'others' | translate"
+    >
     </app-card>
 </ng-template>
 
-<ng-template #panelBodyProfessional>
+<ng-template #panel
+    let-source="source"
+>
     <mat-table class=""
-        [dataSource]="professionalData"></mat-table>
-</ng-template>
+        [dataSource]="source">
+        <ng-container *ngFor="let col of colsToRender; let colIndex = index" matColumnDef="{{col}}">
+            <mat-header-cell
+                *matHeaderCellDef
+            >
+                {{col === 'id' ? '#' : col | translate}}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row[col]}}</mat-cell>
+        </ng-container>
 
-<ng-template #panelBodyOng>
-    <mat-table class=""
-        [dataSource]="ongData"></mat-table>
-</ng-template>
-
-<ng-template #panelBodyOthers>
-    <mat-table class=""
-        [dataSource]="otherData"></mat-table>
+        <mat-header-row *matHeaderRowDef="colsToRender"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: colsToRender"></mat-row>
+    </mat-table>
 </ng-template>
 
 <ng-template #separator>

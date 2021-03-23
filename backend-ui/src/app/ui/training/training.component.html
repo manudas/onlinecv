@@ -35,16 +35,15 @@
 <ng-template #panel
     let-source="source"
 >
-    dar estilo fijandote como se hace aqui https://blog.angular-university.io/angular-material-data-table/
     <mat-table class=""
         [dataSource]="source">
         <ng-container *ngFor="let col of colsToRender; let colIndex = index" matColumnDef="{{col}}">
-            <div
+            <mat-header-cell
                 *matHeaderCellDef
             >
-                {{col === 'id' ? '#' : col}}
-            </div>
-            <div *matCellDef="let row">{{row[col]}}</div>
+                {{col === 'id' ? '#' : col | translate}}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">{{row[col]}}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="colsToRender"></mat-header-row>

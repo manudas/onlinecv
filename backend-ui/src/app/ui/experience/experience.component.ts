@@ -15,6 +15,18 @@ export class ExperienceComponent implements OnInit {
   faTable = faTable;
   type: ExperienceType = null;
 
+  colsToRender = [
+    'id',
+    'name',
+    'role',
+    'description',
+    'company',
+    'company_url',
+    'start_date',
+    'finish_date',
+    'keywords',
+  ];
+
   professionalData: string[] = null;
   ongData: string[] = null;
   otherData: string[] = null;

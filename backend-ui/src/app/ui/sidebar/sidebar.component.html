@@ -50,10 +50,16 @@
                 [dropDownActiveOrFocusedToggleStyles]="experienceMenu.dropDownActiveOrFocusedToggleStyles"></app-menu>
         </li>
         <li [className]="'sidebar_dock_launcher'">
-            <fa-icon [icon]="faBookmark"
-                size="2x"
-                [className]="sidebar_icon"></fa-icon>
-            <a [className]="'sidebar_dock_link'">Bookmarks</a>
+            <app-menu [name]="othersMenu.name"
+                [start_icon]="othersMenu.start_icon"
+                [title]="othersMenu.title"
+                [options]="othersMenu.options"
+                [caret]="othersMenu.caret"
+                [stylesStartIcon]="othersMenu.stylesStartIcon"
+                [stylesDropToggle]="othersMenu.stylesDropToggle"
+                [placement]="'right-top'"
+                [dropDownActiveOrFocusedToggleStyles]="othersMenu.dropDownActiveOrFocusedToggleStyles"></app-menu>
+
         </li>
         <li [className]="'sidebar_dock_launcher'">
             <fa-icon [icon]="faCloud"
