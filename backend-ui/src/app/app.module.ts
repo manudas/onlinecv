@@ -11,7 +11,7 @@ import { WrapperModule } from './ui/wrapper/wrapper.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DetailsEffects } from '@store_effects/Details'
-import { reducer as detailsReducer } from '@store_reducers/Details'
+import { reducer as detailsReducer } from '@store_reducers/Details';
 
 @NgModule({
   declarations: [
