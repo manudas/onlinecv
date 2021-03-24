@@ -4,7 +4,7 @@ import { DetailsComponent } from '@app/ui/details/details.component';
 import { TrainingComponent } from '@app/ui/training/training.component';
 import { ExperienceComponent } from '@app/ui/experience/experience.component';
 
-import { NotfoundComponent } from '@app/notfound/notfound.component';
+import { NotfoundGuardService } from '@app/services/notfound/notfound.service';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // redirect to `DashboardComponent`
@@ -21,6 +21,11 @@ export const routes: Routes = [
     { path: 'others', redirectTo: 'others/', pathMatch: 'full' },
     { path: 'others/:type', component: ExperienceComponent },
 
-    { path: 'notfound', component: NotfoundComponent, pathMatch: 'full' },
+    {
+        path: 'notfound',
+        canActivate: [NotfoundGuardService],
+        children: [],
+        pathMatch: 'full'
+    },
     { path: '**', redirectTo: 'notfound' },
 ];

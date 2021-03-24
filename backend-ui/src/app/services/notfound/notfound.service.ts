@@ -1,11 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT, LocationStrategy } from '@angular/common';
+import { CanActivate } from '@angular/router';
 
-@Component({
-  selector: 'app-notfound',
-  template: '',
-})
-export class NotfoundComponent implements OnInit {
+@Injectable()
+export class NotfoundGuardService implements CanActivate {
 
   constructor(@Inject(DOCUMENT) private readonly document: any,
     private readonly locationStrategy: LocationStrategy) { }
@@ -14,8 +12,9 @@ export class NotfoundComponent implements OnInit {
     return `${this.document.location.origin}${this.locationStrategy.getBaseHref()}`
   }
 
-  ngOnInit(): void {
+  canActivate(): boolean {
     window.location.href = `${this.getUrl()}notfound`
+    return false
   }
 
 }

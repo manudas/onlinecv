@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { NotfoundComponent } from './notfound.component'
+import { NotfoundGuardService } from './notfound.service'
 
 @NgModule({
-  declarations: [NotfoundComponent],
   imports: [
     CommonModule
   ],
-  exports: [NotfoundComponent]
+  providers: [NotfoundGuardService]
 })
 export class NotfoundModule { }
