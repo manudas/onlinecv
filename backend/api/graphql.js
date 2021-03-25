@@ -24,7 +24,9 @@ Object.values(resolvers).forEach((resolver) => {
         Object.assign(rootResolver, rootQuery);
     });
 });
-
+// console.log({context: {
+//     models
+// }});
 module.exports = (debug = false) => graphqlHTTP({
     schema: rootSchema,
     rootValue: rootResolver,

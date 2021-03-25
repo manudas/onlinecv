@@ -87,10 +87,10 @@ app.get("/", function(req, res) {
         );
         res.render("home", dataPassed);
     }).catch(e => console.log(e));
-    // res.send("Hello World!"); 
+    // res.send("Hello World!");
 });
 
-/* 
+/*
  * Route to api if url starts with /api
  * Used in the front end, mainly to display
  * information

@@ -13,7 +13,7 @@ import { MenuModule } from '.././menu/menu.module';
     CommonModule,
     FontAwesomeModule,
     MenuModule,
-    NgbModule
+    NgbModule,
   ],
   exports: [NavbarComponent]
 })

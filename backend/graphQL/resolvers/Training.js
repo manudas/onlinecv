@@ -1,18 +1,18 @@
 module.exports = {
     Query: {
-        regulatedTrainings: async({
+        Trainings: async({
             language
         }, {
             models: {
-                RegulatedTrainingModel
+                TrainingModel
             },
         }, info) => {
-            const regulatedTrainingList = await RegulatedTrainingModel.find({
+            const trainingList = await TrainingModel.find({
                 language
             }).sort({
                 order: 1
             }).exec();
-            return regulatedTrainingList;
+            return trainingList;
         },
     },
     Mutation: {
@@ -27,29 +27,29 @@ module.exports = {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putRegulatedTraining: async(parent, {
-            RegulatedTraining,
+        putTraining: async(parent, {
+            training,
         }, {
             models: {
-                regulatedTrainingModel
+                TrainingModel
             },
         }, info) => {
-            const WriteResult = await regulatedTrainingModel.update({
-                id: RegulatedTraining.id,
-            }, RegulatedTraining, {
+            const WriteResult = await TrainingModel.update({
+                id: training.id,
+            }, training, {
                 upsert: true // if no details found, create a new entry
             });
             return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? RegulatedTraining : false;
+                1) ? Training : false;
         },
-        removeRegulatedTraining: async(parent, {
+        removeTraining: async(parent, {
             id,
         }, {
             models: {
-                regulatedTrainingModel
+                TrainingModel
             },
         }, info) => {
-            const WriteResult = await regulatedTrainingModel.remove({
+            const WriteResult = await TrainingModel.remove({
                 id
             }, true); // true == remove one
             return WriteResult.nRemoved === 1;

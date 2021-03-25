@@ -38,12 +38,11 @@ export class DataService {
         (response) => response['data']
       ), catchError(e => throwError(e))))
   }
-  
 
   private query = (query: string, vars: any = {}): Observable<any> => {
     return this.execute('query', query, vars)
   }
-  
+
   private mutation = (mutation: string, vars: any = {}): Observable<any> => {
     return this.execute('mutation', mutation, vars)
   }

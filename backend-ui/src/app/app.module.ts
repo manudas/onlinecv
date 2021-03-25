@@ -12,10 +12,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DetailsEffects } from '@store_effects/Details'
 import { reducer as detailsReducer } from '@store_reducers/Details';
+import { LanguageSelectorComponent } from './language-selector/language-selector.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    LanguageSelectorComponent,
   ],
   imports: [
     BrowserModule,

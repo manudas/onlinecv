@@ -9,12 +9,12 @@ import { NotfoundGuardService } from '@app/services/notfound/notfound.service';
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // redirect to `DashboardComponent`
     { path: 'dashboard', component: DashboardComponent },
-    
+
     { path: 'details', component: DetailsComponent },
-    
+
     { path: 'training', redirectTo: 'training/', pathMatch: 'full' },
     { path: 'training/:type', component: TrainingComponent },
-    
+
     { path: 'experience', redirectTo: 'experience/', pathMatch: 'full' },
     { path: 'experience/:type', component: ExperienceComponent },
 

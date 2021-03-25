@@ -13,7 +13,7 @@
 */
 module.exports =
     `
-  type RegulatedTraining {
+  type Training {
     id: ID!
     name: String!,
     description: String,
@@ -28,7 +28,7 @@ module.exports =
     language: String!
   }
 
-  input RegulatedTrainingInput {
+  input TrainingInput {
     id: ID
     name: String!,
     description: String,
@@ -44,11 +44,11 @@ module.exports =
   }
 
   extend type Query {
-    regulatedTrainings(language: String!): [RegulatedTraining]!
+    Trainings(language: String!): [Training]!
   }
 
   extend type Mutation {
-    putRegulatedTraining(regulatedTraining: RegulatedTrainingInput!): RegulatedTraining!
-    removeRegulatedTraining(id: ID!): Boolean!
+    putTraining(Training: TrainingInput!): Training!
+    removeTraining(id: ID!): Boolean!
   }
 `;
