@@ -11,13 +11,13 @@ import { WrapperModule } from './ui/wrapper/wrapper.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { DetailsEffects } from '@store_effects/Details'
+import { LocaleEffects } from '@store_effects/Locale'
 import { reducer as detailsReducer } from '@store_reducers/Details';
-import { LanguageSelectorComponent } from './language-selector/language-selector.component';
+import { reducer as localeReducer } from '@store_reducers/Locale';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LanguageSelectorComponent,
   ],
   imports: [
     BrowserModule,
@@ -26,9 +26,13 @@ import { LanguageSelectorComponent } from './language-selector/language-selector
     WrapperModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({
-      details: detailsReducer
+      details: detailsReducer,
+      locale: localeReducer,
     }, {}),
-    EffectsModule.forRoot([DetailsEffects])
+    EffectsModule.forRoot([
+      DetailsEffects,
+      LocaleEffects,
+    ])
   ],
   providers: [],
   bootstrap: [AppComponent]

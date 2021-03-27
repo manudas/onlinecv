@@ -1,0 +1,21 @@
+.location-option-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+
+    .flag-image {
+        display: inline-block;
+        position: absolute;
+        padding: 10px;
+        height: 100%;
+        right: 0;
+    }
+}
+
+mat-select-trigger {
+    .location-option-container {
+        .flag-image {
+            padding: 0;
+        }
+    }
+}

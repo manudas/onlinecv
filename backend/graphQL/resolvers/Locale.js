@@ -38,25 +38,23 @@ module.exports = {
                 Locale: LocaleModel
             },
         }, info) => {
-            // we should be using insert here, as we're looking for the same document than inserting
             const WriteResult = await LocaleModel.update({
-                name: Locale.nametag,
                 iso: Locale.iso,
-            }, Locale, {
+            },  {default: false, ...Locale}, { // default is false by default
                 upsert: true // if no details found, create a new entry
             });
             return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
                 1) ? Locale : false;
         },
         removeLocale: async(parent, {
-            id,
+            _id,
         }, {
             models: {
                 Locale: LocaleModel
             },
         }, info) => {
             const WriteResult = await LocaleModel.remove({
-                id
+                _id
             }, true); // true == remove one
             return WriteResult.nRemoved === 1;
         },

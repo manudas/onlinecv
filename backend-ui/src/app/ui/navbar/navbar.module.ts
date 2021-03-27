@@ -5,6 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; // remove when in menumodule
 
 import { NavbarComponent } from './navbar.component';
+import { LanguageSelectorModule } from '@ui/language-selector/language-selector.module';
 import { MenuModule } from '.././menu/menu.module';
 
 @NgModule({
@@ -14,6 +15,7 @@ import { MenuModule } from '.././menu/menu.module';
     FontAwesomeModule,
     MenuModule,
     NgbModule,
+    LanguageSelectorModule,
   ],
   exports: [NavbarComponent]
 })

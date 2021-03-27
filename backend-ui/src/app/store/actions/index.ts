@@ -6,3 +6,5 @@ export {
     DETAILS_FETCH_FAILED
 }
 from '@store_actions/Details'
+
+export * from './Locale'

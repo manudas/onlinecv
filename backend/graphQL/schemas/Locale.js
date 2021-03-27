@@ -11,15 +11,17 @@
 module.exports =
     `
       type Locale {
-        id: ID!
+        _id: ID!
         name: String!,
-        iso: String!
+        iso: String!,
+        default: Boolean
       }
 
       input LocaleInput {
-        id: ID
+        _id: ID
         name: String!,
-        iso: String!
+        iso: String!,
+        default: Boolean
       }
 
       extend type Query {
@@ -28,6 +30,6 @@ module.exports =
 
       extend type Mutation {
         putLocale(translation: LocaleInput!): Locale!
-        removeLocale(id: ID!): Boolean!
+        removeLocale(_id: ID!): Boolean!
       }
     `;

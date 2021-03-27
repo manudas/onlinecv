@@ -21,11 +21,11 @@ export const routes: Routes = [
     { path: 'others', redirectTo: 'others/', pathMatch: 'full' },
     { path: 'others/:type', component: ExperienceComponent },
 
-    {
-        path: 'notfound',
-        canActivate: [NotfoundGuardService],
-        children: [],
-        pathMatch: 'full'
-    },
-    { path: '**', redirectTo: 'notfound' },
+    // {
+    //     path: 'notfound',
+    //     canActivate: [NotfoundGuardService],
+    //     children: [],
+    //     pathMatch: 'full'
+    // },
+    // { path: '**', redirectTo: 'notfound' },
 ];
