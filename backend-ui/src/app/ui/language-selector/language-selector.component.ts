@@ -39,10 +39,10 @@ export class LanguageSelectorComponent implements OnInit {
       )
     )
 
-    this.selectedLocale$.subscribe((data: string) => 
+    this.selectedLocale$.subscribe((data: string) =>
       this.selectedLocale = data
     )
-    this.locales$.subscribe((data: LocaleType[]) => 
+    this.locales$.subscribe((data: LocaleType[]) =>
       this.locales = data
     )
 
@@ -78,11 +78,16 @@ export class LanguageSelectorComponent implements OnInit {
   }
 
   getSelectedLangageNameFromIso(iso: string): string {
-    return 'not impl'
+    const {name} = this?.locales?.[iso] || {}
+
+    return name
   }
 
   getImgUrl(iso: string): string {
     return `assets/svg-country-flags/svg/${iso}.svg`
   }
 
+  toLanguageArray(): LocaleType[] {
+    return Object.values(this.locales || {})
+  }
 }

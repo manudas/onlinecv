@@ -1,6 +1,6 @@
 <mat-form-field
     >
-    <mat-label>{{'Choose your language' | translate}}</mat-label>
+    <mat-label>{{'Choose your language' | translate | async}}</mat-label>
     <mat-select
         required
         [value]="selectedLocale"
@@ -11,7 +11,7 @@
             <span
                 [ngClass]="'location-option-container'"
             >
-                {{getSelectedLangageNameFromIso(selectedLocale) | translate}}
+                {{getSelectedLangageNameFromIso(selectedLocale) | translate | async}}
                 <img
                     [ngClass]="'flag-image'"
                     src="{{ getImgUrl(selectedLocale) }}"
@@ -29,11 +29,11 @@
         >clear</mat-icon>
         </div>
         <mat-option>--</mat-option>
-        <mat-option *ngFor="let locale of locales" [value]="locale.iso">
+        <mat-option *ngFor="let locale of toLanguageArray()" [value]="locale.iso">
             <span
                 [ngClass]="'location-option-container'"
             >
-                {{locale.name | translate}}
+                {{locale.name | translate | async}}
                 <img
                     [ngClass]="'flag-image'"
                     src="{{ getImgUrl(locale.iso) }}"
@@ -41,6 +41,6 @@
                 </span>
         </mat-option>
     </mat-select>
-    <mat-error *ngIf="!selectedLocale">{{'Please choose a language' | translate}}</mat-error>
-    <mat-hint *ngIf="selectedLocale">{{ 'Selected'| translate }}: {{ getSelectedLangageNameFromIso(selectedLocale) | translate }}</mat-hint>
+    <mat-error *ngIf="!selectedLocale">{{'Please choose a language' | translate | async}}</mat-error>
+    <mat-hint *ngIf="selectedLocale">{{ 'Selected'| translate: this | async}}: {{ getSelectedLangageNameFromIso(selectedLocale) | translate  | async}}</mat-hint>
 </mat-form-field>

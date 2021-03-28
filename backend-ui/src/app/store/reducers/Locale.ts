@@ -10,7 +10,11 @@ const localeReducer = createReducer(
     return { ...state, selectedLocale: iso }}
   ),
   on(LOCALE_ACTIONS.AVAILABLE_LOCALES_FETCHED, (state, {payload}) => {
-    return { ...state, locales: [...payload] }
+    const locales = {}
+    Object.entries(payload).forEach(([_, value]) => {
+      locales[value['iso']] = value
+    })
+    return { ...state, locales }
   }),
 )
 

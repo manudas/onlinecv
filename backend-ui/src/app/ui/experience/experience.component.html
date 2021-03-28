@@ -10,7 +10,7 @@
         [iconClass]="'mr-1'"
         [panelBody]="panel"
         [panelParameters]="{source: professionalData}"
-        [cardTitle]="'professional' | translate"
+        [cardTitle]="'professional' | translate | async"
     >
     </app-card>
 </ng-template>
@@ -20,7 +20,7 @@
         [iconClass]="'mr-1'"
         [panelBody]="panel"
         [panelParameters]="{source: ongData}"
-        [cardTitle]="'ong' | translate"
+        [cardTitle]="'ong' | translate | async"
     >
     </app-card>
 </ng-template>
@@ -30,7 +30,7 @@
         [iconClass]="'mr-1'"
         [panelBody]="panel"
         [panelParameters]="{source: otherData}"
-        [cardTitle]="'others' | translate"
+        [cardTitle]="'others' | translate | async"
     >
     </app-card>
 </ng-template>
@@ -44,7 +44,7 @@
             <mat-header-cell
                 *matHeaderCellDef
             >
-                {{col === 'id' ? '#' : col | translate}}
+                {{col === 'id' ? '#' : col | translate | async}}
             </mat-header-cell>
             <mat-cell *matCellDef="let row">{{row[col]}}</mat-cell>
         </ng-container>
