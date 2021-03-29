@@ -1,5 +1,9 @@
 import { Observable } from "rxjs"
 
+export type RequestedTranslations = {
+    [component: string]: string[]
+}
+
 export type TranslationsType = {
     [iso: string]: {
         [component: string]: {

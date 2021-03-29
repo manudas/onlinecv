@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import {
   LocaleStore,
+  RequestedTranslations,
   StoredTranslationsObservable,
   TranslationStore,
   TranslationsType,
@@ -10,6 +11,7 @@ import {
   Observable,
   of,
 } from 'rxjs';
+import { TranslationService } from './translation.service';
 
 type StoreType = { locale: LocaleStore } & { translation: TranslationStore}
 
@@ -23,10 +25,11 @@ export class TranslatePipe implements PipeTransform {
   selectedLocale // iso code
   selectedLocale$: Observable<string>;
 
-  translations: TranslationsType
-  translations$: Observable<TranslationsType>
+  translations: TranslationsType // real translations from the API
+  translations$: Observable<TranslationsType> // observes the whole translation object
+  storedTranslationsObservable: StoredTranslationsObservable = {} // observes each translation individually
 
-  constructor(private store: Store<StoreType>) {
+  constructor(private store: Store<StoreType>, private translationService: TranslationService) {
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
     this.selectedLocale$.subscribe((data: string) => {
       this.selectedLocale = data
@@ -48,8 +51,6 @@ export class TranslatePipe implements PipeTransform {
       this.translations = {}
     })
   }
-
-  storedTranslationsObservable: StoredTranslationsObservable = {}
 
   getAndInitTranslation(key: string, componentName: string) {
     if (this.translations[this.selectedLocale] === undefined) {
@@ -84,6 +85,7 @@ export class TranslatePipe implements PipeTransform {
   transform(key: string, component: any = null): Observable<string> {
     const caller: string = component?.constructor?.name // otherwise, undefined
     const observable = this.getAndInitTranslationObservable(key, caller)
+    this.translationService.requestTranslation(key, caller)
     return observable
   }
 }

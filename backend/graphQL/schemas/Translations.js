@@ -23,7 +23,7 @@ module.exports =
       }
 
       extend type Query {
-        translations(language: String!): [Translation]!
+        translations(tags: [String!]!, modules: [String!]!, language: String!): [Translation]!
         translation(tag: String!, module: String, language: String!): Translation
       }
 

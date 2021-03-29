@@ -10,6 +10,8 @@ import { NavbarModule } from './ui/navbar/navbar.module';
 import { WrapperModule } from './ui/wrapper/wrapper.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { TranslationsModule } from '@services/translation';
+
 import { DetailsEffects } from '@store_effects/Details'
 import { LocaleEffects } from '@store_effects/Locale'
 import { reducer as detailsReducer } from '@store_reducers/Details';
@@ -32,7 +34,8 @@ import { reducer as localeReducer } from '@store_reducers/Locale';
     EffectsModule.forRoot([
       DetailsEffects,
       LocaleEffects,
-    ])
+    ]),
+    TranslationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
