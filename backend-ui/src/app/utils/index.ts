@@ -1,7 +1,7 @@
 import isEqual from 'lodash/isEqual';
 
-export const useMemo = <T> (func: () => T): ((dep: any[]) => T) => {
-    const _depsChagedAuxiliar = (): Generator => {
+export const useMemo = <T> (func: () => T): ((dep: any) => T) => {
+    const depsChangedGenerator = ((): Generator => {
         let previousDeps
 
         return (function* () {
@@ -16,10 +16,12 @@ export const useMemo = <T> (func: () => T): ((dep: any[]) => T) => {
 
             }
         })()
-    }
+    })()
 
-    const depsChanged = (deps: any[]) => {
-        return _depsChagedAuxiliar().next(deps).value
+    depsChangedGenerator.next() // initialising the generator
+
+    const depsChanged = (deps: any) => {
+        return depsChangedGenerator.next(deps).value
     }
 
     const getFuncValue = ((): (boolean) => T => {
@@ -33,7 +35,7 @@ export const useMemo = <T> (func: () => T): ((dep: any[]) => T) => {
         }
     })()
 
-    return (dep: any[]) => {
+    return (dep: any) => {
         const depsHaveChanged = depsChanged(dep)
         return getFuncValue(depsHaveChanged)
     }

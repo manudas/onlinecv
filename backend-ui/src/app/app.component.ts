@@ -3,9 +3,9 @@ import { TranslationService } from './services/translation/translation.service';
 
 import debounce from 'lodash/debounce';
 
-import { useMemo } from '@utils'
-import { LocaleStore, RequestedTranslations, TranslationStore } from './types';
-import { Store } from '@ngrx/store';
+import { useMemo } from '@utils/index'
+import { ActionRequestTranslation, LocaleStore, TranslationStore } from './types';
+import { select, Store } from '@ngrx/store';
 import { FETCH_TRANSLATION } from './store/actions/Translation';
 import { Observable } from 'rxjs';
 
@@ -24,7 +24,9 @@ export class AppComponent implements OnInit  { // added OnInit to make a regular
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
 
-  constructor(private store: Store<StoreType>, private translationService: TranslationService) { }
+  constructor(private store: Store<StoreType>, private translationService: TranslationService) {
+    this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
+  }
 
   /*
     * We are going to use useMemo
@@ -33,7 +35,7 @@ export class AppComponent implements OnInit  { // added OnInit to make a regular
     * the input (requested translations
     * array), hasn't changed
     */
-  debouncedHandler = useMemo( () => debounce(
+  debouncedHandler = useMemo<ActionRequestTranslation>( () => debounce(
     (params) => {
 
       const {module_arr, tag_arr } = params;

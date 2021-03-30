@@ -4,6 +4,11 @@ export type RequestedTranslations = {
     [component: string]: string[]
 }
 
+export type ActionRequestTranslation = {
+    module_arr: string[],
+    tag_arr: string[]
+  }
+
 export type TranslationsType = {
     [iso: string]: {
         [component: string]: {

@@ -4,7 +4,7 @@
     "baseUrl": "./",
     "paths": {
       "@app/*": ["src/app/*"],
-      "@utils/*": ["src/app/utils*"],
+      "@utils/*": ["src/app/utils/*"],
       "@ui/*": ["src/app/ui/*"],
       "@services/*": ["src/app/services/*"],
       "@data_types/*": ["src/app/types/*"],
