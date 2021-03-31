@@ -1,10 +1,18 @@
 import { createAction, props } from '@ngrx/store'
 
-export const FETCH_TRANSLATION = createAction(
+export const FETCH_TRANSLATIONS = createAction(
     '[App Componet] Fetch Translation',
     props<{
         iso: string
         modules: string[]
         tags: string[]
     }>()
+);
+
+export const FETCH_TRANSLATIONS_OK = createAction(
+    '[App Componet] Fetch Translation OK'
+);
+
+export const FETCH_TRANSLATIONS_FAIL = createAction(
+    '[App Componet] Fetch Translation FAIL'
 );

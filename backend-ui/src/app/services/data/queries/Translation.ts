@@ -19,13 +19,16 @@
     }`
  *
  */
-export const Locale =
+export const Translations =
     `
-        query AvailableLocales {
-            getLocales {
+        query Translations($tags: [String!]!, $modules: [String!]!, $language: String!) {
+            translations(tags: $tags, modules: $modules, language: $language) {
+                # id is not not really needed for the translations and could be removed from this query
                 id: _id
-                name
-                iso
+                language
+                module
+                tag
+                text
             }
         }
     `;

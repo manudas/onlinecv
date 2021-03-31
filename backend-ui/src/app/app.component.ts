@@ -4,9 +4,9 @@ import { TranslationService } from './services/translation/translation.service';
 import debounce from 'lodash/debounce';
 
 import { useMemo } from '@utils/index'
-import { ActionRequestTranslation, LocaleStore, TranslationStore } from './types';
+import { LocaleStore, ModuleTagPairType, TranslationStore } from './types';
 import { select, Store } from '@ngrx/store';
-import { FETCH_TRANSLATION } from './store/actions/Translation';
+import { FETCH_TRANSLATIONS } from '@store_actions/Translation';
 import { Observable } from 'rxjs';
 
 type StoreType = { locale: LocaleStore } & { translation: TranslationStore}
@@ -35,13 +35,13 @@ export class AppComponent implements OnInit  { // added OnInit to make a regular
     * the input (requested translations
     * array), hasn't changed
     */
-  debouncedHandler = useMemo<ActionRequestTranslation>( () => debounce(
-    (params) => {
+  debouncedHandler = useMemo<ModuleTagPairType>( debounce(
+    ([params, iso]) => {
 
       const {module_arr, tag_arr } = params;
 
-      return this.store.dispatch(FETCH_TRANSLATION({
-        iso: this.selectedLocale,
+      return this.store.dispatch(FETCH_TRANSLATIONS({
+        iso,
         modules: module_arr,
         tags: tag_arr
       }))
@@ -51,19 +51,27 @@ export class AppComponent implements OnInit  { // added OnInit to make a regular
     {
         'leading': false,
         'trailing': true,
-    })
-  );
+    }),{ // Memo options
+      ignoreMemorisedValue: true
+    });
 
   ngOnInit(): void {
-    this.selectedLocale$.subscribe((data: string) =>
+    this.selectedLocale$.subscribe((data: string) => {
       this.selectedLocale = data
-    )
+      this.requestTranslations()
+    })
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewChecked(): void {
+    this.requestTranslations()
+  }
+
+  requestTranslations() {
     // make debounce here, so we only run the last call in a given a time gap
     // also, use some kind of memorisation, so given the same input, do not execute the call to the backend
     const translations = this.translationService.getTranslationsRequest()
-    this.debouncedHandler(this.translationService.getModuleTagPairs(translations))
+    if (Object.keys(translations).length > 0 && this.selectedLocale) {
+      this.debouncedHandler(this.translationService.getModuleTagPairs(translations), this.selectedLocale)
+    }
   }
 }

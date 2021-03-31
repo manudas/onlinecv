@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ActionRequestTranslation, RequestedTranslations } from "@app/types/Translations";
+import { ModuleTagPairType, RequestedTranslations } from "@app/types/Translations";
 
 @Injectable()
 export class TranslationService {
@@ -10,13 +10,15 @@ export class TranslationService {
     }
 
     requestTranslation(tag: string, module: string) {
-        this.requestedTranslations[module] = this.requestedTranslations[module] || [];
-        if (!this.requestedTranslations[module].includes(tag)) {
-            this.requestedTranslations[module].push(tag);
+        if (tag) { // let's avoid empty or undefined tags
+            this.requestedTranslations[module] = this.requestedTranslations[module] || [];
+            if (!this.requestedTranslations[module].includes(tag)) {
+                this.requestedTranslations[module].push(tag);
+            }
         }
     }
 
-    getModuleTagPairs = (translations: RequestedTranslations): ActionRequestTranslation => {
+    getModuleTagPairs = (translations: RequestedTranslations): ModuleTagPairType => {
         const result = {
           module_arr: [],
           tag_arr: []

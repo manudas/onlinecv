@@ -7,7 +7,7 @@
 module.exports =
     `
       type Translation {
-        id: ID!
+        _id: ID!
         language: String!,
         module: String,
         tag: String!,
@@ -15,7 +15,7 @@ module.exports =
       }
 
       input TranslationInput {
-        id: ID
+        _id: ID
         language: String!,
         module: String,
         tag: String!,
