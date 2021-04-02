@@ -13,3 +13,7 @@ export type DetailsType = {
     secondaryJobName: string,
     nickname: string
 };
+
+export type FetchDetailsPropsType = {
+    language: string
+}

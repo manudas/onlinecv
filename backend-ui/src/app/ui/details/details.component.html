@@ -5,80 +5,132 @@
 </app-card>
 
 <ng-template #panelBody>
-    <form>
-        <fieldset>
-            <legend>Personal details</legend>
-            <div class="form-group">
-                <label class="control-label">Your photo</label>
-                <app-pictureupload></app-pictureupload>
+    <fieldset>
+        <legend>Personal details</legend>
+        <div class="form-group">
+            <label class="control-label">Your photo</label>
+            <app-pictureupload></app-pictureupload>
+        </div>
+        <form
+            [formGroup]="detailsFormGroup"
+        >
+            <div class='form-group'>
+                <label class='control-label'>First name</label>
+                <input class='form-control'
+                    formControlName="name"
+                    placeholder='Enter your first name'>
+                <small
+                    *ngIf="detailsFormGroup.get('name').touched && detailsFormGroup.get('name').errors"
+                    [className]="'text-danger'"
+                >
+                    You should provide a name
+                </small>
             </div>
             <div class='form-group'>
-                <label class='control-label'>Full name</label>
+                <label class='control-label'>Last name</label>
                 <input class='form-control'
-                    placeholder='Enter your full name'>
+                    formControlName="surname"
+                    placeholder='Enter your last name'>
             </div>
             <div class='form-group'>
                 <label class='control-label'>Nickname</label>
                 <input class='form-control'
+                    formControlName="nickname"
                     placeholder='Enter your nickname'>
+            </div>
+            <div class='form-group'>
+                <label class='control-label'>Primary role name</label>
+                <input class='form-control'
+                    formControlName="primaryRole"
+                    placeholder='Enter your primary role name'>
+                <small
+                    *ngIf="detailsFormGroup.get('primaryRole').touched && detailsFormGroup.get('primaryRole').errors"
+                    [className]="'text-danger'"
+                >
+                    You should provide a valid primare role name. If you never had had one before, just write wath you would like to do
+                </small>
+            </div>
+            <div class='form-group'>
+                <label class='control-label'>Secondary role name</label>
+                <input class='form-control'
+                    formControlName="secondaryRole"
+                    placeholder='Enter your secondary role name'>
             </div>
             <div class='form-group'>
                 <label class='control-label'>Birth details</label>
                 <input class='form-control'
+                    formControlName="birthInfo"
                     placeholder='Enter your birth details'>
                 <p class='help-block'>Enter your birth details. E.g.: 31 Dec 1983 - Jaén, Spain</p>
             </div>
             <div class='form-group'>
                 <label class='control-label'>Where you live</label>
                 <input class='form-control'
+                    formControlName="address"
                     placeholder='Enter the place you live in'>
             </div>
             <div class='form-group'>
                 <label class='control-label'>Email</label>
                 <input class='form-control'
+                    formControlName="email"
                     placeholder='Enter your email'>
+                <small
+                    *ngIf="detailsFormGroup.get('email').touched && detailsFormGroup.get('email').errors"
+                    [className]="'text-danger'"
+                >
+                    You should provide a valid email
+                </small>
             </div>
             <div class='form-group'>
                 <label class='control-label'>Phone number</label>
                 <input class='form-control'
+                    formControlName="phone"
                     placeholder='Enter your phone number'>
             </div>
-        </fieldset>
+        </form>
+    </fieldset>
 
-        <fieldset>
-            <legend>Social networks</legend>
-            <ng-container *ngTemplateOutlet="socialNetwork"></ng-container>
-        </fieldset>
+    <fieldset>
+        <legend>Social networks</legend>
+        <ng-container *ngTemplateOutlet="socialNetwork"></ng-container>
+    </fieldset>
 
-        <div class='form-actions'>
-            <button [className]="'btn submitButton'"
-                type='submit'
-                ngbButton>Submit</button>
-            <button [className]="'btn btn-outline-info'"
-                type='submit'
-                ngbButton>Cancel</button>
-        </div>
-    </form>
+    <div class='form-actions'>
+        <button [className]="'btn submitButton'"
+            type='submit'
+            ngbButton
+            (click)="submitHandler($event)"
+        >
+            {{ 'Submit' | translate: this | async}}
+        </button>
+        <button [className]="'btn btn-outline-info'"
+            type='reset'
+            ngbButton>Cancel</button>
+    </div>
 </ng-template>
 
 <ng-template #socialNetwork>
-    <div class='form-group'>
-        <label class='control-label'>Network name</label>
-        <input class='form-control'
-            placeholder='Enter the network name'
-            placement="top"
-            ngbTooltip="Do not enter any social network that can hurt you in a selection process">
-        <p class='help-block'>E.g: LinkedIn, Facebook, Twitter, Telegram...</p>
-    </div>
-    <div class='form-group'>
-        <label class='control-label'>Profile address</label>
-        <input class='form-control'
-            placeholder='Enter the url of your profile'>
-    </div>
-    <div class='form-group'>
-        <label class='control-label'>Please select an icon to be shown</label>
-        <input class='form-control'
-            placeholder='Enter a FontAwesome 5 icon name'>
-        <p class='help-block'>E.g.: linkedin, paper-plane-o and so on...</p>
-    </div>
+    <form
+            [formGroup]="socialNetworksFormGroup"
+        >
+        <div class='form-group'>
+            <label class='control-label'>Network name</label>
+            <input class='form-control'
+                placeholder='Enter the network name'
+                placement="top"
+                ngbTooltip="Do not enter any social network that can hurt you in a selection process">
+            <p class='help-block'>E.g: LinkedIn, Facebook, Twitter, Telegram...</p>
+        </div>
+        <div class='form-group'>
+            <label class='control-label'>Profile address</label>
+            <input class='form-control'
+                placeholder='Enter the url of your profile'>
+        </div>
+        <div class='form-group'>
+            <label class='control-label'>Please select an icon to be shown</label>
+            <input class='form-control'
+                placeholder='Enter a FontAwesome 5 icon name'>
+            <p class='help-block'>E.g.: linkedin, paper-plane-o and so on...</p>
+        </div>
+    </form>
 </ng-template>

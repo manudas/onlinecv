@@ -1,6 +1,10 @@
-import { createAction } from '@ngrx/store'
+import { FetchDetailsPropsType } from '@app/types/Details'
+import { createAction, props } from '@ngrx/store'
 
-export const FETCH_DETAILS = createAction('[Details Component] FetchDetails')
+export const FETCH_DETAILS = createAction(
+    '[Details Component] FetchDetails',
+    props<FetchDetailsPropsType>()
+)
 export const SAVE_DETAILS = createAction('[Details Component] SaveDetails')
 export const RESET_DETAILS = createAction('[Details Component] ResetDetails')
 

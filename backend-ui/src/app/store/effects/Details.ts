@@ -24,10 +24,18 @@ export class DetailsEffects {
      */
     @Effect()
     public fetchDetailsEffect$: Observable<any> = this.actions$.pipe(
-        ofType(DETAILS.FETCH_DETAILS),
+        ofType<ReturnType<typeof DETAILS.FETCH_DETAILS>>(DETAILS.FETCH_DETAILS),
         tap((action) => console.log('Action caught in DetailsEffects:', action)),
-        switchMap(() => // if a new Actions arrives, the old Observable will be canceled
-            this.dataService.readData(DetailsQuery).pipe(
+        switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const {
+                language,
+            } = action
+
+            const vars = {
+                language,
+            }
+
+            return this.dataService.readData(DetailsQuery, vars).pipe(
                 map((details: DetailsType) => {
                     return {
                         type: DETAILS.DETAILS_FETCHED.type,
@@ -42,6 +50,6 @@ export class DetailsEffects {
                     });
                 })
             )
-        )
+        })
     );
 }
