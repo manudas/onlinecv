@@ -16,7 +16,7 @@ import { SidebarComponent } from './sidebar.component';
     FontAwesomeModule,
     NgbModule,
     MenuModule,
-    RouterModule
+    RouterModule,
   ],
   exports: [SidebarComponent]
 })

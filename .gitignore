@@ -27,3 +27,6 @@ yarn-error.log*
 
 .vscode
 config.bson
+
+# no mongo data apart from mongodb folder, which contains DB initialisation
+/data/mongo/db

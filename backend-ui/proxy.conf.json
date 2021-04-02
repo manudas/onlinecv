@@ -4,5 +4,11 @@
         "secure": false,
         "logLevel": "debug",
         "changeOrigin": true
+    },
+    "/notfound": {
+        "target": "http://localhost:4000/notfound",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true
     }
 }

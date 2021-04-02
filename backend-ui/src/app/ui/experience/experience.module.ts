@@ -7,15 +7,20 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { CardModule } from '@app/ui/card/card.module'
 
+import { TranslationsModule } from '@services/translation';
+
 import { ExperienceComponent } from './experience.component';
 
 @NgModule({
-  declarations: [ExperienceComponent],
+  declarations: [
+    ExperienceComponent,
+  ],
   imports: [
     CommonModule,
     MatTableModule,
     FontAwesomeModule,
-    CardModule
+    CardModule,
+    TranslationsModule,
   ],
   exports: [ExperienceComponent]
 })

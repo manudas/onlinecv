@@ -5,6 +5,7 @@ import { DashboardModule } from '@app/ui/dashboard/dashboard.module';
 import { DetailsModule } from '@app/ui/details/details.module';
 import { TrainingModule } from '@app/ui/training/training.module';
 import { ExperienceModule } from '@app/ui/experience/experience.module';
+import { NotfoundModule } from '@app/services/notfound/notfound.module';
 
 import { routes } from './config/routes'
 
@@ -14,6 +15,7 @@ import { routes } from './config/routes'
     DetailsModule,
     TrainingModule,
     ExperienceModule,
+    NotfoundModule,
     RouterModule.forRoot(routes, { enableTracing: isDevMode() }),
   ],
   exports: [RouterModule]

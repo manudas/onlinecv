@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"ns":"onlinecv.training","v":1,"key":{"_id":1},"name":"_id_"},{"v":1,"unique":true,"key":{"language":1,"name":1},"name":"_training_language_index","ns":"onlinecv.training"},{"v":1,"key":{"name":1},"name":"_training_index","ns":"onlinecv.training"}]}

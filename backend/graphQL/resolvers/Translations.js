@@ -2,34 +2,55 @@ module.exports = {
     Query: {
         // translation(tag: string!, module: string, language: String!)
         translation: async({
-            tag,
-            module,
+            tags,
+            modules,
             language
         }, {
             models: {
                 TranslationsModel
             },
         }, info) => {
+            const lang = language === 'gb' ? 'en' : language;
             const translation = await TranslationsModel.findOne({
-                tag,
-                module,
-                language
+                tags,
+                modules,
+                language: lang
             }).exec();
             return translation;
         },
         translations: async({
+            modules,
+            tags,
             language
         }, {
             models: {
                 TranslationsModel
             },
         }, info) => {
+            const lang = language === 'gb' ? 'en' : language;
+            if (modules.length !== tags.length) {
+                throw new Error('Both modules and tags arrays must be size coincident and map each index to a module/tag pair');
+            }
+
+            const moduleTagPairs = modules.map((module, index) => (
+                { module, tag: tags[index] }
+            ));
             const translationList = await TranslationsModel.find({
-                language
+                $and: [
+                    { $or: moduleTagPairs },
+                    { language: lang }
+                ]
             }).sort({
                 module: 1,
                 tag: 1
             }).exec();
+/* run through all translations to update this two properties:
+    lastAccessed: Schema.Types.Date,
+    accessCounter: Number
+
+    ADD ANOTHER COLLECTION TO ADD THE NOT FOUND TRANSLATIONS
+    IF SOMEONE WASNT FOUND AND NOW IS FOUND, THEN REMOVE FROM NOT FOUND TRANSLATIONS
+*/
             return translationList;
         },
     },

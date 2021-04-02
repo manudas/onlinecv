@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import {
@@ -15,14 +15,27 @@ export class TrainingComponent implements OnInit {
   faTable = faTable;
   type: TrainingType = null;
 
-  regulatedData: string[] = null;
+  colsToRender = [
+    'id',
+    'name',
+    'description',
+    'type',
+    'school',
+    'school_url',
+    'start_date',
+    'finish_date',
+    'average_score',
+    'keywords',
+  ];
+
+  officialData: string[] = null;
   computerData: string[] = null;
   otherData: string[] = null;
 
-  @Input() title: string = 'Training';
+  title: string = 'Training';
 
   constructor(private activatedRoute:ActivatedRoute) {
-    this.activatedRoute.paramMap.subscribe(params => { 
+    this.activatedRoute.paramMap.subscribe(params => {
       const passedType: string = params.get('type');
       if (!(passedType in TrainingType)) {
         this.type = TrainingType.all;
@@ -34,7 +47,7 @@ export class TrainingComponent implements OnInit {
   }
 
   public isTrainingActive(trainingType: string) {
-    return this.type === TrainingType.all 
+    return this.type === TrainingType.all
             || this.type === TrainingType[trainingType];
   }
 
@@ -45,7 +58,7 @@ export class TrainingComponent implements OnInit {
 
 enum TrainingType {
   all,
-  regulated,
+  official,
   computer,
   others
 }

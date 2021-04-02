@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"onlinecv.skills"},{"v":1,"unique":true,"key":{"language":1,"name":1},"name":"_knowledge_language_index","ns":"onlinecv.skills"},{"v":1,"key":{"name":1},"name":"_knowledge_index","ns":"onlinecv.skills"}]}

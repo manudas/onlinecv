@@ -18,7 +18,7 @@ export class DetailsEffects {
         private dataService: DataService
     ) {}
 
-    /** 
+    /**
      * Effect provides new actions as
      * a result of the operation performed
      */
