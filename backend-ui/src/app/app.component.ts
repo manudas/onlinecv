@@ -67,9 +67,7 @@ export class AppComponent implements OnInit  { // added OnInit to make a regular
   }
 
   requestTranslations() {
-    // make debounce here, so we only run the last call in a given a time gap
-    // also, use some kind of memorisation, so given the same input, do not execute the call to the backend
-    const translations = this.translationService.getTranslationsRequest()
+    const translations = this.translationService.getDuplicatesFilteredTranslationsRequest()
     if (Object.keys(translations).length > 0 && this.selectedLocale) {
       this.debouncedHandler(this.translationService.getModuleTagPairs(translations), this.selectedLocale)
     }

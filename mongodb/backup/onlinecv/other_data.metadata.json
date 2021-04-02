@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":1,"key":{"_id":1},"name":"_id_","ns":"onlinecv.other_data"},{"v":1,"unique":true,"key":{"language":1,"name":1},"name":"_other_data_name_index","ns":"onlinecv.other_data"},{"v":1,"key":{"name":1},"name":"other_data_index","ns":"onlinecv.other_data"}]}

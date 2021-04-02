@@ -17,6 +17,7 @@ import { LocaleEffects } from '@store_effects/Locale'
 import { TranslationEffects } from '@store_effects/Translation'
 import { reducer as detailsReducer } from '@store_reducers/Details'
 import { reducer as localeReducer } from '@store_reducers/Locale'
+import { reducer as translationReducer } from '@store_reducers/Translation'
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { reducer as localeReducer } from '@store_reducers/Locale'
     StoreModule.forRoot({
       details: detailsReducer,
       locale: localeReducer,
+      translation: translationReducer,
     }, {}),
     EffectsModule.forRoot([
       DetailsEffects,

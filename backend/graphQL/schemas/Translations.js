@@ -12,6 +12,8 @@ module.exports =
         module: String,
         tag: String!,
         text: String!
+        lastAccessed: String,
+        accessCounter: Int
       }
 
       input TranslationInput {

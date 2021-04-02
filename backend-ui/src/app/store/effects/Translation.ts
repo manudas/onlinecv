@@ -9,7 +9,7 @@ import * as TRANSLATION_ACTIONS from '@store_actions/Translation'
 import { DataService } from '@services/data/data.service'
 import { Translations as TranslationsQuery } from '@services/data/queries'
 
-import { ActionRequestTranslation } from '@app/types/Translations';
+import { ActionRequestTranslation, ReceivedTranslationsType } from '@app/types/Translations';
 
 @Injectable()
 export class TranslationEffects {
@@ -42,10 +42,10 @@ export class TranslationEffects {
             }
 
             return this.dataService.readData(TranslationsQuery, vars).pipe(
-                map((translations) => {
+                map((translations: ReceivedTranslationsType) => {
                     return {
                         type: TRANSLATION_ACTIONS.FETCH_TRANSLATIONS_OK.type,
-                        payload: { translations }
+                        payload: { ...translations }
                     };
                 }),
                 // handle failure in todoListService.fetchTodoList()

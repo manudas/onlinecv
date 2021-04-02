@@ -1,4 +1,4 @@
-import { Observable } from "rxjs"
+import { Subject } from "rxjs"
 
 export type RequestedTranslations = {
     [component: string]: string[]
@@ -15,10 +15,28 @@ export type ActionRequestTranslation = {
     tags: string[]
 }
 
+export type DBTranslation = {
+    id: string
+    language: string
+    module?: string
+    tag: string
+    text: string
+}
+
+export type ReceivedTranslationsType = {
+    translations: DBTranslation[]
+}
+
+export type InternalStoredTranslationInterface = {
+    initialTranslation: string
+    translation?: DBTranslation
+}
+
+
 export type TranslationsType = {
     [iso: string]: {
         [component: string]: {
-            [key: string] : string
+            [key: string] : InternalStoredTranslationInterface
         }
     }
 }
@@ -26,11 +44,9 @@ export type TranslationsType = {
 export type StoredTranslationsObservable = {
     [iso: string]: {
         [component: string]: {
-            [key: string] : Observable<string>
+            [key: string] : Subject<string>
         }
     }
 }
 
-export type TranslationStore = {
-    translations: TranslationsType
-}
+export type TranslationStore = ReceivedTranslationsType

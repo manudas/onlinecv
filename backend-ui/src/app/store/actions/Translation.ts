@@ -1,3 +1,4 @@
+import { ReceivedTranslationsType } from '@app/types/Translations';
 import { createAction, props } from '@ngrx/store'
 
 export const FETCH_TRANSLATIONS = createAction(
@@ -10,7 +11,10 @@ export const FETCH_TRANSLATIONS = createAction(
 );
 
 export const FETCH_TRANSLATIONS_OK = createAction(
-    '[App Componet] Fetch Translation OK'
+    '[App Componet] Fetch Translation OK',
+    props<{
+        payload: ReceivedTranslationsType
+    }>()
 );
 
 export const FETCH_TRANSLATIONS_FAIL = createAction(

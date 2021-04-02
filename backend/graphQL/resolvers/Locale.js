@@ -1,7 +1,7 @@
 module.exports = {
     Query: {
         getLocales: async(
-            parentNotUsed,
+            params,
             {
                 models: {
                     LocaleModel,
@@ -31,7 +31,7 @@ module.exports = {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putLocale: async(parent, {
+        putLocale: async({
             Locale,
         }, {
             models: {
@@ -46,7 +46,7 @@ module.exports = {
             return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
                 1) ? Locale : false;
         },
-        removeLocale: async(parent, {
+        removeLocale: async({
             _id,
         }, {
             models: {
