@@ -27,22 +27,24 @@ module.exports = {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putDetails: async(parent, {
-            Details,
-        }, {
+        putDetails: async({
+            details,
+        },
+        {
             models: {
                 DetailsModel
             },
-        }) => {
-            const WriteResult = await DetailsModel.update({
-                    language: language
+        }, info
+        ) => {
+            const DetailsWriteResult = await DetailsModel.findOneAndUpdate({
+                    language: details.language
                 },
-                Details, {
-                    upsert: true // if no details found, create a new entry
+                details, {
+                    upsert: true, // if no details found, create a new entry
+                    new: true // return the value of the object after the update and not before
                 }
             );
-            return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? Details : false;
+            return DetailsWriteResult? DetailsWriteResult : false;
         },
     },
 };

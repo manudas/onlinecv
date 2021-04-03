@@ -1,7 +1,4 @@
-export {
-    Details
-}
-from './Details';
+export * from './Details';
 
 export * from './Locale'
 

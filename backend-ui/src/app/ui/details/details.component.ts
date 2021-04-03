@@ -59,15 +59,15 @@ export class DetailsComponent implements OnInit {
       language: this.selectedLocale
     }))
 
-    alert('add hints when errors in form validation happens, so as to be able to submit')
+    alert('add social networks')
   }
 
   submitHandler($event): void {
-    debugger
     if (this.detailsFormGroup.valid && this.socialNetworksFormGroup.valid) {
       // dispatch 2 actions to the store:
       // 1 - MUTATE_DETAILS
       // 2 - MUTATE_SOCIAL_NETWORKS
+      this.store.dispatch(ACTION_DETAILS.SAVE_DETAILS( { details: {...this.detailsFormGroup.value, language: this.selectedLocale} } ))
     } else {
       this.detailsFormGroup.markAllAsTouched()
       this.socialNetworksFormGroup.markAllAsTouched()
