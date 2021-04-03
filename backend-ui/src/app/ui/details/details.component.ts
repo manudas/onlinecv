@@ -12,7 +12,7 @@ import * as ACTION_DETAILS from '@store_actions/Details'
 import { DetailsType, LocaleStore } from '@app/types'
 import { FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 
-type StoreType = { locale: LocaleStore } & { details: DetailsType }
+type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } }
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
@@ -22,6 +22,7 @@ export class DetailsComponent implements OnInit {
 
   faEdit: IconDefinition = faEdit
   details$: Observable<DetailsType>
+  details: DetailsType
 
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
@@ -45,7 +46,7 @@ export class DetailsComponent implements OnInit {
   constructor(private store: Store<StoreType>) {
     this.details$ = this.store.pipe(
       select(
-        state => state.details
+        state => state?.details?.data
       )
     )
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
@@ -58,8 +59,15 @@ export class DetailsComponent implements OnInit {
     this.store.dispatch(ACTION_DETAILS.FETCH_DETAILS({
       language: this.selectedLocale
     }))
-
-    alert('add social networks')
+    this.details$.subscribe((data: DetailsType) => {
+      if (data) {
+        this.details = data
+        for (const control in this.detailsFormGroup.controls) {
+          this.detailsFormGroup.get(control).setValue(this.details[control])
+        }
+      }
+    })
+    console.log('add social networks')
   }
 
   submitHandler($event): void {

@@ -19,13 +19,6 @@ export class TranslatePipe implements PipeTransform {
   constructor(private translationService: TranslationService) { }
 
   transform(key: string, component?: any): Subject<string> {
-    if  (key) { // let's avoid undefined translations
-      const caller: string = component?.constructor?.name // otherwise, undefined
-      const subject = this.translationService.getTranslationSubject(key, caller)
-      this.translationService.requestTranslation(key, caller)
-
-      return subject
-    }
-    return null
+    return this.translationService.transform(key, component)
   }
 }

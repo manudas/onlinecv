@@ -3,11 +3,11 @@ import * as DETAIL_ACTIONS from '@store_actions/Details';
 
 export const initialState = {};
 
-const detailsReducer = (state, action) => createReducer(
+const detailsReducer = createReducer(
   initialState,
-  on(DETAIL_ACTIONS.DETAILS_FETCHED, state => {
+  on(DETAIL_ACTIONS.DETAILS_FETCHED, (state, action) => {
     // do some more logic here if needed
-    return { ...state, ...action.payload }}
+    return { ...state, data: { ...action.details } }}
   ),
 )
 

@@ -16,7 +16,3 @@ export const FETCH_TRANSLATIONS_OK = createAction(
         payload: ReceivedTranslationsType
     }>()
 );
-
-export const FETCH_TRANSLATIONS_FAIL = createAction(
-    '[App Componet] Fetch Translation FAIL'
-);

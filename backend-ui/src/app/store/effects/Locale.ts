@@ -7,6 +7,7 @@ import { switchMap, map, tap, catchError } from 'rxjs/operators'
 import { CookieService } from 'ngx-cookie-service'
 
 import * as LOCALE_ACTIONS from '@store_actions/Locale'
+import * as COMMON_ACTIONS from '@store_actions/Common'
 
 import { DataService } from '@services/data/data.service'
 import { Locale as LocaleQuery } from '@services/data/queries'
@@ -14,15 +15,32 @@ import {
     getLocaleTypeRequest,
     SET_LOCALE_ACTION_TYPE,
 } from '@app/types/Locale'
+import { TranslationService } from '@app/services/translation/translation.service';
 
 @Injectable()
 export class LocaleEffects {
 
+    translationsToRequest = ['Error']
+    translationsObservables: {
+        [translationKey: string]: Observable<string>
+    } = {}
+    translatedStrings: {
+        [translationKey: string]: string
+    } = {}
+
     constructor(
         private actions$: Actions,
         private dataService: DataService,
-        private cookieService: CookieService
-    ) {}
+        private cookieService: CookieService,
+        private translate: TranslationService
+    ) {
+        this.translationsToRequest.forEach(translationKey => {
+            this.translationsObservables[translationKey] = this.translate.transform(translationKey, this)
+            this.translationsObservables[translationKey].subscribe((data: string) => {
+                this.translatedStrings[translationKey] = data
+            })
+        })
+    }
 
     /**
      * Effect provides new actions as
@@ -43,8 +61,8 @@ export class LocaleEffects {
                 // handle failure in todoListService.fetchTodoList()
                 catchError((error) => {
                     return of({
-                        type: LOCALE_ACTIONS.AVAILABLE_LOCALES_FETCH_FAILED.type,
-                        payload: { error }
+                        type: COMMON_ACTIONS.FAIL.type,
+                        message: `${this.translatedStrings['Error']}: ${error}`
                     });
                 })
             )

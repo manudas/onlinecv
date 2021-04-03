@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+
 import { TranslationService } from './services/translation/translation.service';
 
 import debounce from 'lodash/debounce';
 
 import { useMemo } from '@utils/index'
-import { LocaleStore, ModuleTagPairType, TranslationStore } from './types';
+import { LocaleStore, ModuleTagPairType, TranslationStore, MessageType } from './types';
 import { select, Store } from '@ngrx/store';
 import { FETCH_TRANSLATIONS } from '@store_actions/Translation';
-import { Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
-type StoreType = { locale: LocaleStore } & { translation: TranslationStore}
+type StoreType = { locale: LocaleStore } & { translation: TranslationStore} & { message: MessageType}
 
 @Component({
   selector: 'app-root',
@@ -24,8 +26,12 @@ export class AppComponent implements OnInit  { // added OnInit to make a regular
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
 
-  constructor(private store: Store<StoreType>, private translationService: TranslationService) {
+  appMessage$: Observable<MessageType>
+
+
+  constructor(private store: Store<StoreType>, private translationService: TranslationService, private snackBar: MatSnackBar) {
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
+    this.appMessage$ = this.store.pipe(select(state => state?.message))
   }
 
   /*
@@ -60,6 +66,17 @@ export class AppComponent implements OnInit  { // added OnInit to make a regular
       this.selectedLocale = data
       this.requestTranslations()
     })
+    this.appMessage$.subscribe((data: MessageType) => {
+      if ( Object.keys(data).length > 0 ) {
+        this.openSnackBar(data.message, data.timeout || 1000)
+      }
+    })
+  }
+
+  openSnackBar(message: string, duration: number) {
+    this.snackBar.open(message, null, {
+       duration,
+    });
   }
 
   ngAfterViewChecked(): void {
@@ -72,4 +89,6 @@ export class AppComponent implements OnInit  { // added OnInit to make a regular
       this.debouncedHandler(this.translationService.getModuleTagPairs(translations), this.selectedLocale)
     }
   }
+
+
 }

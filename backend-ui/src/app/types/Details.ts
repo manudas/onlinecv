@@ -17,3 +17,7 @@ export type DetailsType = {
 export type FetchDetailsPropsType = {
     language: string
 }
+
+export type DetailsFetched = {
+    details: DetailsType
+}

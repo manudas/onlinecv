@@ -5,21 +5,40 @@ import { Observable, of } from 'rxjs';
 import { switchMap, map, tap, catchError } from 'rxjs/operators';
 
 import * as DETAILS from '@store_actions/Details'
+import * as COMMON_ACTIONS from '@store_actions/Common'
 
 import { DataService } from '@services/data/data.service'
+
 import {
     QueryDetails,
     MutateDetails
 } from '@services/data/queries'
-import { DetailsType } from '@app/types/Details'
+import { DetailsFetched, DetailsType } from '@app/types/Details'
+import { TranslationService } from '@app/services/translation/translation.service';
 
 @Injectable()
 export class DetailsEffects {
 
+    translationsToRequest = ['Saved successfully', 'Error']
+    translationsObservables: {
+        [translationKey: string]: Observable<string>
+    } = {}
+    translatedStrings: {
+        [translationKey: string]: string
+    } = {}
+
     constructor(
         private actions$: Actions,
-        private dataService: DataService
-    ) {}
+        private dataService: DataService,
+        private translate: TranslationService,
+    ) {
+        this.translationsToRequest.forEach(translationKey => {
+            this.translationsObservables[translationKey] = this.translate.transform(translationKey, this)
+            this.translationsObservables[translationKey].subscribe((data: string) => {
+                this.translatedStrings[translationKey] = data
+            })
+        })
+    }
 
     /**
      * Effect provides new actions as
@@ -39,17 +58,17 @@ export class DetailsEffects {
             }
 
             return this.dataService.readData(QueryDetails, vars).pipe(
-                map((details: DetailsType) => {
+                map((details: DetailsFetched) => {
                     return {
                         type: DETAILS.DETAILS_FETCHED.type,
-                        payload: { details }
+                        ...details
                     };
                 }),
                 // handle failure in todoListService.fetchTodoList()
                 catchError((error) => {
                     return of({
-                        type: DETAILS.DETAILS_FETCH_FAILED.type,
-                        payload: { error }
+                        type: COMMON_ACTIONS.FAIL.type,
+                        message: `${this.translatedStrings['Error']}: ${error}`
                     });
                 })
             )
@@ -76,15 +95,15 @@ export class DetailsEffects {
             return this.dataService.setData(MutateDetails, vars).pipe(
                 map((details: DetailsType) => {
                     return {
-                        type: DETAILS.DETAILS_FETCHED.type,
-                        payload: { details }
+                        type: COMMON_ACTIONS.SUCCESS.type,
+                        message: `${this.translatedStrings['Saved successfully']}`
                     };
                 }),
                 // handle failure in todoListService.fetchTodoList()
                 catchError((error) => {
                     return of({
-                        type: DETAILS.DETAILS_FETCH_FAILED.type,
-                        payload: { error }
+                        type: COMMON_ACTIONS.FAIL.type,
+                        message: `${this.translatedStrings['Error']}: ${error}`
                     });
                 })
             )
