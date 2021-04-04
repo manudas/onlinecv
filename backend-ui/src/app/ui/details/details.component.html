@@ -92,8 +92,17 @@
 
     <fieldset>
         <legend>{{ 'Social networks' | translate: this | async }}</legend>
+        <ng-container
+            *ngIf="socialNetworks.length"
+            [ngTemplateOutlet]="socialNetworkTableTemplate"
+            [ngTemplateOutletContext]="{
+                source: socialNetworks,
+                colsToRender: socialNetworkColsToRender
+            }"
+
+        ></ng-container>
         <div
-            [className]="'text-right'"
+            [className]="'text-right network-actions'"
         >
             <button
                 (click)="openDialog()"
@@ -119,3 +128,66 @@
             ngbButton>Cancel</button>
     </div>
 </ng-template>
+
+
+<ng-template #socialNetworkTableTemplate
+    let-source="source"
+    let-columnsToBeRendered="colsToRender"
+>
+    <mat-table class=""
+        [dataSource]="source"
+    >
+        <ng-container *ngFor="let col of columnsToBeRendered; let colIndex = index" matColumnDef="{{col}}">
+            <mat-header-cell
+                *matHeaderCellDef
+            >
+                {{col === 'id' ? '#' : col | translate | async | titlecase}}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element; let row; let rowIndex = index">{{ getSocialNetworkTableValue(row , col, rowIndex) }}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="columnsToBeRendered"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: columnsToBeRendered"></mat-row>
+    </mat-table>
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<ng-template #deleteNetwork
+    let-source="source"
+    let-colsToRender="colsToRender"
+>
+
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+

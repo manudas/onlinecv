@@ -10,6 +10,15 @@
         padding: 24px;
     }
 
+    label {
+        display: inline-block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .help-block {
+        color: $darkerGrey;
+    }
 
     [mat-dialog-title] {
         background-color: $grey;

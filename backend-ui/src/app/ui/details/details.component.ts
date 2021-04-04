@@ -27,7 +27,14 @@ export class DetailsComponent implements OnInit {
   details: DetailsType
 
   socialNetworks$: Observable<SocialNetwork[]>
-  socialNetworks: SocialNetwork[]
+  socialNetworks: SocialNetwork[] = []
+  socialNetworkColsToRender = [
+    'id',
+    'label',
+    'description',
+    'edit',
+    'delete',
+  ]
 
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
@@ -45,8 +52,6 @@ export class DetailsComponent implements OnInit {
     primaryRole: new FormControl(null, Validators.required),
     secondaryRole: new FormControl(null),
   })
-
-  // socialNetworksFormGroup: FormGroup = new FormGroup({})
 
   constructor(private store: Store<StoreType>, private matDialog: MatDialog) {
     this.details$ = this.store.pipe(
@@ -91,7 +96,6 @@ export class DetailsComponent implements OnInit {
       this.store.dispatch(ACTION_DETAILS.SAVE_DETAILS( { details: {...this.detailsFormGroup.value, language: this.selectedLocale} } ))
     } else {
       this.detailsFormGroup.markAllAsTouched()
-      // this.socialNetworksFormGroup.markAllAsTouched()
     }
   }
 
@@ -118,8 +122,29 @@ export class DetailsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      // this.animal = result;
+      console.log(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
+      if (result) {
+        this.addNetwork(result);
+      }
     });
+  }
+
+  getSocialNetworkTableValue(networkData: SocialNetwork, columnName: string, rowIndex: number) {
+    const indexInSocialNetworkArr = this.socialNetworks.indexOf(networkData)
+    if (columnName === 'delete') {
+      return
+    } else if (columnName === 'edit') {
+      return
+    }
+    return networkData[columnName]
+  }
+
+  addNetwork(networkData: SocialNetwork) {
+    this.socialNetworks = [...this.socialNetworks, { ...networkData }] // this works but doens't looks too nice
+    // this.socialNetworks.data.push({ ...networkData })
+  }
+
+  debug(object: any) {
+    console.log(JSON.stringify(object))
   }
 }

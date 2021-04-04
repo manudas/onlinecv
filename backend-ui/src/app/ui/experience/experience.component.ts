@@ -34,7 +34,7 @@ export class ExperienceComponent implements OnInit {
   @Input() title: string = 'Experience';
 
   constructor(private activatedRoute:ActivatedRoute) {
-    this.activatedRoute.paramMap.subscribe(params => { 
+    this.activatedRoute.paramMap.subscribe(params => {
       const passedType: string = params.get('type');
       if (!(passedType in ExperienceType)) {
         this.type = ExperienceType.all;
