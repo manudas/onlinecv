@@ -9,10 +9,12 @@ import {
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 import * as ACTION_DETAILS from '@store_actions/Details'
-import { DetailsType, LocaleStore } from '@app/types'
+import { DetailsType, LocaleStore, SocialNetwork } from '@app/types'
 import { FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { SocialNetworkDialogComponent } from './social-network-dialog.component';
 
-type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } }
+type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } } & { socialNetworks: {list: SocialNetwork[] } }
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
@@ -23,6 +25,9 @@ export class DetailsComponent implements OnInit {
   faEdit: IconDefinition = faEdit
   details$: Observable<DetailsType>
   details: DetailsType
+
+  socialNetworks$: Observable<SocialNetwork[]>
+  socialNetworks: SocialNetwork[]
 
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
@@ -41,15 +46,16 @@ export class DetailsComponent implements OnInit {
     secondaryRole: new FormControl(null),
   })
 
-  socialNetworksFormGroup: FormGroup = new FormGroup({})
+  // socialNetworksFormGroup: FormGroup = new FormGroup({})
 
-  constructor(private store: Store<StoreType>) {
+  constructor(private store: Store<StoreType>, private matDialog: MatDialog) {
     this.details$ = this.store.pipe(
       select(
         state => state?.details?.data
       )
     )
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
+    this.socialNetworks$ = this.store.pipe(select(state => state?.socialNetworks?.list))
   }
 
   ngOnInit(): void {
@@ -67,18 +73,53 @@ export class DetailsComponent implements OnInit {
         }
       }
     })
-    console.log('add social networks')
+    this.socialNetworks$.subscribe((data: SocialNetwork[]) => {
+      if (data) {
+        this.socialNetworks = data
+        // for (const control in this.detailsFormGroup.co ntrols) {
+        //   this.detailsFormGroup.get(control).setValue(this.details[control])
+        // }
+      }
+    })
   }
 
   submitHandler($event): void {
-    if (this.detailsFormGroup.valid && this.socialNetworksFormGroup.valid) {
+    if (this.detailsFormGroup.valid /* && this.socialNetworksFormGroup.valid*/) {
       // dispatch 2 actions to the store:
       // 1 - MUTATE_DETAILS
       // 2 - MUTATE_SOCIAL_NETWORKS
       this.store.dispatch(ACTION_DETAILS.SAVE_DETAILS( { details: {...this.detailsFormGroup.value, language: this.selectedLocale} } ))
     } else {
       this.detailsFormGroup.markAllAsTouched()
-      this.socialNetworksFormGroup.markAllAsTouched()
+      // this.socialNetworksFormGroup.markAllAsTouched()
     }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// AÑADIR MATERIAL DESIGN DIALOG
+// POR LO QUE VEO ( Y TIENE SENTIDO, ESTE COMPONENTE HABRA QUE SACARLO FUERA A OTRO COMPONENTE)
+  openDialog(): void {
+    const dialogRef = this.matDialog.open(SocialNetworkDialogComponent, {
+      width: '80%',
+      // data: {name: this.name, animal: this.animal}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      // this.animal = result;
+    });
   }
 }

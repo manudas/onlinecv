@@ -89,6 +89,4 @@ export class AppComponent implements OnInit  { // added OnInit to make a regular
       this.debouncedHandler(this.translationService.getModuleTagPairs(translations), this.selectedLocale)
     }
   }
-
-
 }

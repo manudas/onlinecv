@@ -13,9 +13,10 @@ import { TranslationsModule } from '@services/translation';
 import { DetailsComponent } from './details.component';
 
 import { DataService } from '@services/data/data.service'
+import { SocialNetworkDialogComponent } from './social-network-dialog.component'
 
 @NgModule({
-  declarations: [DetailsComponent],
+  declarations: [DetailsComponent, SocialNetworkDialogComponent],
   imports: [
     CommonModule,
     FontAwesomeModule,

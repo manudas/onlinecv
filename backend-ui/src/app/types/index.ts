@@ -7,3 +7,5 @@ export * from './Translations'
 export * from './Memo'
 
 export * from './Message'
+
+export * from './SocialNetworks'

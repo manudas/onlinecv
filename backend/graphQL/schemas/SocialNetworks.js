@@ -10,7 +10,8 @@ module.exports =
     id: ID!
     language: String!,
     label: String!,
-    text: String,
+    description: String,
+    url: String!,
     keywords: [String]!,
     order: Int!
   }
@@ -19,7 +20,8 @@ module.exports =
     id: ID
     language: String!,
     label: String!,
-    text: String,
+    description: String,
+    url: String!,
     keywords: [String]!,
     order: Int!
   }

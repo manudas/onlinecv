@@ -8,7 +8,8 @@ const collection = 'social_networks';
 const SocialNetworksSchema = new Schema({
     language: String,
     label: String,
-    text: String,
+    description: String,
+    url: String,
     order: Number
 }, {
     collection,

@@ -12,6 +12,8 @@ import { NavbarModule } from './ui/navbar/navbar.module'
 import { WrapperModule } from './ui/wrapper/wrapper.module'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { MatSnackBarModule } from '@angular/material/snack-bar'
+// dialog will be used all along the app, so better to import here and reuse
+import { MatDialogModule } from '@angular/material/dialog'
 
 import { TranslationsModule } from '@services/translation'
 
@@ -56,10 +58,11 @@ if (environment.production) {
     ]),
     TranslationsModule,
     MatSnackBarModule,
+    MatDialogModule,
 
     ...dev
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

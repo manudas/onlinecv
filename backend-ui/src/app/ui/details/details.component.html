@@ -91,8 +91,19 @@
     </fieldset>
 
     <fieldset>
-        <legend>Social networks</legend>
-        <ng-container *ngTemplateOutlet="socialNetwork"></ng-container>
+        <legend>{{ 'Social networks' | translate: this | async }}</legend>
+        <div
+            [className]="'text-right'"
+        >
+            <button
+                (click)="openDialog()"
+                [className]="'btn btn-outline-info'"
+                type='button'
+                ngbButton
+            >
+                {{ 'Add Social Network' | translate: this | async }}
+            </button>
+        </div>
     </fieldset>
 
     <div class='form-actions'>
@@ -107,30 +118,4 @@
             type='reset'
             ngbButton>Cancel</button>
     </div>
-</ng-template>
-
-<ng-template #socialNetwork>
-    <form
-            [formGroup]="socialNetworksFormGroup"
-        >
-        <div class='form-group'>
-            <label class='control-label'>Network name</label>
-            <input class='form-control'
-                placeholder='Enter the network name'
-                placement="top"
-                ngbTooltip="Do not enter any social network that can hurt you in a selection process">
-            <p class='help-block'>E.g: LinkedIn, Facebook, Twitter, Telegram...</p>
-        </div>
-        <div class='form-group'>
-            <label class='control-label'>Profile address</label>
-            <input class='form-control'
-                placeholder='Enter the url of your profile'>
-        </div>
-        <div class='form-group'>
-            <label class='control-label'>Please select an icon to be shown</label>
-            <input class='form-control'
-                placeholder='Enter a FontAwesome 5 icon name'>
-            <p class='help-block'>E.g.: linkedin, paper-plane-o and so on...</p>
-        </div>
-    </form>
 </ng-template>
