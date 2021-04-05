@@ -14,7 +14,7 @@ import {
     MutateDetails
 } from '@services/data/queries'
 import { DetailsFetched, DetailsType } from '@app/types/Details'
-import { TranslationService } from '@app/services/translation/translation.service';
+import { TranslationService } from '@app/services/translation/translation.service'
 
 @Injectable()
 export class DetailsEffects {

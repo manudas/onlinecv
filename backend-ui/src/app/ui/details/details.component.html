@@ -143,7 +143,21 @@
             >
                 {{col === 'id' ? '#' : col | translate | async | titlecase}}
             </mat-header-cell>
-            <mat-cell *matCellDef="let element; let row; let rowIndex = index">{{ getSocialNetworkTableValue(row , col, rowIndex) }}</mat-cell>
+            <mat-cell *matCellDef="let element; let row; let rowIndex = index">
+                <ng-container *ngIf="col === 'edit'"
+                    [ngTemplateOutlet]="editNetworkTemplate"
+                    [ngTemplateOutletContext]="{
+                        rowIndex: rowIndex
+                    }"
+                ></ng-container>
+                <ng-container *ngIf="col === 'delete'"
+                    [ngTemplateOutlet]="deleteNetworkTemplate"
+                    [ngTemplateOutletContext]="{
+                        rowIndex: rowIndex
+                    }"
+                ></ng-container>
+                <ng-container *ngIf="col !== 'delete' && col !== 'edit'"> {{ element[col] }} </ng-container>
+            </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="columnsToBeRendered"></mat-header-row>
@@ -168,15 +182,32 @@
 
 
 
-
-
-
-
-<ng-template #deleteNetwork
-    let-source="source"
-    let-colsToRender="colsToRender"
+<ng-template #editNetworkTemplate
+    let-index="rowIndex"
 >
+    <button [className]="'btn btn-info btn-network-row'"
+        ngbButton
+        (click)="editNetwork(index)"
+    >
+        <fa-icon
+            [icon]="faEdit"
+        ></fa-icon>
+    </button>
+</ng-template>
 
+
+
+<ng-template #deleteNetworkTemplate
+    let-index="rowIndex"
+>
+    <button [className]="'btn btn-danger btn-network-row'"
+        ngbButton
+        (click)="deleteNetwork(index)"
+        >
+        <fa-icon
+            [icon]="faTrash"
+        ></fa-icon>
+    </button>
 </ng-template>
 
 

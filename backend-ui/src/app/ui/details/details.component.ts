@@ -4,15 +4,20 @@ import { Observable } from 'rxjs';
 
 import {
   faEdit,
+  faTrash
 } from '@fortawesome/free-solid-svg-icons'
 
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 import * as ACTION_DETAILS from '@store_actions/Details'
-import { DetailsType, LocaleStore, SocialNetwork } from '@app/types'
-import { FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { DetailsType, EditSocialNetworkStructure, LocaleStore, SocialNetwork } from '@app/types'
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+
+import { TranslationService } from '@app/services/translation/translation.service'
+
 import { SocialNetworkDialogComponent } from './social-network-dialog.component';
+import * as COMMON_ACTIONS from '@store_actions/Common'
 
 type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } } & { socialNetworks: {list: SocialNetwork[] } }
 @Component({
@@ -23,6 +28,8 @@ type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } } & {
 export class DetailsComponent implements OnInit {
 
   faEdit: IconDefinition = faEdit
+  faTrash: IconDefinition = faTrash
+
   details$: Observable<DetailsType>
   details: DetailsType
 
@@ -35,6 +42,14 @@ export class DetailsComponent implements OnInit {
     'edit',
     'delete',
   ]
+
+  translationsToRequest = ['Network deleted successfully']
+  translationsObservables: {
+      [translationKey: string]: Observable<string>
+  } = {}
+  translatedStrings: {
+      [translationKey: string]: string
+  } = {}
 
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
@@ -53,7 +68,7 @@ export class DetailsComponent implements OnInit {
     secondaryRole: new FormControl(null),
   })
 
-  constructor(private store: Store<StoreType>, private matDialog: MatDialog) {
+  constructor(private store: Store<StoreType>, private matDialog: MatDialog, private translate: TranslationService) {
     this.details$ = this.store.pipe(
       select(
         state => state?.details?.data
@@ -61,6 +76,13 @@ export class DetailsComponent implements OnInit {
     )
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
     this.socialNetworks$ = this.store.pipe(select(state => state?.socialNetworks?.list))
+
+    this.translationsToRequest.forEach(translationKey => {
+      this.translationsObservables[translationKey] = this.translate.transform(translationKey, this)
+      this.translationsObservables[translationKey].subscribe((data: string) => {
+        this.translatedStrings[translationKey] = data
+      })
+    })
   }
 
   ngOnInit(): void {
@@ -99,49 +121,63 @@ export class DetailsComponent implements OnInit {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// AÑADIR MATERIAL DESIGN DIALOG
-// POR LO QUE VEO ( Y TIENE SENTIDO, ESTE COMPONENTE HABRA QUE SACARLO FUERA A OTRO COMPONENTE)
-  openDialog(): void {
+  openDialog(data?: EditSocialNetworkStructure): void {
     const dialogRef = this.matDialog.open(SocialNetworkDialogComponent, {
       width: '80%',
-      // data: {name: this.name, animal: this.animal}
+      data
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
-      if (result) {
-        this.addNetwork(result);
+      if (this.isEdit(result)) {
+        const {
+          index,
+          network
+        } = result
+        this.editNetworkValues(index, network)
+      } else {
+        this.addNetwork(result)
       }
     });
   }
 
-  getSocialNetworkTableValue(networkData: SocialNetwork, columnName: string, rowIndex: number) {
-    const indexInSocialNetworkArr = this.socialNetworks.indexOf(networkData)
-    if (columnName === 'delete') {
-      return
-    } else if (columnName === 'edit') {
-      return
-    }
-    return networkData[columnName]
+  isEdit(data: SocialNetwork | EditSocialNetworkStructure): data is EditSocialNetworkStructure {
+    return (data as EditSocialNetworkStructure).index !== undefined
   }
 
   addNetwork(networkData: SocialNetwork) {
-    this.socialNetworks = [...this.socialNetworks, { ...networkData }] // this works but doens't looks too nice
-    // this.socialNetworks.data.push({ ...networkData })
+    this.socialNetworks = [...this.socialNetworks, { ...networkData }]
+  }
+
+  deleteNetwork(index: number) {
+    const socialNetwork = this.socialNetworks[index]
+    if (!socialNetwork.id) { // is not stored yet in DB
+      this.socialNetworks = [
+        ...this.socialNetworks.slice(0, index),
+        ...this.socialNetworks.slice(index + 1)
+      ];
+      this.store.dispatch(COMMON_ACTIONS.SUCCESS({
+        message: this.translatedStrings['Network deleted successfully']
+      }))
+    } else {
+
+    }
+  }
+
+  editNetwork(index: number) {
+    const socialNetwork = this.socialNetworks[index]
+    this.openDialog({
+      network: socialNetwork,
+      index
+    })
+  }
+
+  editNetworkValues(index: number, networkData: SocialNetwork) {
+    this.socialNetworks = [
+      ...this.socialNetworks.slice(0, index),
+      { ...networkData},
+      ...this.socialNetworks.slice(index + 1)
+    ];
   }
 
   debug(object: any) {

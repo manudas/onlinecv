@@ -5,7 +5,7 @@
     <div
         [className]="'paddedContent'"
     >
-        {{ 'Add or edit a social network' | translate: this | async }}
+        {{ editingIndex === null ? ('Add a new social network' | translate: this | async) : ('Editing social network' | translate: this | async) }}
     </div>
 </h2>
 
@@ -34,7 +34,7 @@
             ngbButton
             (click)="submitHandler($event)"
         >
-            {{ 'Add' | translate: this | async }}
+            {{ editingIndex === null ? ('Add' | translate: this | async) : ('Edit' | translate: this | async) }}
         </button>
     </div>
 </div>

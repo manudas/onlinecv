@@ -17,3 +17,8 @@ export type SocialNetwork = {
     url: string
     order: number
 }
+
+export type EditSocialNetworkStructure = {
+    index: number
+    network: SocialNetwork
+}

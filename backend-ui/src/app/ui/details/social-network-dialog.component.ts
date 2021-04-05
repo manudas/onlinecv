@@ -1,7 +1,10 @@
-import { Component } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { MatDialogRef } from "@angular/material/dialog"
-import { SocialNetwork } from "@app/types/SocialNetworks";
+import {
+    MatDialogRef,
+    MAT_DIALOG_DATA,
+} from "@angular/material/dialog"
+import { EditSocialNetworkStructure, SocialNetwork } from "@app/types/SocialNetworks";
 
 @Component({
     templateUrl: './social-network-dialog.component.html',
@@ -30,12 +33,36 @@ export class SocialNetworkDialogComponent {
         url: new FormControl(null, Validators.required),
     })
 
-    constructor( public dialogRef: MatDialogRef<SocialNetworkDialogComponent>) { }
+    editingIndex: number = null
 
+    constructor( public dialogRef: MatDialogRef<SocialNetworkDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditSocialNetworkStructure) {
+        if (data) {
+            const {
+                index,
+                network
+            } = data
+
+            this.editingIndex = index
+
+            for (const control in this.socialNetworksFormGroup.controls) {
+                this.socialNetworksFormGroup.get(control).setValue(network[control])
+            }
+        }
+    }
 
     submitHandler($event): void {
         if (this.socialNetworksFormGroup.valid /* && this.socialNetworksFormGroup.valid*/) {
-            this.close(this.socialNetworksFormGroup.value);
+            const network = this.socialNetworksFormGroup.value
+            let result
+            if (this.editingIndex !== null) {
+                result = {
+                    index: this.editingIndex,
+                    network
+                }
+            } else {
+                result = network
+            }
+            this.close(result);
         } else {
           //this.detailsFormGroup.markAllAsTouched()
           this.socialNetworksFormGroup.markAllAsTouched()
@@ -43,7 +70,7 @@ export class SocialNetworkDialogComponent {
       }
 
 
-    close(message: SocialNetwork = null) {
+    close(message: SocialNetwork | EditSocialNetworkStructure = null) {
         /*
          * this is to get the message in the caller:
 
