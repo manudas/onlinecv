@@ -136,6 +136,10 @@
 >
     <mat-table class=""
         [dataSource]="source"
+        cdkDropList
+        [cdkDropListData]="source"
+        (cdkDropListDropped)="onDrop($event)"
+        [cdkDropListDisabled]="dragDisabled"
     >
         <ng-container *ngFor="let col of columnsToBeRendered; let colIndex = index" matColumnDef="{{col}}">
             <mat-header-cell
@@ -156,30 +160,22 @@
                         rowIndex: rowIndex
                     }"
                 ></ng-container>
-                <ng-container *ngIf="col !== 'delete' && col !== 'edit'"> {{ element[col] }} </ng-container>
+                <ng-container *ngIf="col === 'order'"
+                    [ngTemplateOutlet]="dragHandle"
+                ></ng-container>
+                <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> {{ element[col] }} </ng-container>
             </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="columnsToBeRendered"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: columnsToBeRendered"></mat-row>
+        <mat-row
+            (cdkDragStarted)="onDragStart($event)"
+            *matRowDef="let row; columns: columnsToBeRendered"
+            cdkDrag
+            [cdkDragData]="row"
+        ></mat-row>
     </mat-table>
 </ng-template>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <ng-template #editNetworkTemplate
@@ -211,14 +207,19 @@
 </ng-template>
 
 
+<ng-template #dragHandle>
 
+    <fa-icon
+        [ngStyle]="{
+            color: '#737373',
+            marginRight: 'auto',
+            marginLeft: 'auto'
+        }"
+        [icon]="faArrowsAlt"
+        (mousedown)="dragDisabled = false;"
+        (mouseup)="dragDisabled = true;"
+        (touchstart)="dragDisabled = false;"
+        (touchend)="dragDisabled = true;"
+    ></fa-icon>
 
-
-
-
-
-
-
-
-
-
+</ng-template>

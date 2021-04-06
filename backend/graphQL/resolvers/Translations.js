@@ -44,7 +44,8 @@ module.exports = {
                 module: 1,
                 tag: 1
             }).exec();
-/* run through all translations to update this two properties:
+/* @TODO:
+    run through all translations to update this two properties:
     lastAccessed: Schema.Types.Date,
     accessCounter: Number
 

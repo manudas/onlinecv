@@ -13,6 +13,7 @@ const SocialNetworksSchema = new Schema({
     order: Number
 }, {
     collection,
+    versionKey: false
 });
 
 const SocialNetworksModel = model(collection, SocialNetworksSchema);

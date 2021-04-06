@@ -16,6 +16,11 @@ export type SocialNetwork = {
     description: string
     url: string
     order: number
+    language: string
+}
+
+export type SocialNetworkFetched = {
+    socialNetworks: SocialNetwork[]
 }
 
 export type EditSocialNetworkStructure = {

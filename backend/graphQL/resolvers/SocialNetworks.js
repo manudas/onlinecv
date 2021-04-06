@@ -1,3 +1,5 @@
+var ObjectID = require('mongodb').ObjectID;
+
 module.exports = {
     Query: {
         socialNetworks: async({
@@ -27,20 +29,62 @@ module.exports = {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putSocialNetwork: async(parent, {
-            SocialNetwork,
+        putSocialNetworks: async({
+            socialNetworks
         }, {
             models: {
-                socialNetworksModel
+                SocialNetworksModel
             },
         }, info) => {
-            const WriteResult = await socialNetworksModel.update({
-                id: SocialNetwork.id,
-            }, SocialNetwork, {
-                upsert: true // if no details found, create a new entry
+
+            const SocialNetworkWriteResult = await Promise.all(socialNetworks.map(async network => {
+
+                const cleanedNetwork = Object.entries(network).reduce((prev, [currKey, currVal], currIndex) => {
+                    if (currVal !== null) { // can be 0
+                        prev[currKey !== 'id' ? currKey : '_id'] = currVal;
+                    }
+                    return prev;
+                }, {});
+
+                if (!cleanedNetwork._id) {
+                    cleanedNetwork._id = new ObjectID();
+                }
+
+                const element = await SocialNetworksModel.findOneAndUpdate(
+                    {_id: cleanedNetwork._id}
+                ,
+                cleanedNetwork, {
+                    upsert: true, // if no details found, create a new entry
+                    new: true // return the value of the object after the update and not before
+                });
+
+                return element;
+            }));
+            return SocialNetworkWriteResult? SocialNetworkWriteResult : false;
+
+           /*
+            var bulk = SocialNetworksModel.collection.initializeUnorderedBulkOp();
+            socialNetworks.forEach((network) => {
+                const cleanedNetwork = Object.entries(network).reduce((prev, [currKey, currVal], currIndex) => {
+                    if (currVal) {
+                        prev[currKey !== 'id' ? currKey : '_id'] = currVal;
+                    }
+                    return prev;
+                }, {});
+                if (!cleanedNetwork._id) {
+                    cleanedNetwork._id = new ObjectID();
+                }
+                bulk.find( { _id: cleanedNetwork._id } ).upsert().update(
+                    {
+                        // $setOnInsert: { qty: 0, inStock: true },
+                        // $setOnInsert: { _id: new ObjectID() },
+                        $set: cleanedNetwork
+                    }
+                 );
             });
-            return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? SocialNetwork : false;
+            const result = await bulk.execute();
+            return result;
+            */
         },
         removeSocialNetwork: async(parent, {
             id,

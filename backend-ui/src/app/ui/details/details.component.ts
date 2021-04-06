@@ -4,12 +4,15 @@ import { Observable } from 'rxjs';
 
 import {
   faEdit,
-  faTrash
+  faTrash,
+  faArrowsAlt
 } from '@fortawesome/free-solid-svg-icons'
 
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 import * as ACTION_DETAILS from '@store_actions/Details'
+import * as SOCIAL_NETWORK_ACTIONS from '@store_actions/SocialNetworks'
+
 import { DetailsType, EditSocialNetworkStructure, LocaleStore, SocialNetwork } from '@app/types'
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -18,6 +21,7 @@ import { TranslationService } from '@app/services/translation/translation.servic
 
 import { SocialNetworkDialogComponent } from './social-network-dialog.component';
 import * as COMMON_ACTIONS from '@store_actions/Common'
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } } & { socialNetworks: {list: SocialNetwork[] } }
 @Component({
@@ -29,6 +33,10 @@ export class DetailsComponent implements OnInit {
 
   faEdit: IconDefinition = faEdit
   faTrash: IconDefinition = faTrash
+  faArrowsAlt: IconDefinition = faArrowsAlt
+
+  // initial state of dragging for reordering social networks
+  dragDisabled: boolean = true
 
   details$: Observable<DetailsType>
   details: DetailsType
@@ -41,6 +49,7 @@ export class DetailsComponent implements OnInit {
     'description',
     'edit',
     'delete',
+    'order',
   ]
 
   translationsToRequest = ['Network deleted successfully']
@@ -100,22 +109,20 @@ export class DetailsComponent implements OnInit {
         }
       }
     })
+    this.store.dispatch(SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS({
+      language: this.selectedLocale
+    }))
     this.socialNetworks$.subscribe((data: SocialNetwork[]) => {
       if (data) {
         this.socialNetworks = data
-        // for (const control in this.detailsFormGroup.co ntrols) {
-        //   this.detailsFormGroup.get(control).setValue(this.details[control])
-        // }
       }
     })
   }
 
   submitHandler($event): void {
-    if (this.detailsFormGroup.valid /* && this.socialNetworksFormGroup.valid*/) {
-      // dispatch 2 actions to the store:
-      // 1 - MUTATE_DETAILS
-      // 2 - MUTATE_SOCIAL_NETWORKS
+    if (this.detailsFormGroup.valid) {
       this.store.dispatch(ACTION_DETAILS.SAVE_DETAILS( { details: {...this.detailsFormGroup.value, language: this.selectedLocale} } ))
+      this.store.dispatch(SOCIAL_NETWORK_ACTIONS.SAVE_NETWORKS( { socialNetworks: [...this.socialNetworks] } ))
     } else {
       this.detailsFormGroup.markAllAsTouched()
     }
@@ -146,7 +153,7 @@ export class DetailsComponent implements OnInit {
   }
 
   addNetwork(networkData: SocialNetwork) {
-    this.socialNetworks = [...this.socialNetworks, { ...networkData }]
+    this.socialNetworks = [...this.socialNetworks, { ...networkData, language: this.selectedLocale, order: this.socialNetworks.length }]
   }
 
   deleteNetwork(index: number) {
@@ -160,7 +167,7 @@ export class DetailsComponent implements OnInit {
         message: this.translatedStrings['Network deleted successfully']
       }))
     } else {
-
+      alert('NOT IMPLEMENTED YET TO DELETE AN ALREADY UPSERTED SOCIAL NETWORK')
     }
   }
 
@@ -178,6 +185,29 @@ export class DetailsComponent implements OnInit {
       { ...networkData},
       ...this.socialNetworks.slice(index + 1)
     ];
+  }
+
+  onDrop(event: CdkDragDrop<SocialNetwork[]>) {
+    this.dragDisabled = true
+
+    if (event.previousIndex !== event.currentIndex) {
+      moveItemInArray(this.socialNetworks, event.previousIndex, event.currentIndex)
+      // let's assign the new order properties inside the reordered list of objects
+      this.socialNetworks = this.socialNetworks.map((currentNetwork, indexInArr): SocialNetwork  => {
+        currentNetwork['order'] = indexInArr
+        return currentNetwork
+      })
+    }
+  }
+
+  onDragStart($event) {
+    const draggingElement: HTMLElement = document.querySelector('mat-row.cdk-drag-preview')
+    if (draggingElement) {
+      draggingElement.style['box-shadow'] =
+        `0 5px 5px -3px rgba(0, 0, 0, 0.2),
+        0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12)`
+    }
   }
 
   debug(object: any) {

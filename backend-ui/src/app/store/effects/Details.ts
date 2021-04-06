@@ -19,7 +19,7 @@ import { TranslationService } from '@app/services/translation/translation.servic
 @Injectable()
 export class DetailsEffects {
 
-    translationsToRequest = ['Saved successfully', 'Error']
+    translationsToRequest = ['Details saved successfully', 'Error']
     translationsObservables: {
         [translationKey: string]: Observable<string>
     } = {}
@@ -96,7 +96,7 @@ export class DetailsEffects {
                 map((details: DetailsType) => {
                     return {
                         type: COMMON_ACTIONS.SUCCESS.type,
-                        message: `${this.translatedStrings['Saved successfully']}`
+                        message: `${this.translatedStrings['Details saved successfully']}`
                     };
                 }),
                 // handle failure in todoListService.fetchTodoList()

@@ -7,12 +7,12 @@
 module.exports =
     `
   type SocialNetwork {
-    id: ID!
+    _id: ID!
     language: String!,
     label: String!,
     description: String,
     url: String!,
-    keywords: [String]!,
+    keywords: [String],
     order: Int!
   }
 
@@ -22,7 +22,7 @@ module.exports =
     label: String!,
     description: String,
     url: String!,
-    keywords: [String]!,
+    keywords: [String],
     order: Int!
   }
 
@@ -31,7 +31,7 @@ module.exports =
   }
 
   extend type Mutation {
-    putSocialNetwork(socialNetwork: SocialNetworkInput!): SocialNetwork!
+    putSocialNetworks(socialNetworks: [SocialNetworkInput]!): [SocialNetwork]!
     removeSocialNetwork(id: ID!): Boolean!
   }
 `;

@@ -36,10 +36,16 @@ module.exports = {
             },
         }, info
         ) => {
+            const cleanedDetails = Object.entries(details).reduce((prev, [currKey, currVal], currIndex) => {
+                if (currVal !== null) { // can be 0
+                    prev[currKey !== 'id' ? currKey : '_id'] = currVal;
+                }
+                return prev;
+            }, {});
             const DetailsWriteResult = await DetailsModel.findOneAndUpdate({
-                    language: details.language
+                    language: cleanedDetails.language
                 },
-                details, {
+                cleanedDetails, {
                     upsert: true, // if no details found, create a new entry
                     new: true // return the value of the object after the update and not before
                 }

@@ -34,7 +34,7 @@ module.exports =
   }
 
   input DetailsInput {
-    id: ID
+    _id: ID
     name: String!
     surname: String
     address: String

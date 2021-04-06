@@ -1,18 +1,19 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { DragDropModule } from '@angular/cdk/drag-drop'
 
-import { MatTableModule } from "@angular/material/table";
+import { MatTableModule } from "@angular/material/table"
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 
-import { /*FormsModule,*/ ReactiveFormsModule } from '@angular/forms';
+import { /*FormsModule,*/ ReactiveFormsModule } from '@angular/forms'
 
 import { CardModule } from '@app/ui/card/card.module'
 import { PictureuploadModule } from '@app/ui/pictureupload/pictureupload.module'
-import { TranslationsModule } from '@services/translation';
+import { TranslationsModule } from '@services/translation'
 
-import { DetailsComponent } from './details.component';
+import { DetailsComponent } from './details.component'
 
 import { DataService } from '@services/data/data.service'
 import { SocialNetworkDialogComponent } from './social-network-dialog.component'
@@ -21,6 +22,7 @@ import { SocialNetworkDialogComponent } from './social-network-dialog.component'
   declarations: [DetailsComponent, SocialNetworkDialogComponent],
   imports: [
     CommonModule,
+    DragDropModule,
     FontAwesomeModule,
     NgbModule,
     CardModule,
