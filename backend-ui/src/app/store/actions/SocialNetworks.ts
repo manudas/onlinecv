@@ -15,3 +15,8 @@ export const NETWORKS_FETCHED = createAction(
     '[SocialNetwork/Details Component] Social Networks fetched',
     props<SocialNetworkFetched>()
 )
+
+export const REMOVE_NETWORK = createAction(
+    '[SocialNetwork/Details Component] RemoveNetwork',
+    props<{ id: string }>()
+)

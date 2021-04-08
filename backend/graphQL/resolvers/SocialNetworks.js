@@ -86,17 +86,22 @@ module.exports = {
             return result;
             */
         },
-        removeSocialNetwork: async(parent, {
-            id,
+        removeSocialNetwork: async({
+            id
         }, {
             models: {
-                socialNetworksModel
+                SocialNetworksModel
             },
         }, info) => {
-            const WriteResult = await socialNetworksModel.remove({
-                id
-            }, true); // true == remove one
-            return WriteResult.nRemoved === 1;
+            const WriteResult = await SocialNetworksModel.remove({
+                _id: id
+            }, {
+                justOne: true
+            }); // justOne ==> remove one
+            if (WriteResult.deletedCount === 1) {
+                return id;
+            }
+            throw new Error('Network cannot be deleted as was not found in database');
         },
     },
 };

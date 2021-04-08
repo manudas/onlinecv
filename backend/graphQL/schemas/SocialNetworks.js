@@ -32,6 +32,6 @@ module.exports =
 
   extend type Mutation {
     putSocialNetworks(socialNetworks: [SocialNetworkInput]!): [SocialNetwork]!
-    removeSocialNetwork(id: ID!): Boolean!
+    removeSocialNetwork(id: ID!): ID
   }
 `;

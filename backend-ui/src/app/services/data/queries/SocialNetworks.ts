@@ -21,7 +21,7 @@
  */
     export const QuerySocialNetworks =
     `
-    query Details($language: String!) {
+    query QuerySocialNetworks($language: String!) {
         socialNetworks(language: $language) {
             id: _id
             language
@@ -32,7 +32,7 @@
             order
         }
     }
-`;
+`
 
 
 export const MutateSocialNetworks =
@@ -43,4 +43,11 @@ export const MutateSocialNetworks =
             id: _id
         }
     }
-`;
+`
+
+export const RemoveNetwork =
+`
+    mutation RemoveNetwork($id: ID!) {
+        removeSocialNetwork(id: $id)
+    }
+`

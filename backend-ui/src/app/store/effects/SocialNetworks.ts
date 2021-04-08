@@ -11,7 +11,8 @@ import { DataService } from '@services/data/data.service'
 
 import {
     QuerySocialNetworks,
-    MutateSocialNetworks
+    MutateSocialNetworks,
+    RemoveNetwork
 } from '@services/data/queries'
 import { TranslationService } from '@app/services/translation/translation.service'
 import { select, Store } from '@ngrx/store';
@@ -23,7 +24,7 @@ type StoreType = { locale: LocaleStore }
 @Injectable()
 export class SocialNetworksEffects {
 
-    translationsToRequest = ['Social Networks saved successfully', 'Error']
+    translationsToRequest = ['Social Networks saved successfully', 'Social Networks removed successfully', 'Error']
     translationsObservables: {
         [translationKey: string]: Observable<string>
     } = {}
@@ -75,25 +76,18 @@ export class SocialNetworksEffects {
                         {...socialNetworksData}
                     )
                 }),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((error) => {
                     return of(COMMON_ACTIONS.FAIL(
                         {
                             message: `${this.translatedStrings['Error']}: ${JSON.stringify(error)}`
                         }
                     ))
-                    /*
-                    of({
-                        type: COMMON_ACTIONS.FAIL.type,
-                        message: `${this.translatedStrings['Error']}: ${error}`
-                    });
-                    */
                 })
             )
         })
     );
 
-        /**
+    /**
      * Effect provides new actions as
      * a result of the operation performed
      */
@@ -111,11 +105,6 @@ export class SocialNetworksEffects {
             }
 
             return this.dataService.setData(MutateSocialNetworks, vars).pipe(
-                // map(() => {
-                //     return COMMON_ACTIONS.SUCCESS({
-                //                 message: `${this.translatedStrings['Saved successfully']}`
-                //             })
-                // }),
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translatedStrings['Social Networks saved successfully']}`
@@ -135,5 +124,44 @@ export class SocialNetworksEffects {
                 })
             )
         })
-    );
+    )
+
+    /**
+     * Effect provides new actions as
+     * a result of the operation performed
+     */
+             @Effect()
+             public removeNetworkEffect$: Observable<any> = this.actions$.pipe(
+                 ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK>>(SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK),
+                 tap((action) => console.log('Action caught in DetailsEffects:', action)),
+                 switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+                     const {
+                         id,
+                     } = action
+
+                     const vars = {
+                         id,
+                     }
+
+                     return this.dataService.setData(RemoveNetwork, vars).pipe(
+                         mergeMap(() => [
+                             COMMON_ACTIONS.SUCCESS({
+                                 message: `${this.translatedStrings['Social Networks removed successfully']}`
+                             }),
+                             SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS({
+                                 language: this.selectedLocale
+                             })
+                         ]),
+                         // handle failure in todoListService.fetchTodoList()
+                         catchError((response) => {
+                             const { error: {errors = []} = {} } = response || {}
+                             const messages = errors.map(({message = ''} = {}) => message)
+                             return of(COMMON_ACTIONS.FAIL({
+                                 message: `${this.translatedStrings['Error']}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
+                                 timeout: 2000
+                             }))
+                         })
+                     )
+                 })
+             );
 }

@@ -188,9 +188,9 @@ export class DetailsComponent implements OnInit {
         message: this.translatedStrings['Network deleted successfully']
       }))
     } else {
-      // this.store.dispatch(SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK({
-      //   id: socialNetwork.id
-      // }))
+      this.store.dispatch(SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK({
+        id: socialNetwork.id
+      }))
     }
   }
 
