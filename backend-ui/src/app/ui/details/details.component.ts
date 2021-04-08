@@ -159,14 +159,11 @@ export class DetailsComponent implements OnInit {
       }
     })
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
+    dialogRef.afterClosed().subscribe((indexToRemove = null) => {
+      console.log(`The dialog was closed.`, indexToRemove !== null ? `The following message was received: ${JSON.stringify(indexToRemove)}` : '');
 
-      const {
-        index,
-      } = result
-      if (index) {
-        this.deleteNetwork(index)
+      if (indexToRemove !== null) {
+        this.deleteNetwork(indexToRemove)
       }
 
     })

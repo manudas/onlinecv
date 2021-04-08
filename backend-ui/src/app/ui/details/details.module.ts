@@ -17,9 +17,14 @@ import { DetailsComponent } from './details.component'
 
 import { DataService } from '@services/data/data.service'
 import { SocialNetworkDialogComponent } from './social-network-dialog.component'
+import { ConfirmComponent } from './confirm.component'
 
 @NgModule({
-  declarations: [DetailsComponent, SocialNetworkDialogComponent],
+  declarations: [
+    DetailsComponent,
+    SocialNetworkDialogComponent,
+    ConfirmComponent,
+  ],
   imports: [
     CommonModule,
     DragDropModule,
