@@ -91,7 +91,7 @@
     </fieldset>
 
     <fieldset>
-        <legend>{{ 'Social networks' | translate: this | async }}</legend>
+        <legend>{{ 'Social networks' | translate | async }}</legend>
         <ng-container
             *ngIf="socialNetworks.length"
             [ngTemplateOutlet]="socialNetworkTableTemplate"
@@ -105,12 +105,12 @@
             [className]="'text-right network-actions'"
         >
             <button
-                (click)="openDialog()"
+                (click)="openSocialNetworkDialog()"
                 [className]="'btn btn-outline-info'"
                 type='button'
                 ngbButton
             >
-                {{ 'Add Social Network' | translate: this | async }}
+                {{ 'Add Social Network' | translate | async }}
             </button>
         </div>
     </fieldset>
@@ -121,7 +121,7 @@
             ngbButton
             (click)="submitHandler($event)"
         >
-            {{ 'Submit' | translate: this | async}}
+            {{ 'Submit' | translate | async}}
         </button>
         <button [className]="'btn btn-outline-info'"
             type='reset'
@@ -198,7 +198,7 @@
 >
     <button [className]="'btn btn-danger btn-network-row'"
         ngbButton
-        (click)="deleteNetwork(index)"
+        (click)="openNetworkRemovlaConfirmDialog(index)"
         >
         <fa-icon
             [icon]="faTrash"

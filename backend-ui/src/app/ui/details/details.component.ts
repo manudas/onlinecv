@@ -22,6 +22,7 @@ import { TranslationService } from '@app/services/translation/translation.servic
 import { SocialNetworkDialogComponent } from './social-network-dialog.component';
 import * as COMMON_ACTIONS from '@store_actions/Common'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { ConfirmComponent } from './confirm.component';
 
 type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } } & { socialNetworks: {list: SocialNetwork[] } }
 @Component({
@@ -128,11 +129,11 @@ export class DetailsComponent implements OnInit {
     }
   }
 
-  openDialog(data?: EditSocialNetworkStructure): void {
+  openSocialNetworkDialog(data?: EditSocialNetworkStructure): void {
     const dialogRef = this.matDialog.open(SocialNetworkDialogComponent, {
       width: '80%',
       data
-    });
+    })
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
@@ -145,7 +146,30 @@ export class DetailsComponent implements OnInit {
       } else {
         this.addNetwork(result)
       }
-    });
+    })
+  }
+
+  openNetworkRemovlaConfirmDialog(networkIndex: number): void {
+    const network = this.socialNetworks[networkIndex]
+    const dialogRef = this.matDialog.open(ConfirmComponent, {
+      width: '80%',
+      data: {
+        index: networkIndex,
+        network: network
+      }
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
+
+      const {
+        index,
+      } = result
+      if (index) {
+        this.deleteNetwork(index)
+      }
+
+    })
   }
 
   isEdit(data: SocialNetwork | EditSocialNetworkStructure): data is EditSocialNetworkStructure {
@@ -167,13 +191,15 @@ export class DetailsComponent implements OnInit {
         message: this.translatedStrings['Network deleted successfully']
       }))
     } else {
-      alert('NOT IMPLEMENTED YET TO DELETE AN ALREADY UPSERTED SOCIAL NETWORK')
+      // this.store.dispatch(SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK({
+      //   id: socialNetwork.id
+      // }))
     }
   }
 
   editNetwork(index: number) {
     const socialNetwork = this.socialNetworks[index]
-    this.openDialog({
+    this.openSocialNetworkDialog({
       network: socialNetwork,
       index
     })
