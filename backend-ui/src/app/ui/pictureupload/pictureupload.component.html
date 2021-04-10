@@ -6,16 +6,16 @@
                 'hasImage': hasImage
             }"
             [ngStyle]="{
-                'background-image': imageData ? 'url(' + imageData + ')' : 'none'
+                'background-image': hasImage ? 'url(' + getBase64ImageData() + ')' : 'none'
             }"
             (dragover)="onDragOver($event)"
             (dragleave)="onDragLeave($event)"
-            (drop)="onReceiveFile($event)"
+            (drop)="resetInput($event); onReceiveFile($event)"
             (click)="mediaFile.click()">
             <div [className]="'dashes'"></div>
-            <label>Click to browse or drag an image here</label></div>
+            <label>{{ 'Click to browse or drag an image here' | translate | async }}</label></div>
         <div class="username">
-            <h1>{{'Yournamehere'}}</h1>
+            <h1>{{ name ? name : 'Enter a name bellow' | translate | async }}</h1>
         </div>
     </div>
     <input type="file"

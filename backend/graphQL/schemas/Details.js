@@ -17,6 +17,7 @@ module.exports =
     `
   type Details {
     _id: ID!
+    profileImage: String
     name: String!
     surname: String
     address: String
@@ -35,6 +36,7 @@ module.exports =
 
   input DetailsInput {
     _id: ID
+    profileImage: String
     name: String!
     surname: String
     address: String

@@ -6,6 +6,7 @@ const {
 const collection = 'personal_details';
 
 const DetailsSchema = new Schema({
+    profileImage: Schema.Types.Buffer,
     name: String,
     surname: String,
     address: String,
@@ -18,7 +19,7 @@ const DetailsSchema = new Schema({
     language: String,
     primaryRole: String,
     secondaryRole: String,
-    nickname: String
+    nickname: String,
 }, {
     collection,
     versionKey: false

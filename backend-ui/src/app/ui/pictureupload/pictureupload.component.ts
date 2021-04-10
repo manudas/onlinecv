@@ -1,4 +1,5 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { attachUrlDataTypeToBase64, removeUrlDataFromBase64 } from '@app/utils/Images';
 
 @Component({
   selector: 'app-pictureupload',
@@ -7,9 +8,32 @@ import { Component, OnInit, HostListener } from '@angular/core';
 })
 export class PictureuploadComponent implements OnInit {
 
+  @ViewChild('mediaFile') mediaFile
+
+  @Input()
+  name: string
+
+  _imageData: Blob
+  @Input()
+  set imageData(image: Blob) {
+    this._imageData = image
+    if (image) {
+      this.hasImage = true
+    } else {
+      this.hasImage = false
+    }
+  }
+  get imageData() {
+    return this._imageData
+  }
+
+  @Output()
+  imageDataChange: EventEmitter<Blob> = new EventEmitter<Blob>()
+
   dragging: boolean = false
-  hasImage:boolean = false;
-  imageData: Blob = null;
+  hasImage: boolean = false;
+
+  // file is not needed, for now
   file: File = null;
 
   constructor() { }
@@ -20,22 +44,22 @@ export class PictureuploadComponent implements OnInit {
   onDragOver($event) {
     this.dragging = true;
     $event.preventDefault();
-
   }
 
   onDragLeave($event) {
     this.dragging = false;
   }
 
-  onReceiveFile($event) {
-    // $('#profile').removeClass('dragging hasImage');
-    this.dragging = false;
-    // this.hasImage = false;
+  getBase64ImageData = () => attachUrlDataTypeToBase64(this.imageData)
 
-    const file = $event.dataTransfer ? 
-                    $event.dataTransfer.files[0] 
-                    :  $event.target ? $event.target.files[0] 
-                      : null;
+  onReceiveFile($event) {
+    this.dragging = false;
+
+    const {
+      dataTransfer: {
+        files: [ file  = null]
+      } = $event.target
+    } = $event
 
     if (file) {
       // could be null when no file has been selected
@@ -44,12 +68,41 @@ export class PictureuploadComponent implements OnInit {
       //attach event handlers here...
       reader.readAsDataURL(file);
       reader.onload = function(e) {
-        this.hasImage = true;
-        this.imageData = reader.result;
+        // this.hasImage = true; // done in getter automatically now
+        this.imageData = removeUrlDataFromBase64(reader.result)
         this.file = file
+        this.imageDataChange.emit(this.imageData)
       }.bind(this);
     }
     $event.preventDefault();
+  }
+
+  resetInput($event) {
+    const {
+      dataTransfer: { // comes from drag and drop
+        files: [
+          {
+            name: dragName = null
+          } = {}
+        ]
+      }
+    } = $event
+
+    if (dragName) {
+      const {
+        nativeElement: {
+          files: [
+            {
+              name: inputName = null
+            } = {}
+          ]
+        }
+      } = this.mediaFile
+
+      if (inputName && inputName !== dragName) {
+        this.mediaFile.nativeElement.value = ''
+      }
+    }
   }
 
   @HostListener('document:dragover', ['$event'])
@@ -66,24 +119,3 @@ export class PictureuploadComponent implements OnInit {
     }
   }
 }
-
-
-
-/*
-
-$('#mediaFile').change(function(e) {
-
-  var input = e.target;
-  if (input.files && input.files[0]) {
-    var file = input.files[0];
-
-    var reader = new FileReader();
-
-    reader.readAsDataURL(file);
-    reader.onload = function(e) {
-      console.log(reader.result);
-      $('#profile').css('background-image', 'url(' + reader.result + ')').addClass('hasImage');
-    }
-  }
-})
-*/

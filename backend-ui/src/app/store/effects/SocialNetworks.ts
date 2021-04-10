@@ -130,38 +130,38 @@ export class SocialNetworksEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-             @Effect()
-             public removeNetworkEffect$: Observable<any> = this.actions$.pipe(
-                 ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK>>(SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK),
-                 tap((action) => console.log('Action caught in DetailsEffects:', action)),
-                 switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
-                     const {
-                         id,
-                     } = action
+    @Effect()
+    public removeNetworkEffect$: Observable<any> = this.actions$.pipe(
+        ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK>>(SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK),
+        tap((action) => console.log('Action caught in DetailsEffects:', action)),
+        switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const {
+                id,
+            } = action
 
-                     const vars = {
-                         id,
-                     }
+            const vars = {
+                id,
+            }
 
-                     return this.dataService.setData(RemoveNetwork, vars).pipe(
-                         mergeMap(() => [
-                             COMMON_ACTIONS.SUCCESS({
-                                 message: `${this.translatedStrings['Social Networks removed successfully']}`
-                             }),
-                             SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS({
-                                 language: this.selectedLocale
-                             })
-                         ]),
-                         // handle failure in todoListService.fetchTodoList()
-                         catchError((response) => {
-                             const { error: {errors = []} = {} } = response || {}
-                             const messages = errors.map(({message = ''} = {}) => message)
-                             return of(COMMON_ACTIONS.FAIL({
-                                 message: `${this.translatedStrings['Error']}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
-                                 timeout: 2000
-                             }))
-                         })
-                     )
-                 })
-             );
+            return this.dataService.setData(RemoveNetwork, vars).pipe(
+                mergeMap(() => [
+                    COMMON_ACTIONS.SUCCESS({
+                        message: `${this.translatedStrings['Social Networks removed successfully']}`
+                    }),
+                    SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS({
+                        language: this.selectedLocale
+                    })
+                ]),
+                // handle failure in todoListService.fetchTodoList()
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
+                    const messages = errors.map(({message = ''} = {}) => message)
+                    return of(COMMON_ACTIONS.FAIL({
+                        message: `${this.translatedStrings['Error']}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
+                        timeout: 2000
+                    }))
+                })
+            )
+        })
+    );
 }

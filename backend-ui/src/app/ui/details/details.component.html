@@ -9,7 +9,10 @@
         <legend>Personal details</legend>
         <div class="form-group">
             <label class="control-label">Your photo</label>
-            <app-pictureupload></app-pictureupload>
+            <app-pictureupload
+                [name]="getNicknameOrName()"
+               [(imageData)]="profileImage"
+            ></app-pictureupload>
         </div>
         <form
             [formGroup]="detailsFormGroup"

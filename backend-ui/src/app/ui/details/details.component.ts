@@ -53,6 +53,18 @@ export class DetailsComponent implements OnInit {
     'order',
   ]
 
+  _profileImage: Blob
+  get profileImage() {
+    return this._profileImage
+  }
+  set profileImage(image: Blob) {
+    this._profileImage = image
+    this.detailsFormGroup.get('profileImage').setValue(image)
+  }
+  set profileImageFromSubscription(image: Blob) {
+    this._profileImage = image
+  }
+
   translationsToRequest = ['Network deleted successfully']
   translationsObservables: {
       [translationKey: string]: Observable<string>
@@ -67,6 +79,7 @@ export class DetailsComponent implements OnInit {
   @Input() title: string = 'Personal details';
 
   detailsFormGroup: FormGroup = new FormGroup({
+    profileImage: new FormControl(null),
     name: new FormControl(null, Validators.required), // new FormControl(initialValue, validators)
     surname: new FormControl(null),
     nickname: new FormControl(null),
@@ -77,6 +90,18 @@ export class DetailsComponent implements OnInit {
     primaryRole: new FormControl(null, Validators.required),
     secondaryRole: new FormControl(null),
   })
+
+  getNicknameOrName() {
+    const nickname = this.detailsFormGroup.get('nickname').value
+    const name = this.detailsFormGroup.get('name').value
+
+    return nickname
+      ? nickname
+      : (name
+          ? name
+          : null
+        )
+  }
 
   constructor(private store: Store<StoreType>, private matDialog: MatDialog, private translate: TranslationService) {
     this.details$ = this.store.pipe(
@@ -93,6 +118,8 @@ export class DetailsComponent implements OnInit {
         this.translatedStrings[translationKey] = data
       })
     })
+
+    this.detailsFormGroup.controls.profileImage.valueChanges.subscribe((newImage: Blob) => {this.profileImageFromSubscription = newImage})
   }
 
   ngOnInit(): void {
@@ -124,6 +151,44 @@ export class DetailsComponent implements OnInit {
     if (this.detailsFormGroup.valid) {
       this.store.dispatch(ACTION_DETAILS.SAVE_DETAILS( { details: {...this.detailsFormGroup.value, language: this.selectedLocale} } ))
       this.store.dispatch(SOCIAL_NETWORK_ACTIONS.SAVE_NETWORKS( { socialNetworks: [...this.socialNetworks] } ))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+console.log('would it be good to accompany alt and title in the image in the front end?')
+    //  hasta aqui es barato de hacer. A partir de aqui, subir la imagen es bastante caro, por lo que haría falta desde mi punto de vista tener un flag dirty en la imagen y comprobarlo aqui
+    // this.store.dispatch(IMAGE_ACTIONS.SAVE_PROFILE_IMAGE( { image: this.profileImage } ))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     } else {
       this.detailsFormGroup.markAllAsTouched()
     }
@@ -137,7 +202,7 @@ export class DetailsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
-      if (this.isEdit(result)) {
+      if (this.isSocialNetworkEdit(result)) {
         const {
           index,
           network
@@ -169,7 +234,7 @@ export class DetailsComponent implements OnInit {
     })
   }
 
-  isEdit(data: SocialNetwork | EditSocialNetworkStructure): data is EditSocialNetworkStructure {
+  isSocialNetworkEdit(data: SocialNetwork | EditSocialNetworkStructure): data is EditSocialNetworkStructure {
     return (data as EditSocialNetworkStructure).index !== undefined
   }
 
