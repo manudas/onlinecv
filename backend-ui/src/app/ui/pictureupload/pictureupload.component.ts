@@ -27,6 +27,7 @@ export class PictureuploadComponent implements OnInit {
       this.hasImage = false
       this.resetInput()
     }
+    this.imageDataChange.emit(this._imageData)
   }
   get imageData() {
     return this._imageData
@@ -41,7 +42,7 @@ export class PictureuploadComponent implements OnInit {
   mouseOver: boolean = false // used to show some animations
 
   // file is not needed, for now
-  file: File = null;
+  // file: File = null;
 
   constructor(private matDialog: MatDialog) { }
 
@@ -85,8 +86,7 @@ export class PictureuploadComponent implements OnInit {
       reader.onload = function(e) {
         // this.hasImage = true; // done in getter automatically now
         this.imageData = removeUrlDataFromBase64(reader.result)
-        this.file = file
-        this.imageDataChange.emit(this.imageData)
+        // this.file = file
       }.bind(this);
     }
     $event.preventDefault();

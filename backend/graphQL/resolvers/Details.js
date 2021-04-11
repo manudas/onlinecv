@@ -16,17 +16,6 @@ module.exports = {
         },
     },
     Mutation: {
-        /* Example
-        db.books.update(
-            { item: "ZZZ135" },   // Query parameter
-            {                     // Replacement document
-                item: "ZZZ135",
-                stock: 5,
-                tags: [ "database" ]
-            },
-            { upsert: true }      // Options: upsert -> insert document if no ducment found to update
-        )
-        */
         putDetails: async({
             details,
         },
@@ -42,15 +31,16 @@ module.exports = {
                 }
                 return prev;
             }, {});
-            const DetailsWriteResult = await DetailsModel.findOneAndUpdate({
-                    language: cleanedDetails.language
-                },
-                cleanedDetails, {
-                    upsert: true, // if no details found, create a new entry
-                    new: true // return the value of the object after the update and not before
-                }
-            );
-            return DetailsWriteResult? DetailsWriteResult : false;
+
+            const DetailsRemovalResult = await DetailsModel.remove({
+                language: cleanedDetails.language
+            }, {
+                justOne: true
+            });
+            const document = new DetailsModel(cleanedDetails);
+            const DetailsWriteResult = await document.save();
+
+            return DetailsWriteResult ?? false;
         },
     },
 };
