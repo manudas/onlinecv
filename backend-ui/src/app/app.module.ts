@@ -44,10 +44,18 @@ if (environment.production) {
   ],
   imports: [
     BrowserModule,
-    HttpClientModule,
-    NavbarModule,
-    WrapperModule,
     BrowserAnimationsModule,
+    EffectsModule.forRoot([
+      DetailsEffects,
+      LocaleEffects,
+      TranslationEffects,
+      SocialNetworksEffects,
+    ]),
+    HttpClientModule,
+
+    MatDialogModule,
+    MatSnackBarModule,
+    NavbarModule,
     StoreModule.forRoot({
       details: detailsReducer,
       locale: localeReducer,
@@ -55,16 +63,9 @@ if (environment.production) {
       message: messageReducer,
       socialNetworks: socialNetworkReducer,
     }, {}),
-    EffectsModule.forRoot([
-      DetailsEffects,
-      LocaleEffects,
-      TranslationEffects,
-      SocialNetworksEffects,
-    ]),
     TranslationsModule,
-    MatSnackBarModule,
-    MatDialogModule,
 
+    WrapperModule,
     ...dev
   ],
   providers: [],

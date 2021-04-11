@@ -1,5 +1,9 @@
 import { Component, OnInit, HostListener, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { logEasy } from '@app/services/logging';
+import { PictureOptions } from '@app/types/Picture';
 import { attachUrlDataTypeToBase64, removeUrlDataFromBase64 } from '@app/utils/Images';
+import { ConfirmComponent } from './confirm.component';
 
 @Component({
   selector: 'app-pictureupload',
@@ -21,6 +25,7 @@ export class PictureuploadComponent implements OnInit {
       this.hasImage = true
     } else {
       this.hasImage = false
+      this.resetInput()
     }
   }
   get imageData() {
@@ -31,14 +36,24 @@ export class PictureuploadComponent implements OnInit {
   imageDataChange: EventEmitter<Blob> = new EventEmitter<Blob>()
 
   dragging: boolean = false
-  hasImage: boolean = false;
+  hasImage: boolean = false
+
+  mouseOver: boolean = false // used to show some animations
 
   // file is not needed, for now
   file: File = null;
 
-  constructor() { }
+  constructor(private matDialog: MatDialog) { }
 
   ngOnInit(): void {
+  }
+
+  onClickHandler($event) {
+    if (!this.hasImage) {
+      this.mediaFile.nativeElement.click()
+    } else {
+      this.openActionDialog()
+    }
   }
 
   onDragOver($event) {
@@ -77,18 +92,24 @@ export class PictureuploadComponent implements OnInit {
     $event.preventDefault();
   }
 
-  resetInput($event) {
+  resetInput($event = null) {
     const {
       dataTransfer: { // comes from drag and drop
         files: [
           {
             name: dragName = null
           } = {}
-        ]
-      }
-    } = $event
+        ] = []
+      } = {}
+    } = $event || {}
 
-    if (dragName) {
+    // si no reseteamos con evento de drag
+    // o si lo hacemos con el, si tenemos
+    // un nombre para el archivo a comparar
+    // -------------------------------------
+    // this.mediaFile to avoid crash if set
+    // is executed before mediaFile is loaded
+    if (this.mediaFile && (!$event || dragName)) {
       const {
         nativeElement: {
           files: [
@@ -103,6 +124,28 @@ export class PictureuploadComponent implements OnInit {
         this.mediaFile.nativeElement.value = ''
       }
     }
+  }
+
+  openActionDialog(): void {
+    const dialogRef = this.matDialog.open(ConfirmComponent, {
+      width: '80%',
+      data: null
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
+      switch (result) {
+        case PictureOptions.delete:
+          this.imageData = null
+          break
+        case PictureOptions.upload:
+          this.mediaFile.nativeElement.click()
+          break
+        // case PictureOptions.cancel
+        default: // for cancel
+          // nothing
+      }
+    })
   }
 
   @HostListener('document:dragover', ['$event'])

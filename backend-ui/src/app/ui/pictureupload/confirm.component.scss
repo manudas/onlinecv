@@ -18,14 +18,18 @@
 
     [mat-dialog-actions] {
         background-color: $grey;
-        .submitButton {
-            @extend .btn-outline-secondary;
-            @extend .bg-white;
-            &:hover {
-                @extend .bg-secondary
-            }
 
+        .actionButtonGroup {
             float: right;
+
+            button {
+                margin-left: 10px;
+                @extend .btn-outline-secondary;
+                @extend .bg-white;
+                &:hover {
+                    @extend .bg-secondary
+                }
+            }
         }
     }
 

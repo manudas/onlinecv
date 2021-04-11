@@ -6,12 +6,20 @@
                 'hasImage': hasImage
             }"
             [ngStyle]="{
-                'background-image': hasImage ? 'url(' + getBase64ImageData() + ')' : 'none'
+                'background-image': hasImage
+                                        ? (
+                                            mouseOver || dragging
+                                                ? 'linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,.8)),'
+                                                : ''
+                                        ) + 'url(' + getBase64ImageData() + ')'
+                                        : 'none'
             }"
             (dragover)="onDragOver($event)"
+            (mouseover)="mouseOver = true"
+            (mouseout)="mouseOver = false"
             (dragleave)="onDragLeave($event)"
             (drop)="resetInput($event); onReceiveFile($event)"
-            (click)="mediaFile.click()">
+            (click)="onClickHandler($event)">
             <div [className]="'dashes'"></div>
             <label>{{ 'Click to browse or drag an image here' | translate | async }}</label></div>
         <div class="username">
@@ -23,3 +31,6 @@
         #mediaFile
         (change)="onReceiveFile($event)" />
 </div>
+
+2-ARREGLAR BORRAR IMAGEN EN MONGODB RESOLVER<br/>
+3-ARREGLAR LIMITE DE SUBIDA A EXPRESS/NODEJS error 413, mirar en google<br/>

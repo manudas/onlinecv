@@ -16,6 +16,7 @@ import {
     SET_LOCALE_ACTION_TYPE,
 } from '@app/types/Locale'
 import { TranslationService } from '@app/services/translation/translation.service';
+import { logEasy } from '@app/services/logging/logging.service'
 
 @Injectable()
 export class LocaleEffects {
@@ -49,7 +50,7 @@ export class LocaleEffects {
     @Effect()
     public fetchLocaleEffect$: Observable<any> = this.actions$.pipe(
         ofType(LOCALE_ACTIONS.FETCH_AVAILABLE_LOCALES),
-        tap((action) => console.log('Action caught in LocaleEffects:', action)),
+        tap((action) => logEasy({messages: [`Action caught in ${this.constructor.name}:`, action]})),
         switchMap(() => // if a new Actions arrives, the old Observable will be canceled
             this.dataService.readData(LocaleQuery).pipe(
                 map((data: getLocaleTypeRequest) => {
@@ -76,7 +77,7 @@ export class LocaleEffects {
     @Effect({ dispatch: false })
     public setLocaleEffect$: Observable<any> = this.actions$.pipe(
         ofType(LOCALE_ACTIONS.SET_LOCALE),
-        tap((action) => console.log('Action caught in LocaleEffects:', action)),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         tap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
                 iso

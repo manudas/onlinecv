@@ -18,6 +18,7 @@ import { TranslationService } from '@app/services/translation/translation.servic
 import { select, Store } from '@ngrx/store';
 import { LocaleStore } from '@app/types/Locale';
 import { SocialNetworkFetched } from '@app/types/SocialNetworks';
+import { logEasy } from '@app/services/logging/logging.service';
 
 type StoreType = { locale: LocaleStore }
 
@@ -60,7 +61,7 @@ export class SocialNetworksEffects {
     @Effect()
     public fetchSocialNetworks$: Observable<any> = this.actions$.pipe(
         ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS>>(SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS),
-        tap((action) => console.log('Action caught in DetailsEffects:', action)),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
                 language,
@@ -94,7 +95,7 @@ export class SocialNetworksEffects {
     @Effect()
     public mutateNetworksEffect$: Observable<any> = this.actions$.pipe(
         ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.SAVE_NETWORKS>>(SOCIAL_NETWORK_ACTIONS.SAVE_NETWORKS),
-        tap((action) => console.log('Action caught in DetailsEffects:', action)),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
                 socialNetworks,
@@ -133,7 +134,7 @@ export class SocialNetworksEffects {
     @Effect()
     public removeNetworkEffect$: Observable<any> = this.actions$.pipe(
         ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK>>(SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK),
-        tap((action) => console.log('Action caught in DetailsEffects:', action)),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
                 id,

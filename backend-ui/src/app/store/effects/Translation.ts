@@ -12,6 +12,7 @@ import { Translations as TranslationsQuery } from '@services/data/queries'
 
 import { ActionRequestTranslation, ReceivedTranslationsType } from '@app/types/Translations';
 import { TranslationService } from '@app/services/translation/translation.service';
+import { logEasy } from '@app/services/logging/logging.service';
 
 @Injectable()
 export class TranslationEffects {
@@ -44,7 +45,7 @@ export class TranslationEffects {
     @Effect()
     public fetchTranslationsEffect$: Observable<any> = this.actions$.pipe(
         ofType(TRANSLATION_ACTIONS.FETCH_TRANSLATIONS),
-        tap((action) => console.log('Action caught in TranslationEffects:', action)),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
 
             const {

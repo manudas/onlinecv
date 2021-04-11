@@ -15,6 +15,7 @@ import {
 } from '@services/data/queries'
 import { DetailsFetched, DetailsType } from '@app/types/Details'
 import { TranslationService } from '@app/services/translation/translation.service'
+import { logEasy } from '@app/services/logging/logging.service';
 
 @Injectable()
 export class DetailsEffects {
@@ -47,7 +48,7 @@ export class DetailsEffects {
     @Effect()
     public fetchDetailsEffect$: Observable<any> = this.actions$.pipe(
         ofType<ReturnType<typeof DETAILS.FETCH_DETAILS>>(DETAILS.FETCH_DETAILS),
-        tap((action) => console.log('Action caught in DetailsEffects:', action)),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
                 language,
@@ -82,7 +83,7 @@ export class DetailsEffects {
     @Effect()
     public mutateDetailsEffect$: Observable<any> = this.actions$.pipe(
         ofType<ReturnType<typeof DETAILS.SAVE_DETAILS>>(DETAILS.SAVE_DETAILS),
-        tap((action) => console.log('Action caught in DetailsEffects:', action)),
+        tap((action) => logEasy({messages: [`Action caught in ${this.constructor.name}:`, action]})),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
                 details,

@@ -202,14 +202,16 @@ console.log('would it be good to accompany alt and title in the image in the fro
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
-      if (this.isSocialNetworkEdit(result)) {
-        const {
-          index,
-          network
-        } = result
-        this.editNetworkValues(index, network)
-      } else {
-        this.addNetwork(result)
+      if (result) {
+        if (this.isSocialNetworkEdit(result)) {
+          const {
+            index,
+            network
+          } = result
+          this.editNetworkValues(index, network)
+        } else {
+          this.addNetwork(result)
+        }
       }
     })
   }
@@ -234,7 +236,7 @@ console.log('would it be good to accompany alt and title in the image in the fro
     })
   }
 
-  isSocialNetworkEdit(data: SocialNetwork | EditSocialNetworkStructure): data is EditSocialNetworkStructure {
+  isSocialNetworkEdit(data: SocialNetwork | EditSocialNetworkStructure | Object = {}): data is EditSocialNetworkStructure {
     return (data as EditSocialNetworkStructure).index !== undefined
   }
 
