@@ -10,7 +10,7 @@ export const AVAILABLE_LOCALES_FETCHED = createAction(
         payload: LocaleType[]
     }>()
 )
-export const AVAILABLE_LOCALES_FETCH_FAILED = createAction('[Locale Effect] Available locales fetch failed')
+
 export const FETCH_AVAILABLE_LOCALES = createAction('[Locale Effect] Fetch available locales')
 export const SET_LOCALE = createAction(
     '[Locale Effect] Set Locale',

@@ -46,7 +46,7 @@
             >
                 {{col === 'id' ? '#' : col | translate | async}}
             </mat-header-cell>
-            <mat-cell *matCellDef="let row">{{row[col]}}</mat-cell>
+            <mat-cell *matCellDef="let element; let row">{{row[col]}}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="colsToRender"></mat-header-row>

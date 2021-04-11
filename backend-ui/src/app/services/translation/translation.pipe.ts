@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { ChangeDetectorRef, EmbeddedViewRef, Pipe, PipeTransform, Type } from '@angular/core';
 
 import {
   Subject,
@@ -16,16 +16,11 @@ import { TranslationService } from './translation.service';
 })
 export class TranslatePipe implements PipeTransform {
 
-  constructor(private translationService: TranslationService) { }
+  constructor(private translationService: TranslationService, private cdRef: ChangeDetectorRef) { }
 
-  transform(key: string, component?: any): Subject<string> {
-    if  (key) { // let's avoid undefined translations
-      const caller: string = component?.constructor?.name // otherwise, undefined
-      const subject = this.translationService.getTranslationSubject(key, caller)
-      this.translationService.requestTranslation(key, caller)
-
-      return subject
-    }
-    return null
+  transform(key: string): Subject<string> {
+    const context = (this.cdRef as EmbeddedViewRef<Type<any>>).context
+    const caller: string = context?.constructor?.name // otherwise, undefined
+    return this.translationService.transform(key, caller)
   }
 }

@@ -29,14 +29,21 @@ export class DataService {
   }
 
   private execute = (type: 'query' | 'mutation', query: string, vars: any = {}): Observable<any> => {
-    return (
-      this.http.post(
-          this.url,
-          JSON.stringify({ [type]: query, variables: vars }),
-          this.httpOptions
-      ).pipe(map(
-        (response) => response['data']
-      ), catchError(e => throwError(e))))
+    if (type === 'query' || type === 'mutation') {
+      return (
+        this.http.post(
+            this.url,
+            // before it was [type] : query, but the mutation shouldn't be
+            // mutation: mutation but query: mutation, so first word is always
+            // query independently of the query type
+            JSON.stringify({ query: query, variables: vars }),
+            this.httpOptions
+        ).pipe(map(
+          (response) => response['data']
+        ), catchError(e => throwError(e))))
+    } else {
+      throw new Error(`Unsupported GraphQL query type: ${type}`)
+    }
   }
 
   private query = (query: string, vars: any = {}): Observable<any> => {

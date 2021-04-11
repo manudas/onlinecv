@@ -1,3 +1,5 @@
+@import '../../globals/styles';
+
 .picture {
     margin-top: 10px;
     height: 250px;
@@ -14,8 +16,8 @@
     .modalBox {
         width: 300px;
         margin: 0 auto;
-        background: #fff;
-        box-shadow: 0 15px 50px -5px rgba(black, 0.35);
+        background: $white;
+        box-shadow: 0 15px 50px -5px rgba($black, 0.35);
         padding: 40px;
     }
     #mediaFile {
@@ -33,11 +35,11 @@
         top: -80px;
         margin-bottom: -80px;
         cursor: pointer;
-        background: #f4f4f4;
+        background: $grey;
         display: table;
         background-size: cover;
         background-position: center center;
-        box-shadow: 0 5px 8px rgba(black, 0.35);
+        box-shadow: 0 5px 8px rgba($black, 0.35);
         * {
             // prevent events from this child
             pointer-events: none;
@@ -49,7 +51,7 @@
             border-radius: 100%;
             width: 100%;
             height: 100%;
-            border: 4px dashed #ddd;
+            border: 4px dashed $darkishGrey;
             opacity: 1;
         }
         label {
@@ -57,37 +59,55 @@
             vertical-align: middle;
             text-align: center;
             padding: 0 30px;
-            color: grey;
+            color: $darkerGrey;
             opacity: 1;
         }
+
+        &.hasImage {
+            .dashes,
+            label {
+                opacity: 0;
+            }
+            &:hover {
+                .dashes,
+                label {
+                    opacity: initial;
+                }
+            }
+        }
         &.dragging {
-            background-image: none!important;
+            background-image: none;
             .dashes {
                 animation-duration: 10s;
                 animation-name: spin;
                 animation-iteration-count: infinite;
                 animation-timing-function: linear;
-                opacity: 1!important;
+                opacity: initial;
             }
             label {
-                opacity: 0.5!important;
+                opacity: 0.5;
             }
         }
         &.hasImage {
-            .dashes,
-            label {
-                opacity: 0;
-                //pointer-events: none;
-                //user-select: none;
+            &.dragging {
+                /*
+                 * If label is in a container
+                 * that has image and at the
+                 * same is having another image
+                 * being dragged in
+                 */
+                label {
+                    opacity: initial;
+                }
             }
         }
     }
     .username {
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid $darkishGrey;
         padding-top: 20px;
         h1 {
             text-align: center;
-            font-size: 28px;
+            font-size: 20px;
             font-weight: normal;
             letter-spacing: 1px;
         }

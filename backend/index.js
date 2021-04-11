@@ -52,6 +52,11 @@ app.use(compression({
     level: zlib.constants.Z_BEST_COMPRESSION
 }));
 
+// Add this before the GraphQL middleware
+// Needed to upload files through GraphQL
+// and maybe to download them too
+app.use(express.json({ limit: '1mb' }));
+
 // we set up cookie parser for being able to manage cookies
 // lets parse cookies with cookie-parser midleware
 app.use(cookieParser());

@@ -1,0 +1,40 @@
+<h2
+    mat-dialog-title
+    [className]="''"
+>
+    <div
+        [className]="'paddedContent'"
+    >
+        {{ 'Are you sure?' | translate | async }}
+    </div>
+</h2>
+
+<div mat-dialog-content>
+    <div
+        [className]="'paddedContent'"
+    >
+        {{ ('Network' | translate | async) + network.label + ('will be deleted permanently' | translate | async) }}
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div
+        [className]="'paddedContent'"
+    >
+        <button
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+            (click)="close()"
+        >
+            {{ 'Cancel' | translate | async }}
+        </button>
+        <button
+            [className]="'btn submitButton'"
+            type="submit"
+            ngbButton
+            (click)="close(index)"
+        >
+            {{ 'Continue' | translate | async }}
+        </button>
+    </div>
+</div>

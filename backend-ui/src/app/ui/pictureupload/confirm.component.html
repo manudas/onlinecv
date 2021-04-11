@@ -1,0 +1,50 @@
+<h2
+    mat-dialog-title
+    [className]="''"
+>
+    <div
+        [className]="'paddedContent'"
+    >
+        {{ 'What do you want to do?' | translate | async }}
+    </div>
+</h2>
+
+<div mat-dialog-content>
+    <div
+        [className]="'paddedContent'"
+    >
+        {{ 'You can remove your picture, upload a new one or cancel the operation' | translate | async }}
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div
+        [className]="'paddedContent'"
+    >
+        <button
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+            (click)="close(PictureOptions.cancel)"
+        >
+            {{ 'Cancel' | translate | async }}
+        </button>
+        <div
+            [className]="'actionButtonGroup'"
+        >
+            <button
+                [className]="'btn'"
+                ngbButton
+                (click)="close(PictureOptions.delete)"
+            >
+                {{ 'Delete' | translate | async }}
+            </button>
+            <button
+                [className]="'btn'"
+                ngbButton
+                (click)="close(PictureOptions.upload)"
+            >
+                {{ 'Upload' | translate | async }}
+            </button>
+        </div>
+    </div>
+</div>

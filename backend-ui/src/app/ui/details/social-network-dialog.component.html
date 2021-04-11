@@ -1,0 +1,117 @@
+<h2
+    mat-dialog-title
+    [className]="''"
+>
+    <div
+        [className]="'paddedContent'"
+    >
+        {{ editingIndex === null ? ('Add a new social network' | translate | async) : ('Editing social network' | translate | async) }}
+    </div>
+</h2>
+
+<div mat-dialog-content>
+    <div
+        [className]="'paddedContent'"
+    >
+        <ng-container *ngTemplateOutlet="socialNetworkTemplate"></ng-container>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div
+        [className]="'paddedContent'"
+    >
+        <button
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+            (click)="close()"
+        >
+            {{ 'Cancel' | translate | async }}
+        </button>
+        <button
+            [className]="'btn submitButton'"
+            type="submit"
+            ngbButton
+            (click)="submitHandler($event)"
+        >
+            {{ editingIndex === null ? ('Add' | translate | async) : ('Edit' | translate | async) }}
+        </button>
+    </div>
+</div>
+
+<ng-template #socialNetworkTemplate>
+    <form
+        [formGroup]="socialNetworksFormGroup"
+    >
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Network name' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Enter the network name' | translate | async }}"
+                placement="top"
+                ngbTooltip="{{ 'Do not enter any social network that can harm you in a selection process' | translate | async }}"
+                formControlName="label"
+            >
+            <p
+                class='help-block'
+                [ngStyle]="{
+                    'margin-bottom': socialNetworksFormGroup.get('label').touched && socialNetworksFormGroup.get('label').errors ? 0 : 'initial'
+                }"
+            >
+                {{ 'E.g: LinkedIn, Facebook, Twitter, Telegram...' | translate | async }}
+            </p>
+            <small
+                    *ngIf="socialNetworksFormGroup.get('label').touched && socialNetworksFormGroup.get('label').errors"
+                    [className]="'text-danger'"
+            >
+                {{ 'You should provide a valid social network name' | translate | async }}
+            </small>
+        </div>
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Please enter a description' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Optional: a description of yourself in the social network' | translate | async }}"
+                formControlName="description"
+            >
+            <p
+                class='help-block'
+            >
+                {{ 'E.g.: My professional network with all my archivements' | translate | async }}
+            </p>
+        </div>
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Profile web address' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Enter the url of your profile' | translate | async }}"
+                formControlName="url"
+            >
+            <small
+                *ngIf="socialNetworksFormGroup.get('url').touched && socialNetworksFormGroup.get('url').errors"
+                [className]="'text-danger'"
+            >
+                {{ 'You should the url address of your profile' | translate | async }}
+            </small>
+        </div>
+
+    </form>
+</ng-template>

@@ -10,39 +10,37 @@ module.exports = {
         }) => {
             const details = await DetailsModel.findOne({
                 language: language
-            }).exec();
-
+            }).lean().exec(); // lean to get the model as a plain javascript object
+            details.profileImage = details.profileImage && details.profileImage.toString();
             return details;
         },
     },
     Mutation: {
-        /* Example
-        db.books.update(
-            { item: "ZZZ135" },   // Query parameter
-            {                     // Replacement document
-                item: "ZZZ135",
-                stock: 5,
-                tags: [ "database" ]
-            },
-            { upsert: true }      // Options: upsert -> insert document if no ducment found to update
-        )
-        */
-        putDetails: async(parent, {
-            Details,
-        }, {
+        putDetails: async({
+            details,
+        },
+        {
             models: {
                 DetailsModel
             },
-        }) => {
-            const WriteResult = await DetailsModel.update({
-                    language: language
-                },
-                Details, {
-                    upsert: true // if no details found, create a new entry
+        }, info
+        ) => {
+            const cleanedDetails = Object.entries(details).reduce((prev, [currKey, currVal], currIndex) => {
+                if (currVal !== null) { // can be 0
+                    prev[currKey !== 'id' ? currKey : '_id'] = currVal;
                 }
-            );
-            return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? Details : false;
+                return prev;
+            }, {});
+
+            const DetailsRemovalResult = await DetailsModel.remove({
+                language: cleanedDetails.language
+            }, {
+                justOne: true
+            });
+            const document = new DetailsModel(cleanedDetails);
+            const DetailsWriteResult = await document.save();
+
+            return DetailsWriteResult ?? false;
         },
     },
 };

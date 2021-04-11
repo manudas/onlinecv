@@ -1,10 +1,7 @@
-export {
-    FETCH_DETAILS,
-    SAVE_DETAILS,
-    RESET_DETAILS,
-    DETAILS_FETCHED,
-    DETAILS_FETCH_FAILED
-}
-from '@store_actions/Details'
+export * from './Details'
 
 export * from './Locale'
+
+export * from './Translation'
+
+export * from './Common'

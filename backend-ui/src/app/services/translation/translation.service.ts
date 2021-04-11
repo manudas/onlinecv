@@ -15,7 +15,8 @@ import {
 } from "@ngrx/store";
 import {
     Observable,
-    ReplaySubject
+    ReplaySubject,
+    Subject
 } from "rxjs";
 
 type StoreType = { locale: LocaleStore } & { translation: TranslationStore}
@@ -161,5 +162,25 @@ export class TranslationService {
         })
 
         return result
+    }
+
+    transform(key: string, componentOrComponentName: string | object): Subject<string> {
+      if  (key) { // let's avoid undefined translations
+
+        let caller
+        if (typeof componentOrComponentName === 'string' || componentOrComponentName instanceof String) {
+          // it's a string
+          caller = componentOrComponentName
+        } else {
+          // it's something else
+          caller = componentOrComponentName.constructor.name
+        }
+
+        const subject = this.getTranslationSubject(key, caller)
+        this.requestTranslation(key, caller)
+
+        return subject
+      }
+      return null
     }
 }

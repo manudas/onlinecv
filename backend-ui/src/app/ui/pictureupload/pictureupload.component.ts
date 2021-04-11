@@ -1,4 +1,9 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { logEasy } from '@app/services/logging';
+import { PictureOptions } from '@app/types/Picture';
+import { attachUrlDataTypeToBase64, removeUrlDataFromBase64 } from '@app/utils/Images';
+import { ConfirmComponent } from './confirm.component';
 
 @Component({
   selector: 'app-pictureupload',
@@ -7,35 +12,70 @@ import { Component, OnInit, HostListener } from '@angular/core';
 })
 export class PictureuploadComponent implements OnInit {
 
-  dragging: boolean = false
-  hasImage:boolean = false;
-  imageData: Blob = null;
-  file: File = null;
+  @ViewChild('mediaFile') mediaFile
 
-  constructor() { }
+  @Input()
+  name: string
+
+  _imageData: Blob
+  @Input()
+  set imageData(image: Blob) {
+    this._imageData = image
+    if (image) {
+      this.hasImage = true
+    } else {
+      this.hasImage = false
+      this.resetInput()
+    }
+    this.imageDataChange.emit(this._imageData)
+  }
+  get imageData() {
+    return this._imageData
+  }
+
+  @Output()
+  imageDataChange: EventEmitter<Blob> = new EventEmitter<Blob>()
+
+  dragging: boolean = false
+  hasImage: boolean = false
+
+  mouseOver: boolean = false // used to show some animations
+
+  // file is not needed, for now
+  // file: File = null;
+
+  constructor(private matDialog: MatDialog) { }
 
   ngOnInit(): void {
+  }
+
+  onClickHandler($event) {
+    if (!this.hasImage) {
+      this.mediaFile.nativeElement.click()
+    } else {
+      this.openActionDialog()
+    }
   }
 
   onDragOver($event) {
     this.dragging = true;
     $event.preventDefault();
-
   }
 
   onDragLeave($event) {
     this.dragging = false;
   }
 
-  onReceiveFile($event) {
-    // $('#profile').removeClass('dragging hasImage');
-    this.dragging = false;
-    // this.hasImage = false;
+  getBase64ImageData = () => attachUrlDataTypeToBase64(this.imageData)
 
-    const file = $event.dataTransfer ? 
-                    $event.dataTransfer.files[0] 
-                    :  $event.target ? $event.target.files[0] 
-                      : null;
+  onReceiveFile($event) {
+    this.dragging = false;
+
+    const {
+      dataTransfer: {
+        files: [ file  = null]
+      } = $event.target
+    } = $event
 
     if (file) {
       // could be null when no file has been selected
@@ -44,12 +84,68 @@ export class PictureuploadComponent implements OnInit {
       //attach event handlers here...
       reader.readAsDataURL(file);
       reader.onload = function(e) {
-        this.hasImage = true;
-        this.imageData = reader.result;
-        this.file = file
+        // this.hasImage = true; // done in getter automatically now
+        this.imageData = removeUrlDataFromBase64(reader.result)
+        // this.file = file
       }.bind(this);
     }
     $event.preventDefault();
+  }
+
+  resetInput($event = null) {
+    const {
+      dataTransfer: { // comes from drag and drop
+        files: [
+          {
+            name: dragName = null
+          } = {}
+        ] = []
+      } = {}
+    } = $event || {}
+
+    // si no reseteamos con evento de drag
+    // o si lo hacemos con el, si tenemos
+    // un nombre para el archivo a comparar
+    // -------------------------------------
+    // this.mediaFile to avoid crash if set
+    // is executed before mediaFile is loaded
+    if (this.mediaFile && (!$event || dragName)) {
+      const {
+        nativeElement: {
+          files: [
+            {
+              name: inputName = null
+            } = {}
+          ]
+        }
+      } = this.mediaFile
+
+      if (inputName && inputName !== dragName) {
+        this.mediaFile.nativeElement.value = ''
+      }
+    }
+  }
+
+  openActionDialog(): void {
+    const dialogRef = this.matDialog.open(ConfirmComponent, {
+      width: '80%',
+      data: null
+    })
+
+    dialogRef.afterClosed().subscribe(result => {
+      logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
+      switch (result) {
+        case PictureOptions.delete:
+          this.imageData = null
+          break
+        case PictureOptions.upload:
+          this.mediaFile.nativeElement.click()
+          break
+        // case PictureOptions.cancel
+        default: // for cancel
+          // nothing
+      }
+    })
   }
 
   @HostListener('document:dragover', ['$event'])
@@ -66,24 +162,3 @@ export class PictureuploadComponent implements OnInit {
     }
   }
 }
-
-
-
-/*
-
-$('#mediaFile').change(function(e) {
-
-  var input = e.target;
-  if (input.files && input.files[0]) {
-    var file = input.files[0];
-
-    var reader = new FileReader();
-
-    reader.readAsDataURL(file);
-    reader.onload = function(e) {
-      console.log(reader.result);
-      $('#profile').css('background-image', 'url(' + reader.result + ')').addClass('hasImage');
-    }
-  }
-})
-*/

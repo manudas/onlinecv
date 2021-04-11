@@ -19,22 +19,34 @@
     }`
  *
  */
-export const Details =
+export const QueryDetails =
     `
-        query Details($language: String!) {
-            details(language: $language) {
-                id: _id
-                name
-                surname
-                address
-                phone_number
-                birth_date
-                email
-                keywords
-                language
-                primaryJobName
-                secondaryJobName
-                nickname
-            }
+    query Details($language: String!) {
+        details(language: $language) {
+            id: _id
+            profileImage
+            name
+            surname
+            address
+            phone
+            birthInfo
+            email
+            keywords
+            language
+            primaryRole
+            secondaryRole
+            nickname
         }
-    `;
+    }
+`;
+
+
+export const MutateDetails =
+`
+    mutation MutateDetails($details: DetailsInput!) {
+        putDetails(details: $details) {
+            # return id if everything was ok
+            id: _id
+        }
+    }
+`;

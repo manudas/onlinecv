@@ -1,6 +1,8 @@
 /* Importing Bootstrap SCSS file. */
 
 @import '~bootstrap/scss/bootstrap';
+@import '../../globals/styles';
+
 :host {
     // font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
@@ -52,7 +54,7 @@
         */
     }
     .form-actions {
-        background-color: #f5f7f7;
+        background-color: $grey;
         margin: 15px -15px -15px;
         padding: 15px;
         button {
@@ -69,4 +71,43 @@
             }
         }
     }
+    .text-danger {
+        color: $red;
+    }
+    .network-actions {
+        margin-top: 20px;
+    }
+
+    .btn-network-row {
+        margin: 0 3px;
+    }
+
+    /* DRAGGING EFFECTS */
+    /*
+     * Due to how CtkDropList works,
+     * that inserts a copy of the
+     * dragging element directly before
+     * the close of body, given the
+     * component encapsulation, we cannot
+     * stablish a style / class here, as
+     * we would be refering to an
+     * external (parent) component.
+     * So that, we don't have any
+     * other chance that assing those
+     * styles onDragStart in the component,
+     * for the element with class
+     * .cdk-drag-preview && clidren
+     */
+    .cdk-drag-placeholder {
+        opacity: 0;
+    }
+
+    .cdk-drag-animating {
+        transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    .cdk-drop-list-dragging .mat-row:not(.cdk-drag-placeholder) {
+        transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+    /* END OF DRAGGING EFFECTS */
 }
