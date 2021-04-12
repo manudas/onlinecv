@@ -61,30 +61,6 @@ module.exports = {
                 return element;
             }));
             return SocialNetworkWriteResult? SocialNetworkWriteResult : false;
-
-           /*
-            var bulk = SocialNetworksModel.collection.initializeUnorderedBulkOp();
-            socialNetworks.forEach((network) => {
-                const cleanedNetwork = Object.entries(network).reduce((prev, [currKey, currVal], currIndex) => {
-                    if (currVal) {
-                        prev[currKey !== 'id' ? currKey : '_id'] = currVal;
-                    }
-                    return prev;
-                }, {});
-                if (!cleanedNetwork._id) {
-                    cleanedNetwork._id = new ObjectID();
-                }
-                bulk.find( { _id: cleanedNetwork._id } ).upsert().update(
-                    {
-                        // $setOnInsert: { qty: 0, inStock: true },
-                        // $setOnInsert: { _id: new ObjectID() },
-                        $set: cleanedNetwork
-                    }
-                 );
-            });
-            const result = await bulk.execute();
-            return result;
-            */
         },
         removeSocialNetwork: async({
             id
@@ -93,11 +69,7 @@ module.exports = {
                 SocialNetworksModel
             },
         }, info) => {
-            const WriteResult = await SocialNetworksModel.remove({
-                _id: id
-            }, {
-                justOne: true
-            }); // justOne ==> remove one
+            const WriteResult = await SocialNetworksModel.remove({ _id: id }, { justOne: true }); // justOne ==> remove one
             if (WriteResult.deletedCount === 1) {
                 return id;
             }

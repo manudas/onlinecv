@@ -15,9 +15,9 @@ module.exports =
     `
   type Training {
     id: ID!
-    name: String!,
+    tag: String!,
     description: String,
-    type: String,
+    type: String!,
     school: String,
     start_date: String,
     finish_date: String,
@@ -25,14 +25,15 @@ module.exports =
     school_url: String,
     average_school: Float,
     keywords: [String]!,
-    language: String!
+    language: String!,
+    order: Int!
   }
 
   input TrainingInput {
     id: ID
-    name: String!,
+    tag: String!,
     description: String,
-    type: String,
+    type: String!,
     school: String,
     start_date: String,
     finish_date: String,
@@ -40,7 +41,8 @@ module.exports =
     school_url: String,
     average_school: Float,
     keywords: [String]!,
-    language: String!
+    language: String!,
+    order: Int!
   }
 
   extend type Query {

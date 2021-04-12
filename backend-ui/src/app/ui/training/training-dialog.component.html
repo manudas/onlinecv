@@ -1,0 +1,216 @@
+<h2
+    mat-dialog-title
+    [className]="''"
+>
+    <div
+        [className]="'paddedContent'"
+    >
+        {{
+            editingIndex === null
+                ? ('Add a new training: ' | translate | async) + (TrainingType[trainingFormGroup.get('type').value] | translate | async | titlecase)
+                : ('Editing your training: ' | translate | async) + (TrainingType[trainingFormGroup.get('type').value] | translate | async | titlecase)
+        }}
+    </div>
+</h2>
+
+<div mat-dialog-content>
+    <div
+        [className]="'paddedContent'"
+    >
+        <ng-container *ngTemplateOutlet="trainingTemplate"></ng-container>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div
+        [className]="'paddedContent'"
+    >
+        <button
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+            (click)="close()"
+        >
+            {{ 'Cancel' | translate | async }}
+        </button>
+        <button
+            [className]="'btn submitButton'"
+            type="submit"
+            ngbButton
+            (click)="submitHandler($event)"
+        >
+            {{ editingIndex === null ? ('Add' | translate | async) : ('Edit' | translate | async) }}
+        </button>
+    </div>
+</div>
+
+<ng-template #trainingTemplate>
+    <form
+        [formGroup]="trainingFormGroup"
+    >
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Tag your training' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Enter the training name' | translate | async }}"
+                placement="top"
+                formControlName="tag"
+            >
+            <p
+                class='help-block'
+                [ngStyle]="{
+                    'margin-bottom': trainingFormGroup.get('tag').touched && trainingFormGroup.get('tag').errors ? 0 : 'initial'
+                }"
+            >
+                {{ 'E.g: Bachelor degree on Computer Science' | translate | async }}
+            </p>
+            <small
+                    *ngIf="trainingFormGroup.get('tag').touched && trainingFormGroup.get('tag').errors"
+                    [className]="'text-danger'"
+            >
+                {{ 'You should provide a valid tag for your training' | translate | async }}
+            </small>
+        </div>
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Please enter a description' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Optional: a brief description of your training' | translate | async }}"
+                formControlName="description"
+            >
+            <p
+                class='help-block'
+            >
+                {{ 'E.g.: I learnt Java and Javascript in this bootcamp' | translate | async }}
+            </p>
+        </div>
+
+
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Please enter the school, academy or place where you got your training' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Optional: the name of the place you got your training' | translate | async }}"
+                formControlName="school"
+            >
+            <p
+                class='help-block'
+            >
+                {{ 'E.g.: Upper Technical School of Computer Science in University of Málaga' | translate | async }}
+            </p>
+        </div>
+
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'ATENTO MIRAR SI SE PUEDEN VALIDAR QUE SEAN FECHAS Y PONER DATEPICKER CON SOLO MES Y AÑO Provide your starting date' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Optional: the date in which you started your training' | translate | async }}"
+                formControlName="start_date"
+            >
+            <p
+                class='help-block'
+            >
+                {{ 'E.g.: September 2011' | translate | async }}
+            </p>
+        </div>
+
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'ATENTO MIRAR SI SE PUEDEN VALIDAR QUE SEAN FECHAS Y PONER DATEPICKER CON SOLO MES Y AÑO Provide your finishing date' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Optional: the date in which you finished your training' | translate | async }}"
+                formControlName="finish_date"
+            >
+            <p
+                class='help-block'
+            >
+                {{ 'E.g.: December 2015' | translate | async }}
+            </p>
+        </div>
+
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Do you want to add some info about your Final Degree Project?' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Optional: the name or a brief description of your Final Degree Project' | translate | async }}"
+                formControlName="final_project"
+            >
+            <p
+                class='help-block'
+            >
+                {{ 'E.g.: Experimentation with 3D technologies for mobile devices' | translate | async }}
+            </p>
+        </div>
+
+
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Add the web address of the School' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Optional: the url of your School, if any' | translate | async }}"
+                formControlName="school_url"
+            >
+        </div>
+
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Do you want to show up your average marks?' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Optional: write down here an average of your marks during the training course' | translate | async }}"
+                formControlName="average_school"
+            >
+            <p
+                class='help-block'
+            >
+                {{ 'E.g.: 8.5 over 10, A++ and so on...' | translate | async }}
+            </p>
+        </div>
+    </form>
+</ng-template>

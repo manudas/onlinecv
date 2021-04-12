@@ -1,4 +1,3 @@
-// import { AuthenticationError } from 'apollo-server';
 module.exports = {
     Query: {
         details: async({ // 1st arg: arguments
@@ -8,9 +7,7 @@ module.exports = {
                 DetailsModel,
             }
         }) => {
-            const details = await DetailsModel.findOne({
-                language: language
-            }).lean().exec(); // lean to get the model as a plain javascript object
+            const details = await DetailsModel.findOne({ language: language }).lean().exec(); // lean to get the model as a plain javascript object
             details.profileImage = details.profileImage && details.profileImage.toString();
             return details;
         },
@@ -32,11 +29,7 @@ module.exports = {
                 return prev;
             }, {});
 
-            const DetailsRemovalResult = await DetailsModel.remove({
-                language: cleanedDetails.language
-            }, {
-                justOne: true
-            });
+            const DetailsRemovalResult = await DetailsModel.remove({ language: cleanedDetails.language }, { justOne: true });
             const document = new DetailsModel(cleanedDetails);
             const DetailsWriteResult = await document.save();
 

@@ -9,7 +9,7 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{source: officialData}"
+        [panelParameters]="{type: TrainingType.official}"
         [cardTitle]="'Official' | translate | async">
     </app-card>
 </ng-template>
@@ -18,7 +18,7 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{source: computerData}"
+        [panelParameters]="{type: TrainingType.computer}"
         [cardTitle]="'Computer' | translate | async">
     </app-card>
 </ng-template>
@@ -27,16 +27,17 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{source: otherData}"
+        [panelParameters]="{type: TrainingType.others}"
         [cardTitle]="'Other' | translate | async">
     </app-card>
 </ng-template>
 
 <ng-template #panel
-    let-source="source"
+    let-type="type"
 >
-    <mat-table class=""
-        [dataSource]="source">
+    <mat-table 
+        *ngIf="getTrainingSource(type).length"
+        [dataSource]="getTrainingSource(type)">
         <ng-container *ngFor="let col of colsToRender; let colIndex = index" matColumnDef="{{col}}">
             <mat-header-cell
                 *matHeaderCellDef
@@ -49,6 +50,21 @@
         <mat-header-row *matHeaderRowDef="colsToRender"></mat-header-row>
         <mat-row *matRowDef="let row; columns: colsToRender"></mat-row>
     </mat-table>
+
+    <div
+        [className]="'text-right network-actions'"
+    >
+    style this (watch classes)
+        <button
+            (click)="openTrainingDialog(type)"
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+        >
+            {{ 'Add Training' | translate | async }}
+        </button>
+    </div>
+
 </ng-template>
 
 <ng-template #separator>

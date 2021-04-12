@@ -6,7 +6,7 @@ const {
 const collection = 'training';
 
 const TrainingSchema = new Schema({
-    name: String,
+    tag: String,
     description: String,
     type: String,
     school: String,

@@ -23,6 +23,7 @@ import { SocialNetworkDialogComponent } from './social-network-dialog.component'
 import * as COMMON_ACTIONS from '@store_actions/Common'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ConfirmComponent } from './confirm.component';
+import { logEasy } from '@app/services/logging';
 
 type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } } & { socialNetworks: {list: SocialNetwork[] } }
 @Component({
@@ -201,7 +202,7 @@ console.log('would it be good to accompany alt and title in the image in the fro
     })
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
+      logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
       if (result) {
         if (this.isSocialNetworkEdit(result)) {
           const {
@@ -241,7 +242,8 @@ console.log('would it be good to accompany alt and title in the image in the fro
   }
 
   addNetwork(networkData: SocialNetwork) {
-    this.socialNetworks = [...this.socialNetworks, { ...networkData, language: this.selectedLocale, order: this.socialNetworks.length }]
+    this.editNetworkValues(this.socialNetworks.length, networkData)
+    // this.socialNetworks = [...this.socialNetworks, { ...networkData, language: this.selectedLocale, order: this.socialNetworks.length }]
   }
 
   deleteNetwork(index: number) {

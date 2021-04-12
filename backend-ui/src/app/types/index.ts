@@ -9,3 +9,5 @@ export * from './Memo'
 export * from './Message'
 
 export * from './SocialNetworks'
+
+export * from './Training'
