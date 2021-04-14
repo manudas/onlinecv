@@ -18,6 +18,7 @@ import { DetailsComponent } from './details.component'
 import { DataService } from '@services/data/data.service'
 import { SocialNetworkDialogComponent } from './social-network-dialog.component'
 import { ConfirmComponent } from './confirm.component'
+import { UnderscoreModule } from '@app/services/underscore'
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { ConfirmComponent } from './confirm.component'
     MatTableModule,
     ReactiveFormsModule,
     TranslationsModule,
+    UnderscoreModule,
   ],
   exports: [DetailsComponent],
   providers: [DataService]

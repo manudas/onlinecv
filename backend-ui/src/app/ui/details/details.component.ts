@@ -67,12 +67,6 @@ export class DetailsComponent implements OnInit {
   }
 
   translationsToRequest = ['Network deleted successfully']
-  translationsObservables: {
-      [translationKey: string]: Observable<string>
-  } = {}
-  translatedStrings: {
-      [translationKey: string]: string
-  } = {}
 
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
@@ -113,12 +107,7 @@ export class DetailsComponent implements OnInit {
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
     this.socialNetworks$ = this.store.pipe(select(state => state?.socialNetworks?.list))
 
-    this.translationsToRequest.forEach(translationKey => {
-      this.translationsObservables[translationKey] = this.translate.transform(translationKey, this)
-      this.translationsObservables[translationKey].subscribe((data: string) => {
-        this.translatedStrings[translationKey] = data
-      })
-    })
+    this.translate.prefetch(this.translationsToRequest, this)
 
     this.detailsFormGroup.controls.profileImage.valueChanges.subscribe((newImage: Blob) => {this.profileImageFromSubscription = newImage})
   }
@@ -217,7 +206,7 @@ console.log('would it be good to accompany alt and title in the image in the fro
     })
   }
 
-  openNetworkRemovlaConfirmDialog(networkIndex: number): void {
+  openNetworkRemovalConfirmDialog(networkIndex: number): void {
     const network = this.socialNetworks[networkIndex]
     const dialogRef = this.matDialog.open(ConfirmComponent, {
       width: '80%',
@@ -254,7 +243,7 @@ console.log('would it be good to accompany alt and title in the image in the fro
         ...this.socialNetworks.slice(index + 1)
       ];
       this.store.dispatch(COMMON_ACTIONS.SUCCESS({
-        message: this.translatedStrings['Network deleted successfully']
+        message: this.translate.getResolvedTranslation('Network deleted successfully', this)
       }))
     } else {
       this.store.dispatch(SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK({

@@ -21,24 +21,13 @@ import { logEasy } from '@app/services/logging/logging.service';
 export class DetailsEffects {
 
     translationsToRequest = ['Details saved successfully', 'Error']
-    translationsObservables: {
-        [translationKey: string]: Observable<string>
-    } = {}
-    translatedStrings: {
-        [translationKey: string]: string
-    } = {}
 
     constructor(
         private actions$: Actions,
         private dataService: DataService,
         private translate: TranslationService,
     ) {
-        this.translationsToRequest.forEach(translationKey => {
-            this.translationsObservables[translationKey] = this.translate.transform(translationKey, this)
-            this.translationsObservables[translationKey].subscribe((data: string) => {
-                this.translatedStrings[translationKey] = data
-            })
-        })
+        this.translate.prefetch(this.translationsToRequest, this)
     }
 
     /**
@@ -69,7 +58,7 @@ export class DetailsEffects {
                 catchError((error) => {
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
-                        message: `${this.translatedStrings['Error']}: ${error}`
+                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${error}`
                     });
                 })
             )
@@ -97,14 +86,14 @@ export class DetailsEffects {
                 map((details: DetailsType) => {
                     return {
                         type: COMMON_ACTIONS.SUCCESS.type,
-                        message: `${this.translatedStrings['Details saved successfully']}`
+                        message: `${this.translate.getResolvedTranslation('Details saved successfully', this)}`
                     };
                 }),
                 // handle failure in todoListService.fetchTodoList()
                 catchError((error) => {
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
-                        message: `${this.translatedStrings['Error']}: ${error}`
+                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${error}`
                     });
                 })
             )

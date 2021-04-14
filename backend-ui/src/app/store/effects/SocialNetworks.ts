@@ -26,12 +26,6 @@ type StoreType = { locale: LocaleStore }
 export class SocialNetworksEffects {
 
     translationsToRequest = ['Social Networks saved successfully', 'Social Networks removed successfully', 'Error']
-    translationsObservables: {
-        [translationKey: string]: Observable<string>
-    } = {}
-    translatedStrings: {
-        [translationKey: string]: string
-    } = {}
 
     selectedLocale: string // iso code
     selectedLocale$: Observable<string>
@@ -42,12 +36,7 @@ export class SocialNetworksEffects {
         private translate: TranslationService,
         private store: Store<StoreType>
     ) {
-        this.translationsToRequest.forEach(translationKey => {
-            this.translationsObservables[translationKey] = this.translate.transform(translationKey, this)
-            this.translationsObservables[translationKey].subscribe((data: string) => {
-                this.translatedStrings[translationKey] = data
-            })
-        })
+        this.translate.prefetch(this.translationsToRequest, this)
         this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
         this.selectedLocale$.subscribe((data: string) => {
             this.selectedLocale = data
@@ -80,7 +69,7 @@ export class SocialNetworksEffects {
                 catchError((error) => {
                     return of(COMMON_ACTIONS.FAIL(
                         {
-                            message: `${this.translatedStrings['Error']}: ${JSON.stringify(error)}`
+                            message: `${this.translate.getResolvedTranslation('Error', this)}: ${JSON.stringify(error)}`
                         }
                     ))
                 })
@@ -108,7 +97,7 @@ export class SocialNetworksEffects {
             return this.dataService.setData(MutateSocialNetworks, vars).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
-                        message: `${this.translatedStrings['Social Networks saved successfully']}`
+                        message: `${this.translate.getResolvedTranslation('Social Networks saved successfully', this)}`
                     }),
                     SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS({
                         language: this.selectedLocale
@@ -119,7 +108,7 @@ export class SocialNetworksEffects {
                     const { error: {errors = []} = {} } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)
                     return of(COMMON_ACTIONS.FAIL({
-                        message: `${this.translatedStrings['Error']}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
+                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
                         timeout: 2000
                     }))
                 })
@@ -147,7 +136,7 @@ export class SocialNetworksEffects {
             return this.dataService.setData(RemoveNetwork, vars).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
-                        message: `${this.translatedStrings['Social Networks removed successfully']}`
+                        message: `${this.translate.getResolvedTranslation('Social Networks removed successfully', this)}`
                     }),
                     SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS({
                         language: this.selectedLocale
@@ -158,7 +147,7 @@ export class SocialNetworksEffects {
                     const { error: {errors = []} = {} } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)
                     return of(COMMON_ACTIONS.FAIL({
-                        message: `${this.translatedStrings['Error']}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
+                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
                         timeout: 2000
                     }))
                 })

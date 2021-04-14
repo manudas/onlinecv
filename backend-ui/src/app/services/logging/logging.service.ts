@@ -15,3 +15,5 @@ export const log = ({
   } = {}): void => isDevMode() ? console[Level[level]] (...(Array.isArray(messages) ? messages : [messages])) : null
 
 export const logEasy = (...messages: Array<any>) => log({messages: messages})
+
+export const logEasyError = (...messages: Array<any>) => log({level: Level.error, messages: messages})

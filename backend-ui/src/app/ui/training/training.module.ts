@@ -12,11 +12,14 @@ import { TranslationsModule } from '@services/translation';
 
 import { TrainingComponent } from './training.component';
 import { TrainingDialogComponent } from './training-dialog.component';
+import { UnderscoreModule } from '@app/services/underscore';
+import { ConfirmComponent } from './confirm.component';
 
 @NgModule({
   declarations: [
     TrainingComponent,
     TrainingDialogComponent,
+    ConfirmComponent,
   ],
   imports: [
     CommonModule,
@@ -25,6 +28,7 @@ import { TrainingDialogComponent } from './training-dialog.component';
     CardModule,
     ReactiveFormsModule,
     TranslationsModule,
+    UnderscoreModule,
   ],
   exports: [TrainingComponent]
 })
