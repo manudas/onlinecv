@@ -231,8 +231,7 @@ console.log('would it be good to accompany alt and title in the image in the fro
   }
 
   addNetwork(networkData: SocialNetwork) {
-    this.editNetworkValues(this.socialNetworks.length, networkData)
-    // this.socialNetworks = [...this.socialNetworks, { ...networkData, language: this.selectedLocale, order: this.socialNetworks.length }]
+    this.editNetworkValues(this.socialNetworks.length, {...networkData, language: this.selectedLocale, order: this.socialNetworks.length})
   }
 
   deleteNetwork(index: number) {

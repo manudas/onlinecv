@@ -1,22 +1,32 @@
 // import { SocialNetwork, SocialNetworkFetched } from '@app/types/SocialNetworks'
+import { TrainingFetched, TrainingInterface } from '@app/types'
 import { createAction, props } from '@ngrx/store'
 
-// export const SAVE_NETWORKS =  createAction(
-//     '[SocialNetwork/Details Component] SaveSocialNetworks',
-//     props<{ socialNetworks: SocialNetwork[] }>()
-// )
+export const SAVE_TRAININGS =  createAction(
+    '[Training Component] SaveTrainings',
+    props<{
+        trainings: TrainingInterface[]
+        trainingType: string
+    }>()
+)
 
-// export const FETCH_NETWORKS = createAction(
-//     '[SocialNetwork/Details Component] FetchSocialNetworks',
-//     props<{ language: string }>()
-// )
+export const FETCH_TRAINING = createAction(
+    '[Training Component] FetchTrainings',
+    props<{
+        language: string
+        trainingType: string
+    }>()
+)
 
-// export const NETWORKS_FETCHED = createAction(
-//     '[SocialNetwork/Details Component] Social Networks fetched',
-//     props<SocialNetworkFetched>()
-// )
+export const TRAINING_FETCHED = createAction(
+    '[Training Component] Trainings fetched',
+    props<TrainingFetched>()
+)
 
 export const REMOVE_TRAINING = createAction(
-    '[Training Component] RemoveNetwork',
-    props<{ id: string }>()
+    '[Training Component] RemoveTraining',
+    props<{
+        id: string
+        trainingType: string
+    }>()
 )

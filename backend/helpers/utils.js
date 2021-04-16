@@ -1,4 +1,5 @@
 
+
 // function promisedProperties(object) {
 //     let promisedProperties = [];
 //     const objectKeys = Object.keys(object);
@@ -12,10 +13,18 @@
 //         });
 // }
 
-
-const promisedProperties = async (object = {}) => {
+const resolvedObjectPromises = async (object = {}) => {
     const keys = Object.keys(object);
     return (await Promise.all(Object.values(object))).reduce((previous, current, index) => ({...previous, [keys[index]]: current}), {});
 };
 
-module.exports = promisedProperties;
+const cleanObject = (object, keyMapping) => Object.entries(object).reduce((prev, [currKey, currVal]) => {
+    currVal !== null && (prev[keyMapping[currKey] ? keyMapping[currKey] : currKey] = currVal);
+    return prev;
+}, {});
+
+
+module.exports = {
+    resolvedObjectPromises,
+    cleanObject
+}

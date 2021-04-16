@@ -7,8 +7,8 @@
     >
         {{
             editingIndex === null
-                ? ('Add a new training: ' | translate | async) + (TrainingType[trainingFormGroup.get('type').value] | translate | async | titlecase)
-                : ('Editing your training: ' | translate | async) + (TrainingType[trainingFormGroup.get('type').value] | translate | async | titlecase)
+                ? ('Add a new training: ' | translate | async) + (trainingFormGroup.get('type').value | translate | async | titlecase)
+                : ('Editing your training: ' | translate | async) + (trainingFormGroup.get('type').value | translate | async | titlecase)
         }}
     </div>
 </h2>
@@ -211,7 +211,7 @@
                     <input
                         class='form-control'
                         placeholder="{{ 'Optional: write down here an average of your marks during the training course' | translate | async }}"
-                        formControlName="average_school"
+                        formControlName="average_grade"
                     >
                     <p
                         class='help-block'

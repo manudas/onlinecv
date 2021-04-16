@@ -1,3 +1,5 @@
+const cleanObject = require('@helpers/utils').cleanObject;
+
 module.exports = {
     Query: {
         details: async({ // 1st arg: arguments
@@ -22,13 +24,7 @@ module.exports = {
             },
         }, info
         ) => {
-            const cleanedDetails = Object.entries(details).reduce((prev, [currKey, currVal], currIndex) => {
-                if (currVal !== null) { // can be 0
-                    prev[currKey !== 'id' ? currKey : '_id'] = currVal;
-                }
-                return prev;
-            }, {});
-
+            const cleanedDetails = cleanObject(details, {'id': '_id'});
             const DetailsRemovalResult = await DetailsModel.remove({ language: cleanedDetails.language }, { justOne: true });
             const document = new DetailsModel(cleanedDetails);
             const DetailsWriteResult = await document.save();

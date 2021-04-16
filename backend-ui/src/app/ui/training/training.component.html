@@ -27,7 +27,7 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: TrainingType.others}"
+        [panelParameters]="{type: TrainingType.other}"
         [cardTitle]="'Other' | translate | async">
     </app-card>
 </ng-template>
@@ -77,7 +77,7 @@
     >
     style this (watch classes)
         <button
-            (click)="openTrainingDialog(type)"
+            (click)="openTrainingDialog(getTrainingTypeName(type))"
             [className]="'btn btn-outline-info'"
             type='button'
             ngbButton
@@ -98,7 +98,7 @@
 >
     <button [className]="'btn btn-info btn-training-row'"
         ngbButton
-        (click)="editTraining(index, type)"
+        (click)="editTraining(index, getTrainingTypeName(type))"
     >
         <fa-icon
             [icon]="faEdit"

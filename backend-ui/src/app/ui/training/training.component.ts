@@ -19,9 +19,10 @@ import { Observable } from 'rxjs'
 import { TrainingDialogComponent } from './training-dialog.component'
 import { TranslationService } from '@app/services/translation/translation.service'
 import { ConfirmComponent } from './confirm.component'
+import { LocaleStore } from '@app/types/Locale'
 
 
-type StoreType = { official: TrainingInterface[] } & { computer: TrainingInterface[] } & { other: TrainingInterface[] }
+type StoreType = { locale: LocaleStore } & {trainings: { official: TrainingInterface[] } & { computer: TrainingInterface[] } & { other: TrainingInterface[] }}
 @Component({
   selector: 'app-training',
   templateUrl: './training.component.html',
@@ -41,7 +42,7 @@ export class TrainingComponent implements OnInit {
     'tag',
     'description',
     'school',
-    'average_score',
+    'average_grade',
     'edit',
     'delete',
     'order',
@@ -60,6 +61,8 @@ export class TrainingComponent implements OnInit {
   dragDisabled: boolean = true
 
   translationsToRequest = ['Training deleted successfully']
+  selectedLocale: string // iso code
+  selectedLocale$: Observable<string>
 
   constructor(private activatedRoute:ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog, private translate: TranslationService) {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -71,9 +74,11 @@ export class TrainingComponent implements OnInit {
       }
     })
 
-    this.officialData$ = this.store.pipe(select(state => state?.official))
-    this.computerData$ = this.store.pipe(select(state => state?.computer))
-    this.otherData$ = this.store.pipe(select(state => state?.other))
+    this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
+
+    this.officialData$ = this.store.pipe(select(state => state?.trainings?.official))
+    this.computerData$ = this.store.pipe(select(state => state?.trainings?.computer))
+    this.otherData$ = this.store.pipe(select(state => state?.trainings?.other))
 
     this.translate.prefetch(this.translationsToRequest, this)
 
@@ -82,13 +87,32 @@ export class TrainingComponent implements OnInit {
   public isTrainingActive = (trainingType: string) => this.type === TrainingType.all || this.type === TrainingType[trainingType]
 
   ngOnInit(): void {
+    this.selectedLocale$.subscribe((data: string) => {
+      this.selectedLocale = data
+    })
     this.officialData$.subscribe((data: TrainingInterface[]) => data ? this.officialData = data : null)
     this.computerData$.subscribe((data: TrainingInterface[]) => data ? this.computerData = data : null)
     this.otherData$.subscribe((data: TrainingInterface[]) => data ? this.otherData = data : null)
+
+    if (this.type !== TrainingType.all) {
+      TRAINING_ACTIONS.FETCH_TRAINING({
+        language: this.selectedLocale,
+        trainingType: TrainingType[this.type]
+      })
+    } else {
+      Object.values(TrainingType).filter((type) => typeof type === 'string' ).forEach((type: string) => {
+        type !== TrainingType[TrainingType.all] && this.store.dispatch(
+          TRAINING_ACTIONS.FETCH_TRAINING({
+            language: this.selectedLocale,
+            trainingType: type
+          })
+        )
+      })
+    }
   }
 
 
-  openTrainingDialog(data: EditTrainingStructure | TrainingType): void {
+  openTrainingDialog(data: EditTrainingStructure | string): void {
     const dialogRef = this.matDialog.open(TrainingDialogComponent, {
       width: '80%',
       data
@@ -115,16 +139,20 @@ export class TrainingComponent implements OnInit {
   }
 
   editTrainingValues(index: number, trainingData: TrainingInterface) {
-    const dataIndex = `${TrainingType[trainingData.type]}Data`
-    this[dataIndex] = [
+    const dataIndex = `${trainingData.type}Data`
+    const newTrainings = [
       ...this[dataIndex].slice(0, index),
       { ...trainingData},
       ...this[dataIndex].slice(index + 1)
     ];
+    this.store.dispatch(TRAINING_ACTIONS.SAVE_TRAININGS({
+      trainings: newTrainings,
+      trainingType: trainingData.type
+    }))
   }
 
-  editTraining(index: number, type: TrainingType) {
-    const training = this[`${TrainingType[type]}Data`][index]
+  editTraining(index: number, type: string) {
+    const training = this[`${type}Data`][index]
     this.openTrainingDialog({
       training,
       index
@@ -132,11 +160,19 @@ export class TrainingComponent implements OnInit {
   }
 
   addTraining(trainingData: TrainingInterface) {
-    this.editTrainingValues(this[`${TrainingType[trainingData.type]}Data`].length, trainingData)
+    this.editTrainingValues(this[`${trainingData.type}Data`].length, {
+      ...trainingData,
+      language: this.selectedLocale,
+      order: this[`${trainingData.type}Data`].length
+    })
   }
 
   get TrainingType() {
     return TrainingType
+  }
+
+  getTrainingTypeName(type: TrainingType) {
+    return TrainingType[type]
   }
 
   getTrainingSource(type: TrainingType) {
@@ -167,19 +203,10 @@ export class TrainingComponent implements OnInit {
   }
 
   deleteTraining(trainingIndex: number, type: TrainingType) {
-    const training = this[`${TrainingType[type]}Data`][trainingIndex]
-    if (!training.id) { // is not stored yet in DB
-      this[`${TrainingType[type]}Data`] = [
-        ...this[`${TrainingType[type]}Data`].slice(0, trainingIndex),
-        ...this[`${TrainingType[type]}Data`].slice(trainingIndex + 1)
-      ];
-      this.store.dispatch(COMMON_ACTIONS.SUCCESS({
-        message: this.translate.getResolvedTranslation('Training deleted successfully', this)
-      }))
-    } else {
-      this.store.dispatch(TRAINING_ACTIONS.REMOVE_TRAINING({
-        id: training.id
-      }))
-    }
+    const training = this[`${type}Data`][trainingIndex]
+    this.store.dispatch(TRAINING_ACTIONS.REMOVE_TRAINING({
+      id: training.id,
+      trainingType: type.toString()
+    }))
   }
 }

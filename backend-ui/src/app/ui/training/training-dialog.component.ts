@@ -25,7 +25,7 @@ export class TrainingDialogComponent {
             finish_date: String,
             final_project: String,
             school_url: String,
-            average_school: Float,
+            average_grade: Float,
             keywords: [String]!,
             language: String!
         }
@@ -42,7 +42,7 @@ export class TrainingDialogComponent {
         finish_date: new FormControl(null),
         final_project: new FormControl(null),
         school_url: new FormControl(null),
-        average_school: new FormControl(null),
+        average_grade: new FormControl(null),
 
 
 
@@ -52,8 +52,8 @@ export class TrainingDialogComponent {
 
     editingIndex: number = null
 
-    constructor( public dialogRef: MatDialogRef<TrainingDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditTrainingStructure & TrainingType) {
-        if (isNaN(data)) { // is EditTrainingStructure type
+    constructor( public dialogRef: MatDialogRef<TrainingDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditTrainingStructure | string) {
+        if (!(typeof data === 'string' || data instanceof String)) { // is EditTrainingStructure type
             const {
                 index,
                 training

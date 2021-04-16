@@ -3,7 +3,7 @@ import {
     MatDialogRef,
     MAT_DIALOG_DATA,
 } from "@angular/material/dialog"
-import { TrainingInterface, TrainingType } from "@app/types/Training";
+import { TrainingInterface } from "@app/types/Training";
 
 type data = {
     index: number
@@ -30,7 +30,7 @@ export class ConfirmComponent {
         this.training = training
     }
 
-    close(index?: number, type?: TrainingType) {
+    close(index?: number, type?: string) {
         /*
          * this is to get the message in the caller:
 

@@ -1,4 +1,5 @@
-var ObjectID = require('mongodb').ObjectID;
+const ObjectID = require('mongodb').ObjectID;
+const cleanObject = require('@helpers/utils').cleanObject;
 
 module.exports = {
     Query: {
@@ -39,12 +40,7 @@ module.exports = {
 
             const SocialNetworkWriteResult = await Promise.all(socialNetworks.map(async network => {
 
-                const cleanedNetwork = Object.entries(network).reduce((prev, [currKey, currVal], currIndex) => {
-                    if (currVal !== null) { // can be 0
-                        prev[currKey !== 'id' ? currKey : '_id'] = currVal;
-                    }
-                    return prev;
-                }, {});
+                const cleanedNetwork = cleanObject(network, {'id': '_id'});
 
                 if (!cleanedNetwork._id) {
                     cleanedNetwork._id = new ObjectID();

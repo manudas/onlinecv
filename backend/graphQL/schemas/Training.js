@@ -14,7 +14,7 @@
 module.exports =
     `
   type Training {
-    id: ID!
+    _id: ID!,
     tag: String!,
     description: String,
     type: String!,
@@ -23,14 +23,14 @@ module.exports =
     finish_date: String,
     final_project: String,
     school_url: String,
-    average_school: Float,
-    keywords: [String]!,
+    average_grade: Float,
+    keywords: [String],
     language: String!,
     order: Int!
   }
 
   input TrainingInput {
-    id: ID
+    id: ID,
     tag: String!,
     description: String,
     type: String!,
@@ -39,18 +39,18 @@ module.exports =
     finish_date: String,
     final_project: String,
     school_url: String,
-    average_school: Float,
-    keywords: [String]!,
+    average_grade: Float,
+    keywords: [String],
     language: String!,
     order: Int!
   }
 
   extend type Query {
-    Trainings(language: String!): [Training]!
+    Trainings(language: String!, type: String!): [Training]!
   }
 
   extend type Mutation {
-    putTraining(Training: TrainingInput!): Training!
+    putTrainings(trainings: [TrainingInput]!): [Training]!
     removeTraining(id: ID!): Boolean!
   }
 `;
