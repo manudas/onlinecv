@@ -20,6 +20,7 @@ import { TrainingDialogComponent } from './training-dialog.component'
 import { TranslationService } from '@app/services/translation/translation.service'
 import { ConfirmComponent } from './confirm.component'
 import { LocaleStore } from '@app/types/Locale'
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 
 
 type StoreType = { locale: LocaleStore } & {trainings: { official: TrainingInterface[] } & { computer: TrainingInterface[] } & { other: TrainingInterface[] }}
@@ -93,12 +94,15 @@ export class TrainingComponent implements OnInit {
     this.officialData$.subscribe((data: TrainingInterface[]) => data ? this.officialData = data : null)
     this.computerData$.subscribe((data: TrainingInterface[]) => data ? this.computerData = data : null)
     this.otherData$.subscribe((data: TrainingInterface[]) => data ? this.otherData = data : null)
+    this.activatedRoute.paramMap.subscribe(() => this.fetchData())
+  }
 
+  fetchData() {
     if (this.type !== TrainingType.all) {
-      TRAINING_ACTIONS.FETCH_TRAINING({
+      this.store.dispatch(TRAINING_ACTIONS.FETCH_TRAINING({
         language: this.selectedLocale,
         trainingType: TrainingType[this.type]
-      })
+      }))
     } else {
       Object.values(TrainingType).filter((type) => typeof type === 'string' ).forEach((type: string) => {
         type !== TrainingType[TrainingType.all] && this.store.dispatch(
@@ -110,7 +114,6 @@ export class TrainingComponent implements OnInit {
       })
     }
   }
-
 
   openTrainingDialog(data: EditTrainingStructure | string): void {
     const dialogRef = this.matDialog.open(TrainingDialogComponent, {
@@ -145,9 +148,13 @@ export class TrainingComponent implements OnInit {
       { ...trainingData},
       ...this[dataIndex].slice(index + 1)
     ];
+    this.dispatchSave(newTrainings, trainingData.type)
+  }
+
+  dispatchSave(data, type) {
     this.store.dispatch(TRAINING_ACTIONS.SAVE_TRAININGS({
-      trainings: newTrainings,
-      trainingType: trainingData.type
+      trainings: data,
+      trainingType: type
     }))
   }
 
@@ -208,5 +215,29 @@ export class TrainingComponent implements OnInit {
       id: training.id,
       trainingType: type.toString()
     }))
+  }
+
+  onDragStart($event) {
+    const draggingElement: HTMLElement = document.querySelector('mat-row.cdk-drag-preview')
+    if (draggingElement) {
+      draggingElement.style['box-shadow'] =
+        `0 5px 5px -3px rgba(0, 0, 0, 0.2),
+        0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12)`
+    }
+  }
+
+  onDrop(event: CdkDragDrop<TrainingInterface[]>) {
+    this.dragDisabled = true
+    const type = event.item.data.type
+    if (event.previousIndex !== event.currentIndex) {
+      const currentArr = [...this[`${type}Data`]]
+      moveItemInArray(currentArr, event.previousIndex, event.currentIndex)
+      // let's assign the new order properties inside the reordered list of objects
+      const newArr = currentArr.map((currentTraining, indexInArr): TrainingInterface  => {
+        return {...currentTraining, order: indexInArr}
+      })
+      this.dispatchSave(newArr, type)
+    }
   }
 }

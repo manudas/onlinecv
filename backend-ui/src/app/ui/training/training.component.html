@@ -37,7 +37,14 @@
 >
     <mat-table
         *ngIf="getTrainingSource(type).length"
-        [dataSource]="getTrainingSource(type)">
+        [dataSource]="getTrainingSource(type)"
+
+        cdkDropList
+        [cdkDropListData]="getTrainingSource(type)"
+        (cdkDropListDropped)="onDrop($event)"
+        [cdkDropListDisabled]="dragDisabled"
+
+    >
         <ng-container *ngFor="let col of colsToRender; let colIndex = index" matColumnDef="{{col}}">
             <mat-header-cell
                 *matHeaderCellDef
@@ -69,7 +76,12 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="colsToRender"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: colsToRender"></mat-row>
+        <mat-row
+            (cdkDragStarted)="onDragStart($event)"
+            cdkDrag
+            [cdkDragData]="row"
+            *matRowDef="let row; columns: colsToRender"
+        ></mat-row>
     </mat-table>
 
     <div

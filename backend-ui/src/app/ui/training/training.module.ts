@@ -14,6 +14,7 @@ import { TrainingComponent } from './training.component';
 import { TrainingDialogComponent } from './training-dialog.component';
 import { UnderscoreModule } from '@app/services/underscore';
 import { ConfirmComponent } from './confirm.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ConfirmComponent } from './confirm.component';
   ],
   imports: [
     CommonModule,
+    DragDropModule,
     MatTableModule,
     FontAwesomeModule,
     CardModule,

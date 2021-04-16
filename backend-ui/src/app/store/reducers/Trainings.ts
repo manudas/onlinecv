@@ -10,7 +10,7 @@ const trainingReducer = createReducer(
     Trainings
   }) => {
     // do some more logic here if needed
-    return { ...state, [trainingType]: Trainings}}
+    return { ...state, [trainingType]: [...Trainings]}}
   ),
 )
 
