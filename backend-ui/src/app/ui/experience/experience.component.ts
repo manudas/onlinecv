@@ -108,7 +108,11 @@ export class ExperienceComponent implements OnInit {
             index,
             experience
           } = result
-          this.editExperienceValues(index, experience)
+          this.editExperienceValues(index, {
+            ...experience,
+            language: this.selectedLocale,
+            order: index
+          })
         } else {
           this.addExperience(result)
         }

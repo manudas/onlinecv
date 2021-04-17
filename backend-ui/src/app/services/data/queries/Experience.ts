@@ -52,6 +52,6 @@ export const MutateExperiences =
 export const RemoveExperience =
 `
     mutation RemoveExperience($id: ID!) {
-        removeExperience(id: $id)
+        removeWorkExperience(id: $id)
     }
 `

@@ -13,7 +13,7 @@
     <div
         [className]="'paddedContent'"
     >
-        {{ ('Your training ' | translate | async) + training.tag + ('will be deleted permanently' | translate | async) }}
+        {{ ('Your experience ' | translate | async) + experience.role + ('will be deleted permanently' | translate | async) }}
     </div>
 </div>
 <div mat-dialog-actions>
@@ -32,7 +32,7 @@
             [className]="'btn submitButton'"
             type="submit"
             ngbButton
-            (click)="close(index, training.type)"
+            (click)="close(index, experience.type)"
         >
             {{ 'Continue' | translate | async }}
         </button>

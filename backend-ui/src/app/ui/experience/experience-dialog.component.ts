@@ -64,15 +64,15 @@ export class ExperienceDialogComponent {
 
     submitHandler($event): void {
         if (this.experienceFormGroup.valid /* && this.socialNetworksFormGroup.valid*/) {
-            const training = this.experienceFormGroup.value
+            const experience = this.experienceFormGroup.value
             let result
             if (this.editingIndex !== null) {
                 result = {
                     index: this.editingIndex,
-                    training
+                    experience
                 }
             } else {
-                result = training
+                result = experience
             }
             this.close(result);
         } else {

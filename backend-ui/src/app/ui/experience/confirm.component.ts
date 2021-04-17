@@ -3,11 +3,11 @@ import {
     MatDialogRef,
     MAT_DIALOG_DATA,
 } from "@angular/material/dialog"
-import { TrainingInterface } from "@app/types/Training";
+import { ExperienceInterface } from "@app/types/Experience";
 
 type data = {
     index: number
-    training: TrainingInterface
+    experience: ExperienceInterface
 }
 
 @Component({
@@ -16,18 +16,18 @@ type data = {
 })
 export class ConfirmComponent {
 
-    training: TrainingInterface
+    experience: ExperienceInterface
     index: number
 
     constructor( public dialogRef: MatDialogRef<ConfirmComponent>, @Inject(MAT_DIALOG_DATA) public data: data) {
 
         const {
             index,
-            training
+            experience
         } = data
 
         this.index = index
-        this.training = training
+        this.experience = experience
     }
 
     close(index?: number, type?: string) {

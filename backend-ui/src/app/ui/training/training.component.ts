@@ -126,7 +126,11 @@ export class TrainingComponent implements OnInit {
             index,
             training
           } = result
-          this.editTrainingValues(index, training)
+          this.editTrainingValues(index, {
+            ...training,
+            language: this.selectedLocale,
+            order: index
+          })
         } else {
           this.addTraining(result)
         }
