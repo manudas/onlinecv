@@ -11,3 +11,5 @@ export * from './Message'
 export * from './SocialNetworks'
 
 export * from './Training'
+
+export * from './Experience'

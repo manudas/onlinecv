@@ -10,17 +10,21 @@ import { CardModule } from '@app/ui/card/card.module'
 import { TranslationsModule } from '@services/translation';
 
 import { ExperienceComponent } from './experience.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { UnderscoreModule } from '@app/services/underscore';
 
 @NgModule({
   declarations: [
     ExperienceComponent,
   ],
   imports: [
-    CommonModule,
-    MatTableModule,
-    FontAwesomeModule,
     CardModule,
+    CommonModule,
+    DragDropModule,
+    FontAwesomeModule,
+    MatTableModule,
     TranslationsModule,
+    UnderscoreModule,
   ],
   exports: [ExperienceComponent]
 })

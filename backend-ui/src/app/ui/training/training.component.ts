@@ -33,7 +33,7 @@ export class TrainingComponent implements OnInit {
 
   faArrowsAlt: IconDefinition = faArrowsAlt
   faEdit: IconDefinition = faEdit
-  faTable: IconDefinition  = faTable;
+  faTable: IconDefinition  = faTable
   faTrash: IconDefinition = faTrash
 
   type: TrainingType = null;

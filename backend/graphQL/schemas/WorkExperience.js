@@ -3,7 +3,7 @@
     description: String,
     start_date: Date,
     finish_date: Date,
-    post: String,
+    role: String,
     company: String,
     company_url: String,
     keywords: [],
@@ -17,11 +17,12 @@ module.exports =
     description: String,
     start_date: String,
     finish_date: String,
-    post: String,
+    role: String,
     company: String,
     company_url: String,
     keywords: [String]!,
-    language: String!
+    language: String!,
+    order: Int!
   }
 
   input WorkExperienceInput {
@@ -30,11 +31,12 @@ module.exports =
     description: String,
     start_date: String,
     finish_date: String,
-    post: String,
+    role: String,
     company: String,
     company_url: String,
     keywords: [String]!,
-    language: String!
+    language: String!,
+    order: Int!
   }
 
   extend type Query {
