@@ -25,11 +25,11 @@ export enum ExperienceType {
 
 export type ExperienceInterface = {
     id: string
-    name: string
+    role: string
     description: string
     start_date: string
     finish_date: string
-    role: string
+    type: string
     company: string
     company_url: string
     keywords: string[]
@@ -47,7 +47,7 @@ export type EditExperienceStructure = {
 //     training: TrainingInterface
 // }
 
-// export type TrainingFetched = {
-//     trainingType: string
-//     Trainings: TrainingInterface[]
-// }
+export type ExperienceFetched = {
+    experienceType: string
+    Experiences: ExperienceInterface[]
+}

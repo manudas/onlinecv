@@ -1,0 +1,189 @@
+<h2
+    mat-dialog-title
+    [className]="''"
+>
+    <div
+        [className]="'paddedContent'"
+    >
+        {{
+            editingIndex === null
+                ? ('Add a new experience: ' | translate | async) + (experienceFormGroup.get('type').value | translate | async | titlecase)
+                : ('Editing your experience: ' | translate | async) + (experienceFormGroup.get('type').value | translate | async | titlecase)
+        }}
+    </div>
+</h2>
+
+<div mat-dialog-content>
+    <div
+        [className]="'paddedContent'"
+    >
+        <ng-container *ngTemplateOutlet="experienceTemplate"></ng-container>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div
+        [className]="'paddedContent'"
+    >
+        <button
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+            (click)="close()"
+        >
+            {{ 'Cancel' | translate | async }}
+        </button>
+        <button
+            [className]="'btn submitButton'"
+            type="submit"
+            ngbButton
+            (click)="submitHandler($event)"
+        >
+            {{ editingIndex === null ? ('Add' | translate | async) : ('Edit' | translate | async) }}
+        </button>
+    </div>
+</div>
+
+<ng-template #experienceTemplate>
+    <form
+        [formGroup]="experienceFormGroup"
+    >
+        <div [className]="'row'">
+            <div
+                [className]="'col-md-6 col-sm-12'"
+            >
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Add your role' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Enter the role name' | translate | async }}"
+                        placement="top"
+                        formControlName="role"
+                    >
+                    <p
+                        class='help-block'
+                        [ngStyle]="{
+                            'margin-bottom': experienceFormGroup.get('role').touched && experienceFormGroup.get('role').errors ? 0 : 'initial'
+                        }"
+                    >
+                        {{ 'E.g: Frontend engineer' | translate | async }}
+                    </p>
+                    <small
+                            *ngIf="experienceFormGroup.get('role').touched && experienceFormGroup.get('role').errors"
+                            [className]="'text-danger'"
+                    >
+                        {{ 'You should provide a valid role for your experience' | translate | async }}
+                    </small>
+                </div>
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Please enter a description' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Optional: a brief description of your experience' | translate | async }}"
+                        formControlName="description"
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'E.g.: Translating mockups to real world web apps' | translate | async }}
+                    </p>
+                </div>
+
+
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Please your starting date on this role' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Optional: the date you started to work in this role' | translate | async }}"
+                        formControlName="start_date"
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'E.g.: August 2019' | translate | async }}
+                    </p>
+                </div>
+            </div>
+            <div
+                [className]="'col-md-6 col-sm-12'"
+            >
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'ATENTO MIRAR SI SE PUEDEN VALIDAR QUE SEAN FECHAS Y PONER DATEPICKER CON SOLO MES Y AÑO Provide your finishing date on this role' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Optional: the date in which you finished your experience' | translate | async }}"
+                        formControlName="finish_date"
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'E.g.: To the present day' | translate | async }}
+                    </p>
+                </div>
+
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Would it be interesting to include the company name?' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Optional: the company you worked for, if any' | translate | async }}"
+                        formControlName="company"
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'E.g.: 888 Spectate' | translate | async }}
+                    </p>
+                </div>
+
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Do you worked for a company with a web page?' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Optional: you could include your company web address here' | translate | async }}"
+                        formControlName="company_url"
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'E.g.: http://888sport.es' | translate | async }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-template>

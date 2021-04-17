@@ -1,6 +1,8 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import { Component, OnInit, Input } from '@angular/core'
+import { MatDialog } from '@angular/material/dialog'
 import { ActivatedRoute } from '@angular/router'
+import { logEasy } from '@app/services/logging'
 import { EditExperienceStructure, ExperienceInterface, ExperienceType } from '@app/types/Experience'
 import { LocaleStore } from '@app/types/Locale'
 
@@ -13,6 +15,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { select, Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
+import * as EXPERIENCE_ACTIONS from '@store_actions/Experience'
+import { ConfirmComponent } from './confirm.component'
+import { ExperienceDialogComponent } from './experience-dialog.component'
 
 type StoreType = { locale: LocaleStore } & {experience: { professional: ExperienceInterface[] } & { ong: ExperienceInterface[] } & { other: ExperienceInterface[] }}
 @Component({
@@ -31,14 +36,11 @@ export class ExperienceComponent implements OnInit {
 
   colsToRender = [
     'id',
-    'name',
     'role',
-    'description',
     'company',
-    'company_url',
-    'start_date',
-    'finish_date',
-    'keywords',
+    'edit',
+    'delete',
+    'order',
   ]
 
   // initial state of dragging for reordering working experience
@@ -56,7 +58,7 @@ export class ExperienceComponent implements OnInit {
 
   @Input() title: string = 'Experience'
 
-  constructor(private activatedRoute:ActivatedRoute, private store: Store<StoreType>) {
+  constructor(private activatedRoute:ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog) {
     this.activatedRoute.paramMap.subscribe(params => {
       const passedType: string = params.get('type')
       if (!(passedType in ExperienceType)) {
@@ -79,6 +81,13 @@ export class ExperienceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.selectedLocale$.subscribe((data: string) => this.selectedLocale = data)
+
+    this.professionalData$.subscribe((data: ExperienceInterface[]) => data ? this.professionalData = data : null)
+    this.ongData$.subscribe((data: ExperienceInterface[]) => data ? this.ongData = data : null)
+    this.otherData$.subscribe((data: ExperienceInterface[]) => data ? this.otherData = data : null)
+
+    this.activatedRoute.paramMap.subscribe(() => this.fetchData())
   }
 
   getExperienceTypeName(type: ExperienceType) {
@@ -86,25 +95,25 @@ export class ExperienceComponent implements OnInit {
   }
 
   openExperienceDialog(data: EditExperienceStructure | string): void {
-    // const dialogRef = this.matDialog.open(TrainingDialogComponent, {
-    //   width: '80%',
-    //   data
-    // })
+    const dialogRef = this.matDialog.open(ExperienceDialogComponent, {
+      width: '80%',
+      data
+    })
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
-    //   if (result) {
-    //     if (this.isTrainingEdit(result)) {
-    //       const {
-    //         index,
-    //         training
-    //       } = result
-    //       this.editTrainingValues(index, training)
-    //     } else {
-    //       this.addTraining(result)
-    //     }
-    //   }
-    // })
+    dialogRef.afterClosed().subscribe(result => {
+      logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
+      if (result) {
+        if (this.isExperienceEdit(result)) {
+          const {
+            index,
+            experience
+          } = result
+          this.editExperienceValues(index, experience)
+        } else {
+          this.addExperience(result)
+        }
+      }
+    })
   }
 
   onDragStart($event) {
@@ -128,40 +137,7 @@ export class ExperienceComponent implements OnInit {
         return {...currentTraining, order: indexInArr}
       })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//      this.dispatchSave(newArr, type)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      this.dispatchSave(newArr, type)
     }
   }
 
@@ -174,33 +150,91 @@ export class ExperienceComponent implements OnInit {
   }
 
   openExperienceRemovalConfirmDialog(experienceIndex: number, type: ExperienceType): void {
-    // const experience = this[`${ExperienceType[type]}Data`][experienceIndex]
-    // const dialogRef = this.matDialog.open(ConfirmComponent, {
-    //   width: '80%',
-    //   data: {
-    //     index: experienceIndex,
-    //     experience
-    //   }
-    // })
+    const experience = this[`${ExperienceType[type]}Data`][experienceIndex]
+    const dialogRef = this.matDialog.open(ConfirmComponent, {
+      width: '80%',
+      data: {
+        index: experienceIndex,
+        experience
+      }
+    })
 
-    // dialogRef.afterClosed().subscribe(({
-    //   indexToRemove = null,
-    //   type = null,
-    // } = {}) => {
-    //   logEasy(`The dialog was closed.`, indexToRemove !== null ? `The following message was received: ${JSON.stringify(indexToRemove)}` : '');
+    dialogRef.afterClosed().subscribe(({
+      indexToRemove = null,
+      type = null,
+    } = {}) => {
+      logEasy(`The dialog was closed.`, indexToRemove !== null ? `The following message was received: ${JSON.stringify(indexToRemove)}` : '');
 
-    //   if (indexToRemove !== null && type !== null) {
-    //     this.deleteExperience(indexToRemove, type)
-    //   }
+      if (indexToRemove !== null && type !== null) {
+        this.deleteExperience(indexToRemove, type)
+      }
 
-    // })
+    })
   }
 
   editExperience(index: number, type: string) {
+    alert('separar skill y computer skills the otros y ponerlo en su propio menu parece adecuado para reducir la carga de otros. ICONO: RUEDA DENTADA. PUEDE COPIARSE 99% de aqui y training')
     const experience = this[`${type}Data`][index]
     this.openExperienceDialog({
       experience,
       index
     })
   }
+
+
+  deleteExperience(trainingIndex: number, type: ExperienceType) {
+    const experience = this[`${type}Data`][trainingIndex]
+    this.store.dispatch(EXPERIENCE_ACTIONS.REMOVE_EXPERIENCE({
+      id: experience.id,
+      experienceType: type.toString()
+    }))
+  }
+
+  isExperienceEdit(data: ExperienceInterface | EditExperienceStructure | Object = {}): data is EditExperienceStructure {
+    return (data as EditExperienceStructure).index !== undefined
+  }
+
+  editExperienceValues(index: number, experienceData: ExperienceInterface) {
+    const dataIndex = `${experienceData.type}Data`
+    const newTrainings = [
+      ...this[dataIndex].slice(0, index),
+      { ...experienceData},
+      ...this[dataIndex].slice(index + 1)
+    ];
+    this.dispatchSave(newTrainings, experienceData.type)
+  }
+
+  addExperience(experienceData: ExperienceInterface) {
+    this.editExperienceValues(this[`${experienceData.type}Data`].length, {
+      ...experienceData,
+      language: this.selectedLocale,
+      order: this[`${experienceData.type}Data`].length
+    })
+  }
+
+  dispatchSave(data, type) {
+    this.store.dispatch(EXPERIENCE_ACTIONS.SAVE_EXPERIENCES({
+      experiences: data,
+      experienceType: type
+    }))
+  }
+
+  fetchData() {
+    if (this.type !== ExperienceType.all) {
+      this.store.dispatch(EXPERIENCE_ACTIONS.FETCH_EXPERIENCE({
+        language: this.selectedLocale,
+        experienceType: ExperienceType[this.type]
+      }))
+    } else {
+      Object.values(ExperienceType).filter((type) => typeof type === 'string' ).forEach((type: string) => {
+        type !== ExperienceType[ExperienceType.all] && this.store.dispatch(
+          EXPERIENCE_ACTIONS.FETCH_EXPERIENCE({
+            language: this.selectedLocale,
+            experienceType: type
+          })
+        )
+      })
+    }
+  }
+
 }

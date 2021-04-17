@@ -6,8 +6,8 @@ const {
 const collection = 'professional_experience';
 
 const WorkExperienceSchema = new Schema({
-    name: String,
     description: String,
+    type: String, // professional, ong, other
     start_date: Date,
     finish_date: Date,
     role: String,

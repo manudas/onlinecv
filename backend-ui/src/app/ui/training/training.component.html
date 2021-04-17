@@ -2,7 +2,7 @@
 <ng-container *ngIf="isTrainingActive('all'); then separator"></ng-container>
 <ng-container *ngIf="isTrainingActive('computer'); then computerTemplate"></ng-container>
 <ng-container *ngIf="isTrainingActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isTrainingActive('others'); then othersTemplate"></ng-container>
+<ng-container *ngIf="isTrainingActive('other'); then otherTemplate"></ng-container>
 
 
 <ng-template #officialTemplate>
@@ -23,7 +23,7 @@
     </app-card>
 </ng-template>
 
-<ng-template #othersTemplate>
+<ng-template #otherTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"

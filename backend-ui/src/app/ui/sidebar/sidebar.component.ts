@@ -88,7 +88,7 @@ export class SidebarComponent implements OnInit {
         {
           name: 'Other skills',
           url: 'training',
-          urlSegments: 'others',
+          urlSegments: 'other',
           type: 'option',
         }
       ]
@@ -129,11 +129,11 @@ export class SidebarComponent implements OnInit {
         {
           name: 'All',
           url: 'experience',
-          urlSegments: 'proffesional',
           type: 'option',
         },
         {
           name: 'Professional',
+          urlSegments: 'professional',
           url: 'experience',
           type: 'option',
         },
@@ -146,7 +146,7 @@ export class SidebarComponent implements OnInit {
         {
           name: 'Other experiences',
           url: 'experience',
-          urlSegments: 'others',
+          urlSegments: 'other',
           type: 'option',
         }
       ]
@@ -225,15 +225,15 @@ export class SidebarComponent implements OnInit {
           type: 'option',
         },
         {
-          name: 'Proffesional archivements',
+          name: 'Professional archivements',
           url: 'others',
           urlSegments: 'professional-archivements',
           type: 'option',
         },
         {
-          name: 'Proffesional references',
+          name: 'Professional references',
           url: 'others',
-          urlSegments: 'proffesional-references',
+          urlSegments: 'professional-references',
           type: 'option',
         },
         {
