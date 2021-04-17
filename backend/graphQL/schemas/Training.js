@@ -14,41 +14,43 @@
 module.exports =
     `
   type Training {
-    id: ID!
-    name: String!,
+    _id: ID!,
+    tag: String!,
     description: String,
-    type: String,
+    type: String!,
     school: String,
     start_date: String,
     finish_date: String,
     final_project: String,
     school_url: String,
-    average_school: Float,
-    keywords: [String]!,
-    language: String!
+    average_grade: Float,
+    keywords: [String],
+    language: String!,
+    order: Int!
   }
 
   input TrainingInput {
-    id: ID
-    name: String!,
+    id: ID,
+    tag: String!,
     description: String,
-    type: String,
+    type: String!,
     school: String,
     start_date: String,
     finish_date: String,
     final_project: String,
     school_url: String,
-    average_school: Float,
-    keywords: [String]!,
-    language: String!
+    average_grade: Float,
+    keywords: [String],
+    language: String!,
+    order: Int!
   }
 
   extend type Query {
-    Trainings(language: String!): [Training]!
+    Trainings(language: String!, type: String!): [Training]!
   }
 
   extend type Mutation {
-    putTraining(Training: TrainingInput!): Training!
+    putTrainings(trainings: [TrainingInput]!): [Training]!
     removeTraining(id: ID!): Boolean!
   }
 `;

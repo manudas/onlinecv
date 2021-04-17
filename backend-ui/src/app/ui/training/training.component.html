@@ -9,7 +9,7 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{source: officialData}"
+        [panelParameters]="{type: TrainingType.official}"
         [cardTitle]="'Official' | translate | async">
     </app-card>
 </ng-template>
@@ -18,7 +18,7 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{source: computerData}"
+        [panelParameters]="{type: TrainingType.computer}"
         [cardTitle]="'Computer' | translate | async">
     </app-card>
 </ng-template>
@@ -27,30 +27,127 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{source: otherData}"
+        [panelParameters]="{type: TrainingType.other}"
         [cardTitle]="'Other' | translate | async">
     </app-card>
 </ng-template>
 
 <ng-template #panel
-    let-source="source"
+    let-type="type"
 >
-    <mat-table class=""
-        [dataSource]="source">
+    <mat-table
+        *ngIf="getTrainingSource(type).length"
+        [dataSource]="getTrainingSource(type)"
+
+        cdkDropList
+        [cdkDropListData]="getTrainingSource(type)"
+        (cdkDropListDropped)="onDrop($event)"
+        [cdkDropListDisabled]="dragDisabled"
+
+    >
         <ng-container *ngFor="let col of colsToRender; let colIndex = index" matColumnDef="{{col}}">
             <mat-header-cell
                 *matHeaderCellDef
             >
-                {{col === 'id' ? '#' : col | translate | async}}
+            {{ col === 'id' ? '#' : col | noUnderscore | translate | async | titlecase }}
             </mat-header-cell>
-            <mat-cell *matCellDef="let row">{{row[col]}}</mat-cell>
+            <mat-cell *matCellDef="let element; let row; let rowIndex = index">
+
+                <ng-container *ngIf="col === 'edit'"
+                    [ngTemplateOutlet]="editTrainingTemplate"
+                    [ngTemplateOutletContext]="{
+                        rowIndex: rowIndex,
+                        type: type
+                    }"
+                ></ng-container>
+                <ng-container *ngIf="col === 'delete'"
+                    [ngTemplateOutlet]="deleteTrainingTemplate"
+                    [ngTemplateOutletContext]="{
+                        rowIndex: rowIndex,
+                        type: type
+                    }"
+                ></ng-container>
+                <ng-container *ngIf="col === 'order'"
+                    [ngTemplateOutlet]="dragHandle"
+                ></ng-container>
+                <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> {{ element[col] }} </ng-container>
+
+            </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="colsToRender"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: colsToRender"></mat-row>
+        <mat-row
+            (cdkDragStarted)="onDragStart($event)"
+            cdkDrag
+            [cdkDragData]="row"
+            *matRowDef="let row; columns: colsToRender"
+        ></mat-row>
     </mat-table>
+
+    <div
+        [className]="'text-right network-actions'"
+    >
+    style this (watch classes)
+        <button
+            (click)="openTrainingDialog(getTrainingTypeName(type))"
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+        >
+            {{ 'Add Training' | translate | async }}
+        </button>
+    </div>
+
 </ng-template>
 
 <ng-template #separator>
     <div [className]="'separator'"></div>
+</ng-template>
+
+<ng-template #editTrainingTemplate
+    let-index="rowIndex"
+    let-type="type"
+>
+    <button [className]="'btn btn-info btn-training-row'"
+        ngbButton
+        (click)="editTraining(index, getTrainingTypeName(type))"
+    >
+        <fa-icon
+            [icon]="faEdit"
+        ></fa-icon>
+    </button>
+</ng-template>
+
+
+
+<ng-template #deleteTrainingTemplate
+    let-index="rowIndex"
+    let-type="type"
+>margen izq cortado
+    <button [className]="'btn btn-danger btn-network-row'"
+        ngbButton
+        (click)="openTrainingRemovalConfirmDialog(index, type)"
+        >
+        <fa-icon
+            [icon]="faTrash"
+        ></fa-icon>
+    </button>
+</ng-template>
+
+
+<ng-template #dragHandle>
+
+    <fa-icon
+        [ngStyle]="{
+            color: '#737373',
+            marginRight: 'auto',
+            marginLeft: 'auto'
+        }"
+        [icon]="faArrowsAlt"
+        (mousedown)="dragDisabled = false;"
+        (mouseup)="dragDisabled = true;"
+        (touchstart)="dragDisabled = false;"
+        (touchend)="dragDisabled = true;"
+    ></fa-icon>
+
 </ng-template>

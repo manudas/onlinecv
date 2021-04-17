@@ -241,12 +241,6 @@ export class SidebarComponent implements OnInit {
           url: 'others',
           urlSegments: 'other-data',
           type: 'option',
-        },
-        {
-          name: 'Social networks',
-          url: 'others',
-          urlSegments: 'social-networks',
-          type: 'option',
         }
       ]
   }

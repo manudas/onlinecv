@@ -1,0 +1,32 @@
+@import '~bootstrap/scss/bootstrap';
+@import '../../globals/styles';
+
+:host {
+
+    display: block;
+    margin: -24px;
+
+    .paddedContent {
+        padding: 24px;
+    }
+
+    [mat-dialog-title] {
+        background-color: $grey;
+        color: $darkGrey;
+        margin-bottom: 0;
+    }
+
+    [mat-dialog-actions] {
+        background-color: $grey;
+        .submitButton {
+            @extend .btn-outline-secondary;
+            @extend .bg-white;
+            &:hover {
+                @extend .bg-secondary
+            }
+
+            float: right;
+        }
+    }
+
+}

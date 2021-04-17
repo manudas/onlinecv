@@ -13,7 +13,7 @@ const {
     WorkExperienceModel,
 } = require('@models');
 
-const promisedProperties = require('@helpers/promisedProperties');
+const resolvedObjectPromises = require('@helpers/utils').resolvedObjectPromises;
 
 class api_engine {
     constructor() {}
@@ -27,7 +27,7 @@ class api_engine {
                 const details = this.getDetails(parameter);
                 const result_promises = new Object();
                 result_promises['details'] = details;
-                return_val = promisedProperties(result_promises).catch(
+                return_val = resolvedObjectPromises(result_promises).catch(
                     console.error);
                 break;
         }
@@ -73,7 +73,7 @@ class api_engine {
         result_promises['contact_details'] = contact_details;
         const social_networks = this.getSocialNetworks(language);
         result_promises['social_networks'] = social_networks;
-        return promisedProperties(result_promises)
+        return resolvedObjectPromises(result_promises)
             .catch(console.error);
     }
     getTranslations(_language, _module, tag) {

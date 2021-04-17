@@ -6,7 +6,7 @@ const {
 const collection = 'training';
 
 const TrainingSchema = new Schema({
-    name: String,
+    tag: String,
     description: String,
     type: String,
     school: String,
@@ -14,11 +14,13 @@ const TrainingSchema = new Schema({
     finish_date: Date,
     final_project: String,
     school_url: String,
-    average_school: Number,
+    average_grade: Number,
     keywords: [],
-    language: String
+    language: String,
+    order: Number
 }, {
     collection,
+    versionKey: false
 });
 
 const TrainingModel = model(collection, TrainingSchema);

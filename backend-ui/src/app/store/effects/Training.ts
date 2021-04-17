@@ -4,28 +4,28 @@ import { Observable, of } from 'rxjs';
 
 import { switchMap, mergeMap, map, tap, catchError } from 'rxjs/operators';
 
-import * as SOCIAL_NETWORK_ACTIONS from '@store_actions/SocialNetworks'
+import * as TRAINING_ACTIONS from '@store_actions/Training'
 import * as COMMON_ACTIONS from '@store_actions/Common'
 
 import { DataService } from '@services/data/data.service'
 
 import {
-    QuerySocialNetworks,
-    MutateSocialNetworks,
-    RemoveNetwork
+    QueryTrainings,
+    MutateTrainings,
+    RemoveTraining
 } from '@services/data/queries'
 import { TranslationService } from '@app/services/translation/translation.service'
 import { select, Store } from '@ngrx/store';
 import { LocaleStore } from '@app/types/Locale';
-import { SocialNetworkFetched } from '@app/types/SocialNetworks';
+import { TrainingFetched } from '@app/types/Training';
 import { logEasy } from '@app/services/logging/logging.service';
 
 type StoreType = { locale: LocaleStore }
 
 @Injectable()
-export class SocialNetworksEffects {
+export class TrainingEffects {
 
-    translationsToRequest = ['Social Networks saved successfully', 'Social Network removed successfully', 'Error']
+    translationsToRequest = ['Training saved successfully', 'Training removed successfully', 'Error']
 
     selectedLocale: string // iso code
     selectedLocale$: Observable<string>
@@ -48,22 +48,27 @@ export class SocialNetworksEffects {
      * a result of the operation performed
      */
     @Effect()
-    public fetchSocialNetworks$: Observable<any> = this.actions$.pipe(
-        ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS>>(SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS),
+    public fetchTraining$: Observable<any> = this.actions$.pipe(
+        ofType<ReturnType<typeof TRAINING_ACTIONS.FETCH_TRAINING>>(TRAINING_ACTIONS.FETCH_TRAINING),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
-        switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+        mergeMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
                 language,
+                trainingType,
             } = action
 
             const vars = {
                 language,
+                type: trainingType,
             }
 
-            return this.dataService.readData(QuerySocialNetworks, vars).pipe(
-                map((socialNetworksData: SocialNetworkFetched) => {
-                    return SOCIAL_NETWORK_ACTIONS.NETWORKS_FETCHED(
-                        {...socialNetworksData}
+            return this.dataService.readData(QueryTrainings, vars).pipe(
+                map((trainingData: TrainingFetched) => {
+                    return TRAINING_ACTIONS.TRAINING_FETCHED(
+                        {
+                            trainingType,
+                            ...trainingData
+                        }
                     )
                 }),
                 catchError((error) => {
@@ -75,32 +80,34 @@ export class SocialNetworksEffects {
                 })
             )
         })
-    );
+    )
 
     /**
      * Effect provides new actions as
      * a result of the operation performed
      */
     @Effect()
-    public mutateNetworksEffect$: Observable<any> = this.actions$.pipe(
-        ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.SAVE_NETWORKS>>(SOCIAL_NETWORK_ACTIONS.SAVE_NETWORKS),
+    public mutateTrainingsEffect$: Observable<any> = this.actions$.pipe(
+        ofType<ReturnType<typeof TRAINING_ACTIONS.SAVE_TRAININGS>>(TRAINING_ACTIONS.SAVE_TRAININGS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
-                socialNetworks,
+                trainings,
+                trainingType
             } = action
 
             const vars = {
-                socialNetworks,
+                trainings,
             }
 
-            return this.dataService.setData(MutateSocialNetworks, vars).pipe(
+            return this.dataService.setData(MutateTrainings, vars).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
-                        message: `${this.translate.getResolvedTranslation('Social Networks saved successfully', this)}`
+                        message: `${this.translate.getResolvedTranslation('Training saved successfully', this)}`
                     }),
-                    SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS({
-                        language: this.selectedLocale
+                    TRAINING_ACTIONS.FETCH_TRAINING({
+                        language: this.selectedLocale,
+                        trainingType
                     })
                 ]),
                 // handle failure in todoListService.fetchTodoList()
@@ -121,25 +128,27 @@ export class SocialNetworksEffects {
      * a result of the operation performed
      */
     @Effect()
-    public removeNetworkEffect$: Observable<any> = this.actions$.pipe(
-        ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK>>(SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK),
+    public removeTrainingEffect$: Observable<any> = this.actions$.pipe(
+        ofType<ReturnType<typeof TRAINING_ACTIONS.REMOVE_TRAINING>>(TRAINING_ACTIONS.REMOVE_TRAINING),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
                 id,
+                trainingType
             } = action
 
             const vars = {
                 id,
             }
 
-            return this.dataService.setData(RemoveNetwork, vars).pipe(
+            return this.dataService.setData(RemoveTraining, vars).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
-                        message: `${this.translate.getResolvedTranslation('Social Network removed successfully', this)}`
+                        message: `${this.translate.getResolvedTranslation('Training removed successfully', this)}`
                     }),
-                    SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS({
-                        language: this.selectedLocale
+                    TRAINING_ACTIONS.FETCH_TRAINING({
+                        language: this.selectedLocale,
+                        trainingType
                     })
                 ]),
                 // handle failure in todoListService.fetchTodoList()

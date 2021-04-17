@@ -22,12 +22,6 @@ import { logEasy } from '@app/services/logging/logging.service'
 export class LocaleEffects {
 
     translationsToRequest = ['Error']
-    translationsObservables: {
-        [translationKey: string]: Observable<string>
-    } = {}
-    translatedStrings: {
-        [translationKey: string]: string
-    } = {}
 
     constructor(
         private actions$: Actions,
@@ -35,12 +29,7 @@ export class LocaleEffects {
         private cookieService: CookieService,
         private translate: TranslationService
     ) {
-        this.translationsToRequest.forEach(translationKey => {
-            this.translationsObservables[translationKey] = this.translate.transform(translationKey, this)
-            this.translationsObservables[translationKey].subscribe((data: string) => {
-                this.translatedStrings[translationKey] = data
-            })
-        })
+        this.translate.prefetch(this.translationsToRequest, this)
     }
 
     /**
@@ -63,7 +52,7 @@ export class LocaleEffects {
                 catchError((error) => {
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
-                        message: `${this.translatedStrings['Error']}: ${error}`
+                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${error}`
                     });
                 })
             )

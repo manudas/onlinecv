@@ -1,14 +1,19 @@
+const ObjectID = require('mongodb').ObjectID;
+const cleanObject = require('@helpers/utils').cleanObject;
+
 module.exports = {
     Query: {
         Trainings: async({
-            language
+            language,
+            type
         }, {
             models: {
                 TrainingModel
             },
         }, info) => {
             const trainingList = await TrainingModel.find({
-                language
+                language,
+                type
             }).sort({
                 order: 1
             }).exec();
@@ -16,43 +21,43 @@ module.exports = {
         },
     },
     Mutation: {
-        /* Example
-        db.books.update(
-            { item: "ZZZ135" },   // Query parameter
-            {                     // Replacement document
-                item: "ZZZ135",
-                stock: 5,
-                tags: [ "database" ]
-            },
-            { upsert: true }      // Options: upsert -> insert document if no ducment found to update
-        )
-        */
-        putTraining: async(parent, {
-            training,
+        putTrainings: async({
+            trainings,
         }, {
             models: {
                 TrainingModel
             },
         }, info) => {
-            const WriteResult = await TrainingModel.update({
-                id: training.id,
-            }, training, {
-                upsert: true // if no details found, create a new entry
-            });
-            return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? Training : false;
+
+            const TrainingWriteResult = await Promise.all(trainings.map(async training => {
+
+                const cleanedTraining = cleanObject(training, {'id': '_id'});
+
+                if (!cleanedTraining._id) {
+                    cleanedTraining._id = new ObjectID();
+                }
+
+                const element = await TrainingModel.findOneAndUpdate(
+                    {_id: cleanedTraining._id}
+                ,
+                cleanedTraining, {
+                    upsert: true, // if no details found, create a new entry
+                    new: true // return the value of the object after the update and not before
+                });
+
+                return element;
+            }));
+            return TrainingWriteResult? TrainingWriteResult : false;
         },
-        removeTraining: async(parent, {
+        removeTraining: async({
             id,
         }, {
             models: {
                 TrainingModel
             },
         }, info) => {
-            const WriteResult = await TrainingModel.remove({
-                id
-            }, true); // true == remove one
-            return WriteResult.nRemoved === 1;
+            const WriteResult = await TrainingModel.remove({ _id: id }, { justOne: true }); // remove just one
+            return WriteResult.deletedCount === 1;
         },
     },
 };

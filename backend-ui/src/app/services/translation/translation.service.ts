@@ -18,6 +18,7 @@ import {
     ReplaySubject,
     Subject
 } from "rxjs";
+import { logEasyError } from "../logging";
 
 type StoreType = { locale: LocaleStore } & { translation: TranslationStore}
 
@@ -91,18 +92,18 @@ export class TranslationService {
         translationSubject.next(translationText)
     }
 
-    getTranslation(key: string, componentName: string, locale?: string): InternalStoredTranslationInterface {
+    getTranslation(key: string, componentName: string, locale?: string, create: boolean = true): InternalStoredTranslationInterface {
         if (!locale) {
           locale = this.selectedLocale
         }
-        if (this.translations[locale] === undefined) {
+        if (create && this.translations[locale] === undefined) {
           this.translations[locale] = {}
         }
-        const languageGroup = this.translations[locale]
-        if (languageGroup[componentName] === undefined) {
+        const languageGroup = this.translations[locale] || {}
+        if (create && languageGroup[componentName] === undefined) {
           languageGroup[componentName] = {}
         }
-        const componentGroup = languageGroup[componentName]
+        const componentGroup = languageGroup[componentName] || {}
         if (componentGroup[key] === undefined) {
           componentGroup[key] = {
             initialTranslation: key
@@ -166,21 +167,46 @@ export class TranslationService {
 
     transform(key: string, componentOrComponentName: string | object): Subject<string> {
       if  (key) { // let's avoid undefined translations
-
-        let caller
-        if (typeof componentOrComponentName === 'string' || componentOrComponentName instanceof String) {
-          // it's a string
-          caller = componentOrComponentName
-        } else {
-          // it's something else
-          caller = componentOrComponentName.constructor.name
-        }
-
+        const caller = this.getComponentName(componentOrComponentName)
         const subject = this.getTranslationSubject(key, caller)
         this.requestTranslation(key, caller)
 
         return subject
       }
+
       return null
+    }
+
+    getComponentName(componentOrComponentName: string | object): string {
+      let caller
+      if (typeof componentOrComponentName === 'string' || componentOrComponentName instanceof String) {
+        // it's a string
+        caller = componentOrComponentName
+      } else {
+        // it's something else
+        caller = componentOrComponentName.constructor.name
+      }
+
+      return caller
+    }
+
+    prefetch(translationRequest: string[], componentOrComponentName: string | object) {
+      for (let translationKey of translationRequest) {
+        this.transform(translationKey, componentOrComponentName)
+      }
+    }
+
+    getResolvedTranslation(key: string, componentOrComponentName: string | object): string {
+      const caller = this.getComponentName(componentOrComponentName)
+      const resolvedTranslation = this.getTranslation(key, caller, null, false)
+      if (!resolvedTranslation) {
+        logEasyError('Translation could not be resolved. You need to use prefetch in advance to calling this method')
+
+        return key
+      }
+
+      return resolvedTranslation.translation
+        ? resolvedTranslation.translation.text
+        : resolvedTranslation.initialTranslation
     }
 }
