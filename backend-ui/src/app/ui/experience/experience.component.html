@@ -2,16 +2,15 @@
 <ng-container *ngIf="isExperienceActive('all'); then separator"></ng-container>
 <ng-container *ngIf="isExperienceActive('ong'); then ongTemplate"></ng-container>
 <ng-container *ngIf="isExperienceActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isExperienceActive('others'); then othersTemplate"></ng-container>
+<ng-container *ngIf="isExperienceActive('other'); then otherTemplate"></ng-container>
 
 
 <ng-template #professionalTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{source: professionalData}"
-        [cardTitle]="'professional' | translate | async"
-    >
+        [panelParameters]="{type: ExperienceType.professional}"
+        [cardTitle]="'Professional' | translate | async">
     </app-card>
 </ng-template>
 
@@ -19,41 +18,136 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{source: ongData}"
-        [cardTitle]="'ong' | translate | async"
-    >
+        [panelParameters]="{type: ExperienceType.ong}"
+        [cardTitle]="'Ong' | translate | async">
     </app-card>
 </ng-template>
 
-<ng-template #othersTemplate>
+<ng-template #otherTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{source: otherData}"
-        [cardTitle]="'others' | translate | async"
-    >
+        [panelParameters]="{type: ExperienceType.other}"
+        [cardTitle]="'Other' | translate | async">
     </app-card>
 </ng-template>
 
 <ng-template #panel
-    let-source="source"
+    let-type="type"
 >
-    <mat-table class=""
-        [dataSource]="source">
+    <mat-table
+        *ngIf="getExperienceSource(type).length"
+        [dataSource]="getExperienceSource(type)"
+
+        cdkDropList
+        [cdkDropListData]="getExperienceSource(type)"
+        (cdkDropListDropped)="onDrop($event)"
+        [cdkDropListDisabled]="dragDisabled"
+
+    >
         <ng-container *ngFor="let col of colsToRender; let colIndex = index" matColumnDef="{{col}}">
             <mat-header-cell
                 *matHeaderCellDef
             >
-                {{col === 'id' ? '#' : col | translate | async}}
+            {{ col === 'id' ? '#' : col | noUnderscore | translate | async | titlecase }}
             </mat-header-cell>
-            <mat-cell *matCellDef="let element; let row">{{row[col]}}</mat-cell>
+            <mat-cell *matCellDef="let element; let row; let rowIndex = index">
+
+                <ng-container *ngIf="col === 'edit'"
+                    [ngTemplateOutlet]="editExperienceTemplate"
+                    [ngTemplateOutletContext]="{
+                        rowIndex: rowIndex,
+                        type: type
+                    }"
+                ></ng-container>
+                <ng-container *ngIf="col === 'delete'"
+                    [ngTemplateOutlet]="deleteExperienceTemplate"
+                    [ngTemplateOutletContext]="{
+                        rowIndex: rowIndex,
+                        type: type
+                    }"
+                ></ng-container>
+                <ng-container *ngIf="col === 'order'"
+                    [ngTemplateOutlet]="dragHandle"
+                ></ng-container>
+                <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> {{ element[col] }} </ng-container>
+
+            </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="colsToRender"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: colsToRender"></mat-row>
+        <mat-row
+            (cdkDragStarted)="onDragStart($event)"
+            cdkDrag
+            [cdkDragData]="row"
+            *matRowDef="let row; columns: colsToRender"
+        ></mat-row>
     </mat-table>
+
+    <div
+        [className]="'text-right network-actions'"
+    >
+    style this (watch classes)
+        <button
+            (click)="openExperienceDialog(getExperienceTypeName(type))"
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+        >
+            {{ 'Add Experience' | translate | async }}
+        </button>
+    </div>
+
 </ng-template>
 
 <ng-template #separator>
     <div [className]="'separator'"></div>
+</ng-template>
+
+<ng-template #editExperienceTemplate
+    let-index="rowIndex"
+    let-type="type"
+>
+    <button [className]="'btn btn-info btn-experience-row'"
+        ngbButton
+        (click)="editExperience(index, getExperienceTypeName(type))"
+    >
+        <fa-icon
+            [icon]="faEdit"
+        ></fa-icon>
+    </button>
+</ng-template>
+
+
+
+<ng-template #deleteExperienceTemplate
+    let-index="rowIndex"
+    let-type="type"
+>margen izq cortado
+    <button [className]="'btn btn-danger btn-network-row'"
+        ngbButton
+        (click)="openExperienceRemovalConfirmDialog(index, type)"
+        >
+        <fa-icon
+            [icon]="faTrash"
+        ></fa-icon>
+    </button>
+</ng-template>
+
+
+<ng-template #dragHandle>
+
+    <fa-icon
+        [ngStyle]="{
+            color: '#737373',
+            marginRight: 'auto',
+            marginLeft: 'auto'
+        }"
+        [icon]="faArrowsAlt"
+        (mousedown)="dragDisabled = false;"
+        (mouseup)="dragDisabled = true;"
+        (touchstart)="dragDisabled = false;"
+        (touchend)="dragDisabled = true;"
+    ></fa-icon>
+
 </ng-template>

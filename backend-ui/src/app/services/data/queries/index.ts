@@ -1,5 +1,7 @@
 export * from './Details';
 
+export * from './Experience'
+
 export * from './Locale'
 
 export * from './SocialNetworks'

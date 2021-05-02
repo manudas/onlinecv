@@ -1,14 +1,19 @@
+const ObjectID = require('mongodb').ObjectID;
+const cleanObject = require('@helpers/utils').cleanObject;
+
 module.exports = {
     Query: {
-        workExperiences: async({
-            language
+        Experiences: async({
+            language,
+            type
         }, {
             models: {
                 WorkExperienceModel
             },
         }, info) => {
             const workExperienceList = await WorkExperienceModel.find({
-                language
+                language,
+                type
             }).sort({
                 order: 1
             }).exec();
@@ -27,32 +32,44 @@ module.exports = {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putWorkExperience: async(parent, {
-            WorkExperience,
+        putWorkExperience: async({
+            workExperiences,
         }, {
             models: {
-                workExperienceModel
+                WorkExperienceModel
             },
         }, info) => {
-            const WriteResult = await workExperienceModel.update({
-                id: WorkExperience.id,
-            }, WorkExperience, {
-                upsert: true // if no details found, create a new entry
-            });
-            return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? WorkExperience : false;
+
+
+            const WriteResult = await Promise.all(workExperiences.map(async experience => {
+
+                const cleanedObject = cleanObject(experience, {'id': '_id'});
+
+                if (!cleanedObject._id) {
+                    cleanedObject._id = new ObjectID();
+                }
+
+                const element = await WorkExperienceModel.findOneAndUpdate(
+                    {_id: cleanedObject._id}
+                ,
+                cleanedObject, {
+                    upsert: true, // if no details found, create a new entry
+                    new: true // return the value of the object after the update and not before
+                });
+
+                return element;
+            }));
+            return WriteResult? WriteResult : false;
         },
-        removeWorkExperience: async(parent, {
+        removeWorkExperience: async({
             id,
         }, {
             models: {
-                workExperienceModel
+                WorkExperienceModel
             },
         }, info) => {
-            const WriteResult = await workExperienceModel.remove({
-                id
-            }, true); // true == remove one
-            return WriteResult.nRemoved === 1;
+            const WriteResult = await WorkExperienceModel.remove({ _id: id }, { justOne: true }); // remove just one
+            return WriteResult.deletedCount === 1;
         },
     },
 };
