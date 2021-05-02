@@ -1,8 +1,8 @@
 export * from './Details';
 
-export * from './Locale'
+export * from './Experience'
 
-export * from './Translations'
+export * from './Locale'
 
 export * from './Memo'
 
@@ -12,4 +12,6 @@ export * from './SocialNetworks'
 
 export * from './Training'
 
-export * from './Experience'
+export * from './Translations'
+
+export * from './Skills'

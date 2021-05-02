@@ -16,7 +16,7 @@ import {
 import { select, Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
 import * as EXPERIENCE_ACTIONS from '@store_actions/Experience'
-import { ConfirmComponent } from './confirm.component'
+import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { ExperienceDialogComponent } from './experience-dialog.component'
 
 type StoreType = { locale: LocaleStore } & {experience: { professional: ExperienceInterface[] } & { ong: ExperienceInterface[] } & { other: ExperienceInterface[] }}
@@ -159,25 +159,27 @@ export class ExperienceComponent implements OnInit {
       width: '80%',
       data: {
         index: experienceIndex,
-        experience
+        element: experience,
+        keyName: 'role',
+        superType: 'experience',
+        action: 'delete'
       }
     })
 
     dialogRef.afterClosed().subscribe(({
-      indexToRemove = null,
-      type = null,
+      index = null,
+      element: {type = null} = {},
     } = {}) => {
-      logEasy(`The dialog was closed.`, indexToRemove !== null ? `The following message was received: ${JSON.stringify(indexToRemove)}` : '');
+      logEasy(`The dialog was closed.`, index !== null ? `The following message was received: ${JSON.stringify(index)}` : '');
 
-      if (indexToRemove !== null && type !== null) {
-        this.deleteExperience(indexToRemove, type)
+      if (index !== null && type !== null) {
+        this.deleteExperience(index, type)
       }
 
     })
   }
 
   editExperience(index: number, type: string) {
-    alert('separar skill y computer skills the otros y ponerlo en su propio menu parece adecuado para reducir la carga de otros. ICONO: RUEDA DENTADA. PUEDE COPIARSE 99% de aqui y training')
     const experience = this[`${type}Data`][index]
     this.openExperienceDialog({
       experience,

@@ -3,11 +3,13 @@ import {
     MatDialogRef,
     MAT_DIALOG_DATA,
 } from "@angular/material/dialog"
-import { SocialNetwork } from "@app/types/SocialNetworks";
 
 type data = {
+    action: string
     index: number
-    network: SocialNetwork
+    element: any
+    nameKey: string
+    superType: string
 }
 
 @Component({
@@ -16,21 +18,34 @@ type data = {
 })
 export class ConfirmComponent {
 
-    network: SocialNetwork
+    action: string
+    element: any
     index: number
+    superType: string
+    nameKey: string
+
+    acctionMap = {
+        'delete': 'deleted'
+    }
 
     constructor( public dialogRef: MatDialogRef<ConfirmComponent>, @Inject(MAT_DIALOG_DATA) public data: data) {
 
         const {
+            action,
             index,
-            network
+            element = null,
+            nameKey,
+            superType,
         } = data
 
+        this.action = action
         this.index = index
-        this.network = network
+        this.element = element
+        this.superType = superType
+        this.nameKey = nameKey
     }
 
-    close(message?: number) {
+    close(index?: number, element?: any) {
         /*
          * this is to get the message in the caller:
 
@@ -39,6 +54,10 @@ export class ConfirmComponent {
             });
 
         */
-        this.dialogRef.close(message);
+
+        this.dialogRef.close({
+            ...(index && {index}),
+            ...(element && {element})
+        });
     }
 }

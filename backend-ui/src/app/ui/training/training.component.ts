@@ -17,7 +17,7 @@ import { select, Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
 import { TrainingDialogComponent } from './training-dialog.component'
 import { TranslationService } from '@app/services/translation/translation.service'
-import { ConfirmComponent } from './confirm.component'
+import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { LocaleStore } from '@app/types/Locale'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 
@@ -193,7 +193,10 @@ export class TrainingComponent implements OnInit {
       width: '80%',
       data: {
         index: trainingIndex,
-        training
+        element: training,
+        action: 'delete',
+        nameKey: 'tag',
+        superType: 'training',
       }
     })
 

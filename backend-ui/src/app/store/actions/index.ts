@@ -7,3 +7,5 @@ export * from './Translation'
 export * from './Common'
 
 export * from './Training'
+
+export * from './Skills'

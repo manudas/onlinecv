@@ -7,20 +7,19 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { /*FormsModule,*/ ReactiveFormsModule } from '@angular/forms'
 
 import { CardModule } from '@app/ui/card/card.module'
-import { ConfirmModule } from '@app/ui/confirm/confirm.module'
 
 import { TranslationsModule } from '@services/translation';
 
-import { TrainingComponent } from './training.component';
-import { TrainingDialogComponent } from './training-dialog.component';
+import { SkillsComponent } from './skills.component';
+import { SkillsDialogComponent } from './skills-dialog.component';
 import { UnderscoreModule } from '@app/services/underscore';
-
+import { ConfirmModule } from '@app/ui/confirm/confirm.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
-    TrainingComponent,
-    TrainingDialogComponent,
+    SkillsComponent,
+    SkillsDialogComponent,
   ],
   imports: [
     ConfirmModule,
@@ -33,6 +32,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     TranslationsModule,
     UnderscoreModule,
   ],
-  exports: [TrainingComponent]
+  exports: [SkillsComponent]
 })
-export class TrainingModule { }
+export class SkillsModule { }
