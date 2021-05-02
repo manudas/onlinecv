@@ -15,18 +15,39 @@ export class SkillsDialogComponent {
     /*
      * GraphQL Schema:
 
+        id: ID
+        tag: String!,
+        description: String,
+        skill_level: Int,
 
+
+
+        will this be used ?
+        related_knowledge: [RelatedKnowledge],
+
+
+        type: String,
+        developed_projects: [String]!,
+        keywords: [String]!,
+        language: String!
 
      */
 
     skillsFormGroup: FormGroup = new FormGroup({
         id: new FormControl(null),
 
+        tag: new FormControl(null, Validators.required),
+        description: new FormControl(null),
+        skill_level: new FormControl(null),
 
-
+        // related_knowledge: [RelatedKnowledge],
+        type: new FormControl(null), // computer? others?
+        // developed_projects: [String],
+        // keywords: [String]!,
+        // language: String!
 
         // no estoy seguro de que la mejor forma de manejar keywords sea con un FormControl
-        keywords: new FormControl(null),
+        // keywords: new FormControl(null),
     })
 
     editingIndex: number = null

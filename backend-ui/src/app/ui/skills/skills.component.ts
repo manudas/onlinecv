@@ -112,7 +112,7 @@ export class SkillsComponent implements OnInit {
     }
   }
 
-  openSkillsDialog(data: EditSkillsStructure | string): void {
+  openSkillDialog(data: EditSkillsStructure | string): void {
     const dialogRef = this.matDialog.open(SkillsDialogComponent, {
       width: '80%',
       data
@@ -159,9 +159,9 @@ export class SkillsComponent implements OnInit {
     }))
   }
 
-  editSkills(index: number, type: string) {
+  editSkill(index: number, type: string) {
     const skill = this[`${type}Data`][index]
-    this.openSkillsDialog({
+    this.openSkillDialog({
       skill,
       index
     })
@@ -179,7 +179,7 @@ export class SkillsComponent implements OnInit {
     return SkillsType
   }
 
-  getSkillsTypeName(type: SkillsType) {
+  getSkillTypeName(type: SkillsType) {
     return SkillsType[type]
   }
 

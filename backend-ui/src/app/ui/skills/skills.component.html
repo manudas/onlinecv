@@ -1,15 +1,15 @@
-<ng-container *ngIf="isTrainingActive('official'); then officialTemplate"></ng-container>
-<ng-container *ngIf="isTrainingActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isTrainingActive('computer'); then computerTemplate"></ng-container>
-<ng-container *ngIf="isTrainingActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isTrainingActive('other'); then otherTemplate"></ng-container>
+<ng-container *ngIf="isSkillsActive('skills'); then skillsTemplate"></ng-container>
+<ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
+<ng-container *ngIf="isSkillsActive('computer'); then computerTemplate"></ng-container>
+<ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
+<ng-container *ngIf="isSkillsActive('languages'); then languagesTemplate"></ng-container>
 
 
-<ng-template #officialTemplate>
+<ng-template #skillsTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: TrainingType.official}"
+        [panelParameters]="{type: SkillsType.skills}"
         [cardTitle]="'Official' | translate | async">
     </app-card>
 </ng-template>
@@ -18,16 +18,16 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: TrainingType.computer}"
+        [panelParameters]="{type: SkillsType.computer}"
         [cardTitle]="'Computer' | translate | async">
     </app-card>
 </ng-template>
 
-<ng-template #otherTemplate>
+<ng-template #languagesTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: TrainingType.other}"
+        [panelParameters]="{type: SkillsType.languages}"
         [cardTitle]="'Other' | translate | async">
     </app-card>
 </ng-template>
@@ -36,11 +36,11 @@
     let-type="type"
 >
     <mat-table
-        *ngIf="getTrainingSource(type).length"
-        [dataSource]="getTrainingSource(type)"
+        *ngIf="getSkillsSource(type).length"
+        [dataSource]="getSkillsSource(type)"
 
         cdkDropList
-        [cdkDropListData]="getTrainingSource(type)"
+        [cdkDropListData]="getSkillsSource(type)"
         (cdkDropListDropped)="onDrop($event)"
         [cdkDropListDisabled]="dragDisabled"
 
@@ -54,7 +54,7 @@
             <mat-cell *matCellDef="let element; let row; let rowIndex = index">
 
                 <ng-container *ngIf="col === 'edit'"
-                    [ngTemplateOutlet]="editTrainingTemplate"
+                    [ngTemplateOutlet]="editSkillTemplate"
                     [ngTemplateOutletContext]="{
                         rowIndex: rowIndex,
                         type: type
@@ -89,7 +89,7 @@
     >
     style this (watch classes)
         <button
-            (click)="openTrainingDialog(getTrainingTypeName(type))"
+            (click)="openSkillDialog(getSkillTypeName(type))"
             [className]="'btn btn-outline-info'"
             type='button'
             ngbButton
@@ -104,13 +104,13 @@
     <div [className]="'separator'"></div>
 </ng-template>
 
-<ng-template #editTrainingTemplate
+<ng-template #editSkillTemplate
     let-index="rowIndex"
     let-type="type"
 >
     <button [className]="'btn btn-info btn-training-row'"
         ngbButton
-        (click)="editTraining(index, getTrainingTypeName(type))"
+        (click)="editSkill(index, getSkillTypeName(type))"
     >
         <fa-icon
             [icon]="faEdit"
@@ -126,7 +126,7 @@
 >margen izq cortado
     <button [className]="'btn btn-danger btn-network-row'"
         ngbButton
-        (click)="openTrainingRemovalConfirmDialog(index, type)"
+        (click)="openSkillsRemovalConfirmDialog(index, type)"
         >
         <fa-icon
             [icon]="faTrash"

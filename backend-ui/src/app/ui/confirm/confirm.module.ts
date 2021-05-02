@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core'
+
 import { TranslationsModule } from '@services/translation'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 
@@ -8,6 +10,7 @@ import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
     ConfirmComponent,
   ],
   imports: [
+    CommonModule,
     TranslationsModule,
   ],
   exports: [ConfirmComponent],
