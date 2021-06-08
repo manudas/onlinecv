@@ -153,8 +153,11 @@ export class SkillsComponent implements OnInit {
   }
 
   dispatchSave(data, type) {
+    const curatedData = data.map(skill => {
+      return {...skill, ...(skill.skill_level ? {skill_level: Number(skill.skill_level)} : {})}
+    })
     this.store.dispatch(SKILLS_ACTIONS.SAVE_SKILLS({
-      skills: data,
+      skills: curatedData,
       skillType: type
     }))
   }

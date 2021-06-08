@@ -1,14 +1,19 @@
+const ObjectID = require('mongodb').ObjectID;
+const cleanObject = require('@helpers/utils').cleanObject;
+
 module.exports = {
     Query: {
-        skills: async({
-            language
+        Skills: async({
+            language,
+            type
         }, {
             models: {
                 SkillsModel
             },
         }, info) => {
             const skillList = await SkillsModel.find({
-                language
+                language,
+                type
             }).sort({
                 order: 1
             }).exec();
@@ -27,20 +32,35 @@ module.exports = {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putSkill: async(parent, {
-            Skill,
+        putSkills: async({
+            skills,
         }, {
             models: {
-                skillsModel
+                SkillsModel
             },
         }, info) => {
-            const WriteResult = await skillsModel.update({
-                id: Skill.id,
-            }, Skill, {
-                upsert: true // if no details found, create a new entry
-            });
-            return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? Skill : false;
+
+
+            const WriteResult = await Promise.all(skills.map(async skill => {
+
+                const cleanedSkill = cleanObject(skill, {'id': '_id'});
+
+                if (!cleanedSkill._id) {
+                    cleanedSkill._id = new ObjectID();
+                }
+
+                const element = await SkillsModel.findOneAndUpdate(
+                    {_id: cleanedSkill._id}
+                ,
+                cleanedSkill, {
+                    upsert: true, // if no details found, create a new entry
+                    new: true // return the value of the object after the update and not before
+                });
+
+                return element;
+            }));
+            return WriteResult? WriteResult : false;
+
         },
         removeSkill: async(parent, {
             id,

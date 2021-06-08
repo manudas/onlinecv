@@ -18,7 +18,7 @@ module.exports =
   }
 
   type Skill {
-    id: ID!
+    _id: ID!
     tag: String!,
     description: String,
     skill_level: Int,
@@ -26,7 +26,8 @@ module.exports =
     type: String,
     developed_projects: [String],
     keywords: [String],
-    language: String!
+    language: String!,
+    order: Int!
   }
 
   input SkillInput {
@@ -38,15 +39,16 @@ module.exports =
     type: String,
     developed_projects: [String],
     keywords: [String],
-    language: String!
+    language: String!,
+    order: Int!
   }
 
   extend type Query {
-    skills(language: String!): [Skill]
+    Skills(language: String!, type: String!): [Skill]
   }
 
   extend type Mutation {
-    putSkill(skill: SkillInput!): Skill!
+    putSkills(skills: [SkillInput]!): [Skill]!
     removeSkill(id: ID!): Boolean!
   }
 `;

@@ -23,15 +23,15 @@ export const QuerySkills =
     `
     query QuerySkills($language: String!, $type: String!) {
         Skills(language: $language, type: $type) {
-            id: ID!
-            tag: String!,
-            description: String,
-            skill_level: Int,
-            related_knowledge: [RelatedKnowledge],
-            type: String,
-            developed_projects: [String],
-            keywords: [String],
-            language: String!
+            id: _id
+            tag
+            description
+            skill_level
+            related_knowledge
+            type
+            developed_projects
+            keywords
+            language
         }
     }
 `

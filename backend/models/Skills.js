@@ -6,7 +6,7 @@ const {
 const collection = 'skills';
 
 const SkillsSchema = new Schema({
-    name: String,
+    tag: String,
     description: String,
     skill_level: Number,
     related_knowledge: {}, // subquery ?
@@ -16,6 +16,7 @@ const SkillsSchema = new Schema({
     language: String
 }, {
     collection,
+    versionKey: false,
 });
 
 const SkillsModel = model(collection, SkillsSchema);
