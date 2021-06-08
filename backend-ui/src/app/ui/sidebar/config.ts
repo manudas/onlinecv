@@ -152,7 +152,7 @@ export const MenuListItems = [{
 			{
 				name: 'Computer skills',
 				url: 'skills',
-				urlSegments: 'computer-skills',
+				urlSegments: 'computers',
 				type: 'option',
 			},
 			{

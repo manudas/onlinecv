@@ -1,6 +1,6 @@
 <ng-container *ngIf="isSkillsActive('skills'); then skillsTemplate"></ng-container>
 <ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isSkillsActive('computer'); then computerTemplate"></ng-container>
+<ng-container *ngIf="isSkillsActive('computers'); then computerTemplate"></ng-container>
 <ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
 <ng-container *ngIf="isSkillsActive('languages'); then languagesTemplate"></ng-container>
 
@@ -10,7 +10,7 @@
         [iconClass]="'mr-1'"
         [panelBody]="panel"
         [panelParameters]="{type: SkillsType.skills}"
-        [cardTitle]="'Official' | translate | async">
+        [cardTitle]="'General Skills' | translate | async">
     </app-card>
 </ng-template>
 
@@ -18,7 +18,7 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: SkillsType.computer}"
+        [panelParameters]="{type: SkillsType.computers}"
         [cardTitle]="'Computer' | translate | async">
     </app-card>
 </ng-template>
@@ -28,7 +28,7 @@
         [iconClass]="'mr-1'"
         [panelBody]="panel"
         [panelParameters]="{type: SkillsType.languages}"
-        [cardTitle]="'Other' | translate | async">
+        [cardTitle]="'Languages' | translate | async">
     </app-card>
 </ng-template>
 
@@ -94,7 +94,7 @@
             type='button'
             ngbButton
         >
-            {{ 'Add Training' | translate | async }}
+            {{ 'Add Skills' | translate | async }}
         </button>
     </div>
 

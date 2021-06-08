@@ -48,12 +48,12 @@ export class SkillsComponent implements OnInit {
     'order',
   ];
 
-  officialData$: Observable<SkillInterface[]>
-  officialData: SkillInterface[] = []
-  computerData$: Observable<SkillInterface[]>
-  computerData: SkillInterface[] = []
-  otherData$: Observable<SkillInterface[]>
-  otherData: SkillInterface[] = []
+  skillsData$: Observable<SkillInterface[]>
+  skillsData: SkillInterface[] = []
+  computersData$: Observable<SkillInterface[]>
+  computersData: SkillInterface[] = []
+  languagesData$: Observable<SkillInterface[]>
+  languagesData: SkillInterface[] = []
 
   title: string = 'Skills';
 
@@ -76,9 +76,9 @@ export class SkillsComponent implements OnInit {
 
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
 
-    this.officialData$ = this.store.pipe(select(state => state?.skills?.official))
-    this.computerData$ = this.store.pipe(select(state => state?.skills?.computer))
-    this.otherData$ = this.store.pipe(select(state => state?.skills?.other))
+    this.skillsData$ = this.store.pipe(select(state => state?.skills?.official))
+    this.computersData$ = this.store.pipe(select(state => state?.skills?.computer))
+    this.languagesData$ = this.store.pipe(select(state => state?.skills?.other))
 
     this.translate.prefetch(this.translationsToRequest, this)
 
@@ -88,9 +88,9 @@ export class SkillsComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedLocale$.subscribe((data: string) => this.selectedLocale = data)
-    this.officialData$.subscribe((data: SkillInterface[]) => data ? this.officialData = data : null)
-    this.computerData$.subscribe((data: SkillInterface[]) => data ? this.computerData = data : null)
-    this.otherData$.subscribe((data: SkillInterface[]) => data ? this.otherData = data : null)
+    this.skillsData$.subscribe((data: SkillInterface[]) => data ? this.skillsData = data : null)
+    this.computersData$.subscribe((data: SkillInterface[]) => data ? this.computersData = data : null)
+    this.languagesData$.subscribe((data: SkillInterface[]) => data ? this.languagesData = data : null)
     this.activatedRoute.paramMap.subscribe(() => this.fetchData())
   }
 
@@ -119,7 +119,7 @@ export class SkillsComponent implements OnInit {
     })
 
     dialogRef.afterClosed().subscribe(result => {
-      logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
+      logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '')
       if (result) {
         if (this.isSkillsEdit(result)) {
           const {

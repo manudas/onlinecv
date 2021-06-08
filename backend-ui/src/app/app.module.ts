@@ -20,6 +20,7 @@ import { TranslationsModule } from '@services/translation'
 import { DetailsEffects } from '@store_effects/Details'
 import { ExperienceEffects } from './store/effects/Experience'
 import { LocaleEffects } from '@store_effects/Locale'
+import { SkillEffects } from '@store_effects/Skills'
 import { SocialNetworksEffects } from '@store_effects/SocialNetworks'
 import { TrainingEffects } from '@store_effects/Training'
 import { TranslationEffects } from '@store_effects/Translation'
@@ -54,6 +55,7 @@ if (environment.production) {
       DetailsEffects,
       ExperienceEffects,
       LocaleEffects,
+      SkillEffects,
       SocialNetworksEffects,
       TrainingEffects,
       TranslationEffects,
