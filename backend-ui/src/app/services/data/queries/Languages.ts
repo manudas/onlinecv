@@ -23,17 +23,13 @@
     `
     query QueryLanguages($language: String!) {
         Languages(language: $language) {
-
             id: _id
-            tag
-            description
-            type
+            name
+            certification
             school
             school_url
-            start_date
-            finish_date
-            final_project
-            average_grade
+            written_level
+            spoken_level
             keywords
             language
             order

@@ -4,8 +4,8 @@
     type: String,
     school: String,
     school_url: String,
-    written_level: String,
-    spoken_level: String,
+    written_level: Number,
+    spoken_level: Number,
     keywords: [],
     language: String
 */
@@ -18,10 +18,11 @@ module.exports =
     certification: String,
     school: String,
     school_url: String,
-    written_level: String,
-    spoken_level: String,
+    written_level: Int,
+    spoken_level: Int,
     keywords: [String]!,
-    language: String!
+    language: String!,
+    order: Int!
   }
 
   input LanguageInput {
@@ -30,10 +31,11 @@ module.exports =
     certification: String,
     school: String,
     school_url: String,
-    written_level: String,
-    spoken_level: String,
+    written_level: Int,
+    spoken_level: Int,
     keywords: [String]!,
-    language: String!
+    language: String!,
+    order: Int!
   }
 
   extend type Query {

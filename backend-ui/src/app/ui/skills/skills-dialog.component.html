@@ -7,8 +7,8 @@
     >
         {{
             editingIndex === null
-                ? ('Add a new training: ' | translate | async) + (skillsFormGroup.get('type').value | translate | async | titlecase)
-                : ('Editing your training: ' | translate | async) + (skillsFormGroup.get('type').value | translate | async | titlecase)
+                ? ('Add a new skill: ' | translate | async) + (skillsFormGroup.get('type').value | translate | async | titlecase)
+                : ('Editing your skill: ' | translate | async) + (skillsFormGroup.get('type').value | translate | async | titlecase)
         }}
     </div>
 </h2>
@@ -17,7 +17,7 @@
     <div
         [className]="'paddedContent'"
     >
-        <ng-container *ngTemplateOutlet="trainingTemplate"></ng-container>
+        <ng-container *ngTemplateOutlet="skillTemplate"></ng-container>
     </div>
 </div>
 <div mat-dialog-actions>
@@ -43,7 +43,7 @@
     </div>
 </div>
 
-<ng-template #trainingTemplate>
+<ng-template #skillTemplate>
     <form
         [formGroup]="skillsFormGroup"
     >
@@ -105,7 +105,7 @@
             </label>
             <input
                 class='form-control'
-                placeholder="{{ 'Optional: you can grade yourself on this training' | translate | async }}"
+                placeholder="{{ 'Optional: you can grade yourself on this skill' | translate | async }}"
                 formControlName="skill_level"
             >
             <p

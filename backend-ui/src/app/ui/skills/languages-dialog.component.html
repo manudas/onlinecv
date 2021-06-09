@@ -1,0 +1,175 @@
+<h2
+    mat-dialog-title
+    [className]="''"
+>
+    <div
+        [className]="'paddedContent'"
+    >
+        {{
+            editingIndex === null
+                ? ('Add a new language: ' | translate | async) + (languagesFormGroup.get('type').value | translate | async | titlecase)
+                : ('Editing your language: ' | translate | async) + (languagesFormGroup.get('type').value | translate | async | titlecase)
+        }}
+    </div>
+</h2>
+
+<div mat-dialog-content>
+    <div
+        [className]="'paddedContent'"
+    >
+        <ng-container *ngTemplateOutlet="languageTemplate"></ng-container>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div
+        [className]="'paddedContent'"
+    >
+        <button
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+            (click)="close()"
+        >
+            {{ 'Cancel' | translate | async }}
+        </button>
+        <button
+            [className]="'btn submitButton'"
+            type="submit"
+            ngbButton
+            (click)="submitHandler($event)"
+        >
+            {{ editingIndex === null ? ('Add' | translate | async) : ('Edit' | translate | async) }}
+        </button>
+    </div>
+</div>
+
+<ng-template #languageTemplate>
+    <form
+        [formGroup]="languagesFormGroup"
+    >
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Language' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Enter the language name' | translate | async }}"
+                placement="top"
+                formControlName="tag"
+            >
+            <p
+                class='help-block'
+                [ngStyle]="{
+                    'margin-bottom': languagesFormGroup.get('name').touched && languagesFormGroup.get('name').errors ? 0 : 'initial'
+                }"
+            >
+                {{ 'E.g: Drawing aircrafts' | translate | async }}
+            </p>
+            <small
+                    *ngIf="languagesFormGroup.get('name').touched && languagesFormGroup.get('name').errors"
+                    [className]="'text-danger'"
+            >
+                {{ 'You should provide a valid language name' | translate | async }}
+            </small>
+        </div>
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Certification' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Optional: do you have a certification level of this language?' | translate | async }}"
+                formControlName="certification"
+            >
+            <p
+                class='help-block'
+            >
+                {{ 'E.g.: Cambridge B1, ILTS B2, C1, Proficient, Advanced... and so on ' | translate | async }}
+            </p>
+        </div>
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Have you attended to classes in any school for this language?' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Optional: write the name of the school' | translate | async }}"
+                formControlName="school"
+            >
+            <p
+                class='help-block'
+            >
+                {{ 'E.g.: Official Language School of Palma de Mallorca' | translate | async }}
+            </p>
+        </div>
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Does the school have a web page?' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Optional: the web address of your school' | translate | async }}"
+                formControlName="school_url"
+            >
+            <p
+                class='help-block'
+            >
+                {{ 'E.g.: Official Language School of Palma de Mallorca' | translate | async }}
+            </p>
+        </div>
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Would you assess yourself in the spoken language?' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Optional: from 1 to 10, how well you speak this language' | translate | async }}"
+                formControlName="spoken_level"
+            >
+            <p
+                class='help-block'
+            >
+                {{ 'E.g.: 7.5' | translate | async }}
+            </p>
+        </div>
+        <div
+            class='form-group'
+        >
+            <label
+                class='control-label'
+            >
+                {{ 'Would you assess yourself in the written language?' | translate | async }}
+            </label>
+            <input
+                class='form-control'
+                placeholder="{{ 'Optional: from 1 to 10, how well you write this language' | translate | async }}"
+                formControlName="spoken_level"
+            >
+            <p
+                class='help-block'
+            >
+                {{ 'E.g.: 8' | translate | async }}
+            </p>
+        </div>
+    </form>
+</ng-template>

@@ -10,10 +10,11 @@ const LanguagesSchema = new Schema({
     certification: String,
     school: String,
     school_url: String,
-    written_level: String,
-    spoken_level: String,
+    written_level: Number,
+    spoken_level: Number,
     keywords: [],
-    language: String
+    language: String,
+    order: Number
 }, {
     collection,
     versionKey: false,
