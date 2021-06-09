@@ -13,7 +13,8 @@ const SkillsSchema = new Schema({
     type: String,
     developed_projects: [],
     keywords: [],
-    language: String
+    language: String,
+    order: Number
 }, {
     collection,
     versionKey: false,

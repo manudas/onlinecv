@@ -9,13 +9,13 @@
     keywords: [],
     language: String
 */
+
 module.exports =
     `
   type Language {
-    id: ID!
+    _id: ID!
     name: String!,
     certification: String,
-    type: String,
     school: String,
     school_url: String,
     written_level: String,
@@ -28,7 +28,6 @@ module.exports =
     id: ID
     name: String!,
     certification: String,
-    type: String,
     school: String,
     school_url: String,
     written_level: String,
@@ -38,11 +37,11 @@ module.exports =
   }
 
   extend type Query {
-    languages(language: String!): [Language]!
+    Languages(language: String!): [Language]!
   }
 
   extend type Mutation {
-    putLanguage(language: LanguageInput!): Language!
+    putLanguages(languages: [LanguageInput]!): [Language]!
     removeLanguage(id: ID!): Boolean!
   }
 `;

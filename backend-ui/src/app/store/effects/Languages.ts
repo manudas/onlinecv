@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 
 import { switchMap, mergeMap, map, tap, catchError } from 'rxjs/operators';
 
-import * as SKILLS_ACTIONS from '@store_actions/Skills'
+import * as SKILLS_ACTIONS from '@store_actions/Languages'
 import * as COMMON_ACTIONS from '@store_actions/Common'
 
 import { DataService } from '@services/data/data.service'
@@ -17,7 +17,7 @@ import {
 import { TranslationService } from '@app/services/translation/translation.service'
 import { select, Store } from '@ngrx/store';
 import { LocaleStore } from '@app/types/Locale';
-import { SkillsFetched } from '@app/types/Skills';
+import { SkillsFetched } from '@app/types/Languages';
 import { logEasy } from '@app/services/logging/logging.service';
 
 type StoreType = { locale: LocaleStore }
@@ -25,7 +25,7 @@ type StoreType = { locale: LocaleStore }
 @Injectable()
 export class SkillEffects {
 
-    translationsToRequest = ['Skills saved successfully', 'Skill removed successfully', 'Error']
+    translationsToRequest = ['Languages saved successfully', 'Language removed successfully', 'Error']
 
     selectedLocale: string // iso code
     selectedLocale$: Observable<string>
@@ -48,8 +48,8 @@ export class SkillEffects {
      * a result of the operation performed
      */
     @Effect()
-    public fetchSkills$: Observable<any> = this.actions$.pipe(
-        ofType<ReturnType<typeof SKILLS_ACTIONS.FETCH_SKILLS>>(SKILLS_ACTIONS.FETCH_SKILLS),
+    public fetchLanguages$: Observable<any> = this.actions$.pipe(
+        ofType<ReturnType<typeof LANGUAGE_ACTIONS.FETCH_SKILLS>>(LANGUAGE_ACTIONS.FETCH_SKILLS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         mergeMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
@@ -64,7 +64,7 @@ export class SkillEffects {
 
             return this.dataService.readData(QuerySkills, vars).pipe(
                 map((skillsData: SkillsFetched) => {
-                    return SKILLS_ACTIONS.SKILLS_FETCHED(
+                    return LANGUAGE_ACTIONS.SKILLS_FETCHED(
                         {
                             skillType,
                             ...skillsData
@@ -88,7 +88,7 @@ export class SkillEffects {
      */
     @Effect()
     public mutateSkillsEffect$: Observable<any> = this.actions$.pipe(
-        ofType<ReturnType<typeof SKILLS_ACTIONS.SAVE_SKILLS>>(SKILLS_ACTIONS.SAVE_SKILLS),
+        ofType<ReturnType<typeof LANGUAGE_ACTIONS.SAVE_SKILLS>>(LANGUAGE_ACTIONS.SAVE_SKILLS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
@@ -103,7 +103,7 @@ export class SkillEffects {
             return this.dataService.setData(MutateSkills, vars).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
-                        message: `${this.translate.getResolvedTranslation('Skills saved successfully', this)}`
+                        message: `${this.translate.getResolvedTranslation('Languages saved successfully', this)}`
                     }),
                     SKILLS_ACTIONS.FETCH_SKILLS({
                         language: this.selectedLocale,
@@ -129,7 +129,7 @@ export class SkillEffects {
      */
     @Effect()
     public removeSkillEffect$: Observable<any> = this.actions$.pipe(
-        ofType<ReturnType<typeof SKILLS_ACTIONS.REMOVE_SKILL>>(SKILLS_ACTIONS.REMOVE_SKILL),
+        ofType<ReturnType<typeof LANGUAGE_ACTIONS.REMOVE_SKILL>>(LANGUAGE_ACTIONS.REMOVE_SKILL),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
@@ -146,7 +146,7 @@ export class SkillEffects {
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Skill removed successfully', this)}`
                     }),
-                    SKILLS_ACTIONS.FETCH_SKILLS({
+                    LANGUAGE_ACTIONS.FETCH_SKILLS({
                         language: this.selectedLocale,
                         skillType
                     })

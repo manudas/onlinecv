@@ -1,5 +1,7 @@
 export * from './Details'
 
+export * from './Languages'
+
 export * from './Locale'
 
 export * from './Translation'

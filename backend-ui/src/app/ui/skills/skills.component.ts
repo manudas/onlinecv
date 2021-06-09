@@ -22,7 +22,7 @@ import { LocaleStore } from '@app/types/Locale'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 
 
-type StoreType = { locale: LocaleStore } & {skills: { official: SkillInterface[] } & { computer: SkillInterface[] } & { other: SkillInterface[] }}
+type StoreType = { locale: LocaleStore } & {skills: { skills: SkillInterface[] } & { computers: SkillInterface[] } /* & { other: SkillInterface[] }*/ }
 @Component({
   selector: 'app-skills',
   templateUrl: './skills.component.html',
@@ -76,9 +76,9 @@ export class SkillsComponent implements OnInit {
 
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
 
-    this.skillsData$ = this.store.pipe(select(state => state?.skills?.official))
-    this.computersData$ = this.store.pipe(select(state => state?.skills?.computer))
-    this.languagesData$ = this.store.pipe(select(state => state?.skills?.other))
+    this.skillsData$ = this.store.pipe(select(state => state?.skills?.skills))
+    this.computersData$ = this.store.pipe(select(state => state?.skills?.computers))
+    // this.languagesData$ = this.store.pipe(select(state => state?.skills?.other))
 
     this.translate.prefetch(this.translationsToRequest, this)
 
@@ -90,19 +90,19 @@ export class SkillsComponent implements OnInit {
     this.selectedLocale$.subscribe((data: string) => this.selectedLocale = data)
     this.skillsData$.subscribe((data: SkillInterface[]) => data ? this.skillsData = data : null)
     this.computersData$.subscribe((data: SkillInterface[]) => data ? this.computersData = data : null)
-    this.languagesData$.subscribe((data: SkillInterface[]) => data ? this.languagesData = data : null)
+    // this.languagesData$.subscribe((data: SkillInterface[]) => data ? this.languagesData = data : null)
     this.activatedRoute.paramMap.subscribe(() => this.fetchData())
   }
 
   fetchData() {
-    if (this.type !== SkillsType.all) {
+    if (this.type !== SkillsType.all && this.type !== SkillsType.languages) {
       this.store.dispatch(SKILLS_ACTIONS.FETCH_SKILLS({
         language: this.selectedLocale,
         skillType: SkillsType[this.type]
       }))
     } else {
       Object.values(SkillsType).filter((type) => typeof type === 'string' ).forEach((type: string) => {
-        type !== SkillsType[SkillsType.all] && this.store.dispatch(
+        type !== SkillsType[SkillsType.all] && type !== SkillsType[SkillsType.languages] && this.store.dispatch(
           SKILLS_ACTIONS.FETCH_SKILLS({
             language: this.selectedLocale,
             skillType: type

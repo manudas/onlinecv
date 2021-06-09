@@ -8,7 +8,6 @@ const collection = 'languages';
 const LanguagesSchema = new Schema({
     name: String,
     certification: String,
-    type: String,
     school: String,
     school_url: String,
     written_level: String,
@@ -17,6 +16,7 @@ const LanguagesSchema = new Schema({
     language: String
 }, {
     collection,
+    versionKey: false,
 });
 
 const LanguagesModel = model(collection, LanguagesSchema);

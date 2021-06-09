@@ -30,6 +30,7 @@ import { reducer as experienceReducer } from '@store_reducers/Experience'
 import { reducer as localeReducer } from '@store_reducers/Locale'
 import { reducer as translationReducer } from '@store_reducers/Translation'
 import { reducer as messageReducer } from '@store_reducers/Message'
+import { reducer as skillsReducer } from '@store_reducers/Skills'
 import { reducer as socialNetworkReducer } from '@store_reducers/SocialNetworks'
 import { reducer as trainingReducer } from '@store_reducers/Trainings'
 
@@ -71,6 +72,7 @@ if (environment.production) {
       locale: localeReducer,
       translation: translationReducer,
       message: messageReducer,
+      skills: skillsReducer,
       socialNetworks: socialNetworkReducer,
       trainings: trainingReducer
     }, {}),
