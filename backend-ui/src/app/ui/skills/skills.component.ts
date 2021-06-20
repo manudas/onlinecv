@@ -6,6 +6,7 @@ import { EditSkillsStructure, SkillInterface, SkillsType } from '@app/types/Skil
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 import * as SKILLS_ACTIONS from '@store_actions/Skills'
+import * as LANGUAGE_ACTIONS from '@store_actions/Languages'
 
 import {
   faArrowsAlt,
@@ -20,6 +21,8 @@ import { TranslationService } from '@app/services/translation/translation.servic
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { LocaleStore } from '@app/types/Locale'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
+import { EditLanguageStructure, LanguageInterface } from '@app/types/Languages.'
+import { LanguageDialogComponent } from './languages-dialog.component'
 
 
 type StoreType = { locale: LocaleStore } & {skills: { skills: SkillInterface[] } & { computers: SkillInterface[] } /* & { other: SkillInterface[] }*/ }
@@ -52,8 +55,8 @@ export class SkillsComponent implements OnInit {
   skillsData: SkillInterface[] = []
   computersData$: Observable<SkillInterface[]>
   computersData: SkillInterface[] = []
-  languagesData$: Observable<SkillInterface[]>
-  languagesData: SkillInterface[] = []
+  languagesData$: Observable<LanguageInterface[]>
+  languagesData: LanguageInterface[] = []
 
   title: string = 'Skills';
 
@@ -83,7 +86,7 @@ export class SkillsComponent implements OnInit {
     this.translate.prefetch(this.translationsToRequest, this)
 
   }
-
+queda reducer de language, y luego backend
   public isSkillsActive = (skillType: string) => this.type === SkillsType.all || this.type === SkillsType[skillType]
 
   ngOnInit(): void {
@@ -95,10 +98,13 @@ export class SkillsComponent implements OnInit {
   }
 
   fetchData() {
-    if (this.type !== SkillsType.all && this.type !== SkillsType.languages) {
-      this.store.dispatch(SKILLS_ACTIONS.FETCH_SKILLS({
+    if (this.type !== SkillsType.all) {
+      this.type !== SkillsType.languages && this.store.dispatch(SKILLS_ACTIONS.FETCH_SKILLS({
         language: this.selectedLocale,
         skillType: SkillsType[this.type]
+      }))
+      this.type === SkillsType.languages && this.store.dispatch(LANGUAGE_ACTIONS.FETCH_LANGUAGES({
+        language: this.selectedLocale,
       }))
     } else {
       Object.values(SkillsType).filter((type) => typeof type === 'string' ).forEach((type: string) => {
@@ -108,6 +114,9 @@ export class SkillsComponent implements OnInit {
             skillType: type
           })
         )
+        type === SkillsType[SkillsType.languages] && this.store.dispatch(LANGUAGE_ACTIONS.FETCH_LANGUAGES({
+          language: this.selectedLocale,
+        }))
       })
     }
   }
@@ -118,7 +127,7 @@ export class SkillsComponent implements OnInit {
       data
     })
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: SkillInterface | EditSkillsStructure) => {
       logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '')
       if (result) {
         if (this.isSkillsEdit(result)) {
@@ -138,8 +147,48 @@ export class SkillsComponent implements OnInit {
     })
   }
 
+  openLanguageDialog(data: EditLanguageStructure | string): void {
+    const dialogRef = this.matDialog.open(LanguageDialogComponent, {
+      width: '80%',
+      data
+    })
+
+    dialogRef.afterClosed().subscribe((result: LanguageInterface | EditLanguageStructure) => {
+      logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '')
+      if (result) {
+        if (this.isLanguageEdit(result)) {
+          const {
+            index,
+            language
+          } = result
+          this.editLanguageValues(index, {
+            ...language,
+            language: this.selectedLocale,
+            order: index
+          })
+        } else {
+          this.addLanguage(result)
+        }
+      }
+    })
+  }
+
+  isLanguageEdit(data: LanguageInterface | EditLanguageStructure | Object = {}): data is EditLanguageStructure {
+    return (data as EditLanguageStructure).index !== undefined
+  }
+
   isSkillsEdit(data: SkillInterface | EditSkillsStructure | Object = {}): data is EditSkillsStructure {
     return (data as EditSkillsStructure).index !== undefined
+  }
+
+  editLanguageValues(index: number, languageData: LanguageInterface) {
+    const dataIndex = 'languagesData'
+    const newLanguages = [
+      ...this[dataIndex].slice(0, index),
+      { ...languageData},
+      ...this[dataIndex].slice(index + 1)
+    ];
+    this.dispatchLanguageSave(newLanguages)
   }
 
   editSkillsValues(index: number, skillsData: SkillInterface) {
@@ -150,6 +199,19 @@ export class SkillsComponent implements OnInit {
       ...this[dataIndex].slice(index + 1)
     ];
     this.dispatchSave(newSkills, skillsData.type)
+  }
+
+  dispatchLanguageSave(data) {
+    const curatedData = data.map(language => {
+      return {
+        ...language,
+        ...(language.written_level ? {written_level: Number(language.written_level)} : {}),
+        ...(language.spoken_level ? {spoken_level: Number(language.spoken_level)} : {}),
+      }
+    })
+    this.store.dispatch(LANGUAGE_ACTIONS.SAVE_LANGUAGES({
+      languages: curatedData,
+    }))
   }
 
   dispatchSave(data, type) {
@@ -167,6 +229,15 @@ export class SkillsComponent implements OnInit {
     this.openSkillDialog({
       skill,
       index
+    })
+  }
+
+  addLanguage(languageData: LanguageInterface) {
+    const dataIndex = 'languagesData'
+    this.editLanguageValues(this[dataIndex].length, {
+      ...languageData,
+      language: this.selectedLocale,
+      order: this[dataIndex].length
     })
   }
 

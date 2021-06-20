@@ -48,9 +48,9 @@ export const MutateLanguages =
     }
 `
 
-export const RemoveLanguages =
+export const RemoveLanguage =
 `
-    mutation RemoveLanguages($id: ID!) {
+    mutation RemoveLanguage($id: ID!) {
         removeLanguages(id: $id)
     }
 `

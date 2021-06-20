@@ -32,6 +32,7 @@ export const QuerySkills =
             developed_projects
             keywords
             language
+            order
         }
     }
 `

@@ -12,6 +12,7 @@ import { TranslationsModule } from '@services/translation';
 
 import { SkillsComponent } from './skills.component';
 import { SkillsDialogComponent } from './skills-dialog.component';
+import { LanguageDialogComponent } from './languages-dialog.component';
 import { UnderscoreModule } from '@app/services/underscore';
 import { ConfirmModule } from '@app/ui/confirm/confirm.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -20,6 +21,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
   declarations: [
     SkillsComponent,
     SkillsDialogComponent,
+    LanguageDialogComponent,
   ],
   imports: [
     ConfirmModule,

@@ -10,13 +10,7 @@ export enum SkillsType {
 
           type Skills {
             id: ID!
-
-
-
-
-
-
-
+            ...
             keywords: [String]!,
             language: String!
         }

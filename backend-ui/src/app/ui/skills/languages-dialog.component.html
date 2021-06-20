@@ -7,8 +7,8 @@
     >
         {{
             editingIndex === null
-                ? ('Add a new language: ' | translate | async) + (languagesFormGroup.get('type').value | translate | async | titlecase)
-                : ('Editing your language: ' | translate | async) + (languagesFormGroup.get('type').value | translate | async | titlecase)
+                ? ('Add a new language: ' | translate | async) + (languageFormGroup.get('type').value | translate | async | titlecase)
+                : ('Editing your language: ' | translate | async) + (languageFormGroup.get('type').value | translate | async | titlecase)
         }}
     </div>
 </h2>
@@ -45,7 +45,7 @@
 
 <ng-template #languageTemplate>
     <form
-        [formGroup]="languagesFormGroup"
+        [formGroup]="languageFormGroup"
     >
         <div
             class='form-group'
@@ -64,13 +64,13 @@
             <p
                 class='help-block'
                 [ngStyle]="{
-                    'margin-bottom': languagesFormGroup.get('name').touched && languagesFormGroup.get('name').errors ? 0 : 'initial'
+                    'margin-bottom': languageFormGroup.get('name').touched && languageFormGroup.get('name').errors ? 0 : 'initial'
                 }"
             >
                 {{ 'E.g: Drawing aircrafts' | translate | async }}
             </p>
             <small
-                    *ngIf="languagesFormGroup.get('name').touched && languagesFormGroup.get('name').errors"
+                    *ngIf="languageFormGroup.get('name').touched && languageFormGroup.get('name').errors"
                     [className]="'text-danger'"
             >
                 {{ 'You should provide a valid language name' | translate | async }}

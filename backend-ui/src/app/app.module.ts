@@ -19,6 +19,7 @@ import { TranslationsModule } from '@services/translation'
 
 import { DetailsEffects } from '@store_effects/Details'
 import { ExperienceEffects } from './store/effects/Experience'
+import { LanguageEffects } from '@store_effects/Languages'
 import { LocaleEffects } from '@store_effects/Locale'
 import { SkillEffects } from '@store_effects/Skills'
 import { SocialNetworksEffects } from '@store_effects/SocialNetworks'
@@ -55,6 +56,7 @@ if (environment.production) {
     EffectsModule.forRoot([
       DetailsEffects,
       ExperienceEffects,
+      LanguageEffects,
       LocaleEffects,
       SkillEffects,
       SocialNetworksEffects,

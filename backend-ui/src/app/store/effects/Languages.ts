@@ -4,26 +4,26 @@ import { Observable, of } from 'rxjs';
 
 import { switchMap, mergeMap, map, tap, catchError } from 'rxjs/operators';
 
-import * as SKILLS_ACTIONS from '@store_actions/Languages'
+import * as LANGUAGE_ACTIONS from '@store_actions/Languages'
 import * as COMMON_ACTIONS from '@store_actions/Common'
 
 import { DataService } from '@services/data/data.service'
 
 import {
-    QuerySkills,
-    MutateSkills,
-    RemoveSkill
+    QueryLanguages,
+    MutateLanguages,
+    RemoveLanguage
 } from '@services/data/queries'
 import { TranslationService } from '@app/services/translation/translation.service'
 import { select, Store } from '@ngrx/store';
 import { LocaleStore } from '@app/types/Locale';
-import { SkillsFetched } from '@app/types/Languages';
+import { LanguagesFetched } from '@app/types/Languages';
 import { logEasy } from '@app/services/logging/logging.service';
 
 type StoreType = { locale: LocaleStore }
 
 @Injectable()
-export class SkillEffects {
+export class LanguageEffects {
 
     translationsToRequest = ['Languages saved successfully', 'Language removed successfully', 'Error']
 
@@ -49,25 +49,22 @@ export class SkillEffects {
      */
     @Effect()
     public fetchLanguages$: Observable<any> = this.actions$.pipe(
-        ofType<ReturnType<typeof LANGUAGE_ACTIONS.FETCH_SKILLS>>(LANGUAGE_ACTIONS.FETCH_SKILLS),
+        ofType<ReturnType<typeof LANGUAGE_ACTIONS.FETCH_LANGUAGES>>(LANGUAGE_ACTIONS.FETCH_LANGUAGES),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         mergeMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
                 language,
-                skillType,
             } = action
 
             const vars = {
                 language,
-                type: skillType,
             }
 
-            return this.dataService.readData(QuerySkills, vars).pipe(
-                map((skillsData: SkillsFetched) => {
-                    return LANGUAGE_ACTIONS.SKILLS_FETCHED(
+            return this.dataService.readData(QueryLanguages, vars).pipe(
+                map((languagesData: LanguagesFetched) => {
+                    return LANGUAGE_ACTIONS.LANGUAGES_FETCHED(
                         {
-                            skillType,
-                            ...skillsData
+                            ...languagesData
                         }
                     )
                 }),
@@ -87,27 +84,25 @@ export class SkillEffects {
      * a result of the operation performed
      */
     @Effect()
-    public mutateSkillsEffect$: Observable<any> = this.actions$.pipe(
-        ofType<ReturnType<typeof LANGUAGE_ACTIONS.SAVE_SKILLS>>(LANGUAGE_ACTIONS.SAVE_SKILLS),
+    public mutateLanguagesEffect$: Observable<any> = this.actions$.pipe(
+        ofType<ReturnType<typeof LANGUAGE_ACTIONS.SAVE_LANGUAGES>>(LANGUAGE_ACTIONS.SAVE_LANGUAGES),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
-                skills,
-                skillType
+                languages
             } = action
 
             const vars = {
-                skills,
+                languages,
             }
 
-            return this.dataService.setData(MutateSkills, vars).pipe(
+            return this.dataService.setData(MutateLanguages, vars).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Languages saved successfully', this)}`
                     }),
-                    SKILLS_ACTIONS.FETCH_SKILLS({
+                    LANGUAGE_ACTIONS.FETCH_LANGUAGES({
                         language: this.selectedLocale,
-                        skillType
                     })
                 ]),
                 // handle failure in todoListService.fetchTodoList()
@@ -128,27 +123,25 @@ export class SkillEffects {
      * a result of the operation performed
      */
     @Effect()
-    public removeSkillEffect$: Observable<any> = this.actions$.pipe(
-        ofType<ReturnType<typeof LANGUAGE_ACTIONS.REMOVE_SKILL>>(LANGUAGE_ACTIONS.REMOVE_SKILL),
+    public removeLanguageEffect$: Observable<any> = this.actions$.pipe(
+        ofType<ReturnType<typeof LANGUAGE_ACTIONS.REMOVE_LANGUAGE>>(LANGUAGE_ACTIONS.REMOVE_LANGUAGE),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
                 id,
-                skillType
             } = action
 
             const vars = {
                 id,
             }
 
-            return this.dataService.setData(RemoveSkill, vars).pipe(
+            return this.dataService.setData(RemoveLanguage, vars).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
-                        message: `${this.translate.getResolvedTranslation('Skill removed successfully', this)}`
+                        message: `${this.translate.getResolvedTranslation('Language removed successfully', this)}`
                     }),
-                    LANGUAGE_ACTIONS.FETCH_SKILLS({
+                    LANGUAGE_ACTIONS.FETCH_LANGUAGES({
                         language: this.selectedLocale,
-                        skillType
                     })
                 ]),
                 // handle failure in todoListService.fetchTodoList()

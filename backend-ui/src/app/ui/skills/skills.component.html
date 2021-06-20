@@ -89,12 +89,22 @@
     >
     style this (watch classes)
         <button
+            *ngIf="getSkillTypeName(type) !== 'languages'"
             (click)="openSkillDialog(getSkillTypeName(type))"
             [className]="'btn btn-outline-info'"
             type='button'
             ngbButton
         >
             {{ 'Add Skills' | translate | async }}
+        </button>
+        <button
+            *ngIf="getSkillTypeName(type) === 'languages'"
+            (click)="openLanguageDialog(getSkillTypeName(type))"
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+        >
+            {{ 'Add Language' | translate | async }}
         </button>
     </div>
 

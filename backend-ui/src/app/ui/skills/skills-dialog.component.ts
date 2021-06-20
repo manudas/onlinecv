@@ -47,7 +47,7 @@ export class SkillsDialogComponent {
         // language: String!
 
         // no estoy seguro de que la mejor forma de manejar keywords sea con un FormControl
-        // keywords: new FormControl(null),
+        keywords: new FormControl(null),
     })
 
     editingIndex: number = null
