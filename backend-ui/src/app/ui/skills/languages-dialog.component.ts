@@ -5,7 +5,7 @@ import {
     MAT_DIALOG_DATA,
 } from "@angular/material/dialog"
 import { LanguageInterface } from "@app/types/Languages";
-import { EditLanguageStructure } from "@app/types/Languages.";
+import { EditLanguageStructure } from "@app/types/Languages";
 
 @Component({
     templateUrl: './languages-dialog.component.html',

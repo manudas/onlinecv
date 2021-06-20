@@ -11,7 +11,7 @@
 */
 
 module.exports =
-    `
+`
   type Language {
     _id: ID!
     name: String!,
@@ -39,7 +39,7 @@ module.exports =
   }
 
   extend type Query {
-    Languages(language: String!): [Language]!
+    Languages(language: String!): [Language]
   }
 
   extend type Mutation {

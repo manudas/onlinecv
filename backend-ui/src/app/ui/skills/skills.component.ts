@@ -21,7 +21,7 @@ import { TranslationService } from '@app/services/translation/translation.servic
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { LocaleStore } from '@app/types/Locale'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
-import { EditLanguageStructure, LanguageInterface } from '@app/types/Languages.'
+import { EditLanguageStructure, LanguageInterface } from '@app/types/Languages'
 import { LanguageDialogComponent } from './languages-dialog.component'
 
 
@@ -86,7 +86,7 @@ export class SkillsComponent implements OnInit {
     this.translate.prefetch(this.translationsToRequest, this)
 
   }
-queda reducer de language, y luego backend
+
   public isSkillsActive = (skillType: string) => this.type === SkillsType.all || this.type === SkillsType[skillType]
 
   ngOnInit(): void {
