@@ -25,7 +25,7 @@ import { EditLanguageStructure, LanguageInterface } from '@app/types/Languages'
 import { LanguageDialogComponent } from './languages-dialog.component'
 
 
-type StoreType = { locale: LocaleStore } & {skills: { skills: SkillInterface[] } & { computers: SkillInterface[] } /* & { other: SkillInterface[] }*/ }
+type StoreType = { locale: LocaleStore } & {skills: { skills: SkillInterface[] } & { computers: SkillInterface[] } } & { languages: { list: LanguageInterface[] } }
 @Component({
   selector: 'app-skills',
   templateUrl: './skills.component.html',
@@ -63,7 +63,7 @@ export class SkillsComponent implements OnInit {
   // initial state of dragging for reordering skills
   dragDisabled: boolean = true
 
-  translationsToRequest = ['Skills deleted successfully']
+  translationsToRequest = ['Skills deleted successfully', 'Language deleted successfully']
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
 
@@ -81,7 +81,8 @@ export class SkillsComponent implements OnInit {
 
     this.skillsData$ = this.store.pipe(select(state => state?.skills?.skills))
     this.computersData$ = this.store.pipe(select(state => state?.skills?.computers))
-    // this.languagesData$ = this.store.pipe(select(state => state?.skills?.other))
+
+    this.languagesData$ = this.store.pipe(select(state => state?.languages?.list))
 
     this.translate.prefetch(this.translationsToRequest, this)
 
@@ -93,7 +94,7 @@ export class SkillsComponent implements OnInit {
     this.selectedLocale$.subscribe((data: string) => this.selectedLocale = data)
     this.skillsData$.subscribe((data: SkillInterface[]) => data ? this.skillsData = data : null)
     this.computersData$.subscribe((data: SkillInterface[]) => data ? this.computersData = data : null)
-    // this.languagesData$.subscribe((data: SkillInterface[]) => data ? this.languagesData = data : null)
+    this.languagesData$.subscribe((data: LanguageInterface[]) => data ? this.languagesData = data : null)
     this.activatedRoute.paramMap.subscribe(() => this.fetchData())
   }
 

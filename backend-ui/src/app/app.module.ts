@@ -28,6 +28,7 @@ import { TranslationEffects } from '@store_effects/Translation'
 
 import { reducer as detailsReducer } from '@store_reducers/Details'
 import { reducer as experienceReducer } from '@store_reducers/Experience'
+import { reducer as languageReducer } from '@store_reducers/Languages'
 import { reducer as localeReducer } from '@store_reducers/Locale'
 import { reducer as translationReducer } from '@store_reducers/Translation'
 import { reducer as messageReducer } from '@store_reducers/Message'
@@ -71,6 +72,7 @@ if (environment.production) {
     StoreModule.forRoot({
       details: detailsReducer,
       experience: experienceReducer,
+      languages: languageReducer,
       locale: localeReducer,
       translation: translationReducer,
       message: messageReducer,
