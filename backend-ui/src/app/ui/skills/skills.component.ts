@@ -24,7 +24,6 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import { EditLanguageStructure, LanguageInterface } from '@app/types/Languages'
 import { LanguageDialogComponent } from './languages-dialog.component'
 
-
 type StoreType = { locale: LocaleStore } & {skills: { skills: SkillInterface[] } & { computers: SkillInterface[] } } & { languages: { list: LanguageInterface[] } }
 @Component({
   selector: 'app-skills',
@@ -46,6 +45,16 @@ export class SkillsComponent implements OnInit {
     'description',
     'school',
     'average_grade',
+    'edit',
+    'delete',
+    'order',
+  ];
+
+  languageColsToRender = [
+    'id',
+    'name',
+    'certification',
+    'school',
     'edit',
     'delete',
     'order',

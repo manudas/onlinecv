@@ -1,4 +1,3 @@
-// import { SocialNetwork, SocialNetworkFetched } from '@app/types/SocialNetworks'
 import { TrainingFetched, TrainingInterface } from '@app/types'
 import { createAction, props } from '@ngrx/store'
 

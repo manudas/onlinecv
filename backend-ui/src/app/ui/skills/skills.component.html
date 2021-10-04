@@ -9,7 +9,7 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: SkillsType.skills}"
+        [panelParameters]="{type: SkillsType.skills, cols: colsToRender}"
         [cardTitle]="'General Skills' | translate | async">
     </app-card>
 </ng-template>
@@ -18,7 +18,7 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: SkillsType.computers}"
+        [panelParameters]="{type: SkillsType.computers, cols: colsToRender}"
         [cardTitle]="'Computer' | translate | async">
     </app-card>
 </ng-template>
@@ -27,13 +27,14 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: SkillsType.languages}"
+        [panelParameters]="{type: SkillsType.languages, cols: languageColsToRender}"
         [cardTitle]="'Languages' | translate | async">
     </app-card>
 </ng-template>
 
 <ng-template #panel
     let-type="type"
+    let-cols="cols"
 >
     <mat-table
         *ngIf="getSkillsSource(type).length"
@@ -45,7 +46,7 @@
         [cdkDropListDisabled]="dragDisabled"
 
     >
-        <ng-container *ngFor="let col of colsToRender; let colIndex = index" matColumnDef="{{col}}">
+        <ng-container *ngFor="let col of cols; let colIndex = index" matColumnDef="{{col}}">
             <mat-header-cell
                 *matHeaderCellDef
             >
@@ -75,12 +76,12 @@
             </mat-cell>
         </ng-container>
 
-        <mat-header-row *matHeaderRowDef="colsToRender"></mat-header-row>
+        <mat-header-row *matHeaderRowDef="cols"></mat-header-row>
         <mat-row
             (cdkDragStarted)="onDragStart($event)"
             cdkDrag
             [cdkDragData]="row"
-            *matRowDef="let row; columns: colsToRender"
+            *matRowDef="let row; columns: cols"
         ></mat-row>
     </mat-table>
 
