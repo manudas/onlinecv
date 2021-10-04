@@ -22,7 +22,7 @@ import { TranslationService } from '@app/services/translation/translation.servic
 import { SocialNetworkDialogComponent } from './social-network-dialog.component';
 import * as COMMON_ACTIONS from '@store_actions/Common'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ConfirmComponent } from './confirm.component';
+import { ConfirmComponent } from '@app/ui/confirm/confirm.component';
 import { logEasy } from '@app/services/logging';
 
 type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } } & { socialNetworks: {list: SocialNetwork[] } }
@@ -212,15 +212,18 @@ console.log('would it be good to accompany alt and title in the image in the fro
       width: '80%',
       data: {
         index: networkIndex,
-        network: network
+        element: network,
+        keyName: 'label',
+        superType: 'network',
+        action: 'delete'
       }
     })
 
-    dialogRef.afterClosed().subscribe((indexToRemove = null) => {
-      console.log(`The dialog was closed.`, indexToRemove !== null ? `The following message was received: ${JSON.stringify(indexToRemove)}` : '');
+    dialogRef.afterClosed().subscribe(({index = null}) => {
+      console.log(`The dialog was closed.`, index !== null ? `The following message was received: ${JSON.stringify(index)}` : '');
 
-      if (indexToRemove !== null) {
-        this.deleteNetwork(indexToRemove)
+      if (index !== null) {
+        this.deleteNetwork(index)
       }
 
     })

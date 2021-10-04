@@ -14,39 +14,41 @@ module.exports =
     """
     TO BE FILLED WITH MORE
     """
-    RegulatedTraining,
+    Training,
   }
 
   type Skill {
-    id: ID!
-    name: String!,
+    _id: ID!
+    tag: String!,
     description: String,
     skill_level: Int,
-    related_knowledge: [RelatedKnowledge]!,
+    related_knowledge: [RelatedKnowledge],
     type: String,
-    developed_projects: [String]!,
-    keywords: [String]!,
-    language: String!
+    developed_projects: [String],
+    keywords: [String],
+    language: String!,
+    order: Int!
   }
 
   input SkillInput {
     id: ID
-    name: String!,
+    tag: String!,
     description: String,
     skill_level: Int,
-    related_knowledge: [RelatedKnowledge]!,
+    related_knowledge: [RelatedKnowledge],
     type: String,
-    developed_projects: [String]!,
-    keywords: [String]!,
-    language: String!
+    developed_projects: [String],
+    keywords: [String],
+    language: String!,
+    order: Int!
   }
 
   extend type Query {
-    skills(language: String!): [Skill]!
+    Skills(language: String!, type: String!): [Skill]
   }
 
   extend type Mutation {
-    putSkill(skill: SkillInput!): Skill!
+    putSkills(skills: [SkillInput]!): [Skill]!
     removeSkill(id: ID!): Boolean!
   }
 `;

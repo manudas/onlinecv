@@ -4,45 +4,46 @@
     type: String,
     school: String,
     school_url: String,
-    written_level: String,
-    spoken_level: String,
+    written_level: Number,
+    spoken_level: Number,
     keywords: [],
     language: String
 */
+
 module.exports =
-    `
+`
   type Language {
-    id: ID!
+    _id: ID!
     name: String!,
     certification: String,
-    type: String,
     school: String,
     school_url: String,
-    written_level: String,
-    spoken_level: String,
+    written_level: Int,
+    spoken_level: Int,
     keywords: [String]!,
-    language: String!
+    language: String!,
+    order: Int!
   }
 
   input LanguageInput {
     id: ID
     name: String!,
     certification: String,
-    type: String,
     school: String,
     school_url: String,
-    written_level: String,
-    spoken_level: String,
+    written_level: Int,
+    spoken_level: Int,
     keywords: [String]!,
-    language: String!
+    language: String!,
+    order: Int!
   }
 
   extend type Query {
-    languages(language: String!): [Language]!
+    Languages(language: String!): [Language]
   }
 
   extend type Mutation {
-    putLanguage(language: LanguageInput!): Language!
+    putLanguages(languages: [LanguageInput]!): [Language]!
     removeLanguage(id: ID!): Boolean!
   }
 `;

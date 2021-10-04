@@ -5,7 +5,6 @@ import { logEasy } from '@app/services/logging'
 import { EditTrainingStructure, TrainingInterface, TrainingType } from '@app/types/Training'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
-import * as COMMON_ACTIONS from '@store_actions/Common'
 import * as TRAINING_ACTIONS from '@store_actions/Training'
 
 import {
@@ -18,7 +17,7 @@ import { select, Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
 import { TrainingDialogComponent } from './training-dialog.component'
 import { TranslationService } from '@app/services/translation/translation.service'
-import { ConfirmComponent } from './confirm.component'
+import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { LocaleStore } from '@app/types/Locale'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 
@@ -33,7 +32,7 @@ export class TrainingComponent implements OnInit {
 
   faArrowsAlt: IconDefinition = faArrowsAlt
   faEdit: IconDefinition = faEdit
-  faTable: IconDefinition  = faTable;
+  faTable: IconDefinition  = faTable
   faTrash: IconDefinition = faTrash
 
   type: TrainingType = null;
@@ -88,9 +87,7 @@ export class TrainingComponent implements OnInit {
   public isTrainingActive = (trainingType: string) => this.type === TrainingType.all || this.type === TrainingType[trainingType]
 
   ngOnInit(): void {
-    this.selectedLocale$.subscribe((data: string) => {
-      this.selectedLocale = data
-    })
+    this.selectedLocale$.subscribe((data: string) => this.selectedLocale = data)
     this.officialData$.subscribe((data: TrainingInterface[]) => data ? this.officialData = data : null)
     this.computerData$.subscribe((data: TrainingInterface[]) => data ? this.computerData = data : null)
     this.otherData$.subscribe((data: TrainingInterface[]) => data ? this.otherData = data : null)
@@ -129,7 +126,11 @@ export class TrainingComponent implements OnInit {
             index,
             training
           } = result
-          this.editTrainingValues(index, training)
+          this.editTrainingValues(index, {
+            ...training,
+            language: this.selectedLocale,
+            order: index
+          })
         } else {
           this.addTraining(result)
         }
@@ -192,7 +193,10 @@ export class TrainingComponent implements OnInit {
       width: '80%',
       data: {
         index: trainingIndex,
-        training
+        element: training,
+        action: 'delete',
+        nameKey: 'tag',
+        superType: 'training',
       }
     })
 

@@ -17,16 +17,16 @@ import { DetailsComponent } from './details.component'
 
 import { DataService } from '@services/data/data.service'
 import { SocialNetworkDialogComponent } from './social-network-dialog.component'
-import { ConfirmComponent } from './confirm.component'
+import { ConfirmModule } from '@app/ui/confirm/confirm.module'
 import { UnderscoreModule } from '@app/services/underscore'
 
 @NgModule({
   declarations: [
     DetailsComponent,
     SocialNetworkDialogComponent,
-    ConfirmComponent,
   ],
   imports: [
+    ConfirmModule,
     CommonModule,
     DragDropModule,
     FontAwesomeModule,

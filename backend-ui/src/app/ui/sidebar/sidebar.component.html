@@ -27,39 +27,18 @@
                 [className]="sidebar_icon"></fa-icon>
             <a [className]="'sidebar_dock_link'">Details</a>
         </li>
-        <li [className]="'sidebar_dock_launcher'">
-            <app-menu [name]="trainingMenu.name"
-                [start_icon]="trainingMenu.start_icon"
-                [title]="trainingMenu.title"
-                [options]="trainingMenu.options"
-                [caret]="trainingMenu.caret"
-                [stylesStartIcon]="trainingMenu.stylesStartIcon"
-                [stylesDropToggle]="trainingMenu.stylesDropToggle"
+        <li
+            *ngFor="let menu of menuItems"
+            [className]="'sidebar_dock_launcher'">
+            <app-menu [name]="menu.name"
+                [start_icon]="menu.start_icon"
+                [title]="menu.title"
+                [options]="menu.options"
+                [caret]="menu.caret"
+                [stylesStartIcon]="menu.stylesStartIcon"
+                [stylesDropToggle]="menu.stylesDropToggle"
                 [placement]="'right-top'"
-                [dropDownActiveOrFocusedToggleStyles]="trainingMenu.dropDownActiveOrFocusedToggleStyles"></app-menu>
-        </li>
-        <li [className]="'sidebar_dock_launcher'">
-            <app-menu [name]="experienceMenu.name"
-                [start_icon]="experienceMenu.start_icon"
-                [title]="experienceMenu.title"
-                [options]="experienceMenu.options"
-                [caret]="experienceMenu.caret"
-                [stylesStartIcon]="experienceMenu.stylesStartIcon"
-                [stylesDropToggle]="experienceMenu.stylesDropToggle"
-                [placement]="'right-top'"
-                [dropDownActiveOrFocusedToggleStyles]="experienceMenu.dropDownActiveOrFocusedToggleStyles"></app-menu>
-        </li>
-        <li [className]="'sidebar_dock_launcher'">
-            <app-menu [name]="othersMenu.name"
-                [start_icon]="othersMenu.start_icon"
-                [title]="othersMenu.title"
-                [options]="othersMenu.options"
-                [caret]="othersMenu.caret"
-                [stylesStartIcon]="othersMenu.stylesStartIcon"
-                [stylesDropToggle]="othersMenu.stylesDropToggle"
-                [placement]="'right-top'"
-                [dropDownActiveOrFocusedToggleStyles]="othersMenu.dropDownActiveOrFocusedToggleStyles"></app-menu>
-
+                [dropDownActiveOrFocusedToggleStyles]="menu.dropDownActiveOrFocusedToggleStyles"></app-menu>
         </li>
         <li [className]="'sidebar_dock_launcher'">
             <fa-icon [icon]="faCloud"

@@ -1,6 +1,12 @@
-export * from './Details';
+export * from './Details'
+
+export * from './Experience'
+
+export * from './Languages'
 
 export * from './Locale'
+
+export * from './Skills'
 
 export * from './SocialNetworks'
 

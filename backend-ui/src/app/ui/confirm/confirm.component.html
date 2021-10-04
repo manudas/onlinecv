@@ -13,7 +13,18 @@
     <div
         [className]="'paddedContent'"
     >
-        {{ ('Network' | translate | async) + network.label + ('will be deleted permanently' | translate | async) }}
+        {{
+            ('Your' | translate | async)
+            + ( superType | translate | async )
+            + ' '
+            + element[nameKey]
+            + ' '
+            + ('will be' | translate | async)
+            + ' '
+            + (acctionMap[action] | translate | async)
+            + ' '
+            + ('permanently' | translate | async)
+        }}
     </div>
 </div>
 <div mat-dialog-actions>
@@ -32,7 +43,7 @@
             [className]="'btn submitButton'"
             type="submit"
             ngbButton
-            (click)="close(index)"
+            (click)="close(index, element)"
         >
             {{ 'Continue' | translate | async }}
         </button>

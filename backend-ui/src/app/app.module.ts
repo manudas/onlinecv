@@ -18,17 +18,24 @@ import { MatDialogModule } from '@angular/material/dialog'
 import { TranslationsModule } from '@services/translation'
 
 import { DetailsEffects } from '@store_effects/Details'
+import { ExperienceEffects } from './store/effects/Experience'
+import { LanguageEffects } from '@store_effects/Languages'
 import { LocaleEffects } from '@store_effects/Locale'
+import { SkillEffects } from '@store_effects/Skills'
 import { SocialNetworksEffects } from '@store_effects/SocialNetworks'
 import { TrainingEffects } from '@store_effects/Training'
 import { TranslationEffects } from '@store_effects/Translation'
 
 import { reducer as detailsReducer } from '@store_reducers/Details'
+import { reducer as experienceReducer } from '@store_reducers/Experience'
+import { reducer as languageReducer } from '@store_reducers/Languages'
 import { reducer as localeReducer } from '@store_reducers/Locale'
 import { reducer as translationReducer } from '@store_reducers/Translation'
 import { reducer as messageReducer } from '@store_reducers/Message'
+import { reducer as skillsReducer } from '@store_reducers/Skills'
 import { reducer as socialNetworkReducer } from '@store_reducers/SocialNetworks'
 import { reducer as trainingReducer } from '@store_reducers/Trainings'
+
 
 let dev = [
   StoreDevtoolsModule.instrument({
@@ -49,7 +56,10 @@ if (environment.production) {
     BrowserAnimationsModule,
     EffectsModule.forRoot([
       DetailsEffects,
+      ExperienceEffects,
+      LanguageEffects,
       LocaleEffects,
+      SkillEffects,
       SocialNetworksEffects,
       TrainingEffects,
       TranslationEffects,
@@ -61,9 +71,12 @@ if (environment.production) {
     NavbarModule,
     StoreModule.forRoot({
       details: detailsReducer,
+      experience: experienceReducer,
+      languages: languageReducer,
       locale: localeReducer,
       translation: translationReducer,
       message: messageReducer,
+      skills: skillsReducer,
       socialNetworks: socialNetworkReducer,
       trainings: trainingReducer
     }, {}),

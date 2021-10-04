@@ -6,16 +6,18 @@ const {
 const collection = 'skills';
 
 const SkillsSchema = new Schema({
-    name: String,
+    tag: String,
     description: String,
     skill_level: Number,
     related_knowledge: {}, // subquery ?
     type: String,
     developed_projects: [],
     keywords: [],
-    language: String
+    language: String,
+    order: Number
 }, {
     collection,
+    versionKey: false,
 });
 
 const SkillsModel = model(collection, SkillsSchema);

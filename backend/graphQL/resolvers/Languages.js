@@ -1,15 +1,16 @@
 // import { AuthenticationError } from 'apollo-server';
 module.exports = {
     Query: {
-        languages: async({
+        Languages: async({
             language
         }, {
             models: {
                 LanguagesModel
             },
         }, info) => {
+            const lang = language === 'gb' ? 'en' : language;
             const languageList = await LanguagesModel.find({
-                language
+                language: lang
             }).sort({
                 order: 1
             }).exec();
@@ -28,7 +29,7 @@ module.exports = {
             { upsert: true }      // Options: upsert -> insert document if no ducment found to update
         )
         */
-        putLanguage: async(parent, {
+        putLanguages: async({
             Language,
         }, {
             models: {

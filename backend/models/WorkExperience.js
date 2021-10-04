@@ -6,17 +6,19 @@ const {
 const collection = 'professional_experience';
 
 const WorkExperienceSchema = new Schema({
-    name: String,
     description: String,
+    type: String, // professional, ong, other
     start_date: Date,
     finish_date: Date,
-    post: String,
+    role: String,
     company: String,
     company_url: String,
     keywords: [],
-    language: String
+    language: String,
+    order: Number,
 }, {
     collection,
+    versionKey: false
 });
 
 const WorkExperienceModel = model(collection, WorkExperienceSchema);

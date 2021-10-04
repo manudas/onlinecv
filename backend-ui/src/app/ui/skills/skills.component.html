@@ -1,16 +1,16 @@
-<ng-container *ngIf="isTrainingActive('official'); then officialTemplate"></ng-container>
-<ng-container *ngIf="isTrainingActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isTrainingActive('computer'); then computerTemplate"></ng-container>
-<ng-container *ngIf="isTrainingActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isTrainingActive('other'); then otherTemplate"></ng-container>
+<ng-container *ngIf="isSkillsActive('skills'); then skillsTemplate"></ng-container>
+<ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
+<ng-container *ngIf="isSkillsActive('computers'); then computerTemplate"></ng-container>
+<ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
+<ng-container *ngIf="isSkillsActive('languages'); then languagesTemplate"></ng-container>
 
 
-<ng-template #officialTemplate>
+<ng-template #skillsTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: TrainingType.official}"
-        [cardTitle]="'Official' | translate | async">
+        [panelParameters]="{type: SkillsType.skills, cols: colsToRender}"
+        [cardTitle]="'General Skills' | translate | async">
     </app-card>
 </ng-template>
 
@@ -18,34 +18,35 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: TrainingType.computer}"
+        [panelParameters]="{type: SkillsType.computers, cols: colsToRender}"
         [cardTitle]="'Computer' | translate | async">
     </app-card>
 </ng-template>
 
-<ng-template #otherTemplate>
+<ng-template #languagesTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: TrainingType.other}"
-        [cardTitle]="'Other' | translate | async">
+        [panelParameters]="{type: SkillsType.languages, cols: languageColsToRender}"
+        [cardTitle]="'Languages' | translate | async">
     </app-card>
 </ng-template>
 
 <ng-template #panel
     let-type="type"
+    let-cols="cols"
 >
     <mat-table
-        *ngIf="getTrainingSource(type).length"
-        [dataSource]="getTrainingSource(type)"
+        *ngIf="getSkillsSource(type).length"
+        [dataSource]="getSkillsSource(type)"
 
         cdkDropList
-        [cdkDropListData]="getTrainingSource(type)"
+        [cdkDropListData]="getSkillsSource(type)"
         (cdkDropListDropped)="onDrop($event)"
         [cdkDropListDisabled]="dragDisabled"
 
     >
-        <ng-container *ngFor="let col of colsToRender; let colIndex = index" matColumnDef="{{col}}">
+        <ng-container *ngFor="let col of cols; let colIndex = index" matColumnDef="{{col}}">
             <mat-header-cell
                 *matHeaderCellDef
             >
@@ -54,7 +55,7 @@
             <mat-cell *matCellDef="let element; let row; let rowIndex = index">
 
                 <ng-container *ngIf="col === 'edit'"
-                    [ngTemplateOutlet]="editTrainingTemplate"
+                    [ngTemplateOutlet]="editSkillTemplate"
                     [ngTemplateOutletContext]="{
                         rowIndex: rowIndex,
                         type: type
@@ -75,12 +76,12 @@
             </mat-cell>
         </ng-container>
 
-        <mat-header-row *matHeaderRowDef="colsToRender"></mat-header-row>
+        <mat-header-row *matHeaderRowDef="cols"></mat-header-row>
         <mat-row
             (cdkDragStarted)="onDragStart($event)"
             cdkDrag
             [cdkDragData]="row"
-            *matRowDef="let row; columns: colsToRender"
+            *matRowDef="let row; columns: cols"
         ></mat-row>
     </mat-table>
 
@@ -89,12 +90,22 @@
     >
     style this (watch classes)
         <button
-            (click)="openTrainingDialog(getTrainingTypeName(type))"
+            *ngIf="getSkillTypeName(type) !== 'languages'"
+            (click)="openSkillDialog(getSkillTypeName(type))"
             [className]="'btn btn-outline-info'"
             type='button'
             ngbButton
         >
-            {{ 'Add Training' | translate | async }}
+            {{ 'Add Skills' | translate | async }}
+        </button>
+        <button
+            *ngIf="getSkillTypeName(type) === 'languages'"
+            (click)="openLanguageDialog(getSkillTypeName(type))"
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+        >
+            {{ 'Add Language' | translate | async }}
         </button>
     </div>
 
@@ -104,13 +115,13 @@
     <div [className]="'separator'"></div>
 </ng-template>
 
-<ng-template #editTrainingTemplate
+<ng-template #editSkillTemplate
     let-index="rowIndex"
     let-type="type"
 >
     <button [className]="'btn btn-info btn-training-row'"
         ngbButton
-        (click)="editTraining(index, getTrainingTypeName(type))"
+        (click)="editSkill(index, getSkillTypeName(type))"
     >
         <fa-icon
             [icon]="faEdit"
@@ -126,7 +137,7 @@
 >margen izq cortado
     <button [className]="'btn btn-danger btn-network-row'"
         ngbButton
-        (click)="openTrainingRemovalConfirmDialog(index, type)"
+        (click)="openSkillsRemovalConfirmDialog(index, type)"
         >
         <fa-icon
             [icon]="faTrash"

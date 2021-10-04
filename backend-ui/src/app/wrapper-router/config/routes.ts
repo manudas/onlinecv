@@ -3,6 +3,7 @@ import { DashboardComponent } from '@app/ui/dashboard/dashboard.component';
 import { DetailsComponent } from '@app/ui/details/details.component';
 import { TrainingComponent } from '@app/ui/training/training.component';
 import { ExperienceComponent } from '@app/ui/experience/experience.component';
+import { SkillsComponent } from '@app/ui/skills/skills.component';
 
 import { NotfoundGuardService } from '@app/services/notfound/notfound.service';
 
@@ -18,14 +19,17 @@ export const routes: Routes = [
     { path: 'experience', redirectTo: 'experience/', pathMatch: 'full' },
     { path: 'experience/:type', component: ExperienceComponent },
 
+    { path: 'skills', redirectTo: 'skills/', pathMatch: 'full' },
+    { path: 'skills/:type', component: SkillsComponent },
+
     { path: 'others', redirectTo: 'others/', pathMatch: 'full' },
     { path: 'others/:type', component: ExperienceComponent },
 
-    // {
-    //     path: 'notfound',
-    //     canActivate: [NotfoundGuardService],
-    //     children: [],
-    //     pathMatch: 'full'
-    // },
+    {
+        path: 'notfound',
+        canActivate: [NotfoundGuardService],
+        children: [],
+        pathMatch: 'full'
+    },
     // { path: '**', redirectTo: 'notfound' },
 ];
