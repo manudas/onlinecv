@@ -8,16 +8,16 @@ import { cvComponentsWereLoadedActionCreator } from "../../actions";
 
 import "./cvcontainer.css";
 
-import ProfileResume from "../../containers/profileResume";
-import ProfileDetail from "../../containers/profileDetails";
-import RegulatedTraining from "../../containers/regulated_training";
-import WorkExperience from "../../containers/work_experience";
-import Skill from "../../containers/skills";
-import Interest from "../../containers/interests";
-import PortFolio from "../../containers/portfolio";
-import ContactForm from "../../containers/contact_form";
-import ThankYou from "../../containers/thank_you";
-import Footer from "../../containers/footer";
+import ProfileResume from "../profileResume";
+import ProfileDetail from "../profileDetails";
+import RegulatedTraining from "../regulated_training";
+import WorkExperience from "../work_experience";
+import Skill from "../skills";
+import Interest from "../interests";
+import PortFolio from "../portfolio";
+import ContactForm from "../contact_form";
+import ThankYou from "../thank_you";
+import Footer from "../footer";
 
 class CVContainer extends Component {
     constructor(props) {

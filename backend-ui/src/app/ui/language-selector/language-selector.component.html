@@ -13,6 +13,9 @@
             >
                 {{getSelectedLangageNameFromIso(selectedLocale) | translate | async}}
                 <img
+                    [ngStyle]="{
+                        maxWidth: '22px'
+                    }"
                     [ngClass]="'flag-image'"
                     src="{{ getImgUrl(selectedLocale) }}"
                 />
@@ -35,6 +38,9 @@
             >
                 {{locale.name | translate | async}}
                 <img
+                    [ngStyle]="{
+                        maxWidth: '22px'
+                    }"
                     [ngClass]="'flag-image'"
                     src="{{ getImgUrl(locale.iso) }}"
                 />

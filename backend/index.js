@@ -17,7 +17,7 @@ const cookieParser = require('cookie-parser')
 const path = require("path");
 
 const {
-    rest,
+    // rest,
     graphql
 } = require("./api");
 
@@ -63,44 +63,6 @@ app.use(cookieParser());
 
 //  "static" static folder files
 app.use(express.static(path.join(__dirname, 'static')));
-
-// set the view engine to ejs
-app.set("view engine", "ejs");
-
-// set the Routes
-// Route for first load
-app.get("/", function(req, res) {
-    const rest_engine = rest.engine;
-    let language = req.cookies.language;
-    if (language === undefined) { // no language cookie
-        language = default_language;
-    }
-    const command = rest_engine.command_list.get_details;
-    const homeData = rest_engine.get(command, language);
-    const defaultData = {
-        webTitle: 'Online Resume - Change it on config collection',
-        name: 'Your name here - Change it on the personal_details collection',
-        surname: 'Your last name here - Change it on the personal_details collection',
-        primaryJobName: 'Your primary Job name - Change it on the personal_details collection. You can add a secondary too',
-        secondaryJobName: null,
-        nickname: 'Your nickname or shortened name here - You can assign it or nullify ir on personal_details collection'
-    };
-    homeData.then(data => {
-        const dataPassed = Object.assign(
-            defaultData,
-            data.details,
-        );
-        res.render("home", dataPassed);
-    }).catch(e => console.log(e));
-    // res.send("Hello World!");
-});
-
-/*
- * Route to api if url starts with /api
- * Used in the front end, mainly to display
- * information
- */
-app.use("/api", rest.router);
 
 /*
  * Route to graphQL api if url starts with

@@ -26,6 +26,7 @@ export const Locale =
                 id: _id
                 name
                 iso
+                flag
             }
         }
     `;

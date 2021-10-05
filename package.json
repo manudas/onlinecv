@@ -10,7 +10,7 @@
   "author": "Manuel José Pulgar Anguita",
   "license": "ISC",
   "devDependencies": {
-    "npm-check-updates": "^11.3.0"
+    "npm-check-updates": "^11.8.5"
   },
   "dependencies": {}
 }

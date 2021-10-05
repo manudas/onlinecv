@@ -1,3 +1,17 @@
+
+import { getUserData as getUserDataService } from '../services/getResume'
+
+export const getUserDataAction = 'getUserData';
+export function requestUserDataLoad(lang) { // action creator
+    return async function(dispatch) {
+        const { details } = await getUserDataService(lang);
+        dispatch({
+            type: getUserDataAction,
+            payload: details
+        });
+    }
+}
+
 export const dataLoaded = 'dataLoaded';
 export function dataDidLoad(data) {
     return {
@@ -6,7 +20,7 @@ export function dataDidLoad(data) {
     }
 }
 
-export const setLanguageAction = 'setLanguage'; 
+export const setLanguageAction = 'setLanguage';
 export function setLanguageAC(data) { // setLanguageActionCreator
     return  {
         type: setLanguageAction,

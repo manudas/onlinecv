@@ -14,6 +14,7 @@ module.exports =
         _id: ID!
         name: String!,
         iso: String!,
+        flag: String,
         default: Boolean
       }
 
@@ -21,6 +22,7 @@ module.exports =
         _id: ID
         name: String!,
         iso: String!,
+        flag: String,
         default: Boolean
       }
 

@@ -14,6 +14,7 @@ const LocaleSchema = new Schema({
     _id: Schema.Types.ObjectId, // We can also use String, as it casts to it
     name: String,
     iso: String,
+    flag: String,
     default: Boolean,
 }, {
     collection,

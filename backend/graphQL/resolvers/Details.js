@@ -9,8 +9,9 @@ module.exports = {
                 DetailsModel,
             }
         }) => {
+            // const details1 = await DetailsModel.find({ language: 'es' }); // lean to get the model as a plain javascript object
             const details = await DetailsModel.findOne({ language: language }).lean().exec(); // lean to get the model as a plain javascript object
-            details.profileImage = details.profileImage && details.profileImage.toString();
+            if (details) details.profileImage = details.profileImage && details.profileImage.toString();
             return details;
         },
     },

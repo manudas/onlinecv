@@ -62,52 +62,72 @@ class PageLoader extends Component {
         }
     }
 
+    binded_transition_end = this.transitionEnd.bind(this);
+
     render() {
         if (!this.state.show) return null;
         /* Page Loader
       ========================================================= */
-        const { userData } = this.props;
+        const {
+            userData: {
+                name: userName = null,
+                surname: userSurname = null,
+                nickname,
+                primaryRole,
+                secondaryRole
+            },
+            userData
+        } = {...this.props, ...(this.props.userData ? {} : {userData: {}})};
 
-        if (!userData) return null;
+        const hasData = Object.keys(userData).length > 0;
 
-        const binded_transition_end = this.transitionEnd.bind(this);
-        let name = userData.name ? userData.name : null;
-        if (name) {
-            name = name.split(" ")[0];
-        }
-        let surname = userData.surname ? userData.surname : null;
-        if (surname) {
-            surname = surname.split(" ")[0];
+        let name, surname;
+        if (hasData) {
+
+            name = userName ?? null;
+            if (name) {
+                name = name.split(" ")[0];
+            }
+            surname = userSurname ?? null;
+            if (surname) {
+                surname = surname.split(" ")[0];
+            }
         }
 
         return (
             <div
                 style={this.state.style}
-                onTransitionEnd={binded_transition_end}
+                onTransitionEnd={this.binded_transition_end}
                 className="loader"
                 id="page-loader">
-                <div className="loading-wrapper">
-                    <div className="tp-loader spinner" />
-                    {/* Edit With Your Name */}
-                    <div className="side-menu-name">
-                        {name} {surname}
-                        {userData.nickname ? " - " : ""}
-                        {userData.nickname ? (
-                            <strong>{userData.nickname}</strong>
-                        ) : (
-                            ""
-                        )}
+                    <div className="loading-wrapper">
+                        <div className="tp-loader spinner" />
+                            {
+                                hasData ?
+                                    <>
+                                        {/* Edit With Your Name */}
+                                        <div className="side-menu-name">
+                                            {name} {surname}
+                                            {nickname ? " - " : ""}
+                                            {nickname ? (
+                                                <strong>{nickname}</strong>
+                                            ) : (
+                                                ""
+                                            )}
+                                        </div>
+                                        {/* /Edit With Your Name */}
+                                        {/* Edit With Your Job */}
+                                        <p className="side-menu-job">
+                                            {primaryRole}
+                                            {secondaryRole
+                                                ? ` / ${secondaryRole}`
+                                                : ""}
+                                        </p>
+                                        {/* /Edit With Your Job */}
+                                    </>
+                                    : null
+                            }
                     </div>
-                    {/* /Edit With Your Name */}
-                    {/* Edit With Your Job */}
-                    <p className="side-menu-job">
-                        {userData.primaryJobName}
-                        {userData.secondaryJobName
-                            ? ` / ${userData.secondaryJobName}`
-                            : ""}
-                    </p>
-                    {/* /Edit With Your Job */}
-                </div>
             </div>
         );
         /*  /End of Page loader

@@ -12,7 +12,10 @@ import { getBase64ImageMimeType, bufferToBase64 } from "./helpers/image";
 
 import { connect } from "react-redux";
 
-import { dataDidLoad } from "./actions";
+import {
+    dataDidLoad,
+    requestUserDataLoad,
+} from "./actions";
 
 import { bindActionCreators } from "redux";
 
@@ -29,21 +32,7 @@ class App extends Component {
 
     componentDidMount() {
         const language = this.props.language ? this.props.language : "en";
-        const url = `api/getcontent/${language}?load_images`;
-        let component = this;
-        fetch(url) // Call the fetch function passing the url of the API as a parameter
-            .then(response => response.json())
-            .then(data => {
-                // Your code for handling the data you get from the API
-                component.props.dataLoaded(data);
-                component.hideLoader();
-            })
-            .catch(error => {
-                // This is where you run code if the server returns any errors
-                console.error(
-                    `An error has ocurred calling api url ${url}\n: ${error}`
-                );
-            });
+        this.props.requestUserDataLoad(language);
     }
 
     hideLoader() {
@@ -58,6 +47,7 @@ class App extends Component {
                   this.props.background
               )};base64,${this.props.background})`
             : null;
+
         return (
             <div
                 {...(_backgroundImage
@@ -77,7 +67,7 @@ class App extends Component {
                 />
                 <InfoContainer
                     language={this.props.language}
-                    userData={this.props.userData}
+                    mounted={!this.state.showPageLoader}
                 />
             </div>
         );
@@ -85,20 +75,23 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
+    console.log(state);
     const data = state && state.data ? state.data : null;
     const bgimage =
         data && data.images && data.images.bgimage ? data.images.bgimage : null;
     const language = data && data.language ? data.language : null;
+    const userData = data && data.userData ? data.userData : null;
     return {
         background: bgimage ? bufferToBase64(bgimage.value) : null,
-        language: language,
-        userData: window.dataSet.userData
+        language,
+        userData
     };
 }
 
 function mapDistpatchToProps(dispatch) {
     return bindActionCreators(
         {
+            requestUserDataLoad,
             dataLoaded: dataDidLoad,
             setLanguage: setLanguageAC
         },
