@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 import { LocaleStore } from "@app/types";
 import {
-    DBTranslation,
+    TranslationInterface,
     InternalStoredTranslationInterface,
     ModuleTagPairType,
     RequestedTranslations,
-    StoredTranslationsObservable,
+    TranslationsObservableStore,
     TranslationStore,
     TranslationsType
 } from "@app/types/Translations";
@@ -25,13 +25,13 @@ type StoreType = { locale: LocaleStore } & { translation: TranslationStore}
 @Injectable()
 export class TranslationService {
     requestedTranslations: RequestedTranslations  = { } // the translations that are to be requested to the API
-    storedTranslationsObservable: StoredTranslationsObservable = {} // observes each translation individually
+    storedTranslationsObservable: TranslationsObservableStore = {} // observes each translation individually
 
     selectedLocale // iso code
     selectedLocale$: Observable<string>;
 
     translations: TranslationsType = {} // real translations from the API
-    translations$: Observable<DBTranslation[]> // observes the whole translation object
+    translations$: Observable<TranslationInterface[]> // observes the whole translation object
 
     constructor(private store: Store<StoreType>) {
         this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
@@ -42,7 +42,7 @@ export class TranslationService {
       this.translations$ = this.store.pipe(select(state =>
         state?.translation?.translations
       ))
-      this.translations$.subscribe((data: DBTranslation[]) => {
+      this.translations$.subscribe((data: TranslationInterface[]) => {
         const receivedData = data || []
 
         receivedData.forEach(currentTranslation => {

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { bindActionCreators } from "redux";
 
-import { cvComponentsWereLoadedActionCreator } from "../../actions";
+import { cvComponentsWereLoadedActionCreator } from "../../store/actions";
 
 import "./cvcontainer.css";
 
@@ -22,10 +22,24 @@ import Footer from "../footer";
 class CVContainer extends Component {
     constructor(props) {
         super(props);
+        /**
+         * refList will be used to
+         * share with Menu component
+         * which components were
+         * rendered on the App
+         */
         this.refList = [];
     }
 
     componentDidUpdate() {
+        /**
+         * Dispatching action:
+         *
+         * refList will be used to
+         * share with Menu component
+         * which components were
+         * rendered on the App
+         */
         this.props.componentsWereLoaded(this.refList);
     }
 
@@ -194,7 +208,7 @@ class CVContainer extends Component {
 function mapStateToProps(state) {
     const data = state && state.data ? state.data : null;
 
-    const data_is_loaded = data !== null;
+    const data_is_loaded = data && data.userDetails;
     const language = state && state.language ? state.language : null;
     const translations =
         data && data.translations && data.translations[language]

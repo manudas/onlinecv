@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Cookies from 'universal-cookie';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "font-awesome/css/font-awesome.min.css";
@@ -13,13 +14,17 @@ import { getBase64ImageMimeType, bufferToBase64 } from "./helpers/image";
 import { connect } from "react-redux";
 
 import {
-    dataDidLoad,
     requestUserDataLoad,
-} from "./actions";
+    setLanguageAC,
+} from "./store/actions";
 
 import { bindActionCreators } from "redux";
 
-import { setLanguageAC } from "./actions";
+import {
+    DEFAULT_LANGUAGE_ISO,
+    LANG_COOKIE,
+    LOADER_UNMOUNT_TIMEOUT
+} from './helpers/constants'
 
 class App extends Component {
     constructor(props) {
@@ -27,12 +32,22 @@ class App extends Component {
         this.state = {
             showPageLoader: true
         };
-        this.props.setLanguage("en"); // in the future, look for a cookie with language content to assign
+        this.cookies = new Cookies();
+        const lang = this.cookies.get(LANG_COOKIE);
+        this.props.setLanguage(lang ?? DEFAULT_LANGUAGE_ISO);
     }
 
     componentDidMount() {
-        const language = this.props.language ? this.props.language : "en";
+        const language = this.props.language ? this.props.language : DEFAULT_LANGUAGE_ISO;
         this.props.requestUserDataLoad(language);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.userDetails !== nextProps.userDetails) {
+            // console.log(nextProps.userDetails);
+            // console.log(this.props.userDetails);
+            setTimeout(() => this.hideLoader_binded(), LOADER_UNMOUNT_TIMEOUT); // hide loader in 2 seconds time
+        }
     }
 
     hideLoader() {
@@ -40,6 +55,8 @@ class App extends Component {
             showPageLoader: !this.state.showPageLoader
         });
     }
+
+    hideLoader_binded = this.hideLoader.bind(this)
 
     render() {
         let _backgroundImage = this.props.background
@@ -75,16 +92,19 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log(state);
+    // console.log(state);
     const data = state && state.data ? state.data : null;
     const bgimage =
         data && data.images && data.images.bgimage ? data.images.bgimage : null;
     const language = data && data.language ? data.language : null;
     const userData = data && data.userData ? data.userData : null;
+    const userDetails = data && data.userDetails ? data.userDetails : null;
+
     return {
         background: bgimage ? bufferToBase64(bgimage.value) : null,
         language,
-        userData
+        userData,
+        userDetails
     };
 }
 
@@ -92,7 +112,6 @@ function mapDistpatchToProps(dispatch) {
     return bindActionCreators(
         {
             requestUserDataLoad,
-            dataLoaded: dataDidLoad,
             setLanguage: setLanguageAC
         },
         dispatch

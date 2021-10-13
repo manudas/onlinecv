@@ -6,31 +6,38 @@ import "./profileDetails.css";
 
 class ProfileDetail extends Component {
 
-    renderProfileDetailItem(profile_detail_item, index) {
+    notRenderableColumns = [
+        'profileimage',
+        'keywords',
+        'language',
+    ];
+
+    renderProfileDetailItem(profile_detail_key, profile_detail_value, index) {
+        if (!profile_detail_value || this.notRenderableColumns.includes(profile_detail_key.toLowerCase())) return null;
         /* SECTION ITEM */
         return (
             <div className="line row d-flex" key={index}>
-                {/* Margin Collums (necessary for the timeline effect) */}
+                {/* Margin Columns (necessary for the timeline effect) */}
                 <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
                 <div className="col-md-2 timeline-progress hidden-sm hidden-xs full-height timeline-point " />
-                {/* /Margin Collums */}
+                {/* /Margin Columns */}
                 {/* Item Content */}
                 <div className="col-md-8 content-wrap bg1">
                     <div className="line-content">
                         {/* Subtitle */}
                         <h3 className="section-item-title-1">
-                            {profile_detail_item.label}
+                            {profile_detail_key}
                         </h3>
                         {/* /Subtitle */}
                         {/* content */}
-                        <p>{profile_detail_item.text}</p>
+                        <p>{profile_detail_value}</p>
                         {/* /Content */}
                     </div>
                 </div>
                 {/* /Item Content */}
-                {/* Margin Collum*/}
+                {/* Margin Column */}
                 <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
-                {/* /Margin Collum*/}
+                {/* /Margin Column */}
             </div>
         );
         /* /SECTION ITEM */
@@ -40,10 +47,11 @@ class ProfileDetail extends Component {
         if (!this.props.profile_details) {
             return null;
         } else {
-            return this.props.profile_details.map(
-                (profile_detail_item, index) => {
+            return Object.entries(this.props.profile_details).map(
+                ([ profile_detail_key, profile_detail_value ], index) => {
                     return this.renderProfileDetailItem(
-                        profile_detail_item,
+                        profile_detail_key,
+                        profile_detail_value,
                         index
                     );
                 }
@@ -52,7 +60,7 @@ class ProfileDetail extends Component {
     }
 
     renderTitle() {
-        
+
         return (
             /* VERTICAL MARGIN (necessary for the timeline effect) */
             [
@@ -158,12 +166,12 @@ class ProfileDetail extends Component {
 
 function mapStateToProps(state) {
     const data = state && state.data ? state.data : null;
-    const details = data && data.profile_details ? data.profile_details : null;
+    const userDetails = data && data.userDetails ? data.userDetails : null;
     const social_networks =
         data && data.social_networks ? data.social_networks : null;
 
     return {
-        profile_details: details,
+        profile_details: userDetails.details,
         social_networks: social_networks,
     };
 }

@@ -1,26 +1,11 @@
+const findAndUpdateMany = require('@helpers/utils').findAndUpdateMany;
+
 module.exports = {
     Query: {
-        // translation(tag: string!, module: string, language: String!)
-        translation: async({
-            tags,
-            modules,
-            language
-        }, {
-            models: {
-                TranslationsModel
-            },
-        }, info) => {
-            const lang = language === 'gb' ? 'en' : language;
-            const translation = await TranslationsModel.findOne({
-                tags,
-                modules,
-                language: lang
-            }).exec();
-            return translation;
-        },
         translations: async({
             modules,
             tags,
+            domain,
             language
         }, {
             models: {
@@ -29,31 +14,95 @@ module.exports = {
         }, info) => {
             const lang = language === 'gb' ? 'en' : language;
             if (modules.length !== tags.length) {
-                throw new Error('Both modules and tags arrays must be size coincident and map each index to a module/tag pair');
+                throw new Error('Both modules and tags arrays must be size coincident and map each index to a domain/module/tag triplet');
             }
 
-            const moduleTagPairs = modules.map((module, index) => (
-                { module, tag: tags[index] }
+            const translationFilter = modules.map((module, index) => (
+                {
+                    module,
+                    tag: tags[index],
+                    missing: null,
+                    ...(domain ? {domain: domain} : {})
+                }
             ));
-            const translationList = await TranslationsModel.find({
+
+            const missingTranslationFilter = modules.map((module, index) => (
+                {
+                    module,
+                    tag: tags[index],
+                    missing: true,
+                    ...(domain ? {domain: domain} : {})
+                }
+            ));
+
+            // FOUND TRANSLATIONS: fetching and updating accessCounter and lastTimeFetched
+            const translationList = await findAndUpdateMany(TranslationsModel, {
                 $and: [
-                    { $or: moduleTagPairs },
+                    { $or: translationFilter },
                     { language: lang }
                 ]
-            }).sort({
-                module: 1,
-                tag: 1
-            }).exec();
-/* @TODO:
-    run through all translations to update this two properties:
-    lastAccessed: Schema.Types.Date,
-    accessCounter: Number
+            }, {
+                $inc: { accessCounter: 1 },
+                $currentDate: {
+                    lastTimeFetched: true // datetime
+                }
+            });
+            // END OF FOUND TRANSLATIONS
 
-    ADD ANOTHER COLLECTION TO ADD THE NOT FOUND TRANSLATIONS
-    IF SOMEONE WASNT FOUND AND NOW IS FOUND, THEN REMOVE FROM NOT FOUND TRANSLATIONS
-*/
+            // UPDATING accessCounter and lastTimeFetched OF missing: true TRANSLATIONS
+            const resultMissingTrue = await findAndUpdateMany(TranslationsModel, {
+                $and: [
+                    { $or: missingTranslationFilter },
+                    { language: lang }
+                ]
+            }, {
+                $inc: { accessCounter: 1 },
+                $currentDate: {
+                    lastTimeFetched: true // datetime
+                }
+            });
+            // END OF UPDATING accessCounter and lastTimeFetched OF missing: true TRANSLATIONS
+
+            // UPSERTING COMPLETELY MISSING TRANSLATIONS
+            const elementFoundInTranslationOrMissingTrue = (element) => () => (
+                translationList.some((translatedElement) => { // is element in the translated list?
+                    return translatedElement.domain === element.domain && translatedElement.module === element.module && translatedElement.tag === element.tag;
+                })
+                || resultMissingTrue.some((missingTruetranslatedElement) => { // is element in the missing: true translated list?
+                    return missingTruetranslatedElement.domain === element.domain && missingTruetranslatedElement.module === element.module && missingTruetranslatedElement.tag === element.tag;
+                })
+            );
+
+            const missingTranslations = translationFilter.length
+                ? translationFilter.reduce((untranslatedList, currentTranslation) => {
+                    const elementIndex = untranslatedList.findIndex(elementFoundInTranslationOrMissingTrue(currentTranslation));
+                    if (elementIndex !== -1) {
+                        untranslatedList.splice(elementIndex, 1);
+                    }
+                    return untranslatedList;
+                }, [...translationFilter])
+                :  [...translationFilter];
+
+            const lastTimeFetched = new Date();
+            const missingDocuments = missingTranslations.map((element) => ({ ...element, missing: true, language: lang, accessCounter: 1, lastTimeFetched}));
+
+            TranslationsModel.insertMany(missingDocuments);
+            // END OF UPSERTING COMPLETELY MISSING TRANSLATIONS
+
             return translationList;
         },
+        missingTranslations:  async({
+            language
+        }, {
+            models: {
+                TranslationsModel
+            },
+        }, info) => {
+            return await TranslationsModel.find({
+                language,
+                missing: true
+            });
+        }
     },
     Mutation: {
         /* Example

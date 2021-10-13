@@ -33,6 +33,7 @@
         "@ngrx/store-devtools": "^11.1.0",
         "bootstrap": "^4.6.0",
         "chart.js": "^2.9.4",
+        "gql-query-builder": "^3.5.5",
         "lodash": "^4.17.21",
         "ngx-cookie-service": "^11.0.2",
         "rxjs": "~6.6.6",

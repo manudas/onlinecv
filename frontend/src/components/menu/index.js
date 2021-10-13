@@ -4,7 +4,7 @@ import { bindActionCreators } from "redux";
 
 import { connect } from "react-redux";
 
-import { cvComponentsWereClickedActionCreator } from "../../actions";
+import { cvComponentsWereClickedActionCreator } from "../../store/actions";
 
 import "./menu.css";
 

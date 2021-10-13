@@ -1,5 +1,13 @@
+import Cookies from 'universal-cookie';
 
-import { getUserData as getUserDataService } from '../services/getResume'
+import {
+    LANG_COOKIE
+} from '../../helpers/constants'
+
+import {
+    getUserData as getUserDataService,
+    getUserDetails
+} from '../../services/getResume'
 
 export const getUserDataAction = 'getUserData';
 export function requestUserDataLoad(lang) { // action creator
@@ -9,19 +17,27 @@ export function requestUserDataLoad(lang) { // action creator
             type: getUserDataAction,
             payload: details
         });
+
+        const fullDetails = await getUserDetails(lang);
+        dispatch({
+            type: userDetailsLoad,
+            payload: fullDetails
+        });
     }
 }
 
-export const dataLoaded = 'dataLoaded';
-export function dataDidLoad(data) {
+export const userDetailsLoad = 'userDetailsLoad';
+export function userDetailsLoadAction(data) {
     return {
-        type: dataLoaded,
+        type: userDetailsLoad,
         payload: data
     }
 }
 
 export const setLanguageAction = 'setLanguage';
 export function setLanguageAC(data) { // setLanguageActionCreator
+    const cookie = new Cookies();
+    cookie.set(LANG_COOKIE, data);
     return  {
         type: setLanguageAction,
         payload: data

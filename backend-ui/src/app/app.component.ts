@@ -11,7 +11,11 @@ import { select, Store } from '@ngrx/store';
 import { FETCH_TRANSLATIONS } from '@store_actions/Translation';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-type StoreType = { locale: LocaleStore } & { translation: TranslationStore} & { message: MessageType}
+import {
+  TRANSLATION_DOMAIN,
+} from './utils/constants'
+
+type StoreType = { locale: LocaleStore } & { translations: TranslationStore} & { message: MessageType}
 
 @Component({
   selector: 'app-root',
@@ -49,7 +53,8 @@ export class AppComponent implements OnInit  { // added OnInit to make a regular
       return this.store.dispatch(FETCH_TRANSLATIONS({
         iso,
         modules: module_arr,
-        tags: tag_arr
+        tags: tag_arr,
+        domain: TRANSLATION_DOMAIN
       }))
 
     },

@@ -1,38 +1,42 @@
 import React, { Component } from "react";
+
+import {
+    LOADER_MOUNT_TIMEOUT
+} from '../../helpers/constants'
+
 import "./pageloader.css";
 
 class PageLoader extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            //base css
+            // base css for the whole loader page
             show: true,
             style: {
                 fontSize: 60,
                 opacity: 0,
-                transition: "all 2s ease"
+                transition: "all 1s ease"
             }
         };
     }
 
     componentWillReceiveProps(newProps) {
         //check for the mounted props
-        if (!newProps.mounted) return this.unMountStyle(); //call outro animation when mounted prop is false
+        if (!newProps.mounted) return this.unMountStyle(); // run unmount animation when mounted prop is false
         this.setState({
             //remount the node when the mounted prop is true
             show: true
         });
-        const binded_mount_function = this.mountStyle.bind(this);
-        setTimeout(binded_mount_function, 10); //call the into animiation
+
+        setTimeout(this.binded_mount, LOADER_MOUNT_TIMEOUT); // run the mount animation
     }
 
     unMountStyle() {
-        //css for unmount animation
+        // css for unmount animation
         this.setState({
             style: {
-                fontSize: 60,
+                ... this.state.style,
                 opacity: 0,
-                transition: "all 1s ease"
             }
         });
     }
@@ -41,16 +45,16 @@ class PageLoader extends Component {
         // css for mount animation
         this.setState({
             style: {
-                fontSize: 60,
+                ... this.state.style,
                 opacity: 1,
-                transition: "all 1s ease"
             }
         });
     }
 
+    binded_mount = this.mountStyle.bind(this);
+
     componentDidMount() {
-        const binded_function = this.mountStyle.bind(this);
-        setTimeout(binded_function, 10); //call the into animiation
+        setTimeout(this.binded_mount, LOADER_MOUNT_TIMEOUT); // run the mount animation
     }
 
     transitionEnd() {

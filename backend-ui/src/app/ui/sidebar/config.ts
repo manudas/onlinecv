@@ -1,33 +1,42 @@
 import {
-	faTable,
-	faFlagCheckered,
+	faLanguage,
 	faBookmark,
-	faCog
+	faCog,
+	faFlagCheckered,
+	faTable,
 } from '@fortawesome/free-solid-svg-icons';
+
+const stylesDropToggle = `
+	padding:0;
+	font-size: 0.8em;
+	display: block;
+	width: 100%;
+	border-right: 5px solid transparent;
+	color: #ecf0f1;
+	box-sizing: content-box;
+`;
+
+const dropDownActiveOrFocusedToggleStyles = {
+	'transition-property': 'color',
+	'transition-duration': '0.4s',
+	'transition-timing-function': 'ease-in-out',
+	'color': '#1abc9c'
+};
+
+const stylesStartIcon = `
+	font-size: 2.8em;
+	display:block;
+	width:100%;
+`;
 
 export const MenuListItems = [{
 		name: 'TrainingDropdown',
 		start_icon: faTable,
 		title: 'Training',
 		caret: false,
-		stylesStartIcon: `font-size: 2.7em;
-        display:block;
-        width:100%;`,
-		stylesDropToggle: `
-        padding:0;
-        font-size: 0.8em;
-        display: block;
-        width: 100%;
-        border-right: 5px solid transparent;
-        color: #ecf0f1;
-        box-sizing: content-box;
-        `,
-		dropDownActiveOrFocusedToggleStyles: {
-			'transition-property': 'color',
-			'transition-duration': '0.4s',
-			'transition-timing-function': 'ease-in-out',
-			'color': '#1abc9c'
-		},
+		stylesStartIcon,
+		stylesDropToggle,
+		dropDownActiveOrFocusedToggleStyles,
 		options: [{
 				name: 'Training',
 				type: 'header',
@@ -63,24 +72,9 @@ export const MenuListItems = [{
 		start_icon: faFlagCheckered,
 		title: 'Experience',
 		caret: false,
-		stylesStartIcon: `font-size: 2.8em;
-        display:block;
-        width:100%;`,
-		stylesDropToggle: `
-        padding:0;
-        font-size: 0.8em;
-        display: block;
-        width: 100%;
-        border-right: 5px solid transparent;
-        color: #ecf0f1;
-        box-sizing: content-box;
-        `,
-		dropDownActiveOrFocusedToggleStyles: {
-			'transition-property': 'color',
-			'transition-duration': '0.4s',
-			'transition-timing-function': 'ease-in-out',
-			'color': '#1abc9c'
-		},
+		stylesStartIcon,
+		stylesDropToggle,
+		dropDownActiveOrFocusedToggleStyles,
 		options: [{
 				name: 'Professional & others',
 				type: 'header',
@@ -112,28 +106,13 @@ export const MenuListItems = [{
 	},
 
 	{
-		name: 'skillsDropdown',
+		name: 'SkillsDropdown',
 		start_icon: faCog,
 		title: 'Skills',
 		caret: false,
-		stylesStartIcon: `font-size: 2.8em;
-        display:block;
-        width:100%;`,
-		stylesDropToggle: `
-        padding:0;
-        font-size: 0.8em;
-        display: block;
-        width: 100%;
-        border-right: 5px solid transparent;
-        color: #ecf0f1;
-        box-sizing: content-box;
-        `,
-		dropDownActiveOrFocusedToggleStyles: {
-			'transition-property': 'color',
-			'transition-duration': '0.4s',
-			'transition-timing-function': 'ease-in-out',
-			'color': '#1abc9c'
-		},
+		stylesStartIcon,
+		stylesDropToggle,
+		dropDownActiveOrFocusedToggleStyles,
 		options: [{
 				name: 'Skills',
 				type: 'header',
@@ -163,30 +142,14 @@ export const MenuListItems = [{
 			}
 		]
 	},
-
 	{
 		name: 'OthersDropdown',
 		start_icon: faBookmark,
 		title: 'Others',
 		caret: false,
-		stylesStartIcon: `font-size: 2.8em;
-        display:block;
-        width:100%;`,
-		stylesDropToggle: `
-        padding:0;
-        font-size: 0.8em;
-        display: block;
-        width: 100%;
-        border-right: 5px solid transparent;
-        color: #ecf0f1;
-        box-sizing: content-box;
-        `,
-		dropDownActiveOrFocusedToggleStyles: {
-			'transition-property': 'color',
-			'transition-duration': '0.4s',
-			'transition-timing-function': 'ease-in-out',
-			'color': '#1abc9c'
-		},
+		stylesStartIcon,
+		stylesDropToggle,
+		dropDownActiveOrFocusedToggleStyles,
 		options: [{
 				name: 'Others',
 				type: 'header',
@@ -232,6 +195,37 @@ export const MenuListItems = [{
 				urlSegments: 'other-data',
 				type: 'option',
 			}
+		]
+	},
+	{
+		name: 'TranslationsDropdown',
+		start_icon: faLanguage,
+		title: 'Translations',
+		caret: false,
+		stylesStartIcon,
+		stylesDropToggle,
+		dropDownActiveOrFocusedToggleStyles,
+		options: [{
+				name: 'Translations',
+				type: 'header',
+			},
+			{
+				name: 'All',
+				url: 'translations',
+				type: 'option',
+			},
+			{
+				name: 'Missing translations',
+				url: 'translations',
+				urlSegments: 'missing',
+				type: 'option',
+			},
+			{
+				name: 'Translated strings',
+				url: 'translations',
+				urlSegments: 'translated',
+				type: 'option',
+			},
 		]
 	}
 ]

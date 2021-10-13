@@ -1,4 +1,4 @@
-const ObjectID = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectId;
 const cleanObject = require('@helpers/utils').cleanObject;
 
 module.exports = {
@@ -46,7 +46,7 @@ module.exports = {
                 const cleanedSkill = cleanObject(skill, {'id': '_id'});
 
                 if (!cleanedSkill._id) {
-                    cleanedSkill._id = new ObjectID();
+                    cleanedSkill._id = new ObjectId();
                 }
 
                 const element = await SkillsModel.findOneAndUpdate(

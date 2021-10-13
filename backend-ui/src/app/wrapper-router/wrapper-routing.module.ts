@@ -9,6 +9,7 @@ import { SkillsModule } from '@app/ui/skills/skills.module'
 import { TrainingModule } from '@app/ui/training/training.module'
 
 import { routes } from './config/routes'
+import { TranslationsModule } from '@app/services/translation'
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { routes } from './config/routes'
     NotfoundModule,
     TrainingModule,
     SkillsModule,
+    TranslationsModule,
     RouterModule.forRoot(routes, { enableTracing: isDevMode() }),
   ],
   exports: [RouterModule]

@@ -1,4 +1,4 @@
-const ObjectID = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectId;
 const cleanObject = require('@helpers/utils').cleanObject;
 
 module.exports = {
@@ -34,7 +34,7 @@ module.exports = {
                 const cleanedTraining = cleanObject(training, {'id': '_id'});
 
                 if (!cleanedTraining._id) {
-                    cleanedTraining._id = new ObjectID();
+                    cleanedTraining._id = new ObjectId();
                 }
 
                 const element = await TrainingModel.findOneAndUpdate(

@@ -1,4 +1,4 @@
-const ObjectID = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectId;
 const cleanObject = require('@helpers/utils').cleanObject;
 
 module.exports = {
@@ -14,6 +14,20 @@ module.exports = {
             const workExperienceList = await WorkExperienceModel.find({
                 language,
                 type
+            }).sort({
+                order: 1
+            }).exec();
+            return workExperienceList;
+        },
+        allExperiences: async({
+            language,
+        }, {
+            models: {
+                WorkExperienceModel
+            },
+        }, info) => {
+            const workExperienceList = await WorkExperienceModel.find({
+                language,
             }).sort({
                 order: 1
             }).exec();
@@ -46,7 +60,7 @@ module.exports = {
                 const cleanedObject = cleanObject(experience, {'id': '_id'});
 
                 if (!cleanedObject._id) {
-                    cleanedObject._id = new ObjectID();
+                    cleanedObject._id = new ObjectId();
                 }
 
                 const element = await WorkExperienceModel.findOneAndUpdate(

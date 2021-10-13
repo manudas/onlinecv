@@ -36,7 +36,7 @@ export class DataService {
             // before it was [type] : query, but the mutation shouldn't be
             // mutation: mutation but query: mutation, so first word is always
             // query independently of the query type
-            JSON.stringify({ query: query, variables: vars }),
+            JSON.stringify({ query, variables: vars }),
             this.httpOptions
         ).pipe(map(
           (response) => response['data']

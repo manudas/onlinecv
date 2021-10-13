@@ -41,6 +41,7 @@ module.exports =
 
   extend type Query {
     Experiences(language: String!, type: String!): [WorkExperience]!
+    allExperiences(language: String!): [WorkExperience]!
   }
 
   extend type Mutation {

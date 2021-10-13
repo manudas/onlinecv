@@ -1,4 +1,4 @@
-const ObjectID = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectId;
 const cleanObject = require('@helpers/utils').cleanObject;
 
 module.exports = {
@@ -43,7 +43,7 @@ module.exports = {
                 const cleanedNetwork = cleanObject(network, {'id': '_id'});
 
                 if (!cleanedNetwork._id) {
-                    cleanedNetwork._id = new ObjectID();
+                    cleanedNetwork._id = new ObjectId();
                 }
 
                 const element = await SocialNetworksModel.findOneAndUpdate(
