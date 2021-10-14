@@ -11,8 +11,18 @@ const translationReducer = createReducer(
     const oldTranslations = state.translations || []
     const receivedTranslations = payload.translations
 
-    return { ...state, translations: [...oldTranslations, ...receivedTranslations]}} // payload contains a translations property with all the translations required
-  ),
+    return { ...state, translations: [...oldTranslations, ...receivedTranslations]} // payload contains a translations property with all the translations required
+  }),
+  // missing translations
+  on(TRANSLATE_ACTIONS.FETCH_MISSING_TRANSLATIONS_OK, (state: TranslationStore, { payload }) => {
+    // do some more logic here if needed
+    const { translationManager } = state
+    const { missing: oldMissing = [] } = translationManager || {}
+    const { missingTranslations: receivedTranslations } = payload
+
+    // payload contains a receivedTranslations property with all the missing translations in a given language
+    return { ...state, translationManager: {...translationManager, missing: [...oldMissing, ...receivedTranslations]}}
+  }),
 )
 
 export function reducer(state: object, action) {

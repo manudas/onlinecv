@@ -8,31 +8,30 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CardModule } from '@app/ui/card/card.module'
 import { ConfirmModule } from '@app/ui/confirm/confirm.module'
 
-import { TranslationsModule } from '@services/translation';
-
-import { TranslationsComponent } from './translations.component';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { UnderscoreModule } from '@app/services/underscore';
+
+import { TranslationsModule as TranslationServiceModule } from '@services/translation';
+
+import { TranslationComponent } from './translations.component';
 
 import { TranslationsDialogComponent } from './translations-dialog.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
-    TranslationsComponent,
+    TranslationComponent,
     TranslationsDialogComponent,
   ],
   imports: [
     CardModule,
     ConfirmModule,
     CommonModule,
-    DragDropModule,
     FontAwesomeModule,
     MatTableModule,
     ReactiveFormsModule,
-    TranslationsModule,
+    TranslationServiceModule,
     UnderscoreModule,
   ],
-  exports: [TranslationsComponent]
+  exports: [TranslationComponent]
 })
-export class translationsModule { }
+export class TranslationsModule { }

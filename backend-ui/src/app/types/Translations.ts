@@ -26,6 +26,7 @@ export type TranslationInterface = {
 
 export type ReceivedTranslationsType = {
     translations: TranslationInterface[]
+    missingTranslations?: TranslationInterface[]
 }
 
 export type InternalStoredTranslationInterface = {
@@ -56,4 +57,14 @@ export enum TranslationEnum {
     translated
 }
 
-export type TranslationStore = ReceivedTranslationsType
+export type EditTranslationStructure = {
+    index: number
+    translation: TranslationInterface
+}
+
+export type TranslationStore = ReceivedTranslationsType & {
+    translationManager: {
+        missing: TranslationInterface[],
+        translated: TranslationInterface[]
+    }
+}

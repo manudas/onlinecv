@@ -91,7 +91,7 @@ export class TranslationEffects {
             return this.dataService.readData(query, variables).pipe(
                 map((translations: ReceivedTranslationsType) => {
                     return {
-                        type: TRANSLATION_ACTIONS.FETCH_TRANSLATIONS_OK.type,
+                        type: TRANSLATION_ACTIONS.FETCH_MISSING_TRANSLATIONS_OK.type,
                         payload: { ...translations }
                     };
                 }),

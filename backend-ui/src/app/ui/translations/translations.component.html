@@ -1,1 +1,100 @@
-hola soy translation component
+<ng-container *ngFor="let typeInFor of TranslationTypes">
+    <app-card
+        *ngIf="TranslationTypeStrings[typeInFor] !== 'all' && isType(TranslationTypeStrings[typeInFor])"
+        [icon]="faTable"
+        [iconClass]="'mr-1'"
+        [panelBody]="panel"
+        [panelParameters]="{type: typeInFor}"
+        [cardTitle]="TranslationTypeStrings[typeInFor] | translate | async | titlecase">
+    </app-card>
+    <ng-container *ngIf="TranslationTypeStrings[typeInFor] !== 'all' && isType('all'); then separator"></ng-container>
+</ng-container>
+
+<ng-template #panel
+    let-type="type"
+>
+    <mat-table
+        *ngIf="getSource(type).length"
+        [dataSource]="getSource(type)"
+    >
+    <ng-container *ngFor="let col of getColumns(type); let colIndex = index" matColumnDef="{{col}}">
+        <mat-header-cell
+            *matHeaderCellDef
+        >
+        {{ col === 'id' ? '#' : col | noUnderscore | translate | async | titlecase }}
+        </mat-header-cell>
+        <mat-cell *matCellDef="let element; let row; let rowIndex = index">
+
+            <ng-container *ngIf="col === 'edit'"
+                [ngTemplateOutlet]="editTemplate"
+                [ngTemplateOutletContext]="{
+                    rowIndex: rowIndex,
+                    type: type
+                }"
+            ></ng-container>
+            <ng-container *ngIf="col === 'delete'"
+                [ngTemplateOutlet]="deleteTemplate"
+                [ngTemplateOutletContext]="{
+                    rowIndex: rowIndex,
+                    type: type
+                }"
+            ></ng-container>
+            <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> {{ element[col] }} </ng-container>
+
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="getColumns(type)"></mat-header-row>
+    <mat-row
+        *matRowDef="let row; columns: getColumns(type)"
+    ></mat-row>
+    </mat-table>
+
+    <div
+        *ngIf="hasActions(type)"
+        [className]="'text-right actions'"
+        >
+        style this (watch classes)
+        <button
+            (click)="openEditDialog(TranslationTypeStrings[type])"
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+        >
+            {{ 'Add Experience' | translate | async }}
+        </button>
+    </div>
+
+</ng-template>
+
+<ng-template #separator>
+    <div [className]="'separator'"></div>
+</ng-template>
+
+<ng-template #editTemplate
+    let-index="rowIndex"
+    let-type="type"
+>
+    <button [className]="'btn btn-info btn-experience-row'"
+        ngbButton
+        (click)="edit(index, TranslationTypeStrings[type])"
+    >
+        <fa-icon
+            [icon]="faEdit"
+        ></fa-icon>
+    </button>
+</ng-template>
+
+<ng-template #deleteTemplate
+    let-index="rowIndex"
+    let-type="type"
+>margen izq cortado
+    <button [className]="'btn btn-danger btn-network-row'"
+        ngbButton
+        (click)="openRemovalDialog(index, TranslationTypes[type])"
+        >
+        <fa-icon
+            [icon]="faTrash"
+        ></fa-icon>
+    </button>
+</ng-template>

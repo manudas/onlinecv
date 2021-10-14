@@ -31,3 +31,10 @@ export const FETCH_TRANSLATIONS_OK = createAction(
         payload: ReceivedTranslationsType
     }>()
 );
+
+export const FETCH_MISSING_TRANSLATIONS_OK = createAction(
+    '[Translations Componet] Fetch missing Translation OK',
+    props<{
+        payload: ReceivedTranslationsType
+    }>()
+);

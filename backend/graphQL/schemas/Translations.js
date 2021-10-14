@@ -12,7 +12,7 @@ module.exports =
         domain: String,
         module: String,
         tag: String!,
-        text: String!
+        text: String
         lastTimeFetched: String,
         missing: Boolean,
         accessCounter: Int
