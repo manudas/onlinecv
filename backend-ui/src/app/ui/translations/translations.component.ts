@@ -21,7 +21,7 @@ import { TranslationsDialogComponent } from './translations-dialog.component'
 
 type StoreType = { locale: LocaleStore } & {translation: { translationManager: { missing: TranslationInterface[] } & { translated: TranslationInterface[] }}}
 @Component({
-  selector: 'app-training',
+  selector: 'app-translations',
   templateUrl: './translations.component.html',
   styleUrls: ['./translations.component.scss']
 })
@@ -109,9 +109,9 @@ export class TranslationComponent implements OnInit {
     return this[`${this.TranslationTypeStrings[type]}Cols`]
   }
 
-  openEditDialog(data: EditTranslationStructure | string): void {
-    /*
-    const dialogRef = this.matDialog.open(ExperienceDialogComponent, {
+  openEditDialog(data?: EditTranslationStructure): void {
+
+    const dialogRef = this.matDialog.open(TranslationsDialogComponent, {
       width: '80%',
       data
     })
@@ -119,6 +119,7 @@ export class TranslationComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
       if (result) {
+        /*
         if (this.isExperienceEdit(result)) {
           const {
             index,
@@ -132,16 +133,18 @@ export class TranslationComponent implements OnInit {
         } else {
           this.addExperience(result)
         }
+        */
       }
     })
-    */
+
   }
 
   edit(index: number, type: string) {
     const translation = this[`${type}Data`][index]
     this.openEditDialog({
       translation,
-      index
+      index,
+      isMissing: type === 'missing'
     })
   }
 

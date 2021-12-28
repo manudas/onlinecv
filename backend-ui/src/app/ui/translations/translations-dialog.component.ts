@@ -4,7 +4,7 @@ import {
     MatDialogRef,
     MAT_DIALOG_DATA,
 } from "@angular/material/dialog"
-import { EditExperienceStructure, ExperienceInterface, ExperienceType } from "@app/types/Experience";
+import { EditTranslationStructure, TranslationInterface } from "@app/types/Translations";
 
 @Component({
     templateUrl: './translations-dialog.component.html',
@@ -13,76 +13,72 @@ import { EditExperienceStructure, ExperienceInterface, ExperienceType } from "@a
 export class TranslationsDialogComponent {
 
     /*
-     * GraphQL Schema:
+        GRAPHQL QUERY INCLUDES THE FOLLOWING:
+        'id: _id',
+        'language',
+        'module',
+        'tag',
+        'text',
+        'domain',
+        'missing',
+        'accessCounter',
+        'lastTimeFetched'
+    */
 
-        type WorkExperience {
-            id: ID!
-            description: String,
-            type: String!,
-            start_date: String,
-            finish_date: String,
-            role: String!,
-            company: String,
-            company_url: String,
-            keywords: [String]!,
-            language: String!,
-            order: Int!
-        }
-
-     */
-
-    experienceFormGroup: FormGroup = new FormGroup({
+    dataFormGroup: FormGroup = new FormGroup({
         id: new FormControl(null),
-        role: new FormControl(null, Validators.required),
-        description: new FormControl(null),
-        type: new FormControl(null, Validators.required),
-        start_date: new FormControl(null),
-        finish_date: new FormControl(null),
-        company: new FormControl(null),
-        company_url: new FormControl(null),
-        keywords: new FormControl(null),
+        module: new FormControl(null),
+        tag: new FormControl(null, Validators.required),
+        text: new FormControl(null, Validators.required),
+        domain: new FormControl(null),
     })
 
     editingIndex: number = null
+    missing: boolean = null
 
-    constructor( public dialogRef: MatDialogRef<TranslationsDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditExperienceStructure | string) {
+    constructor( public dialogRef: MatDialogRef<TranslationsDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditTranslationStructure /*| string*/) {
         if (!(typeof data === 'string' || data instanceof String)) { // is EditTrainingStructure type
             const {
                 index,
-                experience
+                translation,
+                isMissing
             } = data
 
             this.editingIndex = index
+            this.missing = isMissing
 
-            for (const control in this.experienceFormGroup.controls) {
-                this.experienceFormGroup.get(control).setValue(experience[control])
+            for (const control in this.dataFormGroup.controls) {
+                this.dataFormGroup.get(control).setValue(translation[control])
             }
-        } else { // is TrainingType enum
+        }
+        /*
+        else { // is TrainingType enum
             this.experienceFormGroup.get('type').setValue(data)
         }
+        */
     }
 
     submitHandler($event): void {
-        if (this.experienceFormGroup.valid /* && this.socialNetworksFormGroup.valid*/) {
-            const experience = this.experienceFormGroup.value
+        if (this.dataFormGroup.valid /* && this.socialNetworksFormGroup.valid*/) {
+            const translation = this.dataFormGroup.value
             let result
             if (this.editingIndex !== null) {
                 result = {
                     index: this.editingIndex,
-                    experience
+                    translation
                 }
             } else {
-                result = experience
+                result = translation
             }
             this.close(result);
         } else {
           //this.detailsFormGroup.markAllAsTouched()
-          this.experienceFormGroup.markAllAsTouched()
+          this.dataFormGroup.markAllAsTouched()
         }
       }
 
 
-    close(message: ExperienceInterface | EditExperienceStructure = null) {
+    close(message: TranslationInterface | EditTranslationStructure = null) {
         /*
          * this is to get the message in the caller:
 
@@ -92,9 +88,5 @@ export class TranslationsDialogComponent {
 
         */
         this.dialogRef.close(message);
-    }
-
-    get ExperienceType() {
-        return ExperienceType
     }
 }

@@ -60,6 +60,7 @@ export enum TranslationEnum {
 export type EditTranslationStructure = {
     index: number
     translation: TranslationInterface
+    isMissing: boolean
 }
 
 export type TranslationStore = ReceivedTranslationsType & {
