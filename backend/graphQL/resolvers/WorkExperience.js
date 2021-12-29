@@ -3,7 +3,7 @@ const cleanObject = require('@helpers/utils').cleanObject;
 
 module.exports = {
     Query: {
-        Experiences: async({
+        Experiences: async ({
             language,
             type
         }, {
@@ -19,7 +19,7 @@ module.exports = {
             }).exec();
             return workExperienceList;
         },
-        allExperiences: async({
+        allExperiences: async ({
             language,
         }, {
             models: {
@@ -35,18 +35,7 @@ module.exports = {
         },
     },
     Mutation: {
-        /* Example
-        db.books.update(
-            { item: "ZZZ135" },   // Query parameter
-            {                     // Replacement document
-                item: "ZZZ135",
-                stock: 5,
-                tags: [ "database" ]
-            },
-            { upsert: true }      // Options: upsert -> insert document if no ducment found to update
-        )
-        */
-        putWorkExperience: async({
+        putWorkExperience: async ({
             workExperiences,
         }, {
             models: {
@@ -57,32 +46,38 @@ module.exports = {
 
             const WriteResult = await Promise.all(workExperiences.map(async experience => {
 
-                const cleanedObject = cleanObject(experience, {'id': '_id'});
+                const cleanedObject = cleanObject(experience, {
+                    'id': '_id'
+                });
 
                 if (!cleanedObject._id) {
                     cleanedObject._id = new ObjectId();
                 }
 
-                const element = await WorkExperienceModel.findOneAndUpdate(
-                    {_id: cleanedObject._id}
-                ,
-                cleanedObject, {
-                    upsert: true, // if no details found, create a new entry
-                    new: true // return the value of the object after the update and not before
-                });
+                const element = await WorkExperienceModel.findOneAndUpdate({
+                        _id: cleanedObject._id
+                    },
+                    cleanedObject, {
+                        upsert: true, // if no details found, create a new entry
+                        new: true // return the value of the object after the update and not before
+                    });
 
                 return element;
             }));
-            return WriteResult? WriteResult : false;
+            return WriteResult ? WriteResult : false;
         },
-        removeWorkExperience: async({
+        removeWorkExperience: async ({
             id,
         }, {
             models: {
                 WorkExperienceModel
             },
         }, info) => {
-            const WriteResult = await WorkExperienceModel.remove({ _id: id }, { justOne: true }); // remove just one
+            const WriteResult = await WorkExperienceModel.remove({
+                _id: id
+            }, {
+                justOne: true
+            }); // remove just one
             return WriteResult.deletedCount === 1;
         },
     },

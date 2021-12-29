@@ -19,7 +19,7 @@ module.exports =
       }
 
       input TranslationInput {
-        _id: ID
+        id: ID
         language: String!,
         domain: String,
         module: String,

@@ -1,5 +1,11 @@
-import { ReceivedTranslationsType } from '@app/types/Translations';
-import { createAction, props } from '@ngrx/store'
+import {
+    ReceivedTranslationsType,
+    EditTranslationStructure
+} from '@app/types/Translations';
+import {
+    createAction,
+    props
+} from '@ngrx/store'
 
 export const FETCH_TRANSLATIONS = createAction(
     '[App Componet] Fetch Translations',
@@ -38,3 +44,10 @@ export const FETCH_MISSING_TRANSLATIONS_OK = createAction(
         payload: ReceivedTranslationsType
     }>()
 );
+
+export const SAVE_TRANSLATION =  createAction(
+    '[Translation Component] SaveTranslation',
+    props<{
+        translation: EditTranslationStructure
+    }>()
+)
