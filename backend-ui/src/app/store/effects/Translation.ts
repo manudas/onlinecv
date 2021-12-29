@@ -32,7 +32,8 @@ import {
 
 import {
     ActionRequestTranslation,
-    ReceivedTranslationsType
+    ReceivedTranslationsType,
+    PutTranslation
 } from '@app/types/Translations';
 import {
     TranslationService
@@ -153,33 +154,14 @@ export class TranslationEffects {
             } = SaveTranslation(translation)
 
             return this.dataService.readData(query, variables).pipe(
-
-
-
-
-
-
-
-
-                map((translations: ReceivedTranslationsType) => {
-                    return {
-                        type: TRANSLATION_ACTIONS.FETCH_MISSING_TRANSLATIONS_OK.type,
+                map((translation: PutTranslation) => {
+                    return TRANSLATION_ACTIONS.TRANSLATION_SAVED({
                         payload: {
-                            ...translations
+                            ...translation
                         }
-                    };
+                    });
                 }),
-
-
-
-
-
-
-
-
-
-                
-                // handle failure in todoListService.fetchTodoList()
+                // handle failure
                 catchError((error) => {
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,

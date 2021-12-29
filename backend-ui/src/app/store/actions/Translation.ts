@@ -1,6 +1,7 @@
 import {
     ReceivedTranslationsType,
-    EditTranslationStructure
+    EditTranslationStructure,
+    PutTranslation
 } from '@app/types/Translations';
 import {
     createAction,
@@ -49,5 +50,12 @@ export const SAVE_TRANSLATION =  createAction(
     '[Translation Component] SaveTranslation',
     props<{
         translation: EditTranslationStructure
+    }>()
+)
+
+export const TRANSLATION_SAVED =  createAction(
+    '[Translation Component/Effect] SavedTranslation',
+    props<{
+        payload: PutTranslation
     }>()
 )

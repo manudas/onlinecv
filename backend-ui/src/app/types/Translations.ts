@@ -24,6 +24,10 @@ export type TranslationInterface = {
     text: string
 }
 
+export type PutTranslation = {
+    putTranslation: TranslationInterface
+}
+
 export type ReceivedTranslationsType = {
     translations: TranslationInterface[]
     missingTranslations?: TranslationInterface[]

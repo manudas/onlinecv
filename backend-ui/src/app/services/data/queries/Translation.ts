@@ -3,6 +3,18 @@ import {
     mutation
 } from 'gql-query-builder'
 
+const translationFields = [
+    'id: _id',
+    'language',
+    'module',
+    'tag',
+    'text',
+    'domain',
+    'missing',
+    'accessCounter',
+    'lastTimeFetched'
+];
+
 export const Translations = (lang: string, tags: string[], modules: string[], domain: string = null) => {
     const {
         query: queryWithoutVars,
@@ -28,17 +40,7 @@ export const Translations = (lang: string, tags: string[], modules: string[], do
                 value: domain
             },
         },
-        fields: [
-            'id: _id',
-            'language',
-            'module',
-            'tag',
-            'text',
-            'domain',
-            'missing',
-            'accessCounter',
-            'lastTimeFetched'
-        ]
+        fields: translationFields
     })
 
     return {
@@ -60,17 +62,7 @@ export const MissingTranslations = (lang: string) => {
                 required: true
             },
         },
-        fields: [
-            'id: _id',
-            'language',
-            'module',
-            'tag',
-            'text',
-            'domain',
-            'missing',
-            'accessCounter',
-            'lastTimeFetched'
-        ]
+        fields: translationFields
     })
 
     return {
@@ -92,17 +84,7 @@ export const TranslatedStrings = (lang: string) => {
                 required: true
             },
         },
-        fields: [
-            'id: _id',
-            'language',
-            'module',
-            'tag',
-            'text',
-            'domain',
-            'missing',
-            'accessCounter',
-            'lastTimeFetched'
-        ]
+        fields: translationFields
     })
 
     return {
@@ -124,9 +106,7 @@ export const SaveTranslation = (translation) => {
                 type: "TranslationInput"
             },
         },
-        fields: [
-            'id: _id',
-        ]
+        fields: translationFields
     })
 
     return {
