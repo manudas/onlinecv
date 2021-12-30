@@ -21,10 +21,9 @@
         <mat-header-cell
             *matHeaderCellDef
         >
-        {{ col === 'id' ? '#' : col | noUnderscore | translate | async | titlecase }}
+        {{ col === 'id' ? '#' : (col | noUnderscore | translate | async | titlecase) }}
         </mat-header-cell>
         <mat-cell *matCellDef="let element; let row; let rowIndex = index">
-
             <ng-container *ngIf="col === 'edit'"
                 [ngTemplateOutlet]="editTemplate"
                 [ngTemplateOutletContext]="{
@@ -39,7 +38,8 @@
                     type: type
                 }"
             ></ng-container>
-            <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> {{ element[col] }} </ng-container>
+            <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'lastTimeFetched'"> {{ element[col] }} </ng-container>
+            <ng-container *ngIf="col === 'lastTimeFetched'"> {{ getLocaleDateFromTimestamp(element[col]) }} </ng-container>
 
         </mat-cell>
     </ng-container>
@@ -61,7 +61,7 @@
             type='button'
             ngbButton
         >
-            {{ 'Add Experience' | translate | async }}
+            {{ 'Add Translation' | translate | async }}
         </button>
     </div>
 
@@ -75,7 +75,7 @@
     let-index="rowIndex"
     let-type="type"
 >
-    <button [className]="'btn btn-info btn-experience-row'"
+    <button [className]="'btn btn-info'"
         ngbButton
         (click)="edit(index, TranslationTypeStrings[type])"
     >
@@ -88,10 +88,10 @@
 <ng-template #deleteTemplate
     let-index="rowIndex"
     let-type="type"
->margen izq cortado
-    <button [className]="'btn btn-danger btn-network-row'"
+>
+    <button [className]="'btn btn-danger'"
         ngbButton
-        (click)="openRemovalDialog(index, TranslationTypes[type])"
+        (click)="openRemovalDialog(index, TranslationTypeStrings[type])"
         >
         <fa-icon
             [icon]="faTrash"

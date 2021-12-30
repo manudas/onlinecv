@@ -75,7 +75,7 @@ module.exports = {
             // END OF UPDATING accessCounter and lastTimeFetched OF missing: true TRANSLATIONS
 
             // UPSERTING COMPLETELY MISSING TRANSLATIONS
-            const elementFoundInTranslationOrMissingTrue = (element) => () => (
+            const elementFoundInTranslationOrMissingTrue = (element) => (
                 translationList.some((translatedElement) => { // is element in the translated list?
                     return translatedElement.domain === element.domain && translatedElement.module === element.module && translatedElement.tag === element.tag;
                 }) ||
@@ -86,7 +86,13 @@ module.exports = {
 
             const missingTranslations = translationFilter.length ?
                 translationFilter.reduce((untranslatedList, currentTranslation) => {
-                    const elementIndex = untranslatedList.findIndex(elementFoundInTranslationOrMissingTrue(currentTranslation));
+                    const elementIndex = elementFoundInTranslationOrMissingTrue(currentTranslation) ?
+                        untranslatedList.findIndex((elem) =>
+                            elem.domain === currentTranslation.domain &&
+                            elem.module === currentTranslation.module &&
+                            elem.tag === currentTranslation.tag
+                        ) :
+                        -1;
                     if (elementIndex !== -1) {
                         untranslatedList.splice(elementIndex, 1);
                     }
@@ -118,7 +124,19 @@ module.exports = {
                 language,
                 missing: true
             });
-        }
+        },
+        translatedStrings: async ({
+            language
+        }, {
+            models: {
+                TranslationsModel
+            },
+        }, info) => {
+            return await TranslationsModel.find({
+                language,
+                missing: null
+            });
+        },
     },
     Mutation: {
         putTranslation: async ({
@@ -137,14 +155,16 @@ module.exports = {
             }
 
             const element = await TranslationsModel.findOneAndUpdate({
-                    _id: cleanedObject._id
-                },
-                {...cleanedObject, $unset: {
+                _id: cleanedObject._id
+            }, {
+                ...cleanedObject,
+                $unset: {
                     missing: 1
-                }}, {
-                    upsert: true, // if no details found, create a new entry
-                    new: true // return the value of the object after the update and not before
-                });
+                }
+            }, {
+                upsert: true, // if no details found, create a new entry
+                new: true // return the value of the object after the update and not before
+            });
 
             return element;
         },
@@ -155,10 +175,13 @@ module.exports = {
                 TranslationsModel
             },
         }, info) => {
-            const WriteResult = await TranslationsModel.remove({
-                id
-            }, true); // true == remove one
-            return WriteResult.nRemoved === 1;
+            const removedElement = await TranslationsModel.findOneAndDelete({
+                _id: id
+            });
+            if (removedElement) {
+                return removedElement;
+            }
+            throw new Error(`Translations with id: ${id} does not exist`);
         },
     },
 };

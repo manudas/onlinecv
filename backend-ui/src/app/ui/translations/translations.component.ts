@@ -68,7 +68,6 @@ export class TranslationComponent implements OnInit {
     type: TranslationEnum = null;
 
     missingCols = [
-        'id',
         'module',
         'domain',
         'tag',
@@ -77,6 +76,17 @@ export class TranslationComponent implements OnInit {
         'edit',
         'delete',
     ]
+    translatedCols = [
+        'module',
+        'domain',
+        'tag',
+        'text',
+        'lastTimeFetched',
+        'accessCounter',
+        'edit',
+        'delete',
+    ]
+
 
     missingData: TranslationInterface[] = []
     missingData$: Observable < TranslationInterface[] >
@@ -154,6 +164,12 @@ export class TranslationComponent implements OnInit {
         }))
     }
 
+    deleteTranslation(id: string) {
+        this.store.dispatch(TRANSLATION_ACTIONS.DELETE_TRANSLATION({
+            translation: id
+        }))
+    }
+
     openEditDialog(data ? : EditTranslationStructure): void {
         const dialogRef = this.matDialog.open(TranslationsDialogComponent, {
             width: '80%',
@@ -183,35 +199,37 @@ export class TranslationComponent implements OnInit {
         })
     }
 
-    openRemovalDialog(index: number, type: Number): void {
-        /*
-        const experience = this[`${ExperienceType[type]}Data`][experienceIndex]
+    openRemovalDialog(index: number, type: string): void {
+        const translation = this[`${type}Data`][index]
         const dialogRef = this.matDialog.open(ConfirmComponent, {
-          width: '80%',
-          data: {
-            index: experienceIndex,
-            element: experience,
-            keyName: 'role',
-            superType: 'experience',
-            action: 'delete'
-          }
+            width: '80%',
+            data: {
+                index,
+                element: translation,
+                nameKey: 'tag',
+                superType: 'translation',
+                action: 'delete'
+            }
         })
 
         dialogRef.afterClosed().subscribe(({
-          index = null,
-          element: {type = null} = {},
+            element: {
+                id = null
+            } = {},
         } = {}) => {
-          logEasy(`The dialog was closed.`, index !== null ? `The following message was received: ${JSON.stringify(index)}` : '');
+            logEasy(`The dialog was closed.`, id !== null ? `The following message was received: ${JSON.stringify(id)}` : '');
 
-          if (index !== null && type !== null) {
-            this.deleteExperience(index, type)
-          }
-
+            if (id !== null) {
+                this.deleteTranslation(id)
+            }
         })
-        */
     }
 
     hasActions(type) {
         return TranslationEnum[type] === TranslationEnum[TranslationEnum.translated] // only translated has actions
+    }
+
+    getLocaleDateFromTimestamp(timestamp: string) {
+        return (new Date(Number(timestamp))).toLocaleDateString()
     }
 }

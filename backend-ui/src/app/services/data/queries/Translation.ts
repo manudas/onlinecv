@@ -77,7 +77,7 @@ export const TranslatedStrings = (lang: string) => {
         query: queryWithoutVars,
         variables
     } = query({
-        operation: 'translatedString',
+        operation: 'translatedStrings',
         variables: {
             language: {
                 value: lang,
@@ -104,6 +104,28 @@ export const SaveTranslation = (translation) => {
                 value: translation,
                 required: true,
                 type: "TranslationInput"
+            },
+        },
+        fields: translationFields
+    })
+
+    return {
+        query: queryWithoutVars,
+        variables
+    }
+}
+
+export const DeleteTranslation = (translationId) => {
+    const {
+        query: queryWithoutVars,
+        variables
+    } = mutation({
+        operation: 'removeTranslation',
+        variables: {
+            id: {
+                value: translationId,
+                required: true,
+                type: "ID"
             },
         },
         fields: translationFields

@@ -1,7 +1,9 @@
 import {
-    ReceivedTranslationsType,
     EditTranslationStructure,
-    PutTranslation
+    PutTranslation,
+    ReceivedTranslationsType,
+    RemovedTranslation,
+    TranslatedTranslations,
 } from '@app/types/Translations';
 import {
     createAction,
@@ -18,10 +20,24 @@ export const FETCH_TRANSLATIONS = createAction(
     }>()
 );
 
+export const FETCH_TRANSLATIONS_OK = createAction(
+    '[App Componet] Fetch Translation OK',
+    props<{
+        payload: ReceivedTranslationsType
+    }>()
+);
+
 export const FETCH_MISSING_TRANSLATIONS = createAction(
     '[Translation Componet] Fetch missing Translations',
     props<{
         iso: string
+    }>()
+);
+
+export const FETCH_MISSING_TRANSLATIONS_OK = createAction(
+    '[Translations Componet] Fetch missing Translation OK',
+    props<{
+        payload: ReceivedTranslationsType
     }>()
 );
 
@@ -32,17 +48,10 @@ export const FETCH_TRANSLATED_TRANSLATIONS = createAction(
     }>()
 );
 
-export const FETCH_TRANSLATIONS_OK = createAction(
-    '[App Componet] Fetch Translation OK',
+export const FETCH_TRANSLATED_TRANSLATIONS_OK = createAction(
+    '[Translations Componet] Fetch translated Translations OK',
     props<{
-        payload: ReceivedTranslationsType
-    }>()
-);
-
-export const FETCH_MISSING_TRANSLATIONS_OK = createAction(
-    '[Translations Componet] Fetch missing Translation OK',
-    props<{
-        payload: ReceivedTranslationsType
+        payload: TranslatedTranslations
     }>()
 );
 
@@ -57,5 +66,19 @@ export const TRANSLATION_SAVED =  createAction(
     '[Translation Component/Effect] SavedTranslation',
     props<{
         payload: PutTranslation
+    }>()
+)
+
+export const DELETE_TRANSLATION =  createAction(
+    '[Translation Component] DeleteTranslation',
+    props<{
+        translation: string
+    }>()
+)
+
+export const TRANSLATION_DELETED =  createAction(
+    '[Translation Component/Effect] DeletedTranslation',
+    props<{
+        payload: RemovedTranslation
     }>()
 )

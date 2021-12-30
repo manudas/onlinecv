@@ -28,6 +28,14 @@ export type PutTranslation = {
     putTranslation: TranslationInterface
 }
 
+export type RemovedTranslation = {
+    removeTranslation: TranslationInterface
+}
+
+export type TranslatedTranslations = {
+    translatedStrings: TranslationInterface[]
+}
+
 export type ReceivedTranslationsType = {
     translations: TranslationInterface[]
     missingTranslations?: TranslationInterface[]

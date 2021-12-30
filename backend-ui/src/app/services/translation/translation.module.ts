@@ -19,4 +19,4 @@ import { TranslationService } from './translation.service';
     TranslationService,
   ]
 })
-export class TranslationsModule { }
+export class TranslationServiceModule { }

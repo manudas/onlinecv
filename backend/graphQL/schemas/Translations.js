@@ -30,10 +30,11 @@ module.exports =
       extend type Query {
         translations(tags: [String!]!, modules: [String!]!, language: String!, domain: String): [Translation]!
         missingTranslations(language: String!): [Translation]!
+        translatedStrings(language: String!): [Translation]!
       }
 
       extend type Mutation {
         putTranslation(translation: TranslationInput!): Translation!
-        removeTranslation(id: ID!): Boolean!
+        removeTranslation(id: ID!): Translation!
       }
     `;

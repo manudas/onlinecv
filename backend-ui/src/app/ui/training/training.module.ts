@@ -9,7 +9,7 @@ import { /*FormsModule,*/ ReactiveFormsModule } from '@angular/forms'
 import { CardModule } from '@app/ui/card/card.module'
 import { ConfirmModule } from '@app/ui/confirm/confirm.module'
 
-import { TranslationsModule } from '@services/translation';
+import { TranslationServiceModule } from '@services/translation';
 
 import { TrainingComponent } from './training.component';
 import { TrainingDialogComponent } from './training-dialog.component';
@@ -30,7 +30,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     FontAwesomeModule,
     CardModule,
     ReactiveFormsModule,
-    TranslationsModule,
+    TranslationServiceModule,
     UnderscoreModule,
   ],
   exports: [TrainingComponent]

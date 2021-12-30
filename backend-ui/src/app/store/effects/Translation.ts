@@ -25,15 +25,19 @@ import {
     DataService
 } from '@services/data/data.service'
 import {
-    Translations as TranslationsQuery,
+    DeleteTranslation,
     MissingTranslations,
     SaveTranslation,
+    TranslatedStrings,
+    Translations as TranslationsQuery,
 } from '@services/data/queries'
 
 import {
     ActionRequestTranslation,
+    PutTranslation,
     ReceivedTranslationsType,
-    PutTranslation
+    RemovedTranslation,
+    TranslatedTranslations,
 } from '@app/types/Translations';
 import {
     TranslationService
@@ -98,8 +102,7 @@ export class TranslationEffects {
     );
 
     /**
-     * Effect provides new actions as
-     * a result of the operation performed
+     * Effect to request missing translations
      */
     @Effect()
     public fetchMissingTranslationsEffect$: Observable < any > = this.actions$.pipe(
@@ -136,6 +139,43 @@ export class TranslationEffects {
     );
 
     /**
+     * Effect to request translated translations
+     */
+    @Effect()
+    public fetchTranslatedTranslationsEffect$: Observable < any > = this.actions$.pipe(
+        ofType(TRANSLATION_ACTIONS.FETCH_TRANSLATED_TRANSLATIONS),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
+        switchMap((action: ReturnType < typeof TRANSLATION_ACTIONS.FETCH_TRANSLATED_TRANSLATIONS > ) => { // if a new Actions arrives, the old Observable will be canceled
+            const {
+                iso,
+            } = action
+
+            const {
+                query,
+                variables,
+            } = TranslatedStrings(iso)
+
+            return this.dataService.readData(query, variables).pipe(
+                map((translations: TranslatedTranslations) => {
+                    return TRANSLATION_ACTIONS.FETCH_TRANSLATED_TRANSLATIONS_OK({
+                        payload: {
+                            ...translations
+                        }
+                    })
+                }),
+                // handle failure in todoListService.fetchTodoList()
+                catchError((error) => {
+                    return of({
+                        type: COMMON_ACTIONS.FAIL.type,
+                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${error}`
+                    })
+                })
+            )
+        })
+    );
+
+
+    /**
      * Effect to request the upsert of a given translation
      */
     @Effect()
@@ -156,6 +196,43 @@ export class TranslationEffects {
             return this.dataService.readData(query, variables).pipe(
                 map((translation: PutTranslation) => {
                     return TRANSLATION_ACTIONS.TRANSLATION_SAVED({
+                        payload: {
+                            ...translation
+                        }
+                    });
+                }),
+                // handle failure
+                catchError((error) => {
+                    return of({
+                        type: COMMON_ACTIONS.FAIL.type,
+                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${error}`
+                    })
+                })
+            )
+        })
+    );
+
+    /**
+     * Effect to request the deletion of a given translation
+     */
+    @Effect()
+    public deleteTranslationEffect$: Observable < any > = this.actions$.pipe(
+        ofType(TRANSLATION_ACTIONS.DELETE_TRANSLATION),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
+
+        switchMap((action: ReturnType < typeof TRANSLATION_ACTIONS.DELETE_TRANSLATION > ) => { // if a new Actions arrives, the old Observable will be canceled
+            const {
+                translation,
+            } = action
+
+            const {
+                query,
+                variables,
+            } = DeleteTranslation(translation)
+
+            return this.dataService.readData(query, variables).pipe(
+                map((translation: RemovedTranslation) => {
+                    return TRANSLATION_ACTIONS.TRANSLATION_DELETED({
                         payload: {
                             ...translation
                         }
