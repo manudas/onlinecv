@@ -36,8 +36,8 @@ export class TranslationsDialogComponent {
     editingIndex: number = null
     missing: boolean = null
 
-    constructor( public dialogRef: MatDialogRef<TranslationsDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditTranslationStructure /*| string*/) {
-        if (!(typeof data === 'string' || data instanceof String)) { // is EditTrainingStructure type
+    constructor( public dialogRef: MatDialogRef<TranslationsDialogComponent>, @Inject(MAT_DIALOG_DATA) public data?: EditTranslationStructure ) {
+        if ( data ) { // is edit structure
             const {
                 index,
                 translation,
@@ -51,15 +51,10 @@ export class TranslationsDialogComponent {
                 this.dataFormGroup.get(control).setValue(translation[control])
             }
         }
-        /*
-        else { // is TrainingType enum
-            this.experienceFormGroup.get('type').setValue(data)
-        }
-        */
     }
 
     submitHandler($event): void {
-        if (this.dataFormGroup.valid /* && this.socialNetworksFormGroup.valid*/) {
+        if (this.dataFormGroup.valid) {
             const translation = this.dataFormGroup.value
             let result
             if (this.editingIndex !== null) {

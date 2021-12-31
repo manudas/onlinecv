@@ -179,9 +179,13 @@ export class TranslationComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
             logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
             if (result) {
-                const {
-                    translation
-                } = result;
+                /*
+                 * Option 1: is an edit. The structure is {index, translation}
+                 * Option 2: is a new translation. It'll be just a translation object
+                 */
+                let {
+                    translation = result // if empty, result is the translation object itself
+                } = result
                 this.dispatchSave({
                     ...translation,
                     language: this.selectedLocale,

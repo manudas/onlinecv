@@ -1,5 +1,6 @@
 const findAndUpdateMany = require('@helpers/utils').findAndUpdateMany;
 const cleanObject = require('@helpers/utils').cleanObject;
+const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     Query: {
