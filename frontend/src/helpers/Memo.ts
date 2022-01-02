@@ -1,14 +1,28 @@
-import { MemoOptions } from '@app/types/Memo';
+import { MemoOptions } from '../types/Memo';
 import isEqual from 'lodash/isEqual';
 
-export const useMemo = <T>(
-    func: (...any) => T,
+export const Memoization = <T>(
+    func: (...dep: any) => T,
     options: MemoOptions = {}
 ): ((...dep: any) => T) => {
     const depsChangedGenerator = ((): Generator => {
         let previousDeps;
-
-        return (function* () {
+        /*
+            function* myfun(): Generator<
+                WhatYouYield,
+                WhatYouReturn,
+                WhatYouAccept
+            > {
+                const myYield = "foo" //type of myYield is WhatYouYield
+                const myAccepted = yield myYield; //type of myAccepted is WhatYouAccept
+                return "baz" //type of this value is WhatYouReturn
+            }
+        */
+        return (function* (): Generator<
+            boolean | undefined,
+            any,
+            undefined
+        > {
             let nextDepsToTest = yield;
             while (true) {
                 if (
@@ -32,7 +46,7 @@ export const useMemo = <T>(
     };
 
     const getFuncValue = ((): ((
-        boolean,
+        hasChanged: boolean,
         ...dep: any
     ) => T) => {
         let previousValue: T;

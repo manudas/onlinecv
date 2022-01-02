@@ -7,11 +7,12 @@ export default function (state = null, action) {
         case setLanguageAction:
             const result = payload;
             if (!payload) {
-                result.language = (state && state.language ) 
-                                            ? state.language : null;
+                result.language = state?.language
+                    ? state.language
+                    : null;
             }
-			return result;
-		default:
+            return result;
+        default:
     }
     return state;
 }

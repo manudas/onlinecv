@@ -1,9 +1,6 @@
 import  { query } from 'gql-query-builder'
-import {
-    DataService,
-} from './data.service'
 
-export const getUserData = (lang: string) => {
+export const getUserDataQuery = (lang: string) => {
     const {
         query: queryWithoutVars,
         variables
@@ -20,13 +17,14 @@ export const getUserData = (lang: string) => {
             'nickname'
         ]
     });
-    const dataService = DataService.factory()
-    const userData = dataService.readData(queryWithoutVars, variables)
 
-    return userData;
+    return {
+        query: queryWithoutVars,
+        variables
+    };
 }
 
-export const getUserDetails = (lang: string) => {
+export const getUserDetailsQuery = (lang: string) => {
     const {
         query: queryWithoutVars,
         variables
@@ -75,8 +73,9 @@ export const getUserDetails = (lang: string) => {
             ]
         },
     ]);
-    const dataService = DataService.factory()
-    const userDetails = dataService.readData(queryWithoutVars, variables)
 
-    return userDetails;
+    return {
+        query: queryWithoutVars,
+        variables
+    };
 }

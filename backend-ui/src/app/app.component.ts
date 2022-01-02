@@ -117,7 +117,7 @@ export class AppComponent implements OnInit { // added OnInit to make a regular 
     }
 
     requestTranslations() {
-        const translations = this.translationService.getDuplicatesFilteredTranslationsRequest()
+        const translations = this.translationService.getNotTranslatedTranslationsRequest()
         if (Object.keys(translations).length > 0 && this.selectedLocale) {
             this.debouncedHandler(this.translationService.getModuleTagPairs(translations), this.selectedLocale)
         }

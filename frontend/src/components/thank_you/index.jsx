@@ -1,23 +1,12 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import "./thank_you.css";
+import { translateString } from '../../helpers/translations';
+
+import './thank_you.css';
 
 class ThankYou extends Component {
-
-    translateString(string) {
-        let translations = this.props.translations
-            ? this.props.translations
-            : null;
-        let result = translations && translations[string] ? translations[string] : null;
-        if (result) {
-            return result["text"];
-        } else {
-            return string + "_translation";
-        }
-    }
-
     render() {
         if (!this.props.data_is_loaded) {
             return null;
@@ -44,9 +33,10 @@ class ThankYou extends Component {
                         <div className="line-content">
                             {/* Subtitle */}
                             <h3 className="thank-you">
-                                {
-									this.translateString('thank_you') 
-								}
+                                {translateString(
+                                    'thank_you',
+                                    this
+                                )}
                                 !
                             </h3>
                             {/* /Subtitle */}
@@ -65,14 +55,15 @@ class ThankYou extends Component {
 
 function mapStateToProps(state) {
     const data = state && state.data ? state.data : null;
-    const language = state && state.language ? state.language : null;
-	const translations =
-		data &&
-		data.translations &&
-		data.translations[language] &&
-		data.translations[language]['ThankYou']
-			? data.translations[language]['ThankYou']
-			: null;
+    const language =
+        state && state.language ? state.language : null;
+    const translations =
+        data &&
+        data.translations &&
+        data.translations[language] &&
+        data.translations[language]['ThankYou']
+            ? data.translations[language]['ThankYou']
+            : null;
     const data_is_loaded = data !== null;
     return {
         data_is_loaded: data_is_loaded,

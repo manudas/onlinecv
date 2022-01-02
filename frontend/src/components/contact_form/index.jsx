@@ -1,33 +1,25 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from 'react';
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
+import { translateString } from '../../helpers/translations';
 
-import "./contact_form.css";
+import './contact_form.css';
 
 class ContactForm extends Component {
     constructor(props) {
         super(props);
         console.log(
-            "Si se envia mensaje poner boton de enviar otro mensaje y deshabilitar\nmandar mensaje de mensaje enviado o ha habido un error, con un action creator asíncrono"
+            'Si se envia mensaje poner boton de enviar otro mensaje y deshabilitar\nmandar mensaje de mensaje enviado o ha habido un error, con un action creator asíncrono'
         );
     }
 
-    translateString(string) {
-        let translations = this.props.translations
-            ? this.props.translations
-            : null;
-        let result = translations && translations[string] ? translations[string] : null;
-        if (result) {
-            return result["text"];
-        } else {
-            return string + "_translation";
-        }
-    }
-
-    renderTitle() {   
+    renderTitle() {
         return [
             /* VERTICAL MARGIN (necessary for the timeline effect) */
-            <div key="1" className="line row timeline-margin content-wrap">
+            <div
+                key="1"
+                className="line row timeline-margin content-wrap"
+            >
                 <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
                 <div className="col-md-2 timeline-progress hidden-sm hidden-xs full-height" />
                 <div className="col-md-9 bg1 full-height" />
@@ -35,7 +27,7 @@ class ContactForm extends Component {
             /* /VERTICAL MARGIN */
             /* SECTION TITLE */
             <div key="2" className="line row d-flex">
-                {/* Margin Collums (necessary for the timeline effect) */}
+                {/* Margin Colums (necessary for the timeline effect) */}
                 <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
                 <div className="col-md-2 timeline-progress hidden-sm hidden-xs timeline-title full-height" />
                 {/* /Margin Collums */}
@@ -63,16 +55,18 @@ class ContactForm extends Component {
                 <form
                     id="contactForm"
                     method="post"
-                    className="form">
+                    className="form"
+                >
                     {/* Form Field */}
                     <div className="form-group">
                         <input
                             className="form-control required"
                             id="name"
                             name="name"
-                            placeholder={
-								this.translateString('username')
-                            }
+                            placeholder={translateString(
+                                'username',
+                                this
+                            )}
                             type="text"
                             required
                         />
@@ -84,9 +78,10 @@ class ContactForm extends Component {
                             className="form-control required"
                             id="email"
                             name="email"
-                            placeholder={
-                                this.translateString('email')
-                            }
+                            placeholder={translateString(
+                                'email',
+                                this
+                            )}
                             type="email"
                             required
                         />
@@ -99,9 +94,10 @@ class ContactForm extends Component {
                             id="subject"
                             type="text"
                             name="subject"
-                            placeholder={
-								this.translateString('subject')
-                            }
+                            placeholder={translateString(
+                                'subject',
+                                this
+                            )}
                             required
                         />
                     </div>
@@ -112,9 +108,10 @@ class ContactForm extends Component {
                             className="form-control required"
                             id="message"
                             name="message"
-                            placeholder={
-								this.translateString('message')
-                            }
+                            placeholder={translateString(
+                                'message',
+                                this
+                            )}
                             rows="5"
                             required
                         />
@@ -126,7 +123,10 @@ class ContactForm extends Component {
                             type="submit"
                             className="btn btn-default form-send"
                             value={
-								this.translateString('send') + "!"
+                                translateString(
+                                    'send',
+                                    this
+                                ) + '!'
                             }
                         />
                     </div>
@@ -147,16 +147,18 @@ class ContactForm extends Component {
         /* Contact infos */
         return (
             <div className="col-md-4 contact-infos">
-                {this.props.contact_details.map((contact_detail, index) => {
-                    return (
-                        <Fragment key={index}>
-                            <h4 className="contact-subtitle-1">
-                                {contact_detail.label}
-                            </h4>
-                            <p>{contact_detail.text}</p>
-                        </Fragment>
-                    );
-                })}
+                {this.props.contact_details.map(
+                    (contact_detail, index) => {
+                        return (
+                            <Fragment key={index}>
+                                <h4 className="contact-subtitle-1">
+                                    {contact_detail.label}
+                                </h4>
+                                <p>{contact_detail.text}</p>
+                            </Fragment>
+                        );
+                    }
+                )}
             </div>
         );
         /* /Contact infos */
@@ -175,9 +177,10 @@ class ContactForm extends Component {
                     <div className="line-content contact-content">
                         {/* Subtitle */}
                         <h3 className="section-item-title-1">
-                            {
-								this.translateString('send_me_a_message')
-							}
+                            {translateString(
+                                'send_me_a_message',
+                                this
+                            )}
                         </h3>
                         {/* /Subtitle */}
                         {/* content */}
@@ -203,7 +206,11 @@ class ContactForm extends Component {
         }
         /* ====>> SECTION: CONTACT <<====*/
         return (
-            <section ref={ this.props.reference } className="timeline" id={this.constructor.name}>
+            <section
+                ref={this.props.reference}
+                className="timeline"
+                id={this.constructor.name}
+            >
                 {this.renderTitle()}
                 {this.renderSection()}
             </section>
@@ -215,8 +222,11 @@ class ContactForm extends Component {
 function mapStateToProps(state) {
     const data = state && state.data ? state.data : null;
     const contact_details =
-        data && data.contact_details ? data.contact_details : null;
-    const language = state && state.language ? state.language : null;
+        data && data.contact_details
+            ? data.contact_details
+            : null;
+    const language =
+        state && state.language ? state.language : null;
     const translations =
         data &&
         data.translations &&

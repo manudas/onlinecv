@@ -1,18 +1,24 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import Slider from "react-slick";
+import Slider from 'react-slick';
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
-import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css";
+import Lightbox from 'react-image-lightbox';
 
-import { getBase64ImageMimeType, bufferToBase64 } from "../../helpers/image";
+import { translateString } from '../../helpers/translations';
 
-import "./portfolio.css";
+import 'react-image-lightbox/style.css';
+
+import {
+    getBase64ImageMimeType,
+    bufferToBase64
+} from '../../helpers/image';
+
+import './portfolio.css';
 
 class PortFolio extends Component {
     constructor(props) {
@@ -30,18 +36,6 @@ class PortFolio extends Component {
         this.openGallery = this._openGallery.bind(this);
     }
 
-    translateString(string) {
-        let translations = this.props.translations
-            ? this.props.translations
-            : null;
-        let result = translations && translations[string] ? translations[string] : null;
-        if (result) {
-            return result["text"];
-        } else {
-            return string + "_translation";
-        }
-    }
-
     _addImgRef(index, imgRef) {
         this.imgRefList[index] = imgRef;
     }
@@ -56,25 +50,32 @@ class PortFolio extends Component {
             ? portfolio_item.description
             : "PORTFOLIO DESCRIPTION";
 		*/
-        const name = portfolio_item.name ? portfolio_item.name : "item_name";
-        const name_without_html = name.replace(/<(?:.|\n)*?>/gm, ""); // striping out html
+        const name = portfolio_item.name
+            ? portfolio_item.name
+            : 'item_name';
+        const name_without_html = name.replace(
+            /<(?:.|\n)*?>/gm,
+            ''
+        ); // striping out html
 
         const image_data = portfolio_item.picture
             ? bufferToBase64(portfolio_item.picture)
             : null;
-        const mimetype = image_data ? getBase64ImageMimeType(image_data) : null;
+        const mimetype = image_data
+            ? getBase64ImageMimeType(image_data)
+            : null;
 
         // `url(data:${getBase64ImageMimeType(this.props.background)};base64,${this.props.background})`
 
         const image = image_data ? (
             <img
-                ref={ref => this.addImgRef(index, ref)}
+                ref={(ref) => this.addImgRef(index, ref)}
                 src={`data:${mimetype};base64, ${image_data}`}
                 alt={name_without_html}
             />
         ) : (
             <img
-                ref={ref => this.addImgRef(index, ref)}
+                ref={(ref) => this.addImgRef(index, ref)}
                 alt={name_without_html}
             />
         );
@@ -85,9 +86,12 @@ class PortFolio extends Component {
                 <div className="portfolio-item">
                     {/* Link to the item image (Put the long description on  "a" title)*/}
                     <a
-                        onClick={() => this.openGallery(index)}
+                        onClick={() =>
+                            this.openGallery(index)
+                        }
                         // href="img/portfolio-item-zoom.jpg"
-                        title={name_without_html}>
+                        title={name_without_html}
+                    >
                         <div className="hover fadeInUp animated">
                             <p className="zoomi">
                                 <i className="fa fa-search" />
@@ -134,9 +138,14 @@ class PortFolio extends Component {
 
         return (
             <Slider {...settings}>
-                {this.props.portfolio.map((portfolio_item, index) => {
-                    return this.renderPortFolioItem(portfolio_item, index);
-                })}
+                {this.props.portfolio.map(
+                    (portfolio_item, index) => {
+                        return this.renderPortFolioItem(
+                            portfolio_item,
+                            index
+                        );
+                    }
+                )}
             </Slider>
         );
     }
@@ -144,7 +153,10 @@ class PortFolio extends Component {
     renderTitle() {
         return [
             /* VERTICAL MARGIN (necessary for the timeline effect) */
-            <div key="1" className="line row timeline-margin content-wrap">
+            <div
+                key="1"
+                className="line row timeline-margin content-wrap"
+            >
                 <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
                 <div className="col-md-2 timeline-progress hidden-sm hidden-xs full-height" />
                 <div className="col-md-9 bg1 full-height" />
@@ -159,7 +171,9 @@ class PortFolio extends Component {
                 {/* Item Content */}
                 <div className="col-md-8 content-wrap bg1">
                     {/* Section title */}
-                    <h2 className="section-title">{this.props.name}</h2>
+                    <h2 className="section-title">
+                        {this.props.name}
+                    </h2>
                     {/* /Section title */}
                 </div>
                 {/* Item Content */}
@@ -187,9 +201,10 @@ class PortFolio extends Component {
                     <div className="line-content">
                         {/* Subtitle */}
                         <h3 className="section-item-title-1">
-                            {
-								this.translateString('some_works')
-							}
+                            {translateString(
+                                'some_works',
+                                this
+                            )}
                         </h3>
                         {/* /Subtitle */}
                         {/* content */}
@@ -218,57 +233,77 @@ class PortFolio extends Component {
                 <Lightbox
                     animationDuration={800}
                     imageTitle={
-                        this.props.portfolio[photoIndex].name
-                            ? this.props.portfolio[photoIndex].name.replace(
+                        this.props.portfolio[photoIndex]
+                            .name
+                            ? this.props.portfolio[
+                                  photoIndex
+                              ].name.replace(
                                   /<(?:.|\n)*?>/gm,
-                                  ""
+                                  ''
                               )
                             : null
                     } // striping out html
                     imageCaption={
-                        this.props.portfolio[photoIndex].description
+                        this.props.portfolio[photoIndex]
+                            .description
                             ? this.props.portfolio[
                                   photoIndex
-                              ].description.replace(/<(?:.|\n)*?>/gm, "")
+                              ].description.replace(
+                                  /<(?:.|\n)*?>/gm,
+                                  ''
+                              )
                             : null
                     } // striping out html
                     mainSrc={
                         this.imgRefList[photoIndex].src
-                            ? this.imgRefList[photoIndex].src
+                            ? this.imgRefList[photoIndex]
+                                  .src
                             : null
                     }
                     nextSrc={
                         this.imgRefList[
-                            (photoIndex + 1) % this.imgRefList.length
+                            (photoIndex + 1) %
+                                this.imgRefList.length
                         ].src
                             ? this.imgRefList[
-                                  (photoIndex + 1) % this.imgRefList.length
+                                  (photoIndex + 1) %
+                                      this.imgRefList.length
                               ].src
                             : null
                     }
                     prevSrc={
                         this.imgRefList[
-                            (photoIndex + this.imgRefList.length - 1) %
+                            (photoIndex +
+                                this.imgRefList.length -
+                                1) %
                                 this.imgRefList.length
                         ].src
                             ? this.imgRefList[
-                                  (photoIndex + this.imgRefList.length - 1) %
+                                  (photoIndex +
+                                      this.imgRefList
+                                          .length -
+                                      1) %
                                       this.imgRefList.length
                               ].src
                             : null
                     }
-                    onCloseRequest={() => this.setState({ isOpen: false })}
+                    onCloseRequest={() =>
+                        this.setState({ isOpen: false })
+                    }
                     onMovePrevRequest={() =>
                         this.setState({
                             photoIndex:
-                                (photoIndex + this.imgRefList.length - 1) %
+                                (photoIndex +
+                                    this.imgRefList.length -
+                                    1) %
                                 this.imgRefList.length
                         })
                     }
                     onMoveNextRequest={() =>
                         this.setState({
                             photoIndex:
-                                (photoIndex + 1) % this.imgRefList.length
+                                (photoIndex + 1) %
+                                this.imgRefList.length
                         })
                     }
                 />
@@ -282,7 +317,11 @@ class PortFolio extends Component {
         }
         /* ====>> SECTION: PORTFOLIO <<====*/
         return (
-            <section ref={ this.props.reference } className="timeline portfolio" id="portfolio">
+            <section
+                ref={this.props.reference}
+                className="timeline portfolio"
+                id="portfolio"
+            >
                 {this.renderTitle()}
                 {this.renderSection()}
                 {this.renderGallerySlider()}
@@ -294,8 +333,10 @@ class PortFolio extends Component {
 
 function mapStateToProps(state) {
     const data = state && state.data ? state.data : null;
-    const portfolio = data && data.portfolio ? data.portfolio : null;
-    const language = state && state.language ? state.language : null;
+    const portfolio =
+        data && data.portfolio ? data.portfolio : null;
+    const language =
+        state && state.language ? state.language : null;
     const translations =
         data &&
         data.translations &&
@@ -306,7 +347,7 @@ function mapStateToProps(state) {
 
     return {
         portfolio: portfolio,
-        translations: translations ,
+        translations: translations,
         language: language
     };
 }

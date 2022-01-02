@@ -1,23 +1,12 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import "./skills.css";
+import { translateString } from '../../helpers/translations';
+
+import './skills.css';
 
 class Skill extends Component {
-	
-    translateString(string) {
-        let translations = this.props.translations
-            ? this.props.translations
-            : null;
-        let result = translations && translations[string] ? translations[string] : null;
-        if (result) {
-            return result["text"];
-        } else {
-            return string + "_translation";
-        }
-    }
-
     renderSkillItem(skill_item, index) {
         /* we have three diferent kinds of progress bar
          * and depending on its index we will assing
@@ -27,24 +16,36 @@ class Skill extends Component {
         const progressBarType = (index + 1) % 3;
         const skillLevel = skill_item.skill_level
             ? skill_item.skill_level
-            : "NO DATA ";
-        const skillName = skill_item.name ? skill_item.name : "NO NAME ";
+            : 'NO DATA ';
+        const skillName = skill_item.name
+            ? skill_item.name
+            : 'NO NAME ';
         const skillDescription = skill_item.description
             ? skill_item.description
             : null;
         /* SECTION ITEM */
         return (
             <li key={index}>
-                <div className="progress" title={`${skillDescription}`}>
+                <div
+                    className="progress"
+                    title={`${skillDescription}`}
+                >
                     <div
                         className={`progress-bar progress-bar-${progressBarType}`}
                         role="progressbar"
                         data-percent={`${skillLevel}%`}
-                        style={{ width: `${skillLevel}%` }}>
-                        <span className="sr-only">{skillLevel}% Complete</span>
+                        style={{ width: `${skillLevel}%` }}
+                    >
+                        <span className="sr-only">
+                            {skillLevel}% Complete
+                        </span>
                     </div>
-                    <span className="progress-type">{skillName}</span>
-                    <span className="progress-completed">{skillLevel}%</span>
+                    <span className="progress-type">
+                        {skillName}
+                    </span>
+                    <span className="progress-completed">
+                        {skillLevel}%
+                    </span>
                 </div>
             </li>
         );
@@ -52,9 +53,11 @@ class Skill extends Component {
     }
 
     renderSkillItems(element, index) {
-        
         return (
-            <div key={element._id} className="line row d-flex">
+            <div
+                key={element._id}
+                className="line row d-flex"
+            >
                 {/* Margin Collums (necessary for the timeline effect) */}
                 <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
                 <div className="col-md-2 timeline-progress hidden-sm hidden-xs full-height timeline-point " />
@@ -64,17 +67,19 @@ class Skill extends Component {
                     <div className="line-content">
                         {/* Subtitle */}
                         <h3 className="section-item-title-1">
-                            {element._id}{" "}
-                            {
-								this.translateString('skills')
-							}
+                            {element._id}{' '}
+                            {translateString('skills', this)}
                         </h3>
                         {/* /Subtitle */}
                         {/* content */}
                         <ul className="skills-list">
                             {/* item-list */}
-                            {element.value.map((skill, index) =>
-                                this.renderSkillItem(skill, index)
+                            {element.value.map(
+                                (skill, index) =>
+                                    this.renderSkillItem(
+                                        skill,
+                                        index
+                                    )
                             )}
                             {/* item list */}
                         </ul>
@@ -92,7 +97,10 @@ class Skill extends Component {
     renderTitle() {
         return [
             /* VERTICAL MARGIN (necessary for the timeline effect) */
-            <div key="1" className="line row timeline-margin content-wrap">
+            <div
+                key="1"
+                className="line row timeline-margin content-wrap"
+            >
                 <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
                 <div className="col-md-2 timeline-progress hidden-sm hidden-xs full-height" />
                 <div className="col-md-9 bg1 full-height" />
@@ -127,7 +135,11 @@ class Skill extends Component {
         }
         /* ====>> SECTION: SKILLS <<====*/
         return (
-            <section ref={ this.props.reference } className="timeline skills" id="skills">
+            <section
+                ref={this.props.reference}
+                className="timeline skills"
+                id="skills"
+            >
                 {this.renderTitle()}
                 {this.props.skills.map((skill, index) =>
                     this.renderSkillItems(skill, index)
@@ -141,7 +153,8 @@ class Skill extends Component {
 function mapStateToProps(state) {
     const data = state && state.data ? state.data : null;
     const skills = data && data.skills ? data.skills : null;
-    const language = state && state.language ? state.language : null;
+    const language =
+        state && state.language ? state.language : null;
     const translations =
         data &&
         data.translations &&

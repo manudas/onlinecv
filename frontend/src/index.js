@@ -7,15 +7,10 @@ import registerServiceWorker from "./registerServiceWorker";
 
 import { Provider } from "react-redux";
 
-import reducers from "./store/reducers";
-
-import { createStore, applyMiddleware } from 'redux'
-import thunkMiddleware from 'redux-thunk'
-
-const middleWare = applyMiddleware(thunkMiddleware);
+import store from './store/storeProvider';
 
 ReactDOM.render(
-    <Provider store={createStore(reducers, middleWare)}>
+    <Provider store={store}>
         <App />
     </Provider>,
     document.getElementById("root")
