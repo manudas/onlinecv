@@ -64,7 +64,7 @@ export function requestTranslations(lang, moduleTagsPairs) {
             variables
         } = getTranslationsQuery(lang, tags, modules, domain);
         const dataService = DataService.factory();
-        const translations = await dataService.readData(
+        const { translations } = await dataService.readData(
             query,
             variables
         );

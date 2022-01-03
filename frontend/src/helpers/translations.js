@@ -99,7 +99,7 @@ const getTranslation = (
 
 export const translateString = (tag, module) => {
     store.subscribe(() => {
-        console.log(store)
+        console.log(store.getState())
     })
 
 
