@@ -7,10 +7,10 @@ const skillsReducer = createReducer(
   initialState,
   on(SKILLS_ACTIONS.SKILLS_FETCHED, (state, {
     skillType,
-    Skills
+    skills
   }) => {
     // do some more logic here if needed
-    return { ...state, [skillType]: [...Skills]}}
+    return { ...state, [skillType]: [...skills]}}
   ),
 )
 

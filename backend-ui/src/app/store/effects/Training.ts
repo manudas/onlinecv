@@ -57,12 +57,12 @@ export class TrainingEffects {
                 trainingType,
             } = action
 
-            const vars = {
-                language,
-                type: trainingType,
-            }
+            const {
+                query,
+                variables,
+            } = QueryTrainings(language, trainingType)
 
-            return this.dataService.readData(QueryTrainings, vars).pipe(
+            return this.dataService.readData(query, variables).pipe(
                 map((trainingData: TrainingFetched) => {
                     return TRAINING_ACTIONS.TRAINING_FETCHED(
                         {
@@ -96,11 +96,12 @@ export class TrainingEffects {
                 trainingType
             } = action
 
-            const vars = {
-                trainings,
-            }
+            const {
+                query,
+                variables,
+            } = MutateTrainings(trainings)
 
-            return this.dataService.setData(MutateTrainings, vars).pipe(
+            return this.dataService.setData(query, variables).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Training saved successfully', this)}`
@@ -137,11 +138,12 @@ export class TrainingEffects {
                 trainingType
             } = action
 
-            const vars = {
-                id,
-            }
+            const {
+                query,
+                variables,
+            } = RemoveTraining(id)
 
-            return this.dataService.setData(RemoveTraining, vars).pipe(
+            return this.dataService.setData(query, variables).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Training removed successfully', this)}`

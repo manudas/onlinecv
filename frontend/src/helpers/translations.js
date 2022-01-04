@@ -53,7 +53,7 @@ export const getNotTranslatedTranslationsRequest = (
                             module,
                             selectedLocale
                         );
-                    if (existingTranslation.translation) {
+                    if (existingTranslation) {
                         return false;
                     }
                     return true;
@@ -68,9 +68,7 @@ export const getNotTranslatedTranslationsRequest = (
     return filteredTranslations;
 };
 
-export const getModuleTagPairs = (
-    translations
-) => {
+export const getModuleTagPairs = (translations) => {
     const result = {
         module_arr: [],
         tag_arr: []
@@ -91,40 +89,37 @@ const getTranslation = (
     module,
     selectedLocale
 ) => {
-    return {
-
-    }
-}
-
-
-export const translateString = (tag, module) => {
-    store.subscribe(() => {
-        console.log(store.getState())
-    })
-
-
-    /*
-    const { translations, language } = useSelector(
-        // selector function
-        ({
-            translations = [],
-            language = DEFAULT_LANGUAGE_ISO
-        }) => {
-            translations, language;
-        }
-    );
-    */
-/*
+    const state = store.getState();
     const translation =
-        translations?.[language]?.[module]?.[tag];
+        state?.translations?.[selectedLocale]?.[module]?.[
+            individualTag
+        ];
 
     if (translation) {
         return translation['text'];
     } else {
-        requestTranslation(tag, module);
-        return tag;
+        return null;
     }
-    */
+};
+
+export const translateString = (tag, module) => {
+    // store.subscribe(() => {
+    //     console.log(store.getState())
+    // })
+
+    const state = store.getState();
+    const { language = DEFAULT_LANGUAGE_ISO } = state;
     const module_name = module.constructor.name;
-    requestTranslation(tag, module_name);
+    let translation = getTranslation(
+        tag,
+        module_name,
+        language
+    );
+
+    if (!translation) {
+        requestTranslation(tag, module_name);
+        translation = tag;
+    }
+
+    return translation;
 };

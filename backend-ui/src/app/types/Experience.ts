@@ -49,5 +49,5 @@ export type EditExperienceStructure = {
 
 export type ExperienceFetched = {
     experienceType: string
-    Experiences: ExperienceInterface[]
+    experiences: ExperienceInterface[]
 }

@@ -1,6 +1,6 @@
 import  { query } from 'gql-query-builder'
 
-export const getUserDataQuery = (lang: string) => {
+export const getUserIntroductionQuery = (lang: string) => {
     const {
         query: queryWithoutVars,
         variables
@@ -24,7 +24,7 @@ export const getUserDataQuery = (lang: string) => {
     };
 }
 
-export const getUserDetailsQuery = (lang: string) => {
+export const getUserFullResumeQuery = (lang: string) => {
     const {
         query: queryWithoutVars,
         variables
@@ -54,24 +54,24 @@ export const getUserDetailsQuery = (lang: string) => {
                 'nickname'
             ]
         },
-        {
-            operation: 'allExperiences',
-            variables: {
-                language: { value: lang, required: true },
-            },
-            fields: [
-                'description',
-                'type',
-                'start_date',
-                'finish_date',
-                'role',
-                'company',
-                'company_url',
-                'keywords',
-                'language',
-                'order',
-            ]
-        },
+        // {
+        //     operation: 'experiences',
+        //     variables: {
+        //         language: { value: lang, required: true },
+        //     },
+        //     fields: [
+        //         'description',
+        //         'type',
+        //         'start_date',
+        //         'finish_date',
+        //         'role',
+        //         'company',
+        //         'company_url',
+        //         'keywords',
+        //         'language',
+        //         'order',
+        //     ]
+        // },
     ]);
 
     return {

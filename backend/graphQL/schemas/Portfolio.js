@@ -35,7 +35,7 @@ module.exports =
   }
 
   extend type Query {
-    portfolios(language: String!): [Portfolio]!
+    portfolio(language: String!): [Portfolio]!
   }
 
   extend type Mutation {

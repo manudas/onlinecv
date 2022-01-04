@@ -7,7 +7,7 @@ export type LocaleType = {
 };
 
 export type getLocaleTypeRequest = {
-    getLocales: LocaleType[]
+    locales: LocaleType[]
 }
 
 export type LocaleStore = {

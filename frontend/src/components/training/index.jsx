@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 
 import { translateString } from '../../helpers/translations';
 
-import './regulatedTraining.css';
+import './training.css';
 
-class RegulatedTraining extends Component {
-    renderTrainingItem(regulated_training, index) {
+class Training extends Component {
+    renderTrainingItem(training, index) {
         /* SECTION ITEM */
         const finish_date = new Date(
-            regulated_training.finish_date
+            training.finish_date
         );
         const options = { year: 'numeric', month: 'short' };
         const finish_date_string =
@@ -19,22 +19,22 @@ class RegulatedTraining extends Component {
                 options
             );
 
-        const school = regulated_training.school_url ? (
+        const school = training.school_url ? (
             <a
-                href={regulated_training.school_url}
+                href={training.school_url}
                 target="_blank"
                 title={
-                    regulated_training.school
-                        ? regulated_training.school
+                    training.school
+                        ? training.school
                         : 'school'
                 }
             >
-                {regulated_training.school
-                    ? regulated_training.school
+                {training.school
+                    ? training.school
                     : 'school'}
             </a>
-        ) : regulated_training.school ? (
-            regulated_training.school
+        ) : training.school ? (
+            training.school
         ) : (
             'school'
         );
@@ -50,8 +50,8 @@ class RegulatedTraining extends Component {
                     <div className="line-content line-content-training">
                         {/* Graduation title */}
                         <h3 className="section-item-title-1">
-                            {regulated_training.name
-                                ? regulated_training.name
+                            {training.name
+                                ? training.name
                                 : 'name'}
                         </h3>
                         {/* /Graduation title */}
@@ -72,11 +72,11 @@ class RegulatedTraining extends Component {
                         {/* content */}
                         <div className="graduation-description">
                             <p className="text-justify">
-                                {regulated_training.description
-                                    ? regulated_training.description
+                                {training.description
+                                    ? training.description
                                     : ''}
-                                {regulated_training.description &&
-                                regulated_training.final_project
+                                {training.description &&
+                                training.final_project
                                     ? '. ' +
                                       translateString(
                                           'final_project',
@@ -84,14 +84,14 @@ class RegulatedTraining extends Component {
                                       ) +
                                       ': '
                                     : ''}
-                                {regulated_training.final_project
-                                    ? regulated_training.final_project
+                                {training.final_project
+                                    ? training.final_project
                                     : ''}
                             </p>
                         </div>
                         <div>
                             <p>
-                                {regulated_training.average_score
+                                {training.average_score
                                     ? [
                                           <span key="1">
                                               {' '}
@@ -101,7 +101,7 @@ class RegulatedTraining extends Component {
                                               )}
                                           </span>,
                                           <strong key="2">
-                                              {regulated_training.average_score +
+                                              {training.average_score +
                                                   '/10'}
                                           </strong>
                                       ]
@@ -121,10 +121,10 @@ class RegulatedTraining extends Component {
     }
 
     renderRegulatedTrainingItems() {
-        if (!this.props.regulated_training) {
+        if (!this.props.training) {
             return null;
         } else {
-            return this.props.regulated_training.map(
+            return this.props.training.map(
                 (training_item, index) => {
                     return this.renderTrainingItem(
                         training_item,
@@ -136,7 +136,7 @@ class RegulatedTraining extends Component {
     }
 
     renderTitle() {
-        if (!this.props.regulated_training) {
+        if (!this.props.training) {
             return null;
         }
 
@@ -175,7 +175,7 @@ class RegulatedTraining extends Component {
     }
 
     render() {
-        if (!this.props.regulated_training) {
+        if (!this.props.training) {
             return null;
         }
         /* ====>> SECTION: TRAINING <<====*/
@@ -195,9 +195,9 @@ class RegulatedTraining extends Component {
 
 function mapStateToProps(state) {
     const data = state && state.data ? state.data : null;
-    const regulated_training =
-        data && data.regulated_training
-            ? data.regulated_training
+    const training =
+        data && data.training
+            ? data.training
             : null;
     const language =
         state && state.language ? state.language : null;
@@ -211,10 +211,10 @@ function mapStateToProps(state) {
               ]
             : null;
     return {
-        regulated_training: regulated_training,
+        training: training,
         translations: translations,
         language: language
     };
 }
 
-export default connect(mapStateToProps)(RegulatedTraining);
+export default connect(mapStateToProps)(Training);

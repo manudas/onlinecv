@@ -1,23 +1,25 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import { bindActionCreators } from "redux";
+import { bindActionCreators } from 'redux';
 
-import { cvComponentsWereLoadedActionCreator } from "../../store/actions";
+import { cvComponentsWereLoadedActionCreator } from '../../store/actions';
 
-import "./cvcontainer.css";
+import { translateString } from '../../helpers/translations';
 
-import ProfileResume from "../profileResume";
-import ProfileDetail from "../profileDetails";
-import RegulatedTraining from "../regulated_training";
-import WorkExperience from "../work_experience";
-import Skill from "../skills";
-import Interest from "../interests";
-import PortFolio from "../portfolio";
-import ContactForm from "../contact_form";
-import ThankYou from "../thank_you";
-import Footer from "../footer";
+import './cvcontainer.css';
+
+import ProfileResume from '../profileResume';
+import ProfileDetail from '../profileDetails';
+import Training from '../training';
+import WorkExperience from '../work_experience';
+import Skill from '../skills';
+import Interest from '../interests';
+import PortFolio from '../portfolio';
+import ContactForm from '../contact_form';
+import ThankYou from '../thank_you';
+import Footer from '../footer';
 
 class CVContainer extends Component {
     constructor(props) {
@@ -73,7 +75,9 @@ class CVContainer extends Component {
                     {/* Mail Button */}
                     <a className="btn btn-default btn-top-message">
                         <i className="fa fa-envelope-o" />
-                        <span className="btn-hide-text">Send me a message</span>
+                        <span className="btn-hide-text">
+                            Send me a message
+                        </span>
                     </a>
                     {/* /Mail Button */}
                 </div>
@@ -83,7 +87,9 @@ class CVContainer extends Component {
     }
 
     addToList(elem, component_name) {
-        const name = this.getComponentTranslatedName(component_name);
+        console.log('creo que seria mejor usar un custon event para enviar elementos al menu en lugar de usar la redux store');
+        const name =
+            translateString(component_name, this);
         this.refList.push({
             component: elem,
             translated_name: name
@@ -91,34 +97,18 @@ class CVContainer extends Component {
         return elem;
     }
 
-    getComponentTranslatedName(component_name) {
-        let translations = this.props.translations
-            ? this.props.translations
-            : null;
-        let module_translations =
-            translations && translations[component_name]
-                ? translations[component_name]
-                : null;
-        let result =
-            module_translations && module_translations["name"]
-                ? module_translations["name"]
-                : null;
-        if (result) {
-            return result["text"];
-        } else {
-            return component_name + "_translation";
-        }
-    }
-
     render() {
-        if (!this.props.data_is_loaded) {
+        if (!this.props.resume) {
             return null;
         }
         /* CONTENT
 	========================================================= */
         this.refList.length = 0; // lets reset the array reference before setting it again
         return (
-            <section id="content-body" className="container animated">
+            <section
+                id="content-body"
+                className="container animated"
+            >
                 <div className="row" id="intro">
                     {this.renderHeaderColors()}
                     {/* Beginning of Content */}
@@ -131,64 +121,71 @@ class CVContainer extends Component {
                                 <ProfileDetail
                                     reference={this.addToList(
                                         React.createRef(),
-                                        "ProfileDetail"
+                                        'ProfileDetail'
                                     )}
-                                    name={this.getComponentTranslatedName(
-                                        "ProfileDetail"
+                                    name={translateString(
+                                        'ProfileDetail',
+                                        this
                                     )}
                                 />
-                                <RegulatedTraining
+                                <Training
                                     reference={this.addToList(
                                         React.createRef(),
-                                        "RegulatedTraining"
+                                        'RegulatedTraining'
                                     )}
-                                    name={this.getComponentTranslatedName(
-                                        "RegulatedTraining"
+                                    name={translateString(
+                                        'RegulatedTraining',
+                                        this
                                     )}
                                 />
                                 <WorkExperience
                                     reference={this.addToList(
                                         React.createRef(),
-                                        "WorkExperience"
+                                        'WorkExperience'
                                     )}
-                                    name={this.getComponentTranslatedName(
-                                        "WorkExperience"
+                                    name={translateString(
+                                        'WorkExperience',
+                                        this
                                     )}
                                 />
                                 <Skill
                                     reference={this.addToList(
                                         React.createRef(),
-                                        "Skill"
+                                        'Skill'
                                     )}
-                                    name={this.getComponentTranslatedName(
-                                        "Skill"
+                                    name={translateString(
+                                        'Skill',
+                                        this
                                     )}
                                 />
                                 <Interest
                                     reference={this.addToList(
                                         React.createRef(),
-                                        "Interest"
+                                        'Interest'
                                     )}
-                                    name={this.getComponentTranslatedName(
-                                        "Interest"
+                                    name={translateString(
+                                        'Interest',
+                                        this
                                     )}
                                 />
                                 <PortFolio
                                     reference={this.addToList(
                                         React.createRef(),
-                                        "PortFolio"
+                                        'PortFolio'
                                     )}
-                                    name={this.getComponentTranslatedName(
-                                        "PortFolio"
+                                    name={translateString(
+                                        'PortFolio',
+                                        this
                                     )}
                                 />
                                 <ContactForm
                                     reference={this.addToList(
                                         React.createRef(),
-                                        "ContactForm"
+                                        'ContactForm'
                                     )}
-                                    name={this.getComponentTranslatedName(
-                                        "ContactForm"
+                                    name={translateString(
+                                        'ContactForm',
+                                        this
                                     )}
                                 />
                                 <ThankYou />
@@ -206,25 +203,31 @@ class CVContainer extends Component {
 }
 
 function mapStateToProps(state) {
-    const data = state && state.data ? state.data : null;
 
-    const data_is_loaded = data && data.userDetails;
-    const language = state && state.language ? state.language : null;
-    const translations =
-        data && data.translations && data.translations[language]
-            ? data.translations[language]
-            : null;
+    const {
+        data: {
+            resume
+        } = {},
+        language,
+        translations: {
+            [language]: {
+                CVContainer: translations
+            } = {}
+        } = {}
+    } = state;
+
     return {
-        data_is_loaded: data_is_loaded,
-        translations: translations,
-        language: language
+        resume,
+        translations,
+        language
     };
 }
 
 function mapDistpatchToProps(dispatch) {
     return bindActionCreators(
         {
-            componentsWereLoaded: cvComponentsWereLoadedActionCreator
+            componentsWereLoaded:
+                cvComponentsWereLoadedActionCreator
         },
         dispatch
     );

@@ -23,33 +23,20 @@ class ProfileResume extends Component {
               )};base64,${this.props.profilePicture}`
             : null;
 
-        let name =
-            this.props.details && this.props.details.name
-                ? this.props.details.name
-                : 'Name ex.';
-        let surname =
-            this.props.details && this.props.details.surname
-                ? this.props.details.surname
-                : '';
+        let name = this.props?.details?.name ?? 'Name ex.';
+        let surname = this.props?.details?.surname ?? '';
         name = name.split(' ')[0];
         surname = surname.split(' ')[0];
 
         const primaryJobName =
-            this.props.details &&
-            this.props.details.primaryJobName
-                ? this.props.details.primaryJobName
-                : null;
+            this.props?.details?.primaryJobName ?? null;
         const secondaryJobName =
-            this.props.details &&
-            this.props.details.secondaryJobName
-                ? this.props.details.secondaryJobName
-                : null;
-
+            this.props?.details?.secondaryJobName ?? null;
+        console.log(
+            '¿QUE ES this.props.details.smallDescription??'
+        );
         const smallDescription =
-            this.props.details &&
-            this.props.details.smallDescription
-                ? this.props.details.smallDescription
-                : null;
+            this.props?.details?.smallDescription ?? null;
 
         /* =============== PROFILE INTRO ====================*/
         return (
@@ -114,29 +101,26 @@ class ProfileResume extends Component {
 }
 
 function mapStateToProps(state) {
-    const data = state && state.data ? state.data : null;
-    const userDetails = data.userDetails ?? null;
-    const details = userDetails.details ?? null;
-    const profile_picture = details.profileImage ?? null;
-    const resume = data && data.resume ? data.resume : null;
-    // const details = (data && data.details) ? data.details : null;
-    const language =
-        state && state.language ? state.language : null;
-    const translations =
-        data &&
-        data.translations &&
-        data.translations[language] &&
-        data.translations[language]['ProfileResume']
-            ? data.translations[language]['ProfileResume']
-            : null;
+    const {
+        data: {
+            resume: {
+                details,
+                details: { profileImage } = {}
+            } = {},
+        } = {},
+        language,
+        translations: {
+            [language]: { ProfileResume: translations } = {}
+        } = {}
+    } = state;
+
     return {
-        profilePicture: profile_picture
-            ? bufferToBase64(profile_picture)
+        profilePicture: profileImage
+            ? bufferToBase64(profileImage)
             : null,
-        resume: resume,
-        details: details,
-        translations: translations,
-        language: language
+        details,
+        translations,
+        language
     };
 }
 

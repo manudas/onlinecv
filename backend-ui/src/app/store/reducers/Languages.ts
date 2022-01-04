@@ -6,10 +6,10 @@ export const initialState = {};
 const languagesReducer = createReducer(
   initialState,
   on(LANGUAGES_ACTIONS.LANGUAGES_FETCHED, (state, {
-    Languages
+    languages
   }) => {
     // do some more logic here if needed
-    return { ...state, list: [...Languages]}}
+    return { ...state, list: [...languages]}}
   ),
 )
 

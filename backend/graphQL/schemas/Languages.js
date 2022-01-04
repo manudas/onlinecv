@@ -39,7 +39,7 @@ module.exports =
   }
 
   extend type Query {
-    Languages(language: String!): [Language]
+    languages(language: String!): [Language]
   }
 
   extend type Mutation {

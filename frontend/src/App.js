@@ -17,7 +17,7 @@ import {
 import { connect } from 'react-redux';
 import debounce from 'lodash/debounce';
 
-import { Memoization } from './helpers/Memo'
+import { Memoization } from './helpers/Memo';
 
 import {
     requestUserDataLoad,
@@ -38,7 +38,6 @@ import {
     LANG_COOKIE,
     LOADER_UNMOUNT_TIMEOUT
 } from './helpers/constants';
-
 class App extends Component {
     constructor(props) {
         super(props);
@@ -52,32 +51,37 @@ class App extends Component {
         );
 
         /*
-        * We are going to use useMemo
-        * here in order to not refetch
-        * the data from the backend if
-        * the input (requested translations
-        * array), hasn't changed
-        */
-        this.debouncedHandler = Memoization (debounce(
-            ([params, iso]) => {
+         * We are going to use useMemo
+         * here in order to not refetch
+         * the data from the backend if
+         * the input (requested translations
+         * array), hasn't changed
+         */
+        this.debouncedHandler = Memoization(
+            debounce(
+                ([params, iso]) => {
+                    const { module_arr, tag_arr } = params;
 
-                const {
-                    module_arr,
-                    tag_arr
-                } = params;
-
-                return this.props.requestTranslations(iso, {
-                    tags: tag_arr,
-                    modules: module_arr,
-                    domain: TRANSLATION_DOMAIN
-                });
-            },
-            this.debounceTimeout, {
-                'leading': false,
-                'trailing': true,
-            }), { // Memo options
-            ignoreMemorisedValue: true
-        });
+                    return this.props.requestTranslations(
+                        iso,
+                        {
+                            tags: tag_arr,
+                            modules: module_arr,
+                            domain: TRANSLATION_DOMAIN
+                        }
+                    );
+                },
+                this.debounceTimeout,
+                {
+                    leading: false,
+                    trailing: true
+                }
+            ),
+            {
+                // Memo options
+                ignoreMemorisedValue: true
+            }
+        );
     }
 
     componentDidMount() {
@@ -100,9 +104,7 @@ class App extends Component {
 
         const translations =
             getNotTranslatedTranslationsRequest();
-        if (
-            Object.keys(translations).length > 0
-        ) {
+        if (Object.keys(translations).length > 0) {
             this.debouncedHandler(
                 getModuleTagPairs(translations),
                 language
@@ -111,11 +113,8 @@ class App extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (
-            this.props.userDetails !== nextProps.userDetails
-        ) {
-            // console.log(nextProps.userDetails);
-            // console.log(this.props.userDetails);
+        if (this.props.resume !== nextProps.resume) {
+            // an element inside data that can be rendered has been found
             setTimeout(
                 () => this.hideLoader_binded(),
                 LOADER_UNMOUNT_TIMEOUT
@@ -155,7 +154,7 @@ class App extends Component {
                 <PageLoader
                     onTransitionEnd={this.transitionEnd}
                     mounted={this.state.showPageLoader}
-                    userData={this.props.userData}
+                    introduction={this.props.introduction}
                 />
                 <InfoContainer
                     language={this.props.language}
@@ -167,26 +166,22 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-    // console.log(state);
-    const data = state && state.data ? state.data : null;
-    const bgimage =
-        data && data.images && data.images.bgimage
-            ? data.images.bgimage
-            : null;
-    const language =
-        data && data.language ? data.language : null;
-    const userData =
-        data && data.userData ? data.userData : null;
-    const userDetails =
-        data && data.userDetails ? data.userDetails : null;
+    const {
+        data: {
+            images: { bgimage } = {},
+            introduction,
+            resume
+        } = {},
+        language
+    } = state;
 
     return {
         background: bgimage
             ? bufferToBase64(bgimage.value)
             : null,
         language,
-        userData,
-        userDetails
+        introduction,
+        resume
     };
 }
 

@@ -165,14 +165,18 @@ class ProfileDetail extends Component {
 }
 
 function mapStateToProps(state) {
-    const data = state && state.data ? state.data : null;
-    const userDetails = data && data.userDetails ? data.userDetails : null;
-    const social_networks =
-        data && data.social_networks ? data.social_networks : null;
+    const {
+        data: {
+            resume: {
+                details
+            } = {},
+            social_networks,
+        } = {}
+    } = state;
 
     return {
-        profile_details: userDetails.details,
-        social_networks: social_networks,
+        profile_details: details,
+        social_networks,
     };
 }
 

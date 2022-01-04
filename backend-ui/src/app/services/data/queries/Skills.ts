@@ -1,28 +1,7 @@
-/**
- * Example of query:
- *
- * const loginQuery = `{
- *
-
-        OPTION A)
-        query namedQuery
-
-        OPTION B)
-        annonymous query
-
-        query($email: String, $password: String) {
-            login(email: $email, password: $password) {
-                token
-                user
-            }
-        }
-    }`
- *
- */
 export const QuerySkills =
     `
     query QuerySkills($language: String!, $type: String!) {
-        Skills(language: $language, type: $type) {
+        skills(language: $language, type: $type) {
             id: _id
             tag
             description

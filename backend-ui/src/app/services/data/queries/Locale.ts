@@ -22,7 +22,7 @@
 export const Locale =
     `
         query AvailableLocales {
-            getLocales {
+            locales {
                 id: _id
                 name
                 iso

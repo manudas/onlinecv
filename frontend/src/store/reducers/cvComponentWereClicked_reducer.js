@@ -5,6 +5,7 @@ export default function (state = null, action) {
     let payload = action.payload;
     switch (action.type) {
         case cvComponentsWereClicked:
+            console.log('no seria mejor usar un custon event para detectar que se clicko un elemento del menu? asi este reducer podría borrarse y eliminarse del root reducer');
             let result = payload;
             if (!payload) {
                 result = (state && state.component_clicked_data ) 

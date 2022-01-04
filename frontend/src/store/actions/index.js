@@ -3,8 +3,8 @@ import Cookies from 'universal-cookie';
 import { LANG_COOKIE } from '../../helpers/constants';
 
 import {
-    getUserDataQuery,
-    getUserDetailsQuery
+    getUserIntroductionQuery,
+    getUserFullResumeQuery
 } from '../../queries/getResume';
 
 import {
@@ -20,7 +20,7 @@ export function requestUserDataLoad(lang) {
         const {
             query: queryUserData,
             variables: variablesUserData
-        } = getUserDataQuery(lang);
+        } = getUserIntroductionQuery(lang);
         const dataService = DataService.factory();
         const { details } = await dataService.readData(
             queryUserData,
@@ -29,22 +29,23 @@ export function requestUserDataLoad(lang) {
 
         dispatch({
             type: getUserDataAction,
-            payload: details
+            payload: { introduction: details }
         });
 
         const {
             query: queryUserDetails,
             variables: variablesUserDetails
-        } = getUserDetailsQuery(lang);
+        } = getUserFullResumeQuery(lang);
         const fullDetails = await dataService.readData(
             queryUserDetails,
             variablesUserDetails
         );
 
-        dispatch({
-            type: userDetailsLoad,
-            payload: fullDetails
-        });
+        dispatch(userDetailsLoadAction({ resume: fullDetails }));
+        // dispatch({
+        //     type: userDetailsLoad,
+        //     payload: { resume: fullDetails }
+        // });
     };
 }
 

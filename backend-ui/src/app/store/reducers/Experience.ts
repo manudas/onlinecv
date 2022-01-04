@@ -7,10 +7,10 @@ const experienceReducer = createReducer(
   initialState,
   on(EXPERIENCE_ACTIONS.EXPERIENCE_FETCHED, (state, {
     experienceType,
-    Experiences
+    experiences
   }) => {
     // do some more logic here if needed
-    return { ...state, [experienceType]: [...Experiences]}}
+    return { ...state, [experienceType]: [...experiences]}}
   ),
 )
 

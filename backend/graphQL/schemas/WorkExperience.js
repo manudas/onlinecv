@@ -40,8 +40,7 @@ module.exports =
   }
 
   extend type Query {
-    Experiences(language: String!, type: String!): [WorkExperience]!
-    allExperiences(language: String!): [WorkExperience]!
+    experiences(language: String!, type: String): [WorkExperience]!
   }
 
   extend type Mutation {

@@ -73,17 +73,17 @@ class PageLoader extends Component {
         /* Page Loader
       ========================================================= */
         const {
-            userData: {
+            introduction: {
                 name: userName = null,
                 surname: userSurname = null,
                 nickname,
                 primaryRole,
                 secondaryRole
             },
-            userData
-        } = {...this.props, ...(this.props.userData ? {} : {userData: {}})};
+            introduction
+        } = {...this.props, ...(this.props.introduction ? {} : {introduction: {}})};
 
-        const hasData = Object.keys(userData).length > 0;
+        const hasData = Object.keys(introduction).length > 0;
 
         let name, surname;
         if (hasData) {

@@ -38,5 +38,5 @@ export type EditSkillsStructure = {
 
 export type SkillsFetched = {
     skillType: string
-    Skills: SkillInterface[]
+    skills: SkillInterface[]
 }

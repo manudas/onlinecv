@@ -27,7 +27,7 @@ module.exports =
       }
 
       extend type Query {
-        getLocales: [Locale]!
+        locales: [Locale]!
       }
 
       extend type Mutation {

@@ -22,7 +22,7 @@
     export const QueryLanguages =
     `
     query QueryLanguages($language: String!) {
-        Languages(language: $language) {
+        languages(language: $language) {
             id: _id
             name
             certification

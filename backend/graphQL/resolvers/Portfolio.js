@@ -1,59 +1,58 @@
-// import { AuthenticationError } from 'apollo-server';
 module.exports = {
     Query: {
-        languages: async({
-            language
-        }, {
-            models: {
-                PortfolioModel // configModel
+        portfolio: async (
+            { language },
+            {
+                models: {
+                    PortfolioModel // configModel
+                }
             },
-        }, info) => {
-            const portfolioList = await PortfolioModel.find({
-                language
-            }).sort({
-                order: 1
-            }).exec();
+            info
+        ) => {
+            const portfolioList = await PortfolioModel.find(
+                {
+                    language
+                }
+            )
+                .sort({
+                    order: 1
+                })
+                .exec();
             return portfolioList;
-        },
+        }
     },
     Mutation: {
-        /* Example
-        db.books.update(
-            { item: "ZZZ135" },   // Query parameter
-            {                     // Replacement document
-                item: "ZZZ135",
-                stock: 5,
-                tags: [ "database" ]
-            },
-            { upsert: true }      // Options: upsert -> insert document if no ducment found to update
-        )
-        */
-        putPortfolio: async(parent, {
-            Portfolio,
-        }, {
-            models: {
-                portfolioModel
-            },
-        }, info) => {
-            const WriteResult = await portfolioModel.update({
-                id: Portfolio.id,
-            }, Portfolio, {
-                upsert: true // if no details found, create a new entry
-            });
-            return (WriteResult.nUpserted === 1 || WriteResult.nModified ===
-                1) ? Portfolio : false;
+        putPortfolio: async (
+            { Portfolio },
+            { models: { PortfolioModel } },
+            info
+        ) => {
+            const WriteResult = await PortfolioModel.update(
+                {
+                    id: Portfolio.id
+                },
+                Portfolio,
+                {
+                    upsert: true // if no details found, create a new entry
+                }
+            );
+            return WriteResult.nUpserted === 1 ||
+                WriteResult.nModified === 1
+                ? Portfolio
+                : false;
         },
-        removePortfolio: async(parent, {
-            id,
-        }, {
-            models: {
-                portfolioModel
-            },
-        }, info) => {
-            const WriteResult = await portfolioModel.remove({
-                id
-            }, true); // true == remove one
+        removePortfolio: async (
+            { id },
+            { models: { PortfolioModel } },
+            info
+        ) => {
+            const WriteResult = await PortfolioModel.remove(
+                {
+                    id
+                },
+                true
+            ); // true == remove one
             return WriteResult.nRemoved === 1;
-        },
-    },
+        }
+    }
 };
