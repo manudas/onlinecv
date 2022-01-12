@@ -75,6 +75,29 @@ export const getUserFullResumeQuery = (lang: string) => {
         {
             operation: 'experienceTypes',
         },
+        {
+            operation: 'trainings',
+            variables: {
+                language: { value: lang, required: true },
+            },
+            fields: [
+                'tag',
+                'description',
+                'type',
+                'school',
+                'start_date',
+                'finish_date',
+                'final_project',
+                'school_url',
+                'average_grade',
+                'keywords',
+                'language',
+                'order'
+            ]
+        },
+        {
+            operation: 'trainingTypes',
+        },
     ]);
 
     return {

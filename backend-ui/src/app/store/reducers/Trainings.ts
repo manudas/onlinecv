@@ -7,10 +7,10 @@ const trainingReducer = createReducer(
   initialState,
   on(TRAINING_ACTIONS.TRAINING_FETCHED, (state, {
     trainingType,
-    Trainings
+    trainings
   }) => {
     // do some more logic here if needed
-    return { ...state, [trainingType]: [...Trainings]}}
+    return { ...state, [trainingType]: [...trainings]}}
   ),
 )
 

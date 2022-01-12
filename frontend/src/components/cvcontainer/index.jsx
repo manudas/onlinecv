@@ -131,10 +131,10 @@ class CVContainer extends Component {
                                 <Training
                                     reference={this.addToList(
                                         React.createRef(),
-                                        'RegulatedTraining'
+                                        'Training'
                                     )}
                                     name={translateString(
-                                        'RegulatedTraining',
+                                        'Training',
                                         this
                                     )}
                                 />

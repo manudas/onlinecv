@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
+import { sortElementsByTypeAndOrder } from '../../helpers/sortingElements';
 
 import { translateString } from '../../helpers/translations';
 
@@ -9,35 +10,30 @@ import './training.css';
 class Training extends Component {
     renderTrainingItem(training, index) {
         /* SECTION ITEM */
-        const finish_date = new Date(
-            training.finish_date
-        );
+        let finish_date_string;
+        if (training.finish_date) {
+        const finish_date = new Date(training.finish_date);
         const options = { year: 'numeric', month: 'short' };
-        const finish_date_string =
+        finish_date_string =
             finish_date.toLocaleDateString(
                 this.language,
                 options
             );
-
+        } else {
+            finish_date_string = translateString('current', this);
+        }
+        const school_name = training.school ?? '';
         const school = training.school_url ? (
             <a
+                rel="noreferrer"
                 href={training.school_url}
                 target="_blank"
-                title={
-                    training.school
-                        ? training.school
-                        : 'school'
-                }
+                title={school_name}
             >
-                {training.school
-                    ? training.school
-                    : 'school'}
+                {school_name}
+                <span className={'text-decoration-none d-inline-block ms-1'}>🡕</span>
             </a>
-        ) : training.school ? (
-            training.school
-        ) : (
-            'school'
-        );
+        ) : school_name;
 
         return (
             <div key={index} className="line row d-flex">
@@ -50,16 +46,14 @@ class Training extends Component {
                     <div className="line-content line-content-training">
                         {/* Graduation title */}
                         <h3 className="section-item-title-1">
-                            {training.name
-                                ? training.name
-                                : 'name'}
+                            {training.tag ?? null}
                         </h3>
                         {/* /Graduation title */}
                         {/* Graduation time */}
                         <h4 className="graduation-time">
                             <i className="fa fa-university" />{' '}
                             {school}
-                            {' - '}
+                            {school ? ' - ' : null}
                             <span className="graduation-date">
                                 {translateString(
                                     'graduation',
@@ -72,42 +66,26 @@ class Training extends Component {
                         {/* content */}
                         <div className="graduation-description">
                             <p className="text-justify">
-                                {training.description
-                                    ? training.description
-                                    : ''}
-                                {training.description &&
-                                training.final_project
-                                    ? '. ' +
-                                      translateString(
-                                          'final_project',
-                                          this
-                                      ) +
-                                      ': '
-                                    : ''}
-                                {training.final_project
-                                    ? training.final_project
-                                    : ''}
+                                {training.description ?? null}
+                                {training.description && training.final_project ? '. ': null}
+                                {training.final_project ? `. ${translateString('final_project', this)}: `: null}
+                                {training.final_project ?? null}
                             </p>
                         </div>
-                        <div>
-                            <p>
-                                {training.average_score
-                                    ? [
-                                          <span key="1">
-                                              {' '}
-                                              {translateString(
-                                                  'average_grade',
-                                                  this
-                                              )}
-                                          </span>,
-                                          <strong key="2">
-                                              {training.average_score +
-                                                  '/10'}
-                                          </strong>
-                                      ]
-                                    : ''}
-                            </p>
-                        </div>
+                        {training.average_grade
+                            ?
+                                <div>
+                                    <p>
+                                        <span>
+                                            {`${translateString('average_grade', this)}: `}
+                                        </span>
+                                        <strong>
+                                            {`${training.average_grade}/10`}
+                                        </strong>
+                                    </p>
+                                </div>
+                            : null
+                        }
                         {/* /Content */}
                     </div>
                 </div>
@@ -194,26 +172,21 @@ class Training extends Component {
 }
 
 function mapStateToProps(state) {
-    const data = state && state.data ? state.data : null;
-    const training =
-        data && data.training
-            ? data.training
-            : null;
-    const language =
-        state && state.language ? state.language : null;
-    const translations =
-        data &&
-        data.translations &&
-        data.translations[language] &&
-        data.translations[language]['RegulatedTraining']
-            ? data.translations[language][
-                  'RegulatedTraining'
-              ]
-            : null;
+    const {
+        data: {
+            resume: { trainings, trainingTypes } = {}
+        } = {},
+        language,
+        translations: { [language]: { Training } = {} } = {}
+    } = state;
+
     return {
-        training: training,
-        translations: translations,
-        language: language
+        training: sortElementsByTypeAndOrder(
+            trainings,
+            trainingTypes
+        ),
+        translations: Training,
+        language
     };
 }
 

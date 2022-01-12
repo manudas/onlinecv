@@ -17,7 +17,8 @@ module.exports = {
                 })
                 .exec();
             return trainingList;
-        }
+        },
+        trainingTypes: ['official', 'computer', 'other']
     },
     Mutation: {
         putTrainings: async (

@@ -48,5 +48,5 @@ export type EditTrainingStructure = {
 
 export type TrainingFetched = {
     trainingType: string
-    Trainings: TrainingInterface[]
+    trainings: TrainingInterface[]
 }
