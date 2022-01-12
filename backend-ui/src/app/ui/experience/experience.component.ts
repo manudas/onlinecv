@@ -35,7 +35,7 @@ export class ExperienceComponent implements OnInit {
   type: ExperienceType = null;
 
   colsToRender = [
-    'id',
+    // 'id',
     'role',
     'company',
     'edit',

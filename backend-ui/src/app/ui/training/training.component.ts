@@ -47,7 +47,7 @@ export class TrainingComponent implements OnInit {
     type: TrainingType = null;
 
     colsToRender = [
-        'id',
+        // 'id',
         'tag',
         'description',
         'school',

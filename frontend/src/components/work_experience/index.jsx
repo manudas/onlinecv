@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
+import { sortElementsByTypeAndOrder } from '../../helpers/sortingElements';
 
 import { translateString } from '../../helpers/translations';
 
@@ -8,45 +9,36 @@ import './work_experience.css';
 
 class WorkExperience extends Component {
     renderWorkExperienceItem(work_experience_item, index) {
+        const company_name = work_experience_item.company ?? '';
         const company = work_experience_item.company_url ? (
             <a
+                rel="noreferrer"
                 href={work_experience_item.company_url}
                 target="_blank"
-                title={
-                    work_experience_item.company
-                        ? work_experience_item.company
-                        : 'company_name'
-                }
+                title={company_name}
+                className={'text-decoration-none'}
             >
-                {work_experience_item.company
-                    ? work_experience_item.company
-                    : 'company_name'}
+                {`${company_name} 🡕`}
             </a>
-        ) : work_experience_item.company ? (
-            work_experience_item.company
-        ) : (
-            'company_name'
-        );
+        ) : company_name;
 
         const options = { year: 'numeric', month: 'short' };
         let starting_date_string = null;
         if (work_experience_item.start_date) {
             const starting_date = new Date(
-                work_experience_item.start_date
+                Number(work_experience_item.start_date)
             );
             starting_date_string =
                 starting_date.toLocaleDateString(
                     this.language,
                     options
                 );
-        } else {
-            starting_date_string = 'starting_date';
         }
 
         let finishing_date_string = null;
         if (work_experience_item.finish_date) {
             const finishing_date = new Date(
-                work_experience_item.finish_date
+                Number(work_experience_item.finish_date)
             );
             finishing_date_string =
                 finishing_date.toLocaleDateString(
@@ -78,11 +70,11 @@ class WorkExperience extends Component {
                         {/* Graduation time */}
                         <h4 className="job">
                             <i className="fa fa-flag" />{' '}
-                            {work_experience_item.position}
+                            {work_experience_item.role}
                             {' - '}
                             <span className="job-date">
                                 {starting_date_string}
-                                {' - '}
+                                {starting_date_string && finishing_date_string ? ' - ' : ''}
                                 {finishing_date_string}
                             </span>
                         </h4>
@@ -111,13 +103,13 @@ class WorkExperience extends Component {
     }
 
     renderWorkExperienceItems() {
-        if (!this.props.professional_experience) {
+        if (!this.props.experiences) {
             return null;
         } else {
-            return this.props.professional_experience.map(
-                (professional_experience, index) => {
+            return this.props.experiences.map(
+                (experiences, index) => {
                     return this.renderWorkExperienceItem(
-                        professional_experience,
+                        experiences,
                         index
                     );
                 }
@@ -161,7 +153,7 @@ class WorkExperience extends Component {
     }
 
     render() {
-        if (!this.props.professional_experience) {
+        if (!this.props.experiences) {
             return null;
         }
         /* ====>> SECTION: WORK EXPERIENCE <<====*/
@@ -180,22 +172,19 @@ class WorkExperience extends Component {
 }
 
 function mapStateToProps(state) {
-    const data = state && state.data ? state.data : null;
-    const professional_experience =
-        data && data.work_experience
-            ? data.work_experience
-            : null;
-    const language =
-        state && state.language ? state.language : null;
-    const translations = data?.translations?.[language]?.[
-        'WorkExperience'
-    ]
-        ? data.translations[language]['WorkExperience']
-        : null;
+    const {
+        data: {
+            resume: { experiences, experienceTypes } = {}
+        } = {},
+        language,
+        translations: {
+            [language]: { WorkExperience } = {}
+        } = {}
+    } = state;
     return {
-        professional_experience: professional_experience,
-        language: language,
-        translations: translations
+        experiences: sortElementsByTypeAndOrder(experiences, experienceTypes),
+        language,
+        translations: WorkExperience
     };
 }
 

@@ -54,24 +54,27 @@ export const getUserFullResumeQuery = (lang: string) => {
                 'nickname'
             ]
         },
-        // {
-        //     operation: 'experiences',
-        //     variables: {
-        //         language: { value: lang, required: true },
-        //     },
-        //     fields: [
-        //         'description',
-        //         'type',
-        //         'start_date',
-        //         'finish_date',
-        //         'role',
-        //         'company',
-        //         'company_url',
-        //         'keywords',
-        //         'language',
-        //         'order',
-        //     ]
-        // },
+        {
+            operation: 'experiences',
+            variables: {
+                language: { value: lang, required: true },
+            },
+            fields: [
+                'description',
+                'type',
+                'start_date',
+                'finish_date',
+                'role',
+                'company',
+                'company_url',
+                'keywords',
+                'language',
+                'order',
+            ]
+        },
+        {
+            operation: 'experienceTypes',
+        },
     ]);
 
     return {

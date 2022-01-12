@@ -18,7 +18,8 @@ module.exports = {
                     })
                     .exec();
             return experienceList;
-        }
+        },
+        experienceTypes: ['professional', 'ong', 'other']
     },
     Mutation: {
         putWorkExperience: async (

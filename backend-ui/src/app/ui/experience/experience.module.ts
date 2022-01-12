@@ -1,50 +1,28 @@
-import {
-    NgModule
-} from '@angular/core';
-import {
-    CommonModule
-} from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-import {
-    MatTableModule
-} from "@angular/material/table";
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table';
 
-import {
-    FontAwesomeModule
-} from '@fortawesome/angular-fontawesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import {
-    CardModule
-} from '@app/ui/card/card.module'
-import {
-    ConfirmModule
-} from '@app/ui/confirm/confirm.module'
+import { CardModule } from '@app/ui/card/card.module';
+import { ConfirmModule } from '@app/ui/confirm/confirm.module';
 
-import {
-    TranslationServiceModule
-} from '@services/translation';
+import { TranslationServiceModule } from '@services/translation';
 
-import {
-    ExperienceComponent
-} from './experience.component';
-import {
-    DragDropModule
-} from '@angular/cdk/drag-drop';
-import {
-    UnderscoreModule
-} from '@app/services/underscore';
+import { ExperienceComponent } from './experience.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { UnderscoreModule } from '@app/services/underscore';
 
-import {
-    ExperienceDialogComponent
-} from './experience-dialog.component';
-import {
-    ReactiveFormsModule
-} from '@angular/forms';
+import { ExperienceDialogComponent } from './experience-dialog.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
         ExperienceComponent,
-        ExperienceDialogComponent,
+        ExperienceDialogComponent
     ],
     imports: [
         CardModule,
@@ -52,10 +30,12 @@ import {
         CommonModule,
         DragDropModule,
         FontAwesomeModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
         MatTableModule,
         ReactiveFormsModule,
         TranslationServiceModule,
-        UnderscoreModule,
+        UnderscoreModule
     ],
     exports: [ExperienceComponent]
 })

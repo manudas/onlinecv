@@ -85,9 +85,8 @@
     </mat-table>
 
     <div
-        [className]="'text-right network-actions'"
+        [className]="'text-right pt-3'"
     >
-    style this (watch classes)
         <button
             (click)="openExperienceDialog(getExperienceTypeName(type))"
             [className]="'btn btn-outline-info'"
@@ -123,7 +122,7 @@
 <ng-template #deleteExperienceTemplate
     let-index="rowIndex"
     let-type="type"
->margen izq cortado
+>
     <button [className]="'btn btn-danger btn-network-row'"
         ngbButton
         (click)="openExperienceRemovalConfirmDialog(index, type)"

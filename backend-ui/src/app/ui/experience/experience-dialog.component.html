@@ -109,15 +109,21 @@
                     >
                         {{ 'Please your starting date on this role' | translate | async }}
                     </label>
-                    <input
-                        class='form-control'
-                        placeholder="{{ 'Optional: the date you started to work in this role' | translate | async }}"
-                        formControlName="start_date"
-                    >
+                    <div class='d-flex'>
+                        <input
+                            class='form-control'
+                            placeholder="{{ 'Optional: the date you started to work in this role' | translate | async }}"
+                            formControlName="start_date"
+                            matInput [matDatepicker]="picker_start"
+                            readOnly
+                        >
+                        <mat-datepicker-toggle matSuffix [for]="picker_start"></mat-datepicker-toggle>
+                        <mat-datepicker #picker_start></mat-datepicker>
+                    </div>
                     <p
                         class='help-block'
                     >
-                        {{ 'E.g.: August 2019' | translate | async }}
+                        {{ 'Click on the toggle button to open the date selector' | translate | async }}
                     </p>
                 </div>
             </div>
@@ -130,17 +136,23 @@
                     <label
                         class='control-label'
                     >
-                        {{ 'ATENTO MIRAR SI SE PUEDEN VALIDAR QUE SEAN FECHAS Y PONER DATEPICKER CON SOLO MES Y AÑO Provide your finishing date on this role' | translate | async }}
+                        {{ 'Provide your finishing date on this role' | translate | async }}
                     </label>
-                    <input
-                        class='form-control'
-                        placeholder="{{ 'Optional: the date in which you finished your experience' | translate | async }}"
-                        formControlName="finish_date"
-                    >
+                    <div class='d-flex'>
+                        <input
+                            class='form-control'
+                            placeholder="{{ 'Optional: the date in which you finished your experience' | translate | async }}"
+                            formControlName="finish_date"
+                            matInput [matDatepicker]="picker_end"
+                            readOnly
+                        >
+                        <mat-datepicker-toggle matSuffix [for]="picker_end"></mat-datepicker-toggle>
+                        <mat-datepicker #picker_end></mat-datepicker>
+                    </div>
                     <p
                         class='help-block'
                     >
-                        {{ 'E.g.: To the present day' | translate | async }}
+                        {{ 'Click on the toggle button to open the date selector' | translate | async }}
                     </p>
                 </div>
 

@@ -29,7 +29,6 @@ export const QueryTrainings = (
             },
             type: {
                 value: type,
-                required: true
             }
         },
         fields: trainingFields

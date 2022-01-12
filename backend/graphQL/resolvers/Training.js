@@ -10,7 +10,7 @@ module.exports = {
         ) => {
             const trainingList = await TrainingModel.find({
                 language,
-                type
+                ...(type ? { type } : {})
             })
                 .sort({
                     order: 1

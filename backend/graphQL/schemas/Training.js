@@ -46,7 +46,7 @@ module.exports =
   }
 
   extend type Query {
-    trainings(language: String!, type: String!): [Training]!
+    trainings(language: String!, type: String): [Training]!
   }
 
   extend type Mutation {
