@@ -20,7 +20,7 @@ module.exports =
     school_url: String,
     written_level: Int,
     spoken_level: Int,
-    keywords: [String]!,
+    keywords: [String!],
     language: String!,
     order: Int!
   }
@@ -33,7 +33,7 @@ module.exports =
     school_url: String,
     written_level: Int,
     spoken_level: Int,
-    keywords: [String]!,
+    keywords: [String!],
     language: String!,
     order: Int!
   }

@@ -7,8 +7,8 @@
     >
         {{
             editingIndex === null
-                ? ('Add a new language: ' | translate | async) + (languageFormGroup.get('type').value | translate | async | titlecase)
-                : ('Editing your language: ' | translate | async) + (languageFormGroup.get('type').value | translate | async | titlecase)
+                ? ('Add a new language: ' | translate | async)
+                : ('Editing your language: ' | translate | async) + (languageFormGroup.get('name').value | translate | async | titlecase)
         }}
     </div>
 </h2>
@@ -59,7 +59,7 @@
                 class='form-control'
                 placeholder="{{ 'Enter the language name' | translate | async }}"
                 placement="top"
-                formControlName="tag"
+                formControlName="name"
             >
             <p
                 class='help-block'
@@ -145,12 +145,22 @@
                 class='form-control'
                 placeholder="{{ 'Optional: from 1 to 10, how well you speak this language' | translate | async }}"
                 formControlName="spoken_level"
+                type="number"
             >
             <p
                 class='help-block'
+                [ngStyle]="{
+                    'margin-bottom': languageFormGroup.get('spoken_level').touched && languageFormGroup.get('spoken_level').errors ? 0 : 'initial'
+                }"
             >
                 {{ 'E.g.: 7.5' | translate | async }}
             </p>
+            <small
+                *ngIf="languageFormGroup.get('spoken_level').touched && languageFormGroup.get('spoken_level').errors"
+                [className]="'text-danger'"
+            >
+                {{ 'Out of range, should be between 1 and 10 or empty' | translate | async }}
+            </small>
         </div>
         <div
             class='form-group'
@@ -163,13 +173,23 @@
             <input
                 class='form-control'
                 placeholder="{{ 'Optional: from 1 to 10, how well you write this language' | translate | async }}"
-                formControlName="spoken_level"
+                formControlName="written_level"
+                type="number"
             >
             <p
                 class='help-block'
+                [ngStyle]="{
+                    'margin-bottom': languageFormGroup.get('written_level').touched && languageFormGroup.get('written_level').errors ? 0 : 'initial'
+                }"
             >
                 {{ 'E.g.: 8' | translate | async }}
             </p>
+            <small
+                *ngIf="languageFormGroup.get('written_level').touched && languageFormGroup.get('written_level').errors"
+                [className]="'text-danger'"
+            >
+                {{ 'Out of range, should be between 1 and 10 or empty' | translate | async }}
+            </small>
         </div>
     </form>
 </ng-template>

@@ -40,7 +40,7 @@ export class SkillsComponent implements OnInit {
   type: SkillsType = null;
 
   colsToRender = [
-    'id',
+    // 'id',
     'tag',
     'description',
     'school',
@@ -51,7 +51,7 @@ export class SkillsComponent implements OnInit {
   ];
 
   languageColsToRender = [
-    'id',
+    // 'id',
     'name',
     'certification',
     'school',

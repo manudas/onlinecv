@@ -44,7 +44,7 @@ module.exports =
   }
 
   extend type Query {
-    skills(language: String!, type: String!): [Skill]
+    skills(language: String!, type: String): [Skill]
   }
 
   extend type Mutation {

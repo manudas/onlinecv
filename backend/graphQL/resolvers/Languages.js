@@ -20,10 +20,10 @@ module.exports = {
     Mutation: {
         putLanguages: async (
             { Language },
-            { models: { languagesModel } },
+            { models: { LanguagesModel } },
             info
         ) => {
-            const WriteResult = await languagesModel.update(
+            const WriteResult = await LanguagesModel.update(
                 {
                     name: Language.name,
                     language: Language.language
@@ -41,10 +41,10 @@ module.exports = {
         removeLanguage: async (
             parent,
             { id },
-            { models: { languagesModel } },
+            { models: { LanguagesModel } },
             info
         ) => {
-            const WriteResult = await languagesModel.remove(
+            const WriteResult = await LanguagesModel.remove(
                 {
                     id
                 },

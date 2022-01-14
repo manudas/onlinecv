@@ -70,8 +70,8 @@
                 {{ 'E.g: Drawing aircrafts' | translate | async }}
             </p>
             <small
-                    *ngIf="skillsFormGroup.get('tag').touched && skillsFormGroup.get('tag').errors"
-                    [className]="'text-danger'"
+                *ngIf="skillsFormGroup.get('tag').touched && skillsFormGroup.get('tag').errors"
+                [className]="'text-danger'"
             >
                 {{ 'You should provide a valid tag for your skill' | translate | async }}
             </small>
@@ -107,12 +107,22 @@
                 class='form-control'
                 placeholder="{{ 'Optional: you can grade yourself on this skill' | translate | async }}"
                 formControlName="skill_level"
+                type="number"
             >
             <p
                 class='help-block'
+                [ngStyle]="{
+                    'margin-bottom': skillsFormGroup.get('skill_level').touched && skillsFormGroup.get('skill_level').errors ? 0 : 'initial'
+                }"
             >
                 {{ 'E.g.: 10' | translate | async }}
             </p>
+            <small
+                *ngIf="skillsFormGroup.get('skill_level').touched && skillsFormGroup.get('skill_level').errors"
+                [className]="'text-danger'"
+            >
+                {{ 'Out of range, should be between 1 and 10 or empty' | translate | async }}
+            </small>
         </div>
     </form>
 </ng-template>

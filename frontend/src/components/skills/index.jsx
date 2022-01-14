@@ -6,7 +6,7 @@ import { translateString } from '../../helpers/translations';
 
 import './skills.css';
 
-class Skill extends Component {
+class Skills extends Component {
     renderSkillItem(skill_item, index) {
         /* we have three diferent kinds of progress bar
          * and depending on its index we will assing
@@ -55,7 +55,7 @@ class Skill extends Component {
     renderSkillItems(element, index) {
         return (
             <div
-                key={element._id}
+                key={index}
                 className="line row d-flex"
             >
                 {/* Margin Collums (necessary for the timeline effect) */}
@@ -67,7 +67,6 @@ class Skill extends Component {
                     <div className="line-content">
                         {/* Subtitle */}
                         <h3 className="section-item-title-1">
-                            {element._id}{' '}
                             {translateString('skills', this)}
                         </h3>
                         {/* /Subtitle */}
@@ -151,23 +150,24 @@ class Skill extends Component {
 }
 
 function mapStateToProps(state) {
-    const data = state && state.data ? state.data : null;
-    const skills = data && data.skills ? data.skills : null;
-    const language =
-        state && state.language ? state.language : null;
-    const translations =
-        data &&
-        data.translations &&
-        data.translations[language] &&
-        data.translations[language]['Skill']
-            ? data.translations[language]['Skill']
-            : null;
+
+    const {
+        data: {
+            resume: {
+                skills
+            } = {}
+        } = {},
+        language,
+        translations: {
+            [language]: { Skills } = {}
+        } = {}
+    } = state;
 
     return {
-        skills: skills,
-        translations: translations,
-        language: state.language
+        skills,
+        translations: Skills,
+        language
     };
 }
 
-export default connect(mapStateToProps)(Skill);
+export default connect(mapStateToProps)(Skills);

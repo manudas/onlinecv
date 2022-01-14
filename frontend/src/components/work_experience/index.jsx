@@ -104,9 +104,9 @@ class WorkExperience extends Component {
             return null;
         } else {
             return this.props.experiences.map(
-                (experiences, index) => {
+                (experience, index) => {
                     return this.renderWorkExperienceItem(
-                        experiences,
+                        experience,
                         index
                     );
                 }

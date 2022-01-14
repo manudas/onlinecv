@@ -1,16 +1,5 @@
-
-
-
 import { DateAdapter } from '@angular/material/core';
 import { select, Store } from '@ngrx/store'
-
-
-
-
-
-
-
-
 
 import { Component, Inject } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
@@ -61,7 +50,7 @@ export class ExperienceDialogComponent {
     })
 
     editingIndex: number = null
-    selectedLocale: string // iso code
+
     selectedLocale$: Observable<string>
 
     constructor( public dialogRef: MatDialogRef<ExperienceDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditExperienceStructure | string, private dateAdapter: DateAdapter<any>, private store: Store<StoreType>) {

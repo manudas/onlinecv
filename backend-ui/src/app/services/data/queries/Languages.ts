@@ -41,7 +41,7 @@
 export const MutateLanguages =
 `
     mutation MutateLanguages($languages: [LanguageInput]!) {
-        putLanguages(languages: $Languages) {
+        putLanguages(languages: $languages) {
             # return id if everything was ok
             id: _id
         }

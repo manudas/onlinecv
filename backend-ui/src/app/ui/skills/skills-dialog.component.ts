@@ -1,17 +1,25 @@
-import { Component, Inject } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { Component, Inject } from '@angular/core';
+import {
+    FormControl,
+    FormGroup,
+    Validators
+} from '@angular/forms';
 import {
     MatDialogRef,
-    MAT_DIALOG_DATA,
-} from "@angular/material/dialog"
-import { EditSkillsStructure, SkillInterface, SkillsType } from "@app/types/Skills";
+    MAT_DIALOG_DATA
+} from '@angular/material/dialog';
+import {
+    EditSkillsStructure,
+    SkillInterface,
+    SkillsType
+} from '@app/types/Skills';
 
+import { assessmentFromOneToTen } from '@utils/commonFormValidators'
 @Component({
     templateUrl: './skills-dialog.component.html',
     styleUrls: ['./skills-dialog.component.scss']
 })
 export class SkillsDialogComponent {
-
     /*
      * GraphQL Schema:
 
@@ -38,7 +46,10 @@ export class SkillsDialogComponent {
 
         tag: new FormControl(null, Validators.required),
         description: new FormControl(null),
-        skill_level: new FormControl(null),
+        skill_level: new FormControl(
+            null,
+            assessmentFromOneToTen
+        ),
 
         // related_knowledge: [RelatedKnowledge],
         type: new FormControl(null), // computer? others?
@@ -47,49 +58,64 @@ export class SkillsDialogComponent {
         // language: String!
 
         // no estoy seguro de que la mejor forma de manejar keywords sea con un FormControl
-        keywords: new FormControl(null),
-    })
+        keywords: new FormControl(null)
+    });
 
-    editingIndex: number = null
+    editingIndex: number = null;
 
-    constructor( public dialogRef: MatDialogRef<SkillsDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditSkillsStructure | string) {
-        if (!(typeof data === 'string' || data instanceof String)) { // is EditTrainingStructure type
-            const {
-                index,
-                skill
-            } = data
+    constructor(
+        public dialogRef: MatDialogRef<SkillsDialogComponent>,
+        @Inject(MAT_DIALOG_DATA)
+        public data: EditSkillsStructure | string
+    ) {
+        if (
+            !(
+                typeof data === 'string' ||
+                data instanceof String
+            )
+        ) {
+            // is EditTrainingStructure type
+            const { index, skill } = data;
 
-            this.editingIndex = index
+            this.editingIndex = index;
 
-            for (const control in this.skillsFormGroup.controls) {
-                this.skillsFormGroup.get(control).setValue(skill[control])
+            for (const control in this.skillsFormGroup
+                .controls) {
+                this.skillsFormGroup
+                    .get(control)
+                    .setValue(skill[control]);
             }
-        } else { // is TrainingType enum
-            this.skillsFormGroup.get('type').setValue(data)
+        } else {
+            // is TrainingType enum
+            this.skillsFormGroup.get('type').setValue(data);
         }
     }
 
     submitHandler($event): void {
-        if (this.skillsFormGroup.valid /* && this.socialNetworksFormGroup.valid*/) {
-            const skills = this.skillsFormGroup.value
-            let result
+        if (
+            this.skillsFormGroup
+                .valid /* && this.socialNetworksFormGroup.valid*/
+        ) {
+            const skill = this.skillsFormGroup.value;
+            let result;
             if (this.editingIndex !== null) {
                 result = {
                     index: this.editingIndex,
-                    skills
-                }
+                    skill
+                };
             } else {
-                result = skills
+                result = skill;
             }
             this.close(result);
         } else {
-          //this.detailsFormGroup.markAllAsTouched()
-          this.skillsFormGroup.markAllAsTouched()
+            //this.detailsFormGroup.markAllAsTouched()
+            this.skillsFormGroup.markAllAsTouched();
         }
-      }
+    }
 
-
-    close(message: SkillInterface | EditSkillsStructure = null) {
+    close(
+        message: SkillInterface | EditSkillsStructure = null
+    ) {
         /*
          * this is to get the message in the caller:
 
@@ -102,6 +128,6 @@ export class SkillsDialogComponent {
     }
 
     get TrainingType() {
-        return SkillsType
+        return SkillsType;
     }
 }
