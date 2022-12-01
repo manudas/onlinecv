@@ -136,6 +136,7 @@ class Training extends Component {
     }
 
     renderTitle() {
+        console.log('pensar como clasificar por tipo de training. Creo que mejor añadir tipo de experiencia')
         return <TimeLineHeader name={this.props.name} />;
     }
 

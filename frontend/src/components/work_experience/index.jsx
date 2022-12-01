@@ -115,6 +115,7 @@ class WorkExperience extends Component {
     }
 
     renderTitle() {
+        console.log('eliminar min-height 150 y pensar como clasificar por tipo de trabajo: profesional, ong y otros. Creo que mejor añadir solo tipo de trabajo')
         return <TimeLineHeader name={this.props.name} />
     }
 

@@ -96,21 +96,12 @@ export function setLanguageAC(data) {
     };
 }
 
-export const cvComponentsWereLoaded =
-    'cvComponentsWereLoaded';
-export function cvComponentsWereLoadedActionCreator(data) {
-    return {
-        type: cvComponentsWereLoaded,
-        payload: data
-    };
-}
-
-export const cvComponentsWereClicked =
-    'cvComponentsWereClicked';
-export function cvComponentsWereClickedActionCreator(data) {
-    const id = Date.now();
-    return {
-        type: cvComponentsWereClicked,
-        payload: { component: data, unique_id: id }
-    };
-}
+// export const cvComponentsWereClicked =
+//     'cvComponentsWereClicked';
+// export function cvComponentsWereClickedActionCreator(data) {
+//     const id = Date.now();
+//     return {
+//         type: cvComponentsWereClicked,
+//         payload: { component: data, unique_id: id }
+//     };
+// }

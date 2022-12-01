@@ -66,7 +66,7 @@ class ProfileResume extends Component {
                     {/* Welcome Title*/}
                     <h1 className="intro-title1">
                         {translateString(
-                            'salutations',
+                            'Hi, I am',
                             this
                         )}
                         <span className="color1 bold">

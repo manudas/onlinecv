@@ -1,8 +1,8 @@
 export enum SkillsType {
     all,
-    skills,
-    computers,
-    languages
+    general,
+    computer,
+    language
 }
 
 /*

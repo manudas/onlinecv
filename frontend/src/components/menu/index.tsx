@@ -1,50 +1,66 @@
-import React, { Component, Fragment } from "react";
+import { Component, Fragment } from "react"
+import { debounce } from "lodash"
+import { bindActionCreators } from "redux"
+import { connect } from "react-redux"
+import { Dispatch } from 'redux'
 
-import { bindActionCreators } from "redux";
+import { cvComponentsWereClickedActionCreator } from "../../store/actions"
 
-import { connect } from "react-redux";
+import { EventType } from "helpers/customEvents"
 
-import { cvComponentsWereClickedActionCreator } from "../../store/actions";
+import { PropDef, StateDef } from "./types"
+import { ComponentDef } from "helpers/types"
 
-import "./menu.css";
+import "./menu.css"
 
-class Menu extends Component {
-    constructor(props) {
+class Menu extends Component<PropDef, StateDef> {
+
+    onMouseEnter
+    closeMenu
+    onClickMenuOption
+    addResumeComponent
+
+    constructor(props: PropDef) {
         super(props);
-        this.state = {
-            menu: "closed",
-            initialState: true
-        };
+
         this.onMouseEnter = this._onMouseEnter.bind(this);
 		this.closeMenu = this._closeMenu.bind(this);
+        this.addResumeComponent = this._addResumeComponent.bind(this)
+        this.onClickMenuOption = this._onClickMenuOption.bind(this);
 
-		this.componentRefs = [];
-
-		/** Initializing code needed to debounce dispatching to
-		 * action creator cvComponentsWereClicked, so as to not
-		 * flood the application
-		 */
-		this.timestamp = new Date();
-		this.debouncedCvComponentsWereClicked = this._debouncedCvComponentsWereClicked.bind(this);
+        this.state = {
+            menu: "closed",
+            previousMenuState: "closed",
+            componentRefs: []
+        };
 	}
 
-	/** Initializing code needed to debounce dispatching to
-	 * action creator cvComponentsWereClicked, so as to not
-	 * flood the application
-	 */
-	static delay = 1500; // how many milliseconds should pass between executions
+    _addResumeComponent(customEvent: Event): void {
+        const component: ComponentDef = (customEvent as CustomEvent).detail
+        this.setState(({componentRefs}) => {
+            return { componentRefs: [...componentRefs, component] }
+        })
+    }
 
-    _closeMenu(event) {
+    componentDidMount() {
+        document.addEventListener(EventType[EventType.SECTION_ADDED], this.addResumeComponent);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener(EventType[EventType.SECTION_ADDED], this.addResumeComponent);
+    }
+
+    _closeMenu() {
         this.setState({
             menu: "closed",
-            initialState: false
+            previousMenuState: "closed",
         });
     }
 
-    _onMouseEnter(event) {
+    _onMouseEnter() {
         this.setState({
             menu: "opened",
-            initialState: false
+            previousMenuState: "closed",
         });
     }
 
@@ -54,7 +70,9 @@ class Menu extends Component {
                 className="side-menu-open hidden-sm hidden-xs"
                 onMouseEnter={this.onMouseEnter}>
                 {/*<!-- Menu-button -->*/}
-                <a className="btn btn-default side-menu-button">
+                <a
+                    href="#menu"
+                    className="btn btn-default side-menu-button">
                     <i className="fa fa-bars" /> MENU
                 </a>
                 {/*<!-- /menu-button -->*/}
@@ -63,43 +81,32 @@ class Menu extends Component {
     }
 
     getSideMenuOpenedStateClass() {
-        return this.state.menu === "opened"
-            ? "side-menu-open_hover"
-            : this.state.initialState
-            ? ""
-            : "side-menu-close-animation";
+        if (this.state.menu === "opened") {
+            return "side-menu-open_hover"
+        } else if (this.state.previousMenuState === "opened") {
+            return "side-menu-close-animation"
+        } else return '';
     }
 
 	/**
-	 * Debouncing dispatchs to
-	 * cvComponentsWereClicked
-	 * as sometimes the user can
-	 * click different options 
-	 * quickly and therefore
-	 * flood the app
+	 * Debouncing to avoid
+	 * flooding the app with
+     * dispatches
 	 */
-	_debouncedCvComponentsWereClicked(index) {
-		let now = new Date();
-		let timeDistance = (now.getTime() - this.timestamp.getTime());
-		if(timeDistance <= Menu.delay) {
-			return;
-		}
-		this.timestamp = new Date();
-
+	_onClickMenuOption = debounce(index => {
 		// Your code
-		this.props.cvComponentsWereClicked(
-			this.componentRefs[index]
+		this.props.onComponentClick(
+			this.state.componentRefs[index]
 		)
-	}
+	}, 1000)
 
-    renderComponent(componentWrapper, index) {
-        const { component, translated_name } = componentWrapper;
+    renderComponent(componentWrapper: ComponentDef, index: number) {
+        const { translated_name } = componentWrapper;
         return (
             <li key={index}>
                 <a
-                    href="#addAnchor?"
-                    ref={(ref) => this.componentRefs[index] = component}
-                    onClick={() => this.debouncedCvComponentsWereClicked(index)}>
+                    href={`#${translated_name}`}
+                    onClick={() => this.onClickMenuOption(index)}>
                     <i className="fa fa-angle-right" /> {translated_name}
                 </a>
             </li>
@@ -107,19 +114,19 @@ class Menu extends Component {
     }
 
     renderOptions() {
-        if (!this.props.components || this.props.components.length === 0) {
+        if ( this.state.componentRefs.length === 0 ) {
             return null;
         }
-		const components = this.props.components;
+		const components = this.state.componentRefs
 
-		let name = this.props.details && this.props.details.name ? this.props.details.name : 'Name ex.';
-        let surname = this.props.details && this.props.details.surname ? this.props.details.surname : 'LastName ex.';
+		let name = this.props?.details?.name ?? 'Name example';
+        let surname = this.props?.details?.surname ?? 'LastName example';
         name = name.split(' ')[0];
         surname = surname.split(' ')[0];
-        
-        const primaryJobName = this.props.details && this.props.details.primaryJobName ? this.props.details.primaryJobName : null;
-		const secondaryJobName = this.props.details && this.props.details.secondaryJobName ? this.props.details.secondaryJobName : null;
-		
+
+        const primaryJobName = this.props?.details?.primaryJobName ?? null;
+		const secondaryJobName = this.props?.details?.secondaryJobName ?? null;
+
 		const jobNames = primaryJobName ? primaryJobName + (secondaryJobName ? `/ ${secondaryJobName}` : '') : ''
 
         return (
@@ -153,10 +160,16 @@ class Menu extends Component {
 
                 {/*<!-- Other Buttons -->*/}
                 <div className="side-menu-buttons">
-                    <a className="btn btn-side-menu">
+                    <a
+                        href="#downloadResume"
+                        className="btn btn-side-menu"
+                    >
                         <i className="fa fa-download" /> Download my resume
                     </a>
-                    <a className="btn btn-side-menu">
+                    <a
+                        href="#sendMessage"
+                        className="btn btn-side-menu"
+                    >
                         <i className="fa fa-envelope-o" /> Send me a message
                     </a>
                 </div>
@@ -167,7 +180,7 @@ class Menu extends Component {
     }
 
     render() {
-        if (!this.props.data_is_loaded) {
+        if (!this.props.details || !this.props.language) {
             return null;
         }
         /*-- SIDE MENU
@@ -175,7 +188,7 @@ class Menu extends Component {
         return (
             <Fragment>
                 {this.renderMenuButton()}
-                {/*<!-- Side Menu container -->*/}
+                {/* <!-- Side Menu container --> */}
                 {this.renderOptions()}
             </Fragment>
         );
@@ -184,27 +197,22 @@ class Menu extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    const data = state && state.data ? state.data : null;
+function mapStateToProps(state: any) {
+    const data = state?.data;
 
-    const data_is_loaded = data !== null;
-    const details = (data && data.details) ? data.details : null;
-    const language = state && state.language ? state.language : null;
-    const component_list =
-        state && state.component_list ? state.component_list : null;
+    const details = data?.resume?.details;
+    const language = state?.language;
 
     return {
-        data_is_loaded: data_is_loaded,
         details: details,
         language: language,
-        components: component_list
     };
 }
 
-function mapDistpatchToProps(dispatch) {
+function mapDistpatchToProps(dispatch: Dispatch) {
     return bindActionCreators(
         {
-            cvComponentsWereClicked: cvComponentsWereClickedActionCreator
+            onComponentClick: cvComponentsWereClickedActionCreator
         },
         dispatch
     );

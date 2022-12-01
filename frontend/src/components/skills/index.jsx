@@ -1,28 +1,24 @@
 import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
+import { clasifyByType } from '../../helpers/sortingElements';
 
 import { translateString } from '../../helpers/translations';
+import TimeLineHeader from '../timeLineHeader';
 
 import './skills.css';
 
 class Skills extends Component {
     renderSkillItem(skill_item, index) {
         /* we have three diferent kinds of progress bar
-         * and depending on its index we will assing
+         * and depending on its index we will assign
          * one or another
          */
 
         const progressBarType = (index + 1) % 3;
-        const skillLevel = skill_item.skill_level
-            ? skill_item.skill_level
-            : 'NO DATA ';
-        const skillName = skill_item.name
-            ? skill_item.name
-            : 'NO NAME ';
-        const skillDescription = skill_item.description
-            ? skill_item.description
-            : null;
+        const skillLevel = skill_item.skill_level;
+        const skillName = skill_item.tag;
+        const skillDescription = skill_item.description;
         /* SECTION ITEM */
         return (
             <li key={index}>
@@ -52,10 +48,10 @@ class Skills extends Component {
         /* SECTION ITEM */
     }
 
-    renderSkillItems(element, index) {
+    renderSkillGroup(skillGroup, indexGroup) {
         return (
             <div
-                key={index}
+                key={indexGroup}
                 className="line row d-flex"
             >
                 {/* Margin Collums (necessary for the timeline effect) */}
@@ -67,19 +63,21 @@ class Skills extends Component {
                     <div className="line-content">
                         {/* Subtitle */}
                         <h3 className="section-item-title-1">
-                            {translateString('skills', this)}
+                            'aqui hay que poner el tipo y agruparlos por tipo'
+                            {translateString(`${indexGroup} skills`, this)}
                         </h3>
                         {/* /Subtitle */}
                         {/* content */}
                         <ul className="skills-list">
                             {/* item-list */}
-                            {element.value.map(
-                                (skill, index) =>
+                            {
+                                skillGroup.map((skill, index) =>
                                     this.renderSkillItem(
                                         skill,
                                         index
                                     )
-                            )}
+                                )
+                            }
                             {/* item list */}
                         </ul>
                         {/* /Content */}
@@ -94,38 +92,7 @@ class Skills extends Component {
     }
 
     renderTitle() {
-        return [
-            /* VERTICAL MARGIN (necessary for the timeline effect) */
-            <div
-                key="1"
-                className="line row timeline-margin content-wrap"
-            >
-                <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
-                <div className="col-md-2 timeline-progress hidden-sm hidden-xs full-height" />
-                <div className="col-md-9 bg1 full-height" />
-            </div>,
-            /* /VERTICAL MARGIN */
-            /* SECTION TITLE */
-            <div key="2" className="line row d-flex">
-                {/* VERTICAL MARGIN (necessary for the timeline effect) */}
-                <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
-                <div className="col-md-2 timeline-progress hidden-sm hidden-xs timeline-title full-height" />
-                {/* /VERTICAL MARGIN (necessary for the timeline effect) */}
-                {/* Item Content */}
-                <div className="col-md-8 content-wrap bg1">
-                    {/* Section title */}
-                    <h2 className="section-title">
-                        {this.props.name}
-                    </h2>
-                    {/* /Section title */}
-                </div>
-                {/* /Item Content */}
-                {/* Margin Collum*/}
-                <div className="col-md-1 bg1 timeline-space full-height hidden-sm hidden-xs" />
-                {/* /Margin Collum*/}
-            </div>
-            /* /SECTION TITLE */
-        ];
+        return <TimeLineHeader name={this.props.name} />
     }
 
     render() {
@@ -140,8 +107,8 @@ class Skills extends Component {
                 id="skills"
             >
                 {this.renderTitle()}
-                {this.props.skills.map((skill, index) =>
-                    this.renderSkillItems(skill, index)
+                {Object.entries(this.props.skills).map(([groupIndex, skillGroup]) =>
+                    this.renderSkillGroup(skillGroup, groupIndex)
                 )}
             </section>
         );
@@ -150,7 +117,6 @@ class Skills extends Component {
 }
 
 function mapStateToProps(state) {
-
     const {
         data: {
             resume: {
@@ -164,7 +130,7 @@ function mapStateToProps(state) {
     } = state;
 
     return {
-        skills,
+        skills: clasifyByType(skills),
         translations: Skills,
         language
     };

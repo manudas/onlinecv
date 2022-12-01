@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
-
-import { bindActionCreators } from 'redux';
-
-import { cvComponentsWereLoadedActionCreator } from '../../store/actions';
+import { EventType } from "helpers/customEvents"
 
 import { translateString } from '../../helpers/translations';
-
-import './cvcontainer.css';
 
 import ProfileResume from '../profileResume';
 import ProfileDetail from '../profileDetails';
@@ -21,29 +15,14 @@ import ContactForm from '../contact_form';
 import ThankYou from '../thank_you';
 import Footer from '../footer';
 
-class CVContainer extends Component {
-    constructor(props) {
-        super(props);
-        /**
-         * refList will be used to
-         * share with Menu component
-         * which components were
-         * rendered on the App
-         */
-        this.refList = [];
-    }
+import { PropDef } from './types';
+import { ComponentDef } from "helpers/types"
 
-    componentDidUpdate() {
-        /**
-         * Dispatching action:
-         *
-         * refList will be used to
-         * share with Menu component
-         * which components were
-         * rendered on the App
-         */
-        this.props.componentsWereLoaded(this.refList);
-    }
+import './cvcontainer.css';
+
+class CVContainer extends Component<PropDef> {
+
+    cvCompoennts: ComponentDef[] = []
 
     renderHeaderColors() {
         /* Header Colors */
@@ -65,7 +44,9 @@ class CVContainer extends Component {
             <div className="row">
                 <div className="header-buttons col-md-10 col-md-offset-1">
                     {/* Download Resume Button */}
-                    <a className="btn btn-default btn-top-resume">
+                    <a
+                        href="#downloadResumeTopBar"
+                        className="btn btn-default btn-top-resume">
                         <i className="fa fa-download" />
                         <span className="btn-hide-text">
                             Download my resume
@@ -73,7 +54,9 @@ class CVContainer extends Component {
                     </a>
                     {/* /Download Resume Button */}
                     {/* Mail Button */}
-                    <a className="btn btn-default btn-top-message">
+                    <a
+                        href="#sendMessageTopBar"
+                        className="btn btn-default btn-top-message">
                         <i className="fa fa-envelope-o" />
                         <span className="btn-hide-text">
                             Send me a message
@@ -86,15 +69,25 @@ class CVContainer extends Component {
         /* /Header Buttons */
     }
 
-    addToList(elem, component_name) {
-        console.log('creo que seria mejor usar un custon event para enviar elementos al menu en lugar de usar la redux store');
-        const name =
-            translateString(component_name, this);
-        this.refList.push({
+    componentDidMount() {
+        this.cvCompoennts.forEach(element => {
+            const customEvent = new CustomEvent(EventType[EventType.SECTION_ADDED], {
+                detail: element
+            })
+
+            document.dispatchEvent(customEvent)
+        })
+    }
+
+    addToList(elem: React.Ref<any>, component_name: string) {
+
+        const name = translateString(component_name, this);
+        this.cvCompoennts.push({
             component: elem,
-            translated_name: name
-        });
-        return elem;
+            translated_name: name,
+        })
+
+        return elem
     }
 
     render() {
@@ -103,7 +96,7 @@ class CVContainer extends Component {
         }
         /* CONTENT
 	========================================================= */
-        this.refList.length = 0; // lets reset the array reference before setting it again
+        // this.refList.length = 0; // lets reset the array reference before setting it again
         return (
             <section
                 id="content-body"
@@ -202,16 +195,16 @@ class CVContainer extends Component {
     }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: any) {
 
     const {
         data: {
-            resume
+            resume = null
         } = {},
         language,
         translations: {
             [language]: {
-                CVContainer: translations
+                CVContainer: translations = null
             } = {}
         } = {}
     } = state;
@@ -223,17 +216,7 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDistpatchToProps(dispatch) {
-    return bindActionCreators(
-        {
-            componentsWereLoaded:
-                cvComponentsWereLoadedActionCreator
-        },
-        dispatch
-    );
-}
 
 export default connect(
-    mapStateToProps,
-    mapDistpatchToProps
+    mapStateToProps
 )(CVContainer);
