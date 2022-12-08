@@ -86,6 +86,7 @@ class PortFolio extends Component {
                 <div className="portfolio-item">
                     {/* Link to the item image (Put the long description on  "a" title)*/}
                     <a
+                        href={`#galeryElement${index}`}
                         onClick={() =>
                             this.openGallery(index)
                         }

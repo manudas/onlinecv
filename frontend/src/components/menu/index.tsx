@@ -1,10 +1,6 @@
 import { Component, Fragment } from "react"
 import { debounce } from "lodash"
-import { bindActionCreators } from "redux"
 import { connect } from "react-redux"
-import { Dispatch } from 'redux'
-
-import { cvComponentsWereClickedActionCreator } from "../../store/actions"
 
 import { EventType } from "helpers/customEvents"
 
@@ -36,10 +32,13 @@ class Menu extends Component<PropDef, StateDef> {
 	}
 
     _addResumeComponent(customEvent: Event): void {
-        const component: ComponentDef = (customEvent as CustomEvent).detail
-        this.setState(({componentRefs}) => {
-            return { componentRefs: [...componentRefs, component] }
-        })
+        const data: ComponentDef = (customEvent as CustomEvent).detail
+        const { component } = data
+        if (component && "current" in component && component.current !== null) {
+            this.setState(({componentRefs}) => {
+                return { componentRefs: [...componentRefs, data] }
+            })
+        }
     }
 
     componentDidMount() {
@@ -89,15 +88,17 @@ class Menu extends Component<PropDef, StateDef> {
     }
 
 	/**
-	 * Debouncing to avoid
-	 * flooding the app with
-     * dispatches
+	 * Debouncing to avoid flooding
+	 * the app with dispatches
 	 */
 	_onClickMenuOption = debounce(index => {
 		// Your code
-		this.props.onComponentClick(
-			this.state.componentRefs[index]
-		)
+        const clickEvent = new CustomEvent(EventType[EventType.MENU_SECTION_CLICKED],
+            { detail: { component: this.state.componentRefs[index].component, unique_id: Date.now() } }
+        )
+
+        document.dispatchEvent(clickEvent)
+
 	}, 1000)
 
     renderComponent(componentWrapper: ComponentDef, index: number) {
@@ -209,16 +210,6 @@ function mapStateToProps(state: any) {
     };
 }
 
-function mapDistpatchToProps(dispatch: Dispatch) {
-    return bindActionCreators(
-        {
-            onComponentClick: cvComponentsWereClickedActionCreator
-        },
-        dispatch
-    );
-}
-
 export default connect(
-    mapStateToProps,
-    mapDistpatchToProps
+    mapStateToProps
 )(Menu);

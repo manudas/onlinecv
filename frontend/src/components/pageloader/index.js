@@ -35,7 +35,7 @@ class PageLoader extends Component {
         // css for unmount animation
         this.setState({
             style: {
-                ... this.state.style,
+                ...this.state.style,
                 opacity: 0,
             }
         });
@@ -45,7 +45,7 @@ class PageLoader extends Component {
         // css for mount animation
         this.setState({
             style: {
-                ... this.state.style,
+                ...this.state.style,
                 opacity: 1,
             }
         });

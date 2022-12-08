@@ -1,13 +1,12 @@
-import { getTranslationsDataAction } from '../actions';
+import { getTranslationsDataAction } from '../actions'
 
-export default function (state: Record<string, any> = {}, action: { payload: any; type: any; }) {
+const translations = function (state: Record<string, any> = {}, action: { payload: any; type: any; }) {
     const {
         payload,
         type
-    } = action;
+    } = action
     switch (type) {
         case getTranslationsDataAction:
-            // data.translations[language][module][tag]
             if (payload?.length === 0) {
                 // no new translations provided by server
                 break
@@ -27,9 +26,11 @@ export default function (state: Record<string, any> = {}, action: { payload: any
                 if (!result[language][module]) result[language][module] = {}
                 if (!result[language][module][tag]) result[language][module][tag] = translation
             })
-            return result;
+            return result
         default:
     }
 
-    return state;
+    return state
 }
+
+export default translations

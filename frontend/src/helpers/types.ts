@@ -1,6 +1,6 @@
 import React from "react"
 
 export type ComponentDef = {
-    component: React.Ref<any>,
+    component?: React.Ref<HTMLElement>,
     translated_name: string,
 }
