@@ -7,7 +7,8 @@ fs.readdirSync(__dirname).forEach(function(file) {
     // let's not include this same file
     if (file !== path.parse(__filename).base) {
         const filename = path.parse(file).name;
-        const fileContent = require(`./${filename}`);
+        // console.log(file);
+        const fileContent = require(`./${file}`);
         // Let's export individual resolvers by name
         module[`${filename}Resolver`] = fileContent;
         // Lets include it in the list of all resolvers (default export)

@@ -1,28 +1,26 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { debounce } from 'lodash'
+
+import ProfileResume from 'components/profileResume'
+import ProfileDetail from 'components/profileDetails'
+import Training from 'components/training'
+import WorkExperience from 'components/work_experience'
+import Skill from 'components/skills'
+import Interest from 'components/interests'
+import PortFolio from 'components/portfolio'
+import ContactForm from 'components/contactForm'
+import ThankYou from 'components/thank_you'
+import Footer from 'components/footer'
+
 import { EventType } from "helpers/customEvents"
-
-import { translateString } from '../../helpers/translations';
-
-import ProfileResume from '../profileResume';
-import ProfileDetail from '../profileDetails';
-import Training from '../training';
-import WorkExperience from '../work_experience';
-import Skill from '../skills';
-import Interest from '../interests';
-import PortFolio from '../portfolio';
-import ContactForm from '../contact_form';
-import ThankYou from '../thank_you';
-import Footer from '../footer';
-
-import { PropDef } from './types';
+import { translateString } from 'helpers/translations'
+import { PropDef } from './types'
 import { ComponentDef } from "helpers/types"
 
-import './cvcontainer.css';
-
+import './cvcontainer.css'
 class CVContainer extends Component<PropDef> {
-
-    cvCompoennts: ComponentDef[] = []
+    private cvComponents: ComponentDef[] = []
 
     renderHeaderColors() {
         /* Header Colors */
@@ -34,7 +32,7 @@ class CVContainer extends Component<PropDef> {
                 <div className="top-color top-color1" />
                 <div className="top-color top-color2" />
             </div>
-        );
+        )
         /* /Header Colors */
     }
 
@@ -49,40 +47,35 @@ class CVContainer extends Component<PropDef> {
                         className="btn btn-default btn-top-resume">
                         <i className="fa fa-download" />
                         <span className="btn-hide-text">
-                            Download my resume
+                            { translateString('Download my resume', this) }
                         </span>
                     </a>
                     {/* /Download Resume Button */}
                     {/* Mail Button */}
                     <a
                         href="#sendMessageTopBar"
-                        className="btn btn-default btn-top-message">
+                        className="btn btn-default btn-top-message"
+                        onClick={this.onClickSendMeMessage}
+                    >
                         <i className="fa fa-envelope-o" />
                         <span className="btn-hide-text">
-                            Send me a message
+                            { translateString('Send me a message', this) }
                         </span>
                     </a>
                     {/* /Mail Button */}
                 </div>
             </div>
-        );
+        )
         /* /Header Buttons */
     }
 
     componentDidMount() {
-        this.cvCompoennts.forEach(element => {
-            const customEvent = new CustomEvent(EventType[EventType.SECTION_ADDED], {
-                detail: element
-            })
-
-            document.dispatchEvent(customEvent)
-        })
+        this.cvComponents.forEach(element => document.dispatchEvent(new CustomEvent(EventType[EventType.SECTION_ADDED], {detail: element} )))
     }
 
     addToList(elem: React.Ref<any>, component_name: string) {
-
-        const name = translateString(component_name, this);
-        this.cvCompoennts.push({
+        const name = translateString(component_name, this)
+        this.cvComponents.push({
             component: elem,
             translated_name: name,
         })
@@ -91,12 +84,10 @@ class CVContainer extends Component<PropDef> {
     }
 
     render() {
-        if (!this.props.resume) {
-            return null;
-        }
+        if (!this.props.resume) return null
         /* CONTENT
-	========================================================= */
-        // this.refList.length = 0; // lets reset the array reference before setting it again
+	    ========================================================= */
+
         return (
             <section
                 id="content-body"
@@ -112,74 +103,32 @@ class CVContainer extends Component<PropDef> {
                         <div className="timeline-wrap">
                             <div className="timeline-bg">
                                 <ProfileDetail
-                                    reference={this.addToList(
-                                        React.createRef(),
-                                        'ProfileDetail'
-                                    )}
-                                    name={translateString(
-                                        'ProfileDetail',
-                                        this
-                                    )}
+                                    reference={ this.addToList(React.createRef(), 'ProfileDetail') }
+                                    name={ translateString('ProfileDetail', this) }
                                 />
                                 <Training
-                                    reference={this.addToList(
-                                        React.createRef(),
-                                        'Training'
-                                    )}
-                                    name={translateString(
-                                        'Training',
-                                        this
-                                    )}
+                                    reference={ this.addToList(React.createRef(), 'Training') }
+                                    name={ translateString('Training', this) }
                                 />
                                 <WorkExperience
-                                    reference={this.addToList(
-                                        React.createRef(),
-                                        'WorkExperience'
-                                    )}
-                                    name={translateString(
-                                        'WorkExperience',
-                                        this
-                                    )}
+                                    reference={ this.addToList(React.createRef(), 'WorkExperience') }
+                                    name={ translateString('WorkExperience', this) }
                                 />
                                 <Skill
-                                    reference={this.addToList(
-                                        React.createRef(),
-                                        'Skill'
-                                    )}
-                                    name={translateString(
-                                        'Skill',
-                                        this
-                                    )}
+                                    reference={ this.addToList(React.createRef(), 'Skill') }
+                                    name={ translateString('Skill', this) }
                                 />
                                 <Interest
-                                    reference={this.addToList(
-                                        React.createRef(),
-                                        'Interest'
-                                    )}
-                                    name={translateString(
-                                        'Interest',
-                                        this
-                                    )}
+                                    reference={ this.addToList(React.createRef(), 'Interest') }
+                                    name={ translateString('Interest', this) }
                                 />
                                 <PortFolio
-                                    reference={this.addToList(
-                                        React.createRef(),
-                                        'PortFolio'
-                                    )}
-                                    name={translateString(
-                                        'PortFolio',
-                                        this
-                                    )}
+                                    reference={ this.addToList(React.createRef(), 'PortFolio') }
+                                    name={ translateString('PortFolio', this) }
                                 />
                                 <ContactForm
-                                    reference={this.addToList(
-                                        React.createRef(),
-                                        'ContactForm'
-                                    )}
-                                    name={translateString(
-                                        'ContactForm',
-                                        this
-                                    )}
+                                    reference={this.addToList(React.createRef(), 'ContactForm') }
+                                    name={ translateString('ContactForm', this) }
                                 />
                                 <ThankYou />
                             </div>
@@ -189,14 +138,23 @@ class CVContainer extends Component<PropDef> {
                     </div>
                 </div>
             </section>
-        );
+        )
         /* /CONTENT
-    ========================================================= */
+        ========================================================= */
     }
+
+    /**
+	 * Debouncing to avoid flooding
+	 * the app with dispatches
+	 */
+	onClickSendMeMessage = debounce(() => {
+        document.dispatchEvent(new CustomEvent(EventType[EventType.SCROLL_TO_SECTION],
+            { detail: { component: this.cvComponents[this.cvComponents.length - 1].component, unique_id: Date.now() } }
+        ))
+	}, 1000).bind(this)
 }
 
 function mapStateToProps(state: any) {
-
     const {
         data: {
             resume = null
@@ -207,16 +165,13 @@ function mapStateToProps(state: any) {
                 CVContainer: translations = null
             } = {}
         } = {}
-    } = state;
+    } = state
 
     return {
         resume,
         translations,
         language
-    };
+    }
 }
 
-
-export default connect(
-    mapStateToProps
-)(CVContainer);
+export default connect(mapStateToProps)(CVContainer)

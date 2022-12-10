@@ -1,4 +1,4 @@
-import store from '../store/storeProvider';
+import store from 'store/storeProvider';
 
 export const TRANSLATION_DOMAIN = 'FRONTEND-UI';
 export const DEFAULT_LANGUAGE_ISO = 'en';
@@ -103,10 +103,6 @@ const getTranslation = (
 };
 
 export const translateString = (tag, module) => {
-    // store.subscribe(() => {
-    //     console.log(store.getState())
-    // })
-
     const state = store.getState();
     const { language = DEFAULT_LANGUAGE_ISO } = state;
     const module_name = module.constructor.name;

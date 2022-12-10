@@ -5,14 +5,14 @@ import './timeLineItem.scss';
 type TimeLineItemProps = {
     index: string;
     children: React.ReactNode;
-    className: string | undefined;
-    type: 'work' | 'education' | undefined;
+    className?: string | undefined;
+    type?: 'work' | 'education' | 'point' | undefined;
 };
 
 const TimeLineItem = ({
     index,
     children,
-    className,
+    className = '',
     type
 }: TimeLineItemProps) => {
     return (

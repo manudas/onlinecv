@@ -11,6 +11,9 @@
     "author": "Manuel José Pulgar Anguita",
     "license": "ISC",
     "dependencies": {
+        "@graphql-tools/load": "^7.8.8",
+        "@graphql-tools/load-files": "^6.6.1",
+        "@graphql-tools/schema": "^9.0.12",
         "compression": "^1.7.4",
         "cookie-parser": "^1.4.5",
         "express": "^4.17.1",

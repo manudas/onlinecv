@@ -16,12 +16,12 @@ export const getUserIntroductionQuery = (lang: string) => {
             'secondaryRole',
             'nickname'
         ]
-    });
+    })
 
     return {
         query: queryWithoutVars,
         variables
-    };
+    }
 }
 
 export const getUserFullResumeQuery = (lang: string) => {
@@ -115,10 +115,10 @@ export const getUserFullResumeQuery = (lang: string) => {
                 'order'
             ]
         }
-    ]);
+    ])
 
     return {
         query: queryWithoutVars,
         variables
-    };
+    }
 }

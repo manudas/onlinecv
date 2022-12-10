@@ -1,4 +1,8 @@
-type elementType = { type: string; order: number };
+type elementType = {
+    type: string
+    order: number
+}
+
 export const sortElementsByTypeAndOrder = (
     elements: elementType[],
     types: string[]
@@ -8,8 +12,8 @@ export const sortElementsByTypeAndOrder = (
         typeObject =
             Object.entries(types).reduce(
                 (carry, [index, value]) => {
-                    carry[value] = Number(index);
-                    return carry;
+                    carry[value] = Number(index)
+                    return carry
                 },
                 {} as Record<string, number>
             )
@@ -21,8 +25,8 @@ export const sortElementsByTypeAndOrder = (
             (typeObject && ((typeObject[elementA.type] ?? 0) - (typeObject[elementB.type] ?? 0)))
             // if no order propety and no typeObject, all te elements are considered equal
             || ((elementA.order ?? 0) - (elementB.order ?? 0))
-    );
-};
+    )
+}
 
 export const clasifyByType = (
     elements: elementType[],
@@ -34,7 +38,7 @@ export const clasifyByType = (
         const type = element.type ?? 'noType'
         result[type] = result[type] ?? []
         result[type].push(element)
-    });
+    })
 
-    return result;
+    return result
 }

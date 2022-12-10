@@ -93,7 +93,7 @@ class Menu extends Component<PropDef, StateDef> {
 	 */
 	_onClickMenuOption = debounce(index => {
 		// Your code
-        const clickEvent = new CustomEvent(EventType[EventType.MENU_SECTION_CLICKED],
+        const clickEvent = new CustomEvent(EventType[EventType.SCROLL_TO_SECTION],
             { detail: { component: this.state.componentRefs[index].component, unique_id: Date.now() } }
         )
 

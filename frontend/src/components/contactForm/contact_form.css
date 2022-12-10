@@ -16,6 +16,7 @@
     position: relative;
 }
 
+/* @todo: when adding validation for email or other fields, use this class */
 .form-group label.error {
     display: block;
     position: absolute;
@@ -66,25 +67,11 @@ textarea.form-control {
     transition: all 0.3s ease-in-out;
 }
 
-::-webkit-input-placeholder {
+::placeholder {
     color: #fafafa !important;
     font-style: italic;
 }
 
-:-moz-placeholder {
-    color: #fafafa !important;
-    font-style: italic;
-}
-
-::-moz-placeholder {
-    color: #fafafa !important;
-    font-style: italic;
-}
-
-:-ms-input-placeholder {
-    color: #fafafa !important;
-    font-style: italic;
-}
 
 .contact-subtitle-1 {
     text-transform: uppercase;
@@ -121,6 +108,7 @@ textarea.form-control {
     }
 }
 
+/* @todo: when adding modal for message success/failure, use those classes bellow */
 .modal-wrap {
     display: none;
 }
@@ -161,6 +149,7 @@ textarea.form-control {
     margin-bottom: 0;
 }
 
+/* @todo: when adding modal for message success/failure, use those classes bellow */
 #contactError .modal-title {
     color: #fff;
 }

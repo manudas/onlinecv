@@ -14,7 +14,7 @@ export const unregisterEvents = ({
     document.removeEventListener('touchend', onTouchEnd)
     document.removeEventListener('touchmove', onTouchMove)
     document.removeEventListener('wheel', onMouseWheel)
-    document.removeEventListener(EventType[EventType.MENU_SECTION_CLICKED], scrollToSection)
+    document.removeEventListener(EventType[EventType.SCROLL_TO_SECTION], scrollToSection)
     document.removeEventListener('mousemove', onMouseMove)
     document.removeEventListener('mouseup', onMouseUp)
 }
@@ -32,7 +32,7 @@ export const registerEvents = ({
     document.addEventListener('touchend', onTouchEnd)
     document.addEventListener('touchmove', onTouchMove)
     document.addEventListener('wheel', onMouseWheel)
-    document.addEventListener(EventType[EventType.MENU_SECTION_CLICKED], scrollToSection)
+    document.addEventListener(EventType[EventType.SCROLL_TO_SECTION], scrollToSection)
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('mouseup', onMouseUp)
 }
