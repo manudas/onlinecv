@@ -34,9 +34,7 @@ export class SidebarComponent implements OnInit {
 
   menuItems = MenuListItems
 
-  constructor(private router: Router) {
-    console.log('estilos repetidos, mucho codigo a mejorar en sidebar, podríamos sacarlos a un archivo constants.js y limpiar sidebar.component?');
-  }
+  constructor(private router: Router) {}
 
   getRoute(elementName){
     if (this.router.url === `\/${elementName}`){

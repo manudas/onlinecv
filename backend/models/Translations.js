@@ -8,12 +8,15 @@ const collection = 'translations';
 const TranslationsSchema = new Schema({
     language: String,
     module: String,
+    domain: String,
     tag: String,
     text: String,
-    lastAccessed: Schema.Types.Date,
+    lastTimeFetched: Schema.Types.Date,
+    missing: Boolean,
     accessCounter: Number
 }, {
     collection,
+    versionKey: false
 });
 
 const TranslationsModel = model(collection, TranslationsSchema);

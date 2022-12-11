@@ -127,17 +127,23 @@
                     <label
                         class='control-label'
                     >
-                        {{ 'ATENTO MIRAR SI SE PUEDEN VALIDAR QUE SEAN FECHAS Y PONER DATEPICKER CON SOLO MES Y AÑO Provide your starting date' | translate | async }}
+                        {{ 'Provide your starting date' | translate | async }}
                     </label>
-                    <input
-                        class='form-control'
-                        placeholder="{{ 'Optional: the date in which you started your training' | translate | async }}"
-                        formControlName="start_date"
-                    >
+                    <div class='d-flex'>
+                        <input
+                            class='form-control'
+                            placeholder="{{ 'Optional: the date in which you started your training' | translate | async }}"
+                            formControlName="start_date"
+                            matInput [matDatepicker]="picker_start"
+                            readOnly
+                        >
+                        <mat-datepicker-toggle matSuffix [for]="picker_start"></mat-datepicker-toggle>
+                        <mat-datepicker #picker_start></mat-datepicker>
+                    </div>
                     <p
                         class='help-block'
                     >
-                        {{ 'E.g.: September 2011' | translate | async }}
+                        {{ 'Click on the toggle button to open the date selector' | translate | async }}
                     </p>
                 </div>
             </div>
@@ -150,17 +156,23 @@
                     <label
                         class='control-label'
                     >
-                        {{ 'ATENTO MIRAR SI SE PUEDEN VALIDAR QUE SEAN FECHAS Y PONER DATEPICKER CON SOLO MES Y AÑO Provide your finishing date' | translate | async }}
+                        {{ 'Provide your finishing date' | translate | async }}
                     </label>
-                    <input
-                        class='form-control'
-                        placeholder="{{ 'Optional: the date in which you finished your training' | translate | async }}"
-                        formControlName="finish_date"
-                    >
+                    <div class='d-flex'>
+                        <input
+                            class='form-control'
+                            placeholder="{{ 'Optional: the date in which you finished your training' | translate | async }}"
+                            formControlName="finish_date"
+                            matInput [matDatepicker]="picker_end"
+                            readOnly
+                        >
+                        <mat-datepicker-toggle matSuffix [for]="picker_end"></mat-datepicker-toggle>
+                        <mat-datepicker #picker_end></mat-datepicker>
+                    </div>
                     <p
                         class='help-block'
                     >
-                        {{ 'E.g.: December 2015' | translate | async }}
+                        {{ 'Click on the toggle button to open the date selector' | translate | async }}
                     </p>
                 </div>
 
@@ -212,6 +224,7 @@
                         class='form-control'
                         placeholder="{{ 'Optional: write down here an average of your marks during the training course' | translate | async }}"
                         formControlName="average_grade"
+                        type="number"
                     >
                     <p
                         class='help-block'

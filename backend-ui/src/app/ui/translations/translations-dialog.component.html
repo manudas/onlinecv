@@ -1,0 +1,166 @@
+<h2
+    mat-dialog-title
+    [className]="''"
+>
+    <div
+        [className]="'paddedContent'"
+    >
+        {{
+            missing
+                ? ('Set missing translation: ' | translate | async) + dataFormGroup.get('tag').value
+                : editingIndex === null
+                    ? ('Add new translation' | translate | async)
+                    : ('Edit translation: ' | translate | async) + dataFormGroup.get('tag').value
+        }}
+    </div>
+</h2>
+
+<div mat-dialog-content>
+    <div
+        [className]="'paddedContent'"
+    >
+        <ng-container *ngTemplateOutlet="template"></ng-container>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div
+        [className]="'paddedContent'"
+    >
+        <button
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+            (click)="close()"
+        >
+            {{ 'Cancel' | translate | async }}
+        </button>
+        <button
+            [className]="'btn submitButton'"
+            type="submit"
+            ngbButton
+            (click)="submitHandler($event)"
+        >
+            {{
+                editingIndex === null
+                    ? ('Add' | translate | async)
+                    : (missing
+                        ? ('Save' | translate | async)
+                        : ('Edit' | translate | async)
+                    )
+            }}
+        </button>
+    </div>
+</div>
+
+<ng-template #template>
+    <form
+        [formGroup]="dataFormGroup"
+    >
+        <div [className]="'row'">
+            <div
+                [className]="'col-md-6 col-sm-12'"
+            >
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Add the translation domain' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Optional: Enter the domain' | translate | async }}"
+                        placement="top"
+                        formControlName="domain"
+                        readOnly={{missing}}
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'E.g: FRONTEND-UI or BACKEND-UI' | translate | async }}
+                    </p>
+                </div>
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Please translation tag' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'The tag of your translation' | translate | async }}"
+                        formControlName="tag"
+                        readOnly={{missing}}
+                    >
+                    <p
+                        class='help-block'
+                        [ngStyle]="{
+                            'margin-bottom': dataFormGroup.get('tag').touched && dataFormGroup.get('tag').errors ? 0 : 'initial'
+                        }"
+                    >
+                        {{ 'This is usually the original translation in the main language' | translate | async }}
+                    </p>
+                    <small
+                            *ngIf="dataFormGroup.get('tag').touched && dataFormGroup.get('tag').errors"
+                            [className]="'text-danger'"
+                    >
+                        {{ 'A tag for the translation is mandatory' | translate | async }}
+                    </small>
+                </div>
+
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Please type the belonging module' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Optional: which is the module that this translation belongs to?' | translate | async }}"
+                        formControlName="module"
+                        readOnly={{missing}}
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'E.g.: TranslationEffect' | translate | async }}
+                    </p>
+                </div>
+            </div>
+            <div
+                [className]="'col-md-6 col-sm-12'"
+            >
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Provide your translation for the selected language' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Your actual translation for the selected language' | translate | async }}"
+                        formControlName="text"
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'E.g.: Traducción' | translate | async }}
+                    </p>
+                    <small
+                            *ngIf="dataFormGroup.get('text').touched && dataFormGroup.get('text').errors"
+                            [className]="'text-danger'"
+                    >
+                        {{ 'Providing the actual translation is mandatory' | translate | async }}
+                    </small>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-template>

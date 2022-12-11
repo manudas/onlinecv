@@ -22,7 +22,7 @@
     export const QueryLanguages =
     `
     query QueryLanguages($language: String!) {
-        Languages(language: $language) {
+        languages(language: $language) {
             id: _id
             name
             certification
@@ -41,7 +41,7 @@
 export const MutateLanguages =
 `
     mutation MutateLanguages($languages: [LanguageInput]!) {
-        putLanguages(languages: $Languages) {
+        putLanguages(languages: $languages) {
             # return id if everything was ok
             id: _id
         }

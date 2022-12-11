@@ -12,10 +12,11 @@ export type ModuleTagPairType = {
 export type ActionRequestTranslation = {
     iso: string
     modules: string[]
-    tags: string[]
+    tags: string[],
+    domain: string
 }
 
-export type DBTranslation = {
+export type TranslationInterface = {
     id: string
     language: string
     module?: string
@@ -23,13 +24,26 @@ export type DBTranslation = {
     text: string
 }
 
+export type PutTranslation = {
+    putTranslation: TranslationInterface
+}
+
+export type RemovedTranslation = {
+    removeTranslation: TranslationInterface
+}
+
+export type TranslatedTranslations = {
+    translatedStrings: TranslationInterface[]
+}
+
 export type ReceivedTranslationsType = {
-    translations: DBTranslation[]
+    translations: TranslationInterface[]
+    missingTranslations?: TranslationInterface[]
 }
 
 export type InternalStoredTranslationInterface = {
     initialTranslation: string
-    translation?: DBTranslation
+    translation?: TranslationInterface
 }
 
 
@@ -41,7 +55,7 @@ export type TranslationsType = {
     }
 }
 
-export type StoredTranslationsObservable = {
+export type TranslationsObservableStore = {
     [iso: string]: {
         [component: string]: {
             [key: string] : Subject<string>
@@ -49,4 +63,21 @@ export type StoredTranslationsObservable = {
     }
 }
 
-export type TranslationStore = ReceivedTranslationsType
+export enum TranslationEnum {
+    all,
+    missing,
+    translated
+}
+
+export type EditTranslationStructure = {
+    index: number
+    translation: TranslationInterface
+    isMissing: boolean
+}
+
+export type TranslationStore = ReceivedTranslationsType & {
+    translationManager: {
+        missing: TranslationInterface[],
+        translated: TranslationInterface[]
+    }
+}

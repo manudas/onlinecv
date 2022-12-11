@@ -1,24 +1,25 @@
 import React, { Component } from 'react';
 
-import Menu from '../../containers/menu';
-import CVContainer from '../../containers/cvcontainer';
-import ScrollBar from '../../containers/scrollBar';
+import Menu from '../menu';
+import CVContainer from '../cvcontainer';
+import ScrollBar from '../scrollBar';
 
 class InfoContainer extends Component {
-
-  render() {
-    /* CV container
-      ========================================================= */
-    return (
-      [
-        <Menu key='Menu' />,
-        <CVContainer key='CVContainer' language={this.props.language} />,
-        <ScrollBar key='ScrollBar' />
-      ]
-    );
-    /*  /End of CV container
-      ========================================================= */
-  }
+    render() {
+        if (!this.props.mounted) return null;
+        /* CV container
+        ========================================================= */
+        return [
+            <Menu key="Menu" />,
+            <CVContainer
+                key="CVContainer"
+                language={this.props.language}
+            />,
+            <ScrollBar key="ScrollBar" />
+        ];
+        /*  /End of CV container
+        ========================================================= */
+    }
 }
 
 export default InfoContainer;

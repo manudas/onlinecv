@@ -1,15 +1,15 @@
-<ng-container *ngIf="isSkillsActive('skills'); then skillsTemplate"></ng-container>
+<ng-container *ngIf="isSkillsActive('general'); then skillsTemplate"></ng-container>
 <ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isSkillsActive('computers'); then computerTemplate"></ng-container>
+<ng-container *ngIf="isSkillsActive('computer'); then computerTemplate"></ng-container>
 <ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isSkillsActive('languages'); then languagesTemplate"></ng-container>
+<ng-container *ngIf="isSkillsActive('language'); then languagesTemplate"></ng-container>
 
 
 <ng-template #skillsTemplate>
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: SkillsType.skills, cols: colsToRender}"
+        [panelParameters]="{type: SkillsType.general, cols: colsToRender}"
         [cardTitle]="'General Skills' | translate | async">
     </app-card>
 </ng-template>
@@ -18,7 +18,7 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: SkillsType.computers, cols: colsToRender}"
+        [panelParameters]="{type: SkillsType.computer, cols: colsToRender}"
         [cardTitle]="'Computer' | translate | async">
     </app-card>
 </ng-template>
@@ -27,7 +27,7 @@
     <app-card [icon]="faTable"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: SkillsType.languages, cols: languageColsToRender}"
+        [panelParameters]="{type: SkillsType.language, cols: languageColsToRender}"
         [cardTitle]="'Languages' | translate | async">
     </app-card>
 </ng-template>
@@ -86,9 +86,8 @@
     </mat-table>
 
     <div
-        [className]="'text-right network-actions'"
+        [className]="'text-right pt-3'"
     >
-    style this (watch classes)
         <button
             *ngIf="getSkillTypeName(type) !== 'languages'"
             (click)="openSkillDialog(getSkillTypeName(type))"
@@ -134,8 +133,8 @@
 <ng-template #deleteTrainingTemplate
     let-index="rowIndex"
     let-type="type"
->margen izq cortado
-    <button [className]="'btn btn-danger btn-network-row'"
+>
+    <button [className]="'btn btn-danger'"
         ngbButton
         (click)="openSkillsRemovalConfirmDialog(index, type)"
         >

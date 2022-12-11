@@ -15,8 +15,12 @@ const credentials_str = (user && user.length > 0 &&
     `${user}:${password}@` :
     '';
 
+/*
 const connetion_string =
     `mongodb://${credentials_str}${host}:${port}/${database}?authSource=${database}`;
+*/
+const connetion_string =
+    `mongodb://${credentials_str}${host}:${port}/${database}`;
 
 const Init = () => {
     console.log("Connection string to MongoDB", connetion_string);

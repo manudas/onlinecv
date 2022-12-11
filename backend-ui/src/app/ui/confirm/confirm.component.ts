@@ -1,4 +1,7 @@
-import { Component, Inject } from "@angular/core";
+import {
+    Component,
+    Inject
+} from "@angular/core";
 import {
     MatDialogRef,
     MAT_DIALOG_DATA,
@@ -18,17 +21,17 @@ type data = {
 })
 export class ConfirmComponent {
 
-    action: string
-    element: any
-    index: number
-    superType: string
-    nameKey: string
+    action: string // what is the action to be applied?
+    element: any // object to apply the action to
+    index: number // index to the element in the array of elements in the parent component, if applicable
+    superType: string // what is going to be affected by this?
+    nameKey: string // key in object with the name representing this element
 
     acctionMap = {
         'delete': 'deleted'
     }
 
-    constructor( public dialogRef: MatDialogRef<ConfirmComponent>, @Inject(MAT_DIALOG_DATA) public data: data) {
+    constructor(public dialogRef: MatDialogRef < ConfirmComponent > , @Inject(MAT_DIALOG_DATA) public data: data) {
 
         const {
             action,
@@ -45,7 +48,7 @@ export class ConfirmComponent {
         this.nameKey = nameKey
     }
 
-    close(index?: number, element?: any) {
+    close(index ? : number, element ? : any) {
         /*
          * this is to get the message in the caller:
 
@@ -56,8 +59,12 @@ export class ConfirmComponent {
         */
 
         this.dialogRef.close({
-            ...(index && {index}),
-            ...(element && {element})
+            ...(index && {
+                index
+            }),
+            ...(element && {
+                element
+            })
         });
     }
 }

@@ -1,3 +1,6 @@
+import { DateAdapter } from '@angular/material/core';
+import { select, Store } from '@ngrx/store'
+
 import { Component, Inject } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import {
@@ -5,6 +8,10 @@ import {
     MAT_DIALOG_DATA,
 } from "@angular/material/dialog"
 import { EditTrainingStructure, TrainingInterface, TrainingType } from "@app/types/Training";
+import { Observable } from "rxjs";
+import { LocaleStore } from '@app/types';
+
+type StoreType = { locale: LocaleStore }
 
 @Component({
     templateUrl: './training-dialog.component.html',
@@ -52,7 +59,13 @@ export class TrainingDialogComponent {
 
     editingIndex: number = null
 
-    constructor( public dialogRef: MatDialogRef<TrainingDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditTrainingStructure | string) {
+    selectedLocale$: Observable<string>
+
+    constructor( public dialogRef: MatDialogRef<TrainingDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditTrainingStructure | string, private dateAdapter: DateAdapter<any>, private store: Store<StoreType>) {
+
+        this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
+        this.selectedLocale$.subscribe((data: string) => data && this.dateAdapter.setLocale(data))
+
         if (!(typeof data === 'string' || data instanceof String)) { // is EditTrainingStructure type
             const {
                 index,
@@ -62,7 +75,12 @@ export class TrainingDialogComponent {
             this.editingIndex = index
 
             for (const control in this.trainingFormGroup.controls) {
-                this.trainingFormGroup.get(control).setValue(training[control])
+                if (control.includes('date')) {
+                    this.trainingFormGroup.get(control).setValue(new Date(Number(training[control])))
+                }
+                else {
+                    this.trainingFormGroup.get(control).setValue(training[control])
+                }
             }
         } else { // is TrainingType enum
             this.trainingFormGroup.get('type').setValue(data)

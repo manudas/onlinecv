@@ -1,8 +1,8 @@
 export enum SkillsType {
     all,
-    skills,
-    computers,
-    languages
+    general,
+    computer,
+    language
 }
 
 /*
@@ -38,5 +38,5 @@ export type EditSkillsStructure = {
 
 export type SkillsFetched = {
     skillType: string
-    Skills: SkillInterface[]
+    skills: SkillInterface[]
 }

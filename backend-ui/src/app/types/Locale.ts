@@ -2,11 +2,12 @@ export type LocaleType = {
     id: number
     name: string
     iso: string
+    flag: string
     default: boolean
 };
 
 export type getLocaleTypeRequest = {
-    getLocales: LocaleType[]
+    locales: LocaleType[]
 }
 
 export type LocaleStore = {

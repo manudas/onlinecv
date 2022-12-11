@@ -1,75 +1,76 @@
-const ObjectID = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectId;
 const cleanObject = require('@helpers/utils').cleanObject;
 
 module.exports = {
     Query: {
-        socialNetworks: async({
-            language
-        }, {
-            models: {
-                SocialNetworksModel
-            },
-        }, info) => {
-            const socialNetworkList = await SocialNetworksModel.find({
-                language
-            }).sort({
-                order: 1
-            }).exec();
+        socialNetworks: async (
+            { language },
+            { models: { SocialNetworksModel } },
+            info
+        ) => {
+            const socialNetworkList =
+                await SocialNetworksModel.find({
+                    language
+                })
+                    .sort({
+                        order: 1
+                    })
+                    .exec();
             return socialNetworkList;
-        },
+        }
     },
     Mutation: {
-        /* Example
-        db.books.update(
-            { item: "ZZZ135" },   // Query parameter
-            {                     // Replacement document
-                item: "ZZZ135",
-                stock: 5,
-                tags: [ "database" ]
-            },
-            { upsert: true }      // Options: upsert -> insert document if no ducment found to update
-        )
-        */
-        putSocialNetworks: async({
-            socialNetworks
-        }, {
-            models: {
-                SocialNetworksModel
-            },
-        }, info) => {
+        putSocialNetworks: async (
+            { socialNetworks },
+            { models: { SocialNetworksModel } },
+            info
+        ) => {
+            const SocialNetworkWriteResult =
+                await Promise.all(
+                    socialNetworks.map(async (network) => {
+                        const cleanedNetwork = cleanObject(
+                            network,
+                            { id: '_id' }
+                        );
 
-            const SocialNetworkWriteResult = await Promise.all(socialNetworks.map(async network => {
+                        if (!cleanedNetwork._id) {
+                            cleanedNetwork._id =
+                                new ObjectId();
+                        }
 
-                const cleanedNetwork = cleanObject(network, {'id': '_id'});
+                        const element =
+                            await SocialNetworksModel.findOneAndUpdate(
+                                { _id: cleanedNetwork._id },
+                                cleanedNetwork,
+                                {
+                                    upsert: true, // if no details found, create a new entry
+                                    new: true // return the value of the object after the update and not before
+                                }
+                            );
 
-                if (!cleanedNetwork._id) {
-                    cleanedNetwork._id = new ObjectID();
-                }
-
-                const element = await SocialNetworksModel.findOneAndUpdate(
-                    {_id: cleanedNetwork._id}
-                ,
-                cleanedNetwork, {
-                    upsert: true, // if no details found, create a new entry
-                    new: true // return the value of the object after the update and not before
-                });
-
-                return element;
-            }));
-            return SocialNetworkWriteResult? SocialNetworkWriteResult : false;
+                        return element;
+                    })
+                );
+            return SocialNetworkWriteResult
+                ? SocialNetworkWriteResult
+                : false;
         },
-        removeSocialNetwork: async({
-            id
-        }, {
-            models: {
-                SocialNetworksModel
-            },
-        }, info) => {
-            const WriteResult = await SocialNetworksModel.remove({ _id: id }, { justOne: true }); // justOne ==> remove one
+        removeSocialNetwork: async (
+            { id },
+            { models: { SocialNetworksModel } },
+            info
+        ) => {
+            const WriteResult =
+                await SocialNetworksModel.remove(
+                    { _id: id },
+                    { justOne: true }
+                ); // justOne ==> remove one
             if (WriteResult.deletedCount === 1) {
                 return id;
             }
-            throw new Error('Network cannot be deleted as was not found in database');
-        },
-    },
+            throw new Error(
+                'Network cannot be deleted as was not found in database'
+            );
+        }
+    }
 };

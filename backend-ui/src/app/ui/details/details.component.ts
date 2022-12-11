@@ -46,7 +46,7 @@ export class DetailsComponent implements OnInit {
   socialNetworks$: Observable<SocialNetwork[]>
   socialNetworks: SocialNetwork[] = []
   socialNetworkColsToRender = [
-    'id',
+    // 'id',
     'label',
     'description',
     'edit',

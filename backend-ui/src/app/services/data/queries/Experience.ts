@@ -22,7 +22,7 @@
     export const QueryExperiences =
     `
     query QueryExperiences($language: String!, $type: String!) {
-        Experiences(language: $language, type: $type) {
+        experiences(language: $language, type: $type) {
             id: _id
             description
             type

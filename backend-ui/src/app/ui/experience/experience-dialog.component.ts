@@ -1,3 +1,6 @@
+import { DateAdapter } from '@angular/material/core';
+import { select, Store } from '@ngrx/store'
+
 import { Component, Inject } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import {
@@ -5,7 +8,10 @@ import {
     MAT_DIALOG_DATA,
 } from "@angular/material/dialog"
 import { EditExperienceStructure, ExperienceInterface, ExperienceType } from "@app/types/Experience";
+import { LocaleStore } from '@app/types';
+import { Observable } from 'rxjs';
 
+type StoreType = { locale: LocaleStore }
 @Component({
     templateUrl: './experience-dialog.component.html',
     styleUrls: ['./experience-dialog.component.scss']
@@ -45,7 +51,13 @@ export class ExperienceDialogComponent {
 
     editingIndex: number = null
 
-    constructor( public dialogRef: MatDialogRef<ExperienceDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditExperienceStructure | string) {
+    selectedLocale$: Observable<string>
+
+    constructor( public dialogRef: MatDialogRef<ExperienceDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditExperienceStructure | string, private dateAdapter: DateAdapter<any>, private store: Store<StoreType>) {
+
+        this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
+        this.selectedLocale$.subscribe((data: string) => data && this.dateAdapter.setLocale(data))
+
         if (!(typeof data === 'string' || data instanceof String)) { // is EditTrainingStructure type
             const {
                 index,
@@ -55,7 +67,12 @@ export class ExperienceDialogComponent {
             this.editingIndex = index
 
             for (const control in this.experienceFormGroup.controls) {
-                this.experienceFormGroup.get(control).setValue(experience[control])
+                if (control.includes('date')) {
+                    this.experienceFormGroup.get(control).setValue(new Date(Number(experience[control])))
+                }
+                else {
+                    this.experienceFormGroup.get(control).setValue(experience[control])
+                }
             }
         } else { // is TrainingType enum
             this.experienceFormGroup.get('type').setValue(data)

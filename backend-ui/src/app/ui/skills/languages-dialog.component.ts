@@ -7,6 +7,8 @@ import {
 import { LanguageInterface } from "@app/types/Languages";
 import { EditLanguageStructure } from "@app/types/Languages";
 
+import { assessmentFromOneToTen } from '@utils/commonFormValidators'
+
 @Component({
     templateUrl: './languages-dialog.component.html',
     styleUrls: ['./skills-dialog.component.scss'] // let's share the css with skills-dialog
@@ -38,8 +40,8 @@ export class LanguageDialogComponent {
         certification: new FormControl(null),
         school: new FormControl(null),
         school_url: new FormControl(null),
-        written_level: new FormControl(null),
-        spoken_level: new FormControl(null),
+        written_level: new FormControl(null, assessmentFromOneToTen),
+        spoken_level: new FormControl(null, assessmentFromOneToTen),
         // keywords: new FormControl(null),
         // language: String!,
         // order: Int!
@@ -48,7 +50,7 @@ export class LanguageDialogComponent {
     editingIndex: number = null
 
     constructor( public dialogRef: MatDialogRef<LanguageDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditLanguageStructure | string) {
-        if (!(typeof data === 'string' || data instanceof String)) { // is EditTrainingStructure type
+        if (!(typeof data === 'string' || data instanceof String)) { // is EditLanguageStructure type
             const {
                 index,
                 language
@@ -59,8 +61,9 @@ export class LanguageDialogComponent {
             for (const control in this.languageFormGroup.controls) {
                 this.languageFormGroup.get(control).setValue(language[control])
             }
-        } else { // is TrainingType enum
-            this.languageFormGroup.get('type').setValue(data)
+        } else { // is new Language
+            // passing type "language" as data, no need to do anything here
+            // this.languageFormGroup.get('type').setValue(data)
         }
     }
 

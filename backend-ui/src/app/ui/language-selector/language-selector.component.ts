@@ -84,8 +84,12 @@ export class LanguageSelectorComponent implements OnInit {
   }
 
   getImgUrl(iso: string): string {
+    let flag
     if (iso) {
-      return `assets/svg-country-flags/svg/${iso}.svg`
+      flag = this.locales && (this.locales[iso].flag || iso)
+    }
+    if (flag) {
+      return `assets/svg-country-flags/svg/${flag}.svg`
     }
     return ''
   }

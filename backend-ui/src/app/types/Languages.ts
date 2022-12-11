@@ -37,5 +37,5 @@ export type EditLanguageStructure = {
 }
 
 export type LanguagesFetched = {
-    Languages: LanguageInterface[]
+    languages: LanguageInterface[]
 }
