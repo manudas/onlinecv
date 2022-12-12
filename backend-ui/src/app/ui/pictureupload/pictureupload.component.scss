@@ -1,8 +1,7 @@
 @import '../../globals/styles';
 
 .picture {
-    margin-top: 10px;
-    height: 250px;
+    margin-top: 50px;
     // ----- Variable Declarations -----
     @keyframes spin {
         from {
@@ -19,6 +18,11 @@
         background: $white;
         box-shadow: 0 15px 50px -5px rgba($black, 0.35);
         padding: 40px;
+        &.large {
+            width: 80%;
+            padding-right: 0;
+            padding-left: 0;
+        }
     }
     #mediaFile {
         visibility: hidden;
@@ -26,7 +30,7 @@
         width: 0;
         display: inline-block;
     }
-    #profile {
+    #dropArea {
         border-radius: 100%;
         width: 200px;
         height: 200px;
@@ -53,6 +57,9 @@
             height: 100%;
             border: 4px dashed $darkishGrey;
             opacity: 1;
+            &.large {
+                border-radius: 0;
+            }
         }
         label {
             display: table-cell;
@@ -101,8 +108,12 @@
                 }
             }
         }
+        &.large {
+            width: auto;
+            border-radius: 0;
+        }
     }
-    .username {
+    .name {
         border-bottom: 1px solid $darkishGrey;
         padding-top: 20px;
         h1 {

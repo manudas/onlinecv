@@ -5,6 +5,7 @@ import { TrainingComponent } from '@app/ui/training/training.component';
 import { ExperienceComponent } from '@app/ui/experience/experience.component';
 import { SkillsComponent } from '@app/ui/skills/skills.component';
 import { TranslationComponent } from '@app/ui/translations/translations.component';
+import { SettingsComponent } from '@app/ui/settings/settings.component';
 
 import { NotfoundGuardService } from '@app/services/notfound/notfound.service';
 
@@ -28,6 +29,8 @@ export const routes: Routes = [
 
     { path: 'translations', redirectTo: 'translations/', pathMatch: 'full' },
     { path: 'translations/:type', component: TranslationComponent },
+
+    { path: 'settings', component: SettingsComponent },
 
     {
         path: 'notfound',

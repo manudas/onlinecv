@@ -6,7 +6,7 @@
 
 
 <ng-template #professionalTemplate>
-    <app-card [icon]="faTable"
+    <app-card [icon]="cardIcon"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
         [panelParameters]="{type: ExperienceType.professional}"
@@ -15,7 +15,7 @@
 </ng-template>
 
 <ng-template #ongTemplate>
-    <app-card [icon]="faTable"
+    <app-card [icon]="cardIcon"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
         [panelParameters]="{type: ExperienceType.ong}"
@@ -24,7 +24,7 @@
 </ng-template>
 
 <ng-template #otherTemplate>
-    <app-card [icon]="faTable"
+    <app-card [icon]="cardIcon"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
         [panelParameters]="{type: ExperienceType.other}"

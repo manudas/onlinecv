@@ -1,9 +1,16 @@
-<div class="picture">
-    <div class="modalBox">
-        <div id="profile"
+<div [ngClass]="{
+    'picture': true,
+    'large': isLargeImage
+}">
+    <div [ngClass]="{
+        'modalBox': true,
+        'large': isLargeImage
+    }">
+        <div id="dropArea"
             [ngClass]="{
                 'dragging': dragging,
-                'hasImage': hasImage
+                'hasImage': hasImage,
+                'large': isLargeImage
             }"
             [ngStyle]="{
                 'background-image': hasImage
@@ -12,18 +19,28 @@
                                                 ? 'linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,.8)),'
                                                 : ''
                                         ) + 'url(' + getBase64ImageData() + ')'
-                                        : 'none'
+                                        : 'none',
+                'height': isLargeImage && largeImageHeight + 'px'
             }"
             (dragover)="onDragOver($event)"
             (mouseover)="mouseOver = true"
             (mouseout)="mouseOver = false"
             (dragleave)="onDragLeave($event)"
             (drop)="resetInput($event); onReceiveFile($event)"
-            (click)="onClickHandler($event)">
-            <div [className]="'dashes'"></div>
+            (click)="onClickHandler($event)"
+            #imageContainer
+        >
+            <div [ngClass]="{
+                'dashes': true,
+                'large': isLargeImage
+            }"></div>
             <label>{{ 'Click to browse or drag an image here' | translate | async }}</label></div>
-        <div class="username">
-            <h1>{{ name ? name : 'Enter a name bellow' | translate | async }}</h1>
+        <div class="name">
+            <h1
+                *ngIf="name"
+            >
+                {{ name }}
+            </h1>
         </div>
     </div>
     <input type="file"

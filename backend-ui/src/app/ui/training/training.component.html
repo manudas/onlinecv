@@ -6,7 +6,7 @@
 
 
 <ng-template #officialTemplate>
-    <app-card [icon]="faTable"
+    <app-card [icon]="cardIcon"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
         [panelParameters]="{type: TrainingType.official}"
@@ -15,7 +15,7 @@
 </ng-template>
 
 <ng-template #computerTemplate>
-    <app-card [icon]="faTable"
+    <app-card [icon]="cardIcon"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
         [panelParameters]="{type: TrainingType.computer}"
@@ -24,7 +24,7 @@
 </ng-template>
 
 <ng-template #otherTemplate>
-    <app-card [icon]="faTable"
+    <app-card [icon]="cardIcon"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
         [panelParameters]="{type: TrainingType.other}"

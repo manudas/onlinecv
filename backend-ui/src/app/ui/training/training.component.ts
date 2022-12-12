@@ -41,7 +41,7 @@ type StoreType = { locale: LocaleStore } & {
 export class TrainingComponent implements OnInit {
     faArrowsAlt: IconDefinition = faArrowsAlt;
     faEdit: IconDefinition = faEdit;
-    faTable: IconDefinition = faTable;
+    cardIcon: IconDefinition = faTable;
     faTrash: IconDefinition = faTrash;
 
     type: TrainingType = null;

@@ -13,7 +13,7 @@ import {
 })
 export class DashboardComponent implements OnInit {
 
-  faBeer = faBeer;
+  cardIcon = faBeer;
   faSyncAlt= faSyncAlt;
   faChevronDown = faChevronDown;
 
@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
     value: 60,
     type: 'warning',
     // optionList: null,
-    
+
     optionList: [
       {
         value: 10,
@@ -35,9 +35,8 @@ export class DashboardComponent implements OnInit {
         text: 'test'
       },
     ]
-    
   }
-  
+
   constructor() { }
 
   ngOnInit(): void {

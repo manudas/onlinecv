@@ -34,7 +34,7 @@ export class SkillsComponent implements OnInit {
 
   faArrowsAlt: IconDefinition = faArrowsAlt
   faEdit: IconDefinition = faEdit
-  faTable: IconDefinition  = faTable
+  cardIcon: IconDefinition  = faTable
   faTrash: IconDefinition = faTrash
 
   type: SkillsType = null;
