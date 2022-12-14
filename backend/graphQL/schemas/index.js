@@ -6,20 +6,6 @@ const rootSchema = `
     type Query
 `;
 
-// let fullSchema = rootSchema;
-
-// fs.readdirSync(__dirname).forEach(function(file) {
-//     // let's not include this same file
-//     if (file !== path.parse(__filename).base) {
-//         const filename = path.parse(file).name;
-//         const fileContent = require(`./${filename}`);
-//         module[`${filename}Schema`] = fileContent;
-//         fullSchema += `\n${fileContent}`;
-//     }
-// });
-
-
-
 const { join } = require('path')
 const { loadFilesSync } = require('@graphql-tools/load-files')
 const { mergeSchemas } = require('@graphql-tools/schema')

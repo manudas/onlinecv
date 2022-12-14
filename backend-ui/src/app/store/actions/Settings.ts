@@ -9,3 +9,8 @@ export const SAVE_SETTINGS = createAction(
     '[Settings Component] SaveSettings',
     props<{ settings: SettingsType }>()
 )
+
+export const SETTINGS_FETCHED = createAction(
+    '[Settings Component] Fetched Settings',
+    props<{ settings: SettingsType }>()
+)

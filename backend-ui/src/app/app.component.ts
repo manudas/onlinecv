@@ -1,40 +1,15 @@
-import {
-    Component,
-    OnInit
-} from '@angular/core';
-import {
-    Observable
-} from 'rxjs';
-
-import {
-    TranslationService
-} from './services/translation/translation.service';
-
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { TranslationService } from './services/translation/translation.service';
 import debounce from 'lodash/debounce';
+import { useMemo } from '@utils/index'
+import { LocaleStore, ModuleTagPairType, TranslationStore, MessageType } from './types';
+import { select, Store } from '@ngrx/store';
+import { FETCH_TRANSLATIONS } from '@store_actions/Translation';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TRANSLATION_DOMAIN } from './utils/constants'
 
-import {
-    useMemo
-} from '@utils/index'
-import {
-    LocaleStore,
-    ModuleTagPairType,
-    TranslationStore,
-    MessageType
-} from './types';
-import {
-    select,
-    Store
-} from '@ngrx/store';
-import {
-    FETCH_TRANSLATIONS
-} from '@store_actions/Translation';
-import {
-    MatSnackBar
-} from '@angular/material/snack-bar';
-
-import {
-    TRANSLATION_DOMAIN,
-} from './utils/constants'
+import * as COMMON_ACTIONS from '@store_actions/Common'
 
 type StoreType = {
     locale: LocaleStore
@@ -101,15 +76,19 @@ export class AppComponent implements OnInit { // added OnInit to make a regular 
         })
         this.appMessage$.subscribe((data: MessageType) => {
             if (Object.keys(data).length > 0) {
-                this.openSnackBar(data.message, data.timeout || 1000)
+                this.openSnackBar(data.message, data.timeout || 1000, data.type)
             }
         })
     }
 
-    openSnackBar(message: string, duration: number) {
-        this.snackBar.open(message, null, {
-            duration,
-        });
+    openSnackBar(message: string | string[], duration: number, type: string = null) {
+        const msg_arr = Array.isArray(message) ? message: [message]
+        const className = type === COMMON_ACTIONS.FAIL.type ? 'SnackFailed' : 'SnackSuccess'
+        msg_arr.forEach( (message, index) => {
+            setTimeout(() => {
+                this.snackBar.open( message, null, { duration, panelClass: className} )
+            }, index * (duration + 500)) // 500 => timeout between two messages
+        })
     }
 
     ngAfterViewChecked(): void {

@@ -91,10 +91,11 @@ export class TranslationEffects {
                     };
                 }),
                 // handle failure in todoListService.fetchTodoList()
-                catchError((error) => {
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${error}`
+                        message: errors.map(error => error.message)
                     })
                 })
             )
@@ -128,10 +129,11 @@ export class TranslationEffects {
                     };
                 }),
                 // handle failure in todoListService.fetchTodoList()
-                catchError((error) => {
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${error}`
+                        message: errors.map(error => error.message)
                     })
                 })
             )
@@ -164,10 +166,11 @@ export class TranslationEffects {
                     })
                 }),
                 // handle failure in todoListService.fetchTodoList()
-                catchError((error) => {
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${error}`
+                        message: errors.map(error => error.message)
                     })
                 })
             )
@@ -202,10 +205,11 @@ export class TranslationEffects {
                     });
                 }),
                 // handle failure
-                catchError((error) => {
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${error}`
+                        message: errors.map(error => error.message)
                     })
                 })
             )
@@ -239,10 +243,11 @@ export class TranslationEffects {
                     });
                 }),
                 // handle failure
-                catchError((error) => {
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${error}`
+                        message: errors.map(error => error.message)
                     })
                 })
             )

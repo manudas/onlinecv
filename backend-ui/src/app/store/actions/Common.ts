@@ -17,7 +17,7 @@ export const WARNING = createAction(
 export const FAIL = createAction(
     '[Common Action] Action failed',
     props<{
-        message: string
+        message: string | string[]
         timeout?: number
     }>()
 )

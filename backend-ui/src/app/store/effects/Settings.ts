@@ -1,26 +1,26 @@
-import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Observable, of } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { Actions, Effect, ofType } from '@ngrx/effects'
+import { Observable, of } from 'rxjs'
 
-import { switchMap, map, tap, catchError } from 'rxjs/operators';
+import { switchMap, map, tap, catchError } from 'rxjs/operators'
 
-import * as DETAILS from '@store_actions/Details'
+import * as SETTINGS from '@store_actions/Settings'
 import * as COMMON_ACTIONS from '@store_actions/Common'
 
 import { DataService } from '@services/data/data.service'
 
 import {
-    QueryDetails,
-    MutateDetails
+    QuerySettings,
+    MutateSettings
 } from '@services/data/queries'
-import { DetailsFetched, DetailsType } from '@app/types/Details'
+import { SettingsFetched, SettingsType } from '@app/types/Settings'
 import { TranslationService } from '@app/services/translation/translation.service'
-import { logEasy } from '@app/services/logging/logging.service';
+import { logEasy } from '@app/services/logging/logging.service'
 
 @Injectable()
-export class DetailsEffects {
+export class SettingsEffects {
 
-    translationsToRequest = ['Details saved successfully', 'Error']
+    translationsToRequest = ['Settings saved successfully']
 
     constructor(
         private actions$: Actions,
@@ -35,24 +35,22 @@ export class DetailsEffects {
      * a result of the operation performed
      */
     @Effect()
-    public fetchDetailsEffect$: Observable<any> = this.actions$.pipe(
-        ofType<ReturnType<typeof DETAILS.FETCH_DETAILS>>(DETAILS.FETCH_DETAILS),
+    public fetchSettingsEffect$: Observable<any> = this.actions$.pipe(
+        ofType<ReturnType<typeof SETTINGS.FETCH_SETTINGS>>(SETTINGS.FETCH_SETTINGS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
                 language,
             } = action
 
-            const vars = {
-                language,
-            }
+            const {
+                query,
+                variables,
+            } = QuerySettings(language)
 
-            return this.dataService.readData(QueryDetails, vars).pipe(
-                map((details: DetailsFetched) => {
-                    return {
-                        type: DETAILS.DETAILS_FETCHED.type,
-                        ...details
-                    };
+            return this.dataService.readData(query, variables).pipe(
+                map((settings: SettingsFetched) => {
+                    return SETTINGS.SETTINGS_FETCHED({...settings})
                 }),
                 // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
@@ -60,45 +58,46 @@ export class DetailsEffects {
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)
-                    });
+                    })
                 })
             )
         })
-    );
+    )
 
         /**
      * Effect provides new actions as
      * a result of the operation performed
      */
     @Effect()
-    public mutateDetailsEffect$: Observable<any> = this.actions$.pipe(
-        ofType<ReturnType<typeof DETAILS.SAVE_DETAILS>>(DETAILS.SAVE_DETAILS),
+    public mutateSettingsEffect$: Observable<any> = this.actions$.pipe(
+        ofType<ReturnType<typeof SETTINGS.SAVE_SETTINGS>>(SETTINGS.SAVE_SETTINGS),
         tap((action) => logEasy({messages: [`Action caught in ${this.constructor.name}:`, action]})),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
-                details,
+                settings,
             } = action
 
-            const vars = {
-                details,
-            }
+            const {
+                query,
+                variables,
+            } = MutateSettings(settings)
 
-            return this.dataService.setData(MutateDetails, vars).pipe(
-                map((details: DetailsType) => {
+            return this.dataService.setData(query, variables).pipe(
+                map((settings: SettingsType) => {
                     return {
                         type: COMMON_ACTIONS.SUCCESS.type,
-                        message: `${this.translate.getResolvedTranslation('Details saved successfully', this)}`
-                    };
+                        message: `${this.translate.getResolvedTranslation('Settings saved successfully', this)}`
+                    }
                 }),
                 // handle failure in todoListService.fetchTodoList()
-                catchError((error) => {
-                    const { error: {errors = []} = {} } = error || {}
-                    return of({
-                        type: COMMON_ACTIONS.FAIL.type,
-                        message: errors.map(error => error.message)
-                    });
+                catchError(({
+                    error: {
+                        errors = []
+                    } = {}
+                }) => {
+                    return of(COMMON_ACTIONS.FAIL({message: errors.map(error => error.message), timeout: 2000}))
                 })
             )
         })
-    );
+    )
 }

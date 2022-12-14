@@ -63,13 +63,11 @@ export class LocaleEffects {
                     );
                 }),
                 // handle failure in todoListService.fetchTodoList()
-                catchError((error) => {
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
-                        message: `${this.translate.getResolvedTranslation(
-                            'Error',
-                            this
-                        )}: ${error}`
+                        message: errors.map(error => error.message),
                     });
                 })
             )

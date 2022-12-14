@@ -4,4 +4,18 @@
     position: fixed;
     width: 100%;
     height: 100%;
+
+
+}
+
+::ng-deep .SnackFailed {
+    background-color: red;
+    font-weight: bold;
+    color: white;
+}
+
+::ng-deep .SnackSuccess {
+    background-color: green;
+    font-weight: bold;
+    color: white;
 }

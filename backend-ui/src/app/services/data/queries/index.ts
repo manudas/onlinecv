@@ -6,6 +6,8 @@ export * from './Languages'
 
 export * from './Locale'
 
+export * from './Settings'
+
 export * from './Skills'
 
 export * from './SocialNetworks'

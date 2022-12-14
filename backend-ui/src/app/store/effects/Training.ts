@@ -71,10 +71,11 @@ export class TrainingEffects {
                         }
                     )
                 }),
-                catchError((error) => {
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
                     return of(COMMON_ACTIONS.FAIL(
                         {
-                            message: `${this.translate.getResolvedTranslation('Error', this)}: ${JSON.stringify(error)}`
+                            message: errors.map(error => error.message)
                         }
                     ))
                 })
@@ -116,7 +117,7 @@ export class TrainingEffects {
                     const { error: {errors = []} = {} } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)
                     return of(COMMON_ACTIONS.FAIL({
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
+                        message: errors.map(error => error.message),
                         timeout: 2000
                     }))
                 })
@@ -158,7 +159,7 @@ export class TrainingEffects {
                     const { error: {errors = []} = {} } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)
                     return of(COMMON_ACTIONS.FAIL({
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
+                        message: errors.map(error => error.message),
                         timeout: 2000
                     }))
                 })

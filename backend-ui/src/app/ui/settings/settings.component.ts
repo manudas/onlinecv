@@ -9,7 +9,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 import * as ACTION_SETTINGS from '@store_actions/Settings'
 import { logEasy } from '@app/services/logging'
 
-type StoreType = { locale: LocaleStore } & { settings: {data: SettingsComponent } }
+type StoreType = { locale: LocaleStore } & { settings: {data: SettingsType } }
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
