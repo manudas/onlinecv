@@ -15,8 +15,8 @@ import {
     MatIconModule
 } from '@angular/material/icon'
 import {
-    MatSelectModule
-} from '@angular/material/select'
+    MatLegacySelectModule as MatSelectModule
+} from '@angular/material/legacy-select'
 import {
     TranslationServiceModule
 } from '@services/translation';

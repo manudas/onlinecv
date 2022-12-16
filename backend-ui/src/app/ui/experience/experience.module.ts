@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { MatTableModule } from '@angular/material/table';
+import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 

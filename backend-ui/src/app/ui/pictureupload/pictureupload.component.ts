@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener, Input, Output, EventEmitter, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core'
-import { MatDialog } from '@angular/material/dialog'
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { logEasy } from '@app/services/logging'
 import { PictureOptions } from '@app/types/Picture'
 import { attachUrlDataTypeToBase64, removeUrlDataFromBase64 } from '@app/utils/Images'

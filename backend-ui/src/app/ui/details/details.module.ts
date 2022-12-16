@@ -9,8 +9,8 @@ import {
 } from '@angular/cdk/drag-drop'
 
 import {
-    MatTableModule
-} from "@angular/material/table"
+    MatLegacyTableModule as MatTableModule
+} from "@angular/material/legacy-table"
 
 import {
     FontAwesomeModule

@@ -6,8 +6,8 @@ import {
 } from '@angular/common';
 
 import {
-    MatTableModule
-} from "@angular/material/table";
+    MatLegacyTableModule as MatTableModule
+} from "@angular/material/legacy-table";
 
 import {
     FontAwesomeModule

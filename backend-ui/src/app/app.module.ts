@@ -11,9 +11,9 @@ import {  AppComponent } from './app.component'
 import {  NavbarModule } from './ui/navbar/navbar.module'
 import {  WrapperModule } from './ui/wrapper/wrapper.module'
 import {  BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import {  MatSnackBarModule } from '@angular/material/snack-bar'
+import {  MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar'
 // dialog will be used all along the app, so better to import here and reuse
-import {  MatDialogModule } from '@angular/material/dialog'
+import {  MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog'
 
 import {  TranslationServiceModule } from '@services/translation'
 
