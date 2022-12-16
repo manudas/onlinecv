@@ -7,7 +7,7 @@ import {
 } from '@ngrx/store';
 import * as TRANSLATE_ACTIONS from '@store_actions/Translation';
 
-export const initialState = {};
+export const initialState: TranslationStore = <TranslationStore>{};
 
 const translationReducer = createReducer(
     initialState,
@@ -225,6 +225,6 @@ const translationReducer = createReducer(
     }),
 )
 
-export function reducer(state: object, action) {
+export function reducer(state: TranslationStore, action) {
     return translationReducer(state, action)
 }
