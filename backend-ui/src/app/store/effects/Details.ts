@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 
 import { switchMap, map, tap, catchError } from 'rxjs/operators';
@@ -34,8 +34,8 @@ export class DetailsEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public fetchDetailsEffect$: Observable<any> = this.actions$.pipe(
+    
+    public fetchDetailsEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof DETAILS.FETCH_DETAILS>>(DETAILS.FETCH_DETAILS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -64,14 +64,14 @@ export class DetailsEffects {
                 })
             )
         })
-    );
+    ));
 
         /**
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public mutateDetailsEffect$: Observable<any> = this.actions$.pipe(
+    
+    public mutateDetailsEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof DETAILS.SAVE_DETAILS>>(DETAILS.SAVE_DETAILS),
         tap((action) => logEasy({messages: [`Action caught in ${this.constructor.name}:`, action]})),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -100,5 +100,5 @@ export class DetailsEffects {
                 })
             )
         })
-    );
+    ));
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 
 import {
@@ -43,8 +43,8 @@ export class LocaleEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public fetchLocaleEffect$: Observable<any> = this.actions$.pipe(
+    
+    public fetchLocaleEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType(LOCALE_ACTIONS.FETCH_AVAILABLE_LOCALES),
         tap((action) =>
             logEasy({
@@ -72,14 +72,14 @@ export class LocaleEffects {
                 })
             )
         )
-    );
+    ));
 
     /**
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect({ dispatch: false })
-    public setLocaleEffect$: Observable<any> = this.actions$.pipe(
+    
+    public setLocaleEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType(LOCALE_ACTIONS.SET_LOCALE),
         tap((action) =>
             logEasy(
@@ -93,5 +93,5 @@ export class LocaleEffects {
                 action as SET_LOCALE_ACTION_TYPE;
             this.cookieService.set('selectedLocale', iso);
         })
-    );
+    ), { dispatch: false });
 }

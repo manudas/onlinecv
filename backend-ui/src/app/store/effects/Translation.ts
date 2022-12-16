@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import {
     Actions,
-    Effect,
+    createEffect,
     ofType
 } from '@ngrx/effects';
 import {
@@ -63,8 +63,8 @@ export class TranslationEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public fetchTranslationsEffect$: Observable < any > = this.actions$.pipe(
+    
+    public fetchTranslationsEffect$: Observable < any > = createEffect(() => this.actions$.pipe(
         ofType(TRANSLATION_ACTIONS.FETCH_TRANSLATIONS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -100,13 +100,13 @@ export class TranslationEffects {
                 })
             )
         })
-    );
+    ));
 
     /**
      * Effect to request missing translations
      */
-    @Effect()
-    public fetchMissingTranslationsEffect$: Observable < any > = this.actions$.pipe(
+    
+    public fetchMissingTranslationsEffect$: Observable < any > = createEffect(() => this.actions$.pipe(
         ofType(TRANSLATION_ACTIONS.FETCH_MISSING_TRANSLATIONS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action: ReturnType < typeof TRANSLATION_ACTIONS.FETCH_MISSING_TRANSLATIONS > ) => { // if a new Actions arrives, the old Observable will be canceled
@@ -138,13 +138,13 @@ export class TranslationEffects {
                 })
             )
         })
-    );
+    ));
 
     /**
      * Effect to request translated translations
      */
-    @Effect()
-    public fetchTranslatedTranslationsEffect$: Observable < any > = this.actions$.pipe(
+    
+    public fetchTranslatedTranslationsEffect$: Observable < any > = createEffect(() => this.actions$.pipe(
         ofType(TRANSLATION_ACTIONS.FETCH_TRANSLATED_TRANSLATIONS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action: ReturnType < typeof TRANSLATION_ACTIONS.FETCH_TRANSLATED_TRANSLATIONS > ) => { // if a new Actions arrives, the old Observable will be canceled
@@ -175,14 +175,14 @@ export class TranslationEffects {
                 })
             )
         })
-    );
+    ));
 
 
     /**
      * Effect to request the upsert of a given translation
      */
-    @Effect()
-    public saveTranslationEffect$: Observable < any > = this.actions$.pipe(
+    
+    public saveTranslationEffect$: Observable < any > = createEffect(() => this.actions$.pipe(
         ofType(TRANSLATION_ACTIONS.SAVE_TRANSLATION),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
 
@@ -214,13 +214,13 @@ export class TranslationEffects {
                 })
             )
         })
-    );
+    ));
 
     /**
      * Effect to request the deletion of a given translation
      */
-    @Effect()
-    public deleteTranslationEffect$: Observable < any > = this.actions$.pipe(
+    
+    public deleteTranslationEffect$: Observable < any > = createEffect(() => this.actions$.pipe(
         ofType(TRANSLATION_ACTIONS.DELETE_TRANSLATION),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
 
@@ -252,5 +252,5 @@ export class TranslationEffects {
                 })
             )
         })
-    );
+    ));
 }

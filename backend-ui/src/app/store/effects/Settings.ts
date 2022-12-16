@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { Actions, Effect, ofType } from '@ngrx/effects'
+import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Observable, of } from 'rxjs'
 
 import { switchMap, map, tap, catchError } from 'rxjs/operators'
@@ -34,8 +34,8 @@ export class SettingsEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public fetchSettingsEffect$: Observable<any> = this.actions$.pipe(
+    
+    public fetchSettingsEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof SETTINGS.FETCH_SETTINGS>>(SETTINGS.FETCH_SETTINGS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -62,14 +62,14 @@ export class SettingsEffects {
                 })
             )
         })
-    )
+    ))
 
         /**
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public mutateSettingsEffect$: Observable<any> = this.actions$.pipe(
+    
+    public mutateSettingsEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof SETTINGS.SAVE_SETTINGS>>(SETTINGS.SAVE_SETTINGS),
         tap((action) => logEasy({messages: [`Action caught in ${this.constructor.name}:`, action]})),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -99,5 +99,5 @@ export class SettingsEffects {
                 })
             )
         })
-    )
+    ))
 }
