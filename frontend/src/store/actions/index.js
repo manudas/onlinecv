@@ -1,17 +1,17 @@
 import Cookies from 'universal-cookie';
 
-import { LANG_COOKIE } from '../../helpers/constants';
+import { LANG_COOKIE } from 'helpers/constants';
 
 import {
     getUserIntroductionQuery,
     getUserFullResumeQuery
-} from '../../queries/getResume';
+} from 'queries/getResume';
 
 import {
     getTranslationsQuery,
-} from '../../queries/getTranslations';
+} from 'queries/getTranslations';
 
-import { DataService } from '../../queries/data.service';
+import { DataService } from 'queries/data.service';
 
 export const getUserDataAction = 'getUserData';
 export function requestUserDataLoad(lang) {
@@ -22,7 +22,7 @@ export function requestUserDataLoad(lang) {
             variables: variablesUserData
         } = getUserIntroductionQuery(lang);
         const dataService = DataService.factory();
-        const { details } = await dataService.readData(
+        const { data: { details } } = await dataService.readData(
             queryUserData,
             variablesUserData
         );
@@ -36,16 +36,12 @@ export function requestUserDataLoad(lang) {
             query: queryUserDetails,
             variables: variablesUserDetails
         } = getUserFullResumeQuery(lang);
-        const fullDetails = await dataService.readData(
+        const { data: fullDetails } = await dataService.readData(
             queryUserDetails,
             variablesUserDetails
         );
 
         dispatch(userDetailsLoadAction({ resume: fullDetails }));
-        // dispatch({
-        //     type: userDetailsLoad,
-        //     payload: { resume: fullDetails }
-        // });
     };
 }
 
@@ -65,7 +61,7 @@ export function requestTranslations(lang, moduleTagsPairs) {
             variables
         } = getTranslationsQuery(lang, tags, modules, domain);
         const dataService = DataService.factory();
-        const { translations } = await dataService.readData(
+        const { data: { translations } } = await dataService.readData(
             query,
             variables
         );

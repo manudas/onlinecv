@@ -4,9 +4,9 @@ import { select, Store } from '@ngrx/store'
 import { Component, Inject } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import {
-    MatLegacyDialogRef as MatDialogRef,
-    MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA,
-} from "@angular/material/legacy-dialog"
+    MatDialogRef,
+    MAT_DIALOG_DATA,
+} from "@angular/material/dialog"
 import { EditExperienceStructure, ExperienceInterface, ExperienceType } from "@app/types/Experience";
 import { LocaleStore } from '@app/types';
 import { Observable } from 'rxjs';

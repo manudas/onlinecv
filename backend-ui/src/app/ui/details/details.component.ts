@@ -15,7 +15,7 @@ import * as SOCIAL_NETWORK_ACTIONS from '@store_actions/SocialNetworks'
 
 import { DetailsType, EditSocialNetworkStructure, LocaleStore, SocialNetwork } from '@app/types'
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 import { TranslationService } from '@app/services/translation/translation.service'
 

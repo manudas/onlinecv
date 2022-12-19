@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import { Component, OnInit, Input } from '@angular/core'
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { MatDialog } from '@angular/material/dialog'
 import { ActivatedRoute } from '@angular/router'
 import { logEasy } from '@app/services/logging'
 import { EditExperienceStructure, ExperienceInterface, ExperienceType } from '@app/types/Experience'

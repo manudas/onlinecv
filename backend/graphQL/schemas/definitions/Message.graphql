@@ -2,7 +2,6 @@ input Message {
   from: String!
   name: String!
   subject: String!
-  email: String!
   message: String!
 }
 

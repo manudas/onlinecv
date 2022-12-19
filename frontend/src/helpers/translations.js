@@ -105,7 +105,8 @@ const getTranslation = (
 export const translateString = (tag, module) => {
     const state = store.getState();
     const { language = DEFAULT_LANGUAGE_ISO } = state;
-    const module_name = module.constructor.name;
+    // module can be a class instance or a string
+    const module_name = module?.constructor?.name  === "String" ? module : module?.constructor?.name;
     let translation = getTranslation(
         tag,
         module_name,

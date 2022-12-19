@@ -11,9 +11,9 @@ import {  AppComponent } from './app.component'
 import {  NavbarModule } from './ui/navbar/navbar.module'
 import {  WrapperModule } from './ui/wrapper/wrapper.module'
 import {  BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import {  MatLegacySnackBarModule as MatSnackBarModule } from '@angular/material/legacy-snack-bar'
+import {  MatSnackBarModule } from '@angular/material/snack-bar'
 // dialog will be used all along the app, so better to import here and reuse
-import {  MatLegacyDialogModule as MatDialogModule } from '@angular/material/legacy-dialog'
+import {  MatDialogModule } from '@angular/material/dialog'
 
 import {  TranslationServiceModule } from '@services/translation'
 
@@ -32,6 +32,7 @@ import {  reducer as languageReducer } from '@store_reducers/Languages'
 import {  reducer as localeReducer } from '@store_reducers/Locale'
 import {  reducer as translationReducer } from '@store_reducers/Translation'
 import {  reducer as messageReducer } from '@store_reducers/Message'
+import {  reducer as settingsReducer } from '@store_reducers/Settings'
 import {  reducer as skillsReducer } from '@store_reducers/Skills'
 import {  reducer as socialNetworkReducer } from '@store_reducers/SocialNetworks'
 import {  reducer as trainingReducer } from '@store_reducers/Trainings'
@@ -78,6 +79,7 @@ if (environment.production) {
             locale: localeReducer,
             translation: translationReducer,
             message: messageReducer,
+            settings: settingsReducer,
             skills: skillsReducer,
             socialNetworks: socialNetworkReducer,
             trainings: trainingReducer

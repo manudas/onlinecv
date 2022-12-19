@@ -6,7 +6,7 @@ import { useMemo } from '@utils/index'
 import { LocaleStore, ModuleTagPairType, TranslationStore, MessageType } from './types';
 import { select, Store } from '@ngrx/store';
 import { FETCH_TRANSLATIONS } from '@store_actions/Translation';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { TRANSLATION_DOMAIN } from './utils/constants'
 
 import * as COMMON_ACTIONS from '@store_actions/Common'
