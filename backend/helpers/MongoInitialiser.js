@@ -10,10 +10,7 @@ const {
     database
 } = mongodb_settings;
 
-const credentials_str = (user && user.length > 0 &&
-        password && password.lenght > 0) ?
-    `${user}:${password}@` :
-    '';
+const credentials_str = (user && password) ? `${user}:${password}@` : '';
 
 /*
 const connetion_string =

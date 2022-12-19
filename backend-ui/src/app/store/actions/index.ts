@@ -10,4 +10,6 @@ export * from './Common'
 
 export * from './Training'
 
+export * from './Settings'
+
 export * from './Skills'

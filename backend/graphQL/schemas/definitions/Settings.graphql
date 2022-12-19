@@ -1,0 +1,30 @@
+input SettingsInput {
+  backgroundImage: String
+  sendToEmail: Boolean!
+  smtpServer: String
+  smtpPort: Int
+  smtpUsername: String
+  smtpPassword: String
+  messagingEmail: String
+  language: String!
+}
+
+type Settings {
+  _id: ID!
+  backgroundImage: String
+  sendToEmail: Boolean!
+  smtpServer: String
+  smtpPort: Int
+  smtpUsername: String
+  smtpPassword: String
+  messagingEmail: String
+  language: String!
+}
+
+extend type Query {
+  settings(language: String!): Settings
+}
+
+extend type Mutation {
+  putSettings(settings: SettingsInput!): Boolean!
+}

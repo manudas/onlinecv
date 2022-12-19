@@ -16,4 +16,6 @@ export * from './Training'
 
 export * from './Translations'
 
+export * from './Settings'
+
 export * from './Skills'

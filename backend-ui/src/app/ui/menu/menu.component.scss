@@ -1,6 +1,8 @@
 /* Importing Bootstrap SCSS file. */
 
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';
+@import '../../globals/styles';
+
 .dropdown {
     color: #777777;
     &-menu {
@@ -78,7 +80,9 @@
     }
     &_badge {
         @extend .badge;
-        @extend .badge-secondary;
+
+        background-color: $darkerGrey;
+
         font-size: 0.8rem;
         padding: 3px 7px;
         display: inline-flex;

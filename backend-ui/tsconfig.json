@@ -3,15 +3,33 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@app/*": ["src/app/*"],
-      "@utils/*": ["src/app/utils/*"],
-      "@ui/*": ["src/app/ui/*"],
-      "@services/*": ["src/app/services/*"],
-      "@data_types/*": ["src/app/types/*"],
-      "@store/*": ["src/app/store/*"],
-      "@store_reducers/*": ["src/app/store/reducers/*"],
-      "@store_actions/*": ["src/app/store/actions/*"],
-      "@store_effects/*": ["src/app/store/effects/*"],
+      "@app/*": [
+        "src/app/*"
+      ],
+      "@utils/*": [
+        "src/app/utils/*"
+      ],
+      "@ui/*": [
+        "src/app/ui/*"
+      ],
+      "@services/*": [
+        "src/app/services/*"
+      ],
+      "@data_types/*": [
+        "src/app/types/*"
+      ],
+      "@store/*": [
+        "src/app/store/*"
+      ],
+      "@store_reducers/*": [
+        "src/app/store/reducers/*"
+      ],
+      "@store_actions/*": [
+        "src/app/store/actions/*"
+      ],
+      "@store_effects/*": [
+        "src/app/store/effects/*"
+      ]
     },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
@@ -21,11 +39,12 @@
     "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2015",
+    "target": "ES2022",
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

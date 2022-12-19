@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 
 import { switchMap, mergeMap, map, tap, catchError } from 'rxjs/operators';
@@ -47,8 +47,8 @@ export class ExperienceEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public fetchExperience$: Observable<any> = this.actions$.pipe(
+    
+    public fetchExperience$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof EXPERIENCE_ACTIONS.FETCH_EXPERIENCE>>(EXPERIENCE_ACTIONS.FETCH_EXPERIENCE),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         mergeMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -71,23 +71,24 @@ export class ExperienceEffects {
                         }
                     )
                 }),
-                catchError((error) => {
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
                     return of(COMMON_ACTIONS.FAIL(
                         {
-                            message: `${this.translate.getResolvedTranslation('Error', this)}: ${JSON.stringify(error)}`
+                            message: errors.map(error => error.message)
                         }
                     ))
                 })
             )
         })
-    )
+    ))
 
     /**
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public mutateExperiencesEffect$: Observable<any> = this.actions$.pipe(
+    
+    public mutateExperiencesEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof EXPERIENCE_ACTIONS.SAVE_EXPERIENCES>>(EXPERIENCE_ACTIONS.SAVE_EXPERIENCES),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -115,20 +116,20 @@ export class ExperienceEffects {
                     const { error: {errors = []} = {} } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)
                     return of(COMMON_ACTIONS.FAIL({
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
+                        message: errors.map(error => error.message),
                         timeout: 2000
                     }))
                 })
             )
         })
-    )
+    ))
 
     /**
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public removeExperienceEffect$: Observable<any> = this.actions$.pipe(
+    
+    public removeExperienceEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof EXPERIENCE_ACTIONS.REMOVE_EXPERIENCE>>(EXPERIENCE_ACTIONS.REMOVE_EXPERIENCE),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -154,13 +155,12 @@ export class ExperienceEffects {
                 // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
-                    const messages = errors.map(({message = ''} = {}) => message)
                     return of(COMMON_ACTIONS.FAIL({
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
+                        message: errors.map(error => error.message),
                         timeout: 2000
                     }))
                 })
             )
         })
-    );
+    ));
 }

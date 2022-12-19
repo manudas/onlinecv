@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 
 import { switchMap, mergeMap, map, tap, catchError } from 'rxjs/operators';
@@ -47,8 +47,8 @@ export class TrainingEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public fetchTraining$: Observable<any> = this.actions$.pipe(
+    
+    public fetchTraining$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof TRAINING_ACTIONS.FETCH_TRAINING>>(TRAINING_ACTIONS.FETCH_TRAINING),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         mergeMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -71,23 +71,24 @@ export class TrainingEffects {
                         }
                     )
                 }),
-                catchError((error) => {
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
                     return of(COMMON_ACTIONS.FAIL(
                         {
-                            message: `${this.translate.getResolvedTranslation('Error', this)}: ${JSON.stringify(error)}`
+                            message: errors.map(error => error.message)
                         }
                     ))
                 })
             )
         })
-    )
+    ))
 
     /**
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public mutateTrainingsEffect$: Observable<any> = this.actions$.pipe(
+    
+    public mutateTrainingsEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof TRAINING_ACTIONS.SAVE_TRAININGS>>(TRAINING_ACTIONS.SAVE_TRAININGS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -116,20 +117,20 @@ export class TrainingEffects {
                     const { error: {errors = []} = {} } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)
                     return of(COMMON_ACTIONS.FAIL({
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
+                        message: errors.map(error => error.message),
                         timeout: 2000
                     }))
                 })
             )
         })
-    )
+    ))
 
     /**
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public removeTrainingEffect$: Observable<any> = this.actions$.pipe(
+    
+    public removeTrainingEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof TRAINING_ACTIONS.REMOVE_TRAINING>>(TRAINING_ACTIONS.REMOVE_TRAINING),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -158,11 +159,11 @@ export class TrainingEffects {
                     const { error: {errors = []} = {} } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)
                     return of(COMMON_ACTIONS.FAIL({
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
+                        message: errors.map(error => error.message),
                         timeout: 2000
                     }))
                 })
             )
         })
-    );
+    ));
 }

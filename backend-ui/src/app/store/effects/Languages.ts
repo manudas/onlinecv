@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 
 import { switchMap, mergeMap, map, tap, catchError } from 'rxjs/operators';
@@ -47,8 +47,8 @@ export class LanguageEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public fetchLanguages$: Observable<any> = this.actions$.pipe(
+    
+    public fetchLanguages$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof LANGUAGE_ACTIONS.FETCH_LANGUAGES>>(LANGUAGE_ACTIONS.FETCH_LANGUAGES),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         mergeMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -68,23 +68,24 @@ export class LanguageEffects {
                         }
                     )
                 }),
-                catchError((error) => {
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
                     return of(COMMON_ACTIONS.FAIL(
                         {
-                            message: `${this.translate.getResolvedTranslation('Error', this)}: ${JSON.stringify(error)}`
+                            message: errors.map(error => error.message)
                         }
                     ))
                 })
             )
         })
-    )
+    ))
 
     /**
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public mutateLanguagesEffect$: Observable<any> = this.actions$.pipe(
+    
+    public mutateLanguagesEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof LANGUAGE_ACTIONS.SAVE_LANGUAGES>>(LANGUAGE_ACTIONS.SAVE_LANGUAGES),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -108,22 +109,21 @@ export class LanguageEffects {
                 // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
-                    const messages = errors.map(({message = ''} = {}) => message)
                     return of(COMMON_ACTIONS.FAIL({
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
+                        message: errors.map(error => error.message),
                         timeout: 2000
                     }))
                 })
             )
         })
-    )
+    ))
 
     /**
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public removeLanguageEffect$: Observable<any> = this.actions$.pipe(
+    
+    public removeLanguageEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof LANGUAGE_ACTIONS.REMOVE_LANGUAGE>>(LANGUAGE_ACTIONS.REMOVE_LANGUAGE),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -147,13 +147,12 @@ export class LanguageEffects {
                 // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
-                    const messages = errors.map(({message = ''} = {}) => message)
                     return of(COMMON_ACTIONS.FAIL({
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
+                        message: errors.map(error => error.message),
                         timeout: 2000
                     }))
                 })
             )
         })
-    );
+    ));
 }

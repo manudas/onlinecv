@@ -1,4 +1,4 @@
-version: '3.7' #version of docker compose format document
+version: '3.9' #version of docker compose format document
 services:
   db:
     build:
@@ -9,9 +9,7 @@ services:
      - "27017:27017"
     volumes:
      - ./data/mongo/db:/data/db #data/db is where mongo stores database files
-    # # uncomment when you have created an admin user & a DB user
-    # command:
-    #  - mongod --bind_ip 0.0.0.0 --authç
+     - ./data/config/mongodb/init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     env_file:
      - "dockerMongo/.env"
     healthcheck:
@@ -21,6 +19,9 @@ services:
       retries: 3
       start_period: 40s
     restart: on-failure
+    secrets:
+      - app_mongo_password
+      - app_mongo_root_password
   backend:
     build:
         context: dockerNode
@@ -63,3 +64,8 @@ services:
 
 #docker run -d --name mongo -p 27017:27017 -v /data/mongo/:/data/mongo mvertes/alpine-mongo
 #docker run -d -p 80:80 -v /data:/data --name onlinecv onlinecv
+secrets:
+  app_mongo_password:
+    file: ./data/config/mongodb/app_mongo_password.txt
+  app_mongo_root_password:
+    file: ./data/config/mongodb/app_mongo_root_password.txt

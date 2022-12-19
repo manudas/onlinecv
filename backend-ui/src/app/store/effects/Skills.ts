@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Observable, of } from 'rxjs';
 
 import { switchMap, mergeMap, map, tap, catchError } from 'rxjs/operators';
@@ -47,8 +47,8 @@ export class SkillEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public fetchSkills$: Observable<any> = this.actions$.pipe(
+    
+    public fetchSkills$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof SKILLS_ACTIONS.FETCH_SKILLS>>(SKILLS_ACTIONS.FETCH_SKILLS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         mergeMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -71,23 +71,24 @@ export class SkillEffects {
                         }
                     )
                 }),
-                catchError((error) => {
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
                     return of(COMMON_ACTIONS.FAIL(
                         {
-                            message: `${this.translate.getResolvedTranslation('Error', this)}: ${JSON.stringify(error)}`
+                            message: errors.map(error => error.message)
                         }
                     ))
                 })
             )
         })
-    )
+    ))
 
     /**
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public mutateSkillsEffect$: Observable<any> = this.actions$.pipe(
+    
+    public mutateSkillsEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof SKILLS_ACTIONS.SAVE_SKILLS>>(SKILLS_ACTIONS.SAVE_SKILLS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -113,22 +114,22 @@ export class SkillEffects {
                 // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
-                    const messages = errors.map(({message = ''} = {}) => message)
-                    return of(COMMON_ACTIONS.FAIL({
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
-                        timeout: 2000
-                    }))
+                    return of(COMMON_ACTIONS.FAIL(
+                        {
+                            message: errors.map(error => error.message)
+                        }
+                    ))
                 })
             )
         })
-    )
+    ))
 
     /**
      * Effect provides new actions as
      * a result of the operation performed
      */
-    @Effect()
-    public removeSkillEffect$: Observable<any> = this.actions$.pipe(
+    
+    public removeSkillEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof SKILLS_ACTIONS.REMOVE_SKILL>>(SKILLS_ACTIONS.REMOVE_SKILL),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
@@ -154,13 +155,12 @@ export class SkillEffects {
                 // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
-                    const messages = errors.map(({message = ''} = {}) => message)
                     return of(COMMON_ACTIONS.FAIL({
-                        message: `${this.translate.getResolvedTranslation('Error', this)}: ${messages.length ? messages.join('\n') : JSON.stringify(response)}`,
+                        message: errors.map(error => error.message),
                         timeout: 2000
                     }))
                 })
             )
         })
-    );
+    ));
 }

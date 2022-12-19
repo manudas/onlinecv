@@ -1,0 +1,105 @@
+<app-card [icon]="cardIcon"
+    [iconClass]="'mr-1'"
+    [panelBody]="panelBody"
+    [cardTitle]="title | translate | async">
+</app-card>
+
+<ng-template #panelBody>
+    <fieldset>
+        <legend>{{'Settings' | translate | async}}</legend>
+        <div class="form-group">
+            <label class="control-label">{{'Resume background image' | translate | async}}</label>
+            <app-pictureupload
+                [isLargeImage]="true"
+                [name]="'Set a background image for your online Resume' | translate | async"
+               [(imageData)]="backgroundImage"
+            ></app-pictureupload>
+        </div>
+        <form
+            [formGroup]="settingsFormGroup"
+        >
+            <div class='form-group'>
+                <label class='control-label'>{{'Enable email messaging system' | translate | async}}</label>
+                <mat-checkbox class='form-control checkbox' [aria-label]="'isMessagingToEmailEnabled'" formControlName="sendToEmail">
+                    {{'Check to introduce your email server details' | translate | async}}
+                </mat-checkbox>
+            </div>
+            <div class='form-group'>
+                <label class='control-label'>{{'SMTP Server' | translate | async}}</label>
+                <input class='form-control'
+                    formControlName="smtpServer"
+                    [placeholder]="'Enter your SMTP Sever' | translate | async">
+                <small
+                    *ngIf="settingsFormGroup.get('smtpServer').touched && settingsFormGroup.get('smtpServer').errors"
+                    [className]="'text-danger'"
+                >
+                    {{'SMTP Server should be provided if checkbox for email system is checked' | translate | async}}
+                </small>
+            </div>
+            <div class='form-group'>
+                <label class='control-label'>{{'SMTP Server port' | translate | async}}</label>
+                <input class='form-control'
+                    formControlName="smtpPort"
+                    [placeholder]="'Enter the SMTP Server port' | translate | async">
+                <small
+                    *ngIf="settingsFormGroup.get('smtpPort').touched && settingsFormGroup.get('smtpPort').errors"
+                    [className]="'text-danger'"
+                >
+                    {{'SMTP Server port should be provided if checkbox for email system is checked' | translate | async}}
+                </small>
+            </div>
+            <div class='form-group'>
+                <label class='control-label'>{{'SMTP Server Username' | translate | async}}</label>
+                <input class='form-control'
+                    formControlName="smtpUsername"
+                    [placeholder]="'Enter server username' | translate | async">
+                <small
+                    *ngIf="settingsFormGroup.get('smtpUsername').touched && settingsFormGroup.get('smtpUsername').errors"
+                    [className]="'text-danger'"
+                >
+                    {{'SMTP Server username should be provided if checkbox for email system is checked' | translate | async}}
+                </small>
+            </div>
+            <div class='form-group'>
+                <label class='control-label'>{{'SMTP Server Password' | translate | async}}</label>
+                <input class='form-control'
+                    formControlName="smtpPassword"
+                    type="password"
+                    placeholder="*****************">
+                <small
+                    *ngIf="settingsFormGroup.get('smtpPassword').touched && settingsFormGroup.get('smtpPassword').errors"
+                    [className]="'text-danger'"
+                >
+                    {{'SMTP Server password should be provided if checkbox for email system is checked' | translate | async}}
+                </small>
+            </div>
+            <div class='form-group'>
+                <label class='control-label'>{{'Your destination email address' | translate | async}}</label>
+                <input class='form-control'
+
+                    formControlName="messagingEmail"
+                    [placeholder]="'Enter your email' | translate | async">
+                <small
+                    *ngIf="settingsFormGroup.get('messagingEmail').touched && settingsFormGroup.get('messagingEmail').errors"
+                    [className]="'text-danger'"
+                >
+                    {{'Destination email should be provided if checkbox for email system is checked' | translate | async}}
+                </small>
+                <p class='help-block'>{{'The email you want to receive your messages in' | translate | async}}</p>
+            </div>
+        </form>
+    </fieldset>
+
+    <div class='form-actions'>
+        <button [className]="'btn submitButton'"
+            type='submit'
+            ngbButton
+            (click)="submitHandler($event)"
+        >
+            {{ 'Submit' | translate | async}}
+        </button>
+        <button [className]="'btn btn-outline-info'"
+            type='reset'
+            ngbButton>Cancel</button>
+    </div>
+</ng-template>

@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, Input, ViewChild, ElementRef } from '@angular/core';
 
-import { Chart } from 'chart.js'
+import { Chart, DoughnutController, ArcElement } from 'chart.js'
 
 import { MaterialDesignColors } from './config/colors';
 
@@ -41,8 +41,10 @@ export class DoughnutChartComponent implements OnInit {
         },
         options: {
           responsive: false,
-          legend: {
-            display: this.displayLegend,
+          plugins: {
+            legend: {
+              display: this.displayLegend,
+            }
           },
           animation: {
             animateScale: true,
@@ -57,6 +59,7 @@ export class DoughnutChartComponent implements OnInit {
   constructor(private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
+    Chart.register(DoughnutController, ArcElement)
   }
 
   private getRandomColor(): string {

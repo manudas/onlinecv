@@ -1,6 +1,6 @@
 /* Importing Bootstrap SCSS file. */
 
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';
 :host {
     .progress {
         height: 2rem;
@@ -12,6 +12,10 @@
             border-radius: 0;
             height: 2rem;
             font-size: 1rem;
+            
+            & > * {
+                height: 100%;
+            }
         }
     }
 }

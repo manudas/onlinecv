@@ -1,6 +1,6 @@
 /* Importing Bootstrap SCSS file. */
 
-@import '~bootstrap/scss/bootstrap';
+@import 'bootstrap/scss/bootstrap';
 @import '../../globals/styles';
 
 :host {
@@ -103,7 +103,7 @@
         transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
     }
 
-    .cdk-drop-list-dragging .mat-row:not(.cdk-drag-placeholder) {
+    .cdk-drop-list-dragging .mat-mdc-row:not(.cdk-drag-placeholder) {
         transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
     }
     /* END OF DRAGGING EFFECTS */

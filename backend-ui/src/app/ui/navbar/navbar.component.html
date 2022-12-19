@@ -17,9 +17,12 @@
             [badge]="messageMenu.badge"
             [options]="messageMenu.options"></app-menu>
         <div>
-            <a [ngClass]="'navigation-bar_nav-link'">
+            <a
+                [routerLink]="'settings'"
+                [ngClass]="'navigation-bar_nav-link'">
                 <fa-icon [className]="'mr-1'"
-                    [icon]="faCog"></fa-icon> Settings
+                    [icon]="faCog"></fa-icon>
+                    Settings
             </a>
         </div>
         <app-menu [name]="userMenu.name"

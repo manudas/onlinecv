@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; // remove when in menumodule
+import { RouterModule } from '@angular/router';
 
 import { NavbarComponent } from './navbar.component';
 import { LanguageSelectorModule } from '@ui/language-selector/language-selector.module';
@@ -14,7 +14,7 @@ import { MenuModule } from '.././menu/menu.module';
     CommonModule,
     FontAwesomeModule,
     MenuModule,
-    NgbModule,
+    RouterModule,
     LanguageSelectorModule,
   ],
   exports: [NavbarComponent]

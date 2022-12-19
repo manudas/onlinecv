@@ -33,7 +33,7 @@ type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } } & {
 })
 export class DetailsComponent implements OnInit {
 
-  faEdit: IconDefinition = faEdit
+  cardIcon: IconDefinition = faEdit
   faTrash: IconDefinition = faTrash
   faArrowsAlt: IconDefinition = faArrowsAlt
 

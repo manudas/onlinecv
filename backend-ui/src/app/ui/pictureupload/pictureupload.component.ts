@@ -1,21 +1,26 @@
-import { Component, OnInit, HostListener, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { logEasy } from '@app/services/logging';
-import { PictureOptions } from '@app/types/Picture';
-import { attachUrlDataTypeToBase64, removeUrlDataFromBase64 } from '@app/utils/Images';
-import { ConfirmComponent } from './confirm.component';
+import { Component, OnInit, HostListener, Input, Output, EventEmitter, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core'
+import { MatDialog } from '@angular/material/dialog'
+import { logEasy } from '@app/services/logging'
+import { PictureOptions } from '@app/types/Picture'
+import { attachUrlDataTypeToBase64, removeUrlDataFromBase64 } from '@app/utils/Images'
+import { ConfirmComponent } from './confirm.component'
 
+declare var ResizeObserver
 @Component({
   selector: 'app-pictureupload',
   templateUrl: './pictureupload.component.html',
   styleUrls: ['./pictureupload.component.scss']
 })
-export class PictureuploadComponent implements OnInit {
+export class PictureuploadComponent implements OnInit, OnDestroy {
 
   @ViewChild('mediaFile') mediaFile
+  @ViewChild('imageContainer') imageContainer
 
   @Input()
-  name: string
+  name?: string
+  @Input()
+  isLargeImage?: boolean = false
+  largeImageHeight: number = 0
 
   _imageData: Blob
   @Input()
@@ -41,12 +46,27 @@ export class PictureuploadComponent implements OnInit {
 
   mouseOver: boolean = false // used to show some animations
 
-  // file is not needed, for now
-  // file: File = null;
+  private resizeObserverInstance
 
-  constructor(private matDialog: MatDialog) { }
+  constructor(private matDialog: MatDialog, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
+    if(this.isLargeImage) {
+      this.resizeObserverInstance = new ResizeObserver(
+          (entries) => {
+              entries.forEach((entry) => {
+                const { clientWidth } = this?.imageContainer?.nativeElement ?? {clientWidth: 0}
+                this.largeImageHeight = clientWidth
+                this.changeDetector.detectChanges()
+              })
+          }
+      )
+      this.resizeObserverInstance.observe(document.documentElement)
+    }
+  }
+
+  ngOnDestroy() {
+    this.resizeObserverInstance && this.resizeObserverInstance.unobserve(document.documentElement)
   }
 
   onClickHandler($event) {
@@ -58,18 +78,18 @@ export class PictureuploadComponent implements OnInit {
   }
 
   onDragOver($event) {
-    this.dragging = true;
-    $event.preventDefault();
+    this.dragging = true
+    $event.preventDefault()
   }
 
   onDragLeave($event) {
-    this.dragging = false;
+    this.dragging = false
   }
 
   getBase64ImageData = () => attachUrlDataTypeToBase64(this.imageData)
 
   onReceiveFile($event) {
-    this.dragging = false;
+    this.dragging = false
 
     const {
       dataTransfer: {
@@ -79,17 +99,15 @@ export class PictureuploadComponent implements OnInit {
 
     if (file) {
       // could be null when no file has been selected
-      const reader = new FileReader();
+      const reader = new FileReader()
 
       //attach event handlers here...
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file)
       reader.onload = function(e) {
-        // this.hasImage = true; // done in getter automatically now
         this.imageData = removeUrlDataFromBase64(reader.result)
-        // this.file = file
-      }.bind(this);
+      }.bind(this)
     }
-    $event.preventDefault();
+    $event.preventDefault()
   }
 
   resetInput($event = null) {
@@ -133,7 +151,7 @@ export class PictureuploadComponent implements OnInit {
     })
 
     dialogRef.afterClosed().subscribe(result => {
-      logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
+      logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '')
       switch (result) {
         case PictureOptions.delete:
           this.imageData = null
@@ -151,12 +169,12 @@ export class PictureuploadComponent implements OnInit {
   @HostListener('document:dragover', ['$event'])
   @HostListener('drop', ['$event'])
   onDragDropFileVerifyZone(event) {
-    if (event.target.matches('#profile')) {
+    if (event.target.matches('#dropArea')) {
       // In drop zone. I don't want listeners later in event-chain to meddle in here
-      event.stopPropagation();
+      event.stopPropagation()
     } else {
       // Outside of drop zone! Prevent default action, and do not show copy/move icon
-      event.preventDefault();
+      event.preventDefault()
       event.dataTransfer.effectAllowed = 'none'
       event.dataTransfer.dropEffect = 'none'
     }

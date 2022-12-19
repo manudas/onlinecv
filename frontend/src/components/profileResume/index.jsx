@@ -101,18 +101,11 @@ class ProfileResume extends Component {
 }
 
 function mapStateToProps(state) {
-    const {
-        data: {
-            resume: {
-                details,
-                details: { profileImage } = {}
-            } = {},
-        } = {},
-        language,
-        translations: {
-            [language]: { ProfileResume: translations } = {}
-        } = {}
-    } = state;
+    const data = state?.data
+    const language = state?.language
+    const details = state?.details
+    const profileImage = details?.profileImage
+    const translations = state?.[language]?.ProfileResume
 
     return {
         profilePicture: profileImage

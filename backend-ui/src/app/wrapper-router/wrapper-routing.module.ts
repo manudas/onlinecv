@@ -34,6 +34,9 @@ import {
 import {
     TranslationServiceModule
 } from '@app/services/translation'
+import {
+    SettingsModule
+} from '@app/ui/settings/settings.module'
 
 @NgModule({
     imports: [
@@ -45,6 +48,7 @@ import {
         SkillsModule,
         TranslationsModule,
         TranslationServiceModule,
+        SettingsModule,
         RouterModule.forRoot(routes, {
             enableTracing: isDevMode()
         }),
