@@ -11,8 +11,7 @@ import './work_experience.css';
 
 class WorkExperience extends Component {
     renderWorkExperienceItem(work_experience_item, index) {
-        const company_name =
-            work_experience_item.company ?? '';
+        const company_name = work_experience_item.company ?? '';
         const company = work_experience_item.company_url ? (
             <a
                 rel="noreferrer"
@@ -33,28 +32,16 @@ class WorkExperience extends Component {
             const starting_date = new Date(
                 Number(work_experience_item.start_date)
             );
-            starting_date_string =
-                starting_date.toLocaleDateString(
-                    this.language,
-                    options
-                );
+            starting_date_string = starting_date.toLocaleDateString(this.language, options);
         }
 
         let finishing_date_string = null;
         if (work_experience_item.finish_date) {
-            const finishing_date = new Date(
-                Number(work_experience_item.finish_date)
-            );
+            const finishing_date = new Date(Number(work_experience_item.finish_date));
             finishing_date_string =
-                finishing_date.toLocaleDateString(
-                    this.language,
-                    options
-                );
+                finishing_date.toLocaleDateString(this.language, options);
         } else {
-            finishing_date_string = translateString(
-                'current',
-                this
-            );
+            finishing_date_string = translateString('current', this);
         }
 
         /* SECTION ITEM */
@@ -72,12 +59,13 @@ class WorkExperience extends Component {
                         {work_experience_item.role}
                         {' - '}
                         <span className="job-date">
-                            {starting_date_string}
-                            {starting_date_string &&
-                            finishing_date_string
-                                ? ' - '
-                                : ''}
-                            {finishing_date_string}
+                            { starting_date_string }
+                            {
+                                starting_date_string && finishing_date_string
+                                    ? ' - '
+                                    : ''
+                            }
+                            { finishing_date_string }
                         </span>
                     </h4>
                     {/* Graduation time */}
@@ -86,9 +74,7 @@ class WorkExperience extends Component {
                         <p
                             className="text-justify"
                             dangerouslySetInnerHTML={{
-                                __html:
-                                    work_experience_item.description ??
-                                    null
+                                __html: work_experience_item.description ?? null
                             }}
                         />
                     </div>
@@ -100,29 +86,25 @@ class WorkExperience extends Component {
     }
 
     renderWorkExperienceItems() {
-        if (!this.props.experiences) {
-            return null;
-        } else {
-            return this.props.experiences.map(
-                (experience, index) => {
-                    return this.renderWorkExperienceItem(
-                        experience,
-                        index
-                    );
-                }
-            );
-        }
+        if (!this.props.experiences?.length) return null;
+        return this.props.experiences.map(
+            (experience, index) => {
+                return this.renderWorkExperienceItem(
+                    experience,
+                    index
+                );
+            }
+        );
     }
 
     renderTitle() {
         console.log('eliminar min-height 150 y pensar como clasificar por tipo de trabajo: profesional, ong y otros. Creo que mejor añadir solo tipo de trabajo')
+        if (!this.props.experiences?.length) return null;
         return <TimeLineHeader name={this.props.name} />
     }
 
     render() {
-        if (!this.props.experiences) {
-            return null;
-        }
+        if (!this.props.experiences?.length) return null;
         /* ====>> SECTION: WORK EXPERIENCE <<====*/
         return (
             <section

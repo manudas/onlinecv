@@ -1,31 +1,32 @@
-import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Observable, of } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { Actions, createEffect, ofType } from '@ngrx/effects'
+import { Observable, of } from 'rxjs'
 
 import {
     switchMap,
     map,
     tap,
     catchError
-} from 'rxjs/operators';
+} from 'rxjs/operators'
 
-import { CookieService } from 'ngx-cookie-service';
+import { CookieService } from 'ngx-cookie-service'
 
-import * as LOCALE_ACTIONS from '@store_actions/Locale';
-import * as COMMON_ACTIONS from '@store_actions/Common';
+import * as LOCALE_ACTIONS from '@store_actions/Locale'
+import * as COMMON_ACTIONS from '@store_actions/Common'
 
-import { DataService } from '@services/data/data.service';
-import { Locale as LocaleQuery } from '@services/data/queries';
+import { DataService } from '@services/data/data.service'
+import { Locale as LocaleQuery } from '@services/data/queries'
 import {
     getLocaleTypeRequest,
     SET_LOCALE_ACTION_TYPE
-} from '@app/types/Locale';
-import { TranslationService } from '@app/services/translation/translation.service';
-import { logEasy } from '@app/services/logging/logging.service';
+} from '@app/types/Locale'
+import { TranslationService } from '@app/services/translation/translation.service'
+import { logEasy } from '@app/services/logging/logging.service'
+import { LANG_COOKIE } from '@app/utils/constants'
 
 @Injectable()
 export class LocaleEffects {
-    translationsToRequest = ['Error'];
+    translationsToRequest = ['Error']
 
     constructor(
         private actions$: Actions,
@@ -36,7 +37,7 @@ export class LocaleEffects {
         this.translate.prefetch(
             this.translationsToRequest,
             this
-        );
+        )
     }
 
     /**
@@ -60,7 +61,7 @@ export class LocaleEffects {
                 map(({ locales }: getLocaleTypeRequest) => {
                     return LOCALE_ACTIONS.AVAILABLE_LOCALES_FETCHED(
                         { payload: [...locales] }
-                    );
+                    )
                 }),
                 // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
@@ -68,11 +69,11 @@ export class LocaleEffects {
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message),
-                    });
+                    })
                 })
             )
         )
-    ));
+    ))
 
     /**
      * Effect provides new actions as
@@ -88,10 +89,9 @@ export class LocaleEffects {
             )
         ),
         tap((action) => {
-            // if a new Actions arrives, the old Observable will be canceled
-            const { iso } =
-                action as SET_LOCALE_ACTION_TYPE;
-            this.cookieService.set('selectedLocale', iso);
+            const { iso } = action as SET_LOCALE_ACTION_TYPE
+            // set Cookie if there is a value to set
+            iso && this.cookieService.set(LANG_COOKIE, iso)
         })
-    ), { dispatch: false });
+    ), { dispatch: false })
 }

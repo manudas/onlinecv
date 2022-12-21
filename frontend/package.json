@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^5.2.3",
+    "buffer": "^6.0.3",
     "font-awesome": "^4.7.0",
     "gql-query-builder": "^3.8.0",
     "lodash": "^4.17.21",

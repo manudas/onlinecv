@@ -9,6 +9,7 @@ import {
 
 import * as ACTION_LOCALE from '@store_actions/Locale'
 import { Observable } from 'rxjs'
+import { LANG_COOKIE } from '@app/utils/constants'
 
 @Component({
   selector: 'app-language-selector',
@@ -27,7 +28,7 @@ export class LanguageSelectorComponent implements OnInit {
   filterInput: string
 
   constructor(private store: Store<{ locale: LocaleStore }>, private cookieService: CookieService) {
-    this.cookieLocale = this.cookieService.get('selectedLocale')
+    this.cookieLocale = this.cookieService.get(LANG_COOKIE)
   }
 
   ngOnInit(): void {
@@ -72,7 +73,7 @@ export class LanguageSelectorComponent implements OnInit {
   }
 
   onSelected($event) {
-    this.store.dispatch(ACTION_LOCALE.SET_LOCALE({
+    $event.value && this.store.dispatch(ACTION_LOCALE.SET_LOCALE({
       iso: $event.value
     }))
   }

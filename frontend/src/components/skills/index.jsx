@@ -16,7 +16,8 @@ class Skills extends Component {
          */
 
         const progressBarType = (index + 1) % 3;
-        const skillLevel = skill_item.skill_level;
+        // level is from 0 to 10 in server and to 100 in frontend
+        const skillLevel = skill_item.skill_level * 10.0;
         const skillName = skill_item.tag;
         const skillDescription = skill_item.description;
         /* SECTION ITEM */
@@ -92,13 +93,12 @@ class Skills extends Component {
     }
 
     renderTitle() {
+        if (!this.props.skills?.length) return null;
         return <TimeLineHeader name={this.props.name} />
     }
 
     render() {
-        if (!this.props.skills) {
-            return null;
-        }
+        if (!Object.keys(this.props.skills)?.length) return null;
         /* ====>> SECTION: SKILLS <<====*/
         return (
             <section

@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer'
+
 export const imageSignature = { // magic numbers
     'iVBORw0KGgo' : 'png',
     '/9j/': 'jpeg',

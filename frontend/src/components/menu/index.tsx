@@ -6,23 +6,18 @@ import { EventType } from "helpers/customEvents"
 
 import { PropDef, StateDef } from "./types"
 import { ComponentDef } from "helpers/types"
+import { translateString } from "helpers/translations"
 
 import "./menu.css"
 
 class Menu extends Component<PropDef, StateDef> {
-
-    onMouseEnter
-    closeMenu
-    onClickMenuOption
-    addResumeComponent
-
     constructor(props: PropDef) {
         super(props);
 
-        this.onMouseEnter = this._onMouseEnter.bind(this);
-		this.closeMenu = this._closeMenu.bind(this);
-        this.addResumeComponent = this._addResumeComponent.bind(this)
-        this.onClickMenuOption = this._onClickMenuOption.bind(this);
+        this.onMouseEnter = this.onMouseEnter.bind(this);
+		this.closeMenu = this.closeMenu.bind(this);
+        this.addResumeComponent = this.addResumeComponent.bind(this)
+        this.onClickMenuOption = this.onClickMenuOption.bind(this);
 
         this.state = {
             menu: "closed",
@@ -31,7 +26,7 @@ class Menu extends Component<PropDef, StateDef> {
         };
 	}
 
-    _addResumeComponent(customEvent: Event): void {
+    addResumeComponent(customEvent: Event): void {
         const data: ComponentDef = (customEvent as CustomEvent).detail
         const { component } = data
         if (component && "current" in component && component.current !== null) {
@@ -49,14 +44,14 @@ class Menu extends Component<PropDef, StateDef> {
         document.removeEventListener(EventType[EventType.SECTION_ADDED], this.addResumeComponent);
     }
 
-    _closeMenu() {
+    closeMenu() {
         this.setState({
             menu: "closed",
             previousMenuState: "closed",
         });
     }
 
-    _onMouseEnter() {
+    onMouseEnter() {
         this.setState({
             menu: "opened",
             previousMenuState: "closed",
@@ -72,7 +67,7 @@ class Menu extends Component<PropDef, StateDef> {
                 <a
                     href="#menu"
                     className="btn btn-default side-menu-button">
-                    <i className="fa fa-bars" /> MENU
+                    <i className="fa fa-bars" /> { translateString('MENU', this) }
                 </a>
                 {/*<!-- /menu-button -->*/}
             </div>
@@ -91,7 +86,7 @@ class Menu extends Component<PropDef, StateDef> {
 	 * Debouncing to avoid flooding
 	 * the app with dispatches
 	 */
-	_onClickMenuOption = debounce(index => {
+	onClickMenuOption = debounce(index => {
 		// Your code
         const clickEvent = new CustomEvent(EventType[EventType.SCROLL_TO_SECTION],
             { detail: { component: this.state.componentRefs[index].component, unique_id: Date.now() } }
@@ -115,9 +110,7 @@ class Menu extends Component<PropDef, StateDef> {
     }
 
     renderOptions() {
-        if ( this.state.componentRefs.length === 0 ) {
-            return null;
-        }
+        if ( this.state.componentRefs.length === 0 ) return null
 		const components = this.state.componentRefs
 
 		let name = this.props?.details?.name ?? 'Name example';
@@ -141,11 +134,11 @@ class Menu extends Component<PropDef, StateDef> {
                 {/*<!-- Menu header -->*/}
                 <div className="side-menu-name">
                     {/*<!-- edit with your name -->*/}
-                    {name} <strong>{surname}</strong>
+                    {name} <strong>{ surname }</strong>
                     {/*<!-- /edit with your name -->*/}
                 </div>
                 {/*<!-- edit with your Job -->*/}
-                <p className="side-menu-job">{jobNames}</p>
+                <p className="side-menu-job">{ jobNames }</p>
                 {/*<!-- /edit with your job -->*/}
                 {/*<!-- /Menu Header -->*/}
 
@@ -165,13 +158,13 @@ class Menu extends Component<PropDef, StateDef> {
                         href="#downloadResume"
                         className="btn btn-side-menu"
                     >
-                        <i className="fa fa-download" /> Download my resume
+                        <i className="fa fa-download" /> { translateString('Download my resume', this) }
                     </a>
                     <a
                         href="#sendMessage"
                         className="btn btn-side-menu"
                     >
-                        <i className="fa fa-envelope-o" /> Send me a message
+                        <i className="fa fa-envelope-o" /> { translateString('Send me a message', this) }
                     </a>
                 </div>
                 {/*<!-- /Other Buttons-->*/}
@@ -181,9 +174,6 @@ class Menu extends Component<PropDef, StateDef> {
     }
 
     render() {
-        if (!this.props.details || !this.props.language) {
-            return null;
-        }
         /*-- SIDE MENU
 		========================================================= */
         return (
@@ -210,6 +200,4 @@ function mapStateToProps(state: any) {
     };
 }
 
-export default connect(
-    mapStateToProps
-)(Menu);
+export default connect(mapStateToProps)(Menu)

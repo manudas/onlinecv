@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core'
-import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Store, select } from '@ngrx/store'
+import { Observable } from 'rxjs'
 
 import {
   faEdit,
@@ -14,16 +14,16 @@ import * as ACTION_DETAILS from '@store_actions/Details'
 import * as SOCIAL_NETWORK_ACTIONS from '@store_actions/SocialNetworks'
 
 import { DetailsType, EditSocialNetworkStructure, LocaleStore, SocialNetwork } from '@app/types'
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { MatDialog } from '@angular/material/dialog'
 
 import { TranslationService } from '@app/services/translation/translation.service'
 
-import { SocialNetworkDialogComponent } from './social-network-dialog.component';
+import { SocialNetworkDialogComponent } from './social-network-dialog.component'
 import * as COMMON_ACTIONS from '@store_actions/Common'
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ConfirmComponent } from '@app/ui/confirm/confirm.component';
-import { logEasy } from '@app/services/logging';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
+import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
+import { logEasy } from '@app/services/logging'
 
 type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } } & { socialNetworks: {list: SocialNetwork[] } }
 @Component({
@@ -71,7 +71,7 @@ export class DetailsComponent implements OnInit {
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
 
-  @Input() title: string = 'Personal details';
+  @Input() title: string = 'Personal details'
 
   detailsFormGroup: FormGroup = new FormGroup({
     profileImage: new FormControl(null),
@@ -191,7 +191,7 @@ console.log('would it be good to accompany alt and title in the image in the fro
     })
 
     dialogRef.afterClosed().subscribe(result => {
-      logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
+      logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '')
       if (result) {
         if (this.isSocialNetworkEdit(result)) {
           const {
@@ -220,7 +220,7 @@ console.log('would it be good to accompany alt and title in the image in the fro
     })
 
     dialogRef.afterClosed().subscribe(({index = null}) => {
-      console.log(`The dialog was closed.`, index !== null ? `The following message was received: ${JSON.stringify(index)}` : '');
+      console.log(`The dialog was closed.`, index !== null ? `The following message was received: ${JSON.stringify(index)}` : '')
 
       if (index !== null) {
         this.deleteNetwork(index)
@@ -243,7 +243,7 @@ console.log('would it be good to accompany alt and title in the image in the fro
       this.socialNetworks = [
         ...this.socialNetworks.slice(0, index),
         ...this.socialNetworks.slice(index + 1)
-      ];
+      ]
       this.store.dispatch(COMMON_ACTIONS.SUCCESS({
         message: this.translate.getResolvedTranslation('Network deleted successfully', this)
       }))
@@ -267,7 +267,7 @@ console.log('would it be good to accompany alt and title in the image in the fro
       ...this.socialNetworks.slice(0, index),
       { ...networkData},
       ...this.socialNetworks.slice(index + 1)
-    ];
+    ]
   }
 
   onDrop(event: CdkDragDrop<SocialNetwork[]>) {
