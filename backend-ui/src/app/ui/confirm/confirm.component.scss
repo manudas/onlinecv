@@ -4,10 +4,10 @@
 :host {
 
     display: block;
-    margin: -24px;
+    padding: 5px;
 
     .paddedContent {
-        padding: 24px;
+        padding: 20px;
     }
 
     [mat-dialog-title] {

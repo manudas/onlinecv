@@ -96,6 +96,8 @@ export class ExperienceComponent implements OnInit {
 
   openExperienceDialog(data: EditExperienceStructure | string): void {
     const dialogRef = this.matDialog.open(ExperienceDialogComponent, {
+      height: '80%',
+      maxHeight: '100%',
       width: '80%',
       data
     })
@@ -160,7 +162,7 @@ export class ExperienceComponent implements OnInit {
       data: {
         index: experienceIndex,
         element: experience,
-        keyName: 'role',
+        nameKey: 'role',
         superType: 'experience',
         action: 'delete'
       }

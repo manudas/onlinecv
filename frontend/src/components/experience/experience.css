@@ -36,3 +36,8 @@
     font-size: 13px;
     line-height: 19px;
 }
+
+.detail-list {
+    list-style-position: inside;
+    list-style-type: square;
+}

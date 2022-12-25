@@ -1,57 +1,89 @@
-/**
- * Example of query:
- *
- * const loginQuery = `{
- *
+import { query, mutation } from 'gql-query-builder'
 
-        OPTION A)
-        query namedQuery
+const experienceFields = [
+    'id: _id',
+    'description',
+    'type',
+    'start_date',
+    'finish_date',
+    'role',
+    'company',
+    'company_url',
+    'details',
+    'keywords',
+    'language',
+    'order'
+]
 
-        OPTION B)
-        annonymous query
+const mutationFields = [
+    'id: _id',
+]
 
-        query($email: String, $password: String) {
-            login(email: $email, password: $password) {
-                token
-                user
+export const QueryExperiences = (
+    lang: string,
+    type: string,
+) => {
+    const { query: queryWithoutVars, variables } = query({
+        operation: 'experiences',
+        variables: {
+            language: {
+                value: lang,
+                required: true
+            },
+            type: {
+                value: type,
+                required: true,
             }
-        }
-    }`
- *
- */
-    export const QueryExperiences =
-    `
-    query QueryExperiences($language: String!, $type: String!) {
-        experiences(language: $language, type: $type) {
-            id: _id
-            description
-            type
-            start_date
-            finish_date
-            role
-            company
-            company_url
-            keywords
-            language
-            order
-        }
+        },
+        fields: experienceFields
+    })
+
+    return {
+        query: queryWithoutVars,
+        variables
     }
-`
+}
+
+export const MutateExperiences = (experiences) => {
+    const { query: queryWithoutVars, variables } = mutation(
+        {
+            operation: 'putWorkExperience',
+            variables: {
+                workExperiences: {
+                    value: experiences,
+                    required: true,
+                    type: '[WorkExperienceInput]'
+                }
+            },
+            fields: mutationFields
+        }
+    )
+
+    return {
+        query: queryWithoutVars,
+        variables
+    }
+}
 
 
-export const MutateExperiences =
-`
-    mutation MutateExperiences($experiences: [WorkExperienceInput]!) {
-        putWorkExperience(workExperiences: $experiences) {
-            # return id if everything was ok
-            id: _id
+export const RemoveExperience = (
+    id: string
+) => {
+    const { query: queryWithoutVars, variables } = mutation(
+        {
+            operation: 'removeWorkExperience',
+            variables: {
+                id: {
+                    value: id,
+                    type: 'ID',
+                    required: true,
+                }
+            },
         }
-    }
-`
+    )
 
-export const RemoveExperience =
-`
-    mutation RemoveExperience($id: ID!) {
-        removeWorkExperience(id: $id)
+    return {
+        query: queryWithoutVars,
+        variables
     }
-`
+}

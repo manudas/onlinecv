@@ -57,12 +57,12 @@ export class ExperienceEffects {
                 experienceType,
             } = action
 
-            const vars = {
-                language,
-                type: experienceType,
-            }
+            const {
+                query,
+                variables,
+            } = QueryExperiences(language, experienceType)
 
-            return this.dataService.readData(QueryExperiences, vars).pipe(
+            return this.dataService.readData(query, variables).pipe(
                 map((experienceData: ExperienceFetched) => {
                     return EXPERIENCE_ACTIONS.EXPERIENCE_FETCHED(
                         {
@@ -97,11 +97,12 @@ export class ExperienceEffects {
                 experienceType
             } = action
 
-            const vars = {
-                experiences,
-            }
+            const {
+                query,
+                variables,
+            } = MutateExperiences(experiences)
 
-            return this.dataService.setData(MutateExperiences, vars).pipe(
+            return this.dataService.setData(query, variables).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Experience saved successfully', this)}`
@@ -138,11 +139,12 @@ export class ExperienceEffects {
                 experienceType
             } = action
 
-            const vars = {
-                id,
-            }
+            const {
+                query,
+                variables,
+            } = RemoveExperience(id)
 
-            return this.dataService.setData(RemoveExperience, vars).pipe(
+            return this.dataService.setData(query, variables).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Experience removed successfully', this)}`

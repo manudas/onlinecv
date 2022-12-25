@@ -68,6 +68,7 @@ export const getUserFullResumeQuery = (lang: string) => {
                 'company',
                 'company_url',
                 'keywords',
+                'details',
                 'language',
                 'order',
             ]

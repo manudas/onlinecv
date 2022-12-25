@@ -13,7 +13,8 @@ const WorkExperienceSchema = new Schema({
     role: String,
     company: String,
     company_url: String,
-    keywords: [],
+    keywords: [String],
+    details: [String],
     language: String,
     order: Number,
 }, {

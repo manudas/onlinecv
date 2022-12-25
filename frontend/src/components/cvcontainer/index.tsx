@@ -5,7 +5,7 @@ import { debounce } from 'lodash'
 import ProfileResume from 'components/profileResume'
 import ProfileDetail from 'components/profileDetails'
 import Training from 'components/training'
-import WorkExperience from 'components/work_experience'
+import Experience from 'components/experience'
 import Skill from 'components/skills'
 import Interest from 'components/interests'
 import PortFolio from 'components/portfolio'
@@ -110,9 +110,9 @@ class CVContainer extends Component<PropDef> {
                                     reference={ this.addToList(React.createRef(), 'Training') }
                                     name={ translateString('Training', this) }
                                 />
-                                <WorkExperience
-                                    reference={ this.addToList(React.createRef(), 'WorkExperience') }
-                                    name={ translateString('WorkExperience', this) }
+                                <Experience
+                                    reference={ this.addToList(React.createRef(), 'Experience') }
+                                    name={ translateString('Experience', this) }
                                 />
                                 <Skill
                                     reference={ this.addToList(React.createRef(), 'Skill') }

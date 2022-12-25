@@ -28,21 +28,21 @@ class ProfileResume extends Component {
         name = name.split(' ')[0];
         surname = surname.split(' ')[0];
 
-        const primaryJobName =
-            this.props?.details?.primaryJobName ?? null;
-        const secondaryJobName =
-            this.props?.details?.secondaryJobName ?? null;
+        const primaryRole =
+            this.props?.details?.primaryRole ?? null;
+        const secondaryRole =
+            this.props?.details?.secondaryRole ?? null;
         console.log(
             '¿QUE ES this.props.details.smallDescription??'
         );
         const smallDescription =
-            this.props?.details?.smallDescription ?? null;
+            this.props?.details?.smallDescription ?? 'molaria tener un smallDescription llamado simplemente description en backendui';
 
         /* =============== PROFILE INTRO ====================*/
         return (
             <div className="profile-intro row">
                 {/* Left Collum with Avatar pic */}
-                <div className="col-md-4 profile-col">
+                <div className="col-md-5 col-lg-4 profile-col">
                     {/* Avatar pic */}
                     <div className="profile-pic">
                         <div className="profile-border">
@@ -62,7 +62,7 @@ class ProfileResume extends Component {
                 </div>
                 {/* /Left columm with avatar pic */}
                 {/* Right Columm */}
-                <div className="col-md-7">
+                <div className="col-md-6 col-lg-7">
                     {/* Welcome Title*/}
                     <h1 className="intro-title1">
                         {translateString(
@@ -77,11 +77,11 @@ class ProfileResume extends Component {
                     {/* Welcome Title */}
                     {/* Job - */}
                     <h2 className="intro-title2">
-                        {primaryJobName}{' '}
-                        {primaryJobName && secondaryJobName
+                        {primaryRole}{' '}
+                        {primaryRole && secondaryRole
                             ? '/'
                             : ''}{' '}
-                        {secondaryJobName}
+                        {secondaryRole}
                     </h2>
                     {/* job */}
                     {/* Description */}

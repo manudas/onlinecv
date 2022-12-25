@@ -59,7 +59,7 @@ export class ConfirmComponent {
         */
 
         this.dialogRef.close({
-            ...(index && {
+            ...(index != null && { // != null -> neither null nor undefined
                 index
             }),
             ...(element && {

@@ -18,6 +18,7 @@ export enum ExperienceType {
             company: String,
             company_url: String,
             keywords: [String]!,
+            details: [String],
             language: String!
         }
 
@@ -34,6 +35,7 @@ export type ExperienceInterface = {
     company_url: string
     keywords: string[]
     language: string
+    details: string[]
     order: number
 }
 
