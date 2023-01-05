@@ -1,0 +1,47 @@
+type Details {
+  _id: ID!
+  profileImage: String
+  name: String!
+  surname: String
+  address: String
+  phone: String
+  birthInfo: String
+  email: String!
+  """
+  // qr_code: String, // qr_code will be made on the fly
+  """
+  keywords: [String]
+  language: String!
+  primaryRole: String!
+  secondaryRole: String
+  nickname: String
+  description: String
+}
+
+input DetailsInput {
+  _id: ID
+  profileImage: String
+  name: String!
+  surname: String
+  address: String
+  phone: String
+  birthInfo: String
+  email: String!
+  """
+  // qr_code: String, // qr_code will be made on the fly
+  """
+  keywords: [String]
+  language: String!
+  primaryRole: String!
+  secondaryRole: String
+  nickname: String
+  description: String
+}
+
+extend type Query {
+  details(language: String!): Details
+}
+
+extend type Mutation {
+  putDetails(details: DetailsInput!): Details!
+}

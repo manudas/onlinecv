@@ -9,13 +9,13 @@
 }
 
 ::ng-deep .SnackFailed {
-    background-color: red;
-    font-weight: bold;
-    color: white;
+    --mdc-snackbar-container-color: red;
+    --mdc-snackbar-supporting-text-color: white;
+    --mdc-snackbar-supporting-text-weight: bold;
 }
 
 ::ng-deep .SnackSuccess {
-    background-color: green;
-    font-weight: bold;
-    color: white;
+    --mdc-snackbar-container-color: green;
+    --mdc-snackbar-supporting-text-color: white;
+    --mdc-snackbar-supporting-text-weight: bold;
 }

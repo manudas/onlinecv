@@ -74,16 +74,17 @@ export class DetailsComponent implements OnInit {
   @Input() title: string = 'Personal details'
 
   detailsFormGroup: FormGroup = new FormGroup({
-    profileImage: new FormControl(null),
+    profileImage: new FormControl(),
     name: new FormControl(null, Validators.required), // new FormControl(initialValue, validators)
-    surname: new FormControl(null),
-    nickname: new FormControl(null),
-    birthInfo: new FormControl(null),
-    address: new FormControl(null),
+    surname: new FormControl(),
+    nickname: new FormControl(),
+    birthInfo: new FormControl(),
+    address: new FormControl(),
     email: new FormControl(null, [Validators.required, Validators.email] ),
-    phone: new FormControl(null),
+    phone: new FormControl(),
     primaryRole: new FormControl(null, Validators.required),
-    secondaryRole: new FormControl(null),
+    secondaryRole: new FormControl(),
+    description: new FormControl()
   })
 
   getNicknameOrName() {

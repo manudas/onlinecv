@@ -6,9 +6,9 @@
 
 <ng-template #panelBody>
     <fieldset>
-        <legend>Personal details</legend>
+        <legend>{{ 'Personal details' | translate | async }}</legend>
         <div class="form-group">
-            <label class="control-label">Your photo</label>
+            <label class="control-label">{{ 'Your photo' | translate | async }}</label>
             <app-pictureupload
                 [name]="getNicknameOrName()"
                [(imageData)]="profileImage"
@@ -18,77 +18,85 @@
             [formGroup]="detailsFormGroup"
         >
             <div class='form-group'>
-                <label class='control-label'>First name</label>
+                <label class='control-label'>{{ 'First name' | translate | async }}</label>
                 <input class='form-control'
                     formControlName="name"
-                    placeholder='Enter your first name'>
+                    [placeholder]="'Enter your first name' | translate | async">
                 <small
                     *ngIf="detailsFormGroup.get('name').touched && detailsFormGroup.get('name').errors"
                     [className]="'text-danger'"
                 >
-                    You should provide a name
+                    {{ 'You should provide a name' | translate | async }}
                 </small>
             </div>
             <div class='form-group'>
-                <label class='control-label'>Last name</label>
+                <label class='control-label'>{{ 'Last name' | translate | async }}</label>
                 <input class='form-control'
                     formControlName="surname"
-                    placeholder='Enter your last name'>
+                    [placeholder]="'Enter your last name' | translate | async">
             </div>
             <div class='form-group'>
-                <label class='control-label'>Nickname</label>
+                <label class='control-label'>{{ 'Nickname' | translate | async }}</label>
                 <input class='form-control'
                     formControlName="nickname"
-                    placeholder='Enter your nickname'>
+                    [placeholder]="'Enter your nickname' | translate | async">
             </div>
             <div class='form-group'>
-                <label class='control-label'>Primary role name</label>
+                <label class='control-label'>{{ 'Primary role name' | translate | async }}</label>
                 <input class='form-control'
                     formControlName="primaryRole"
-                    placeholder='Enter your primary role name'>
+                    [placeholder]="'Enter your primary role name' | translate | async">
                 <small
                     *ngIf="detailsFormGroup.get('primaryRole').touched && detailsFormGroup.get('primaryRole').errors"
                     [className]="'text-danger'"
                 >
-                    You should provide a valid primare role name. If you never had had one before, just write wath you would like to do
+                    {{ 'You should provide a valid primare role name. If you never had had one before, just write wath you would like to do' | translate | async }}
                 </small>
             </div>
             <div class='form-group'>
-                <label class='control-label'>Secondary role name</label>
+                <label class='control-label'>{{ 'Secondary role name' | translate | async }}</label>
                 <input class='form-control'
                     formControlName="secondaryRole"
-                    placeholder='Enter your secondary role name'>
+                    [placeholder]="'Enter your secondary role name' | translate | async">
             </div>
             <div class='form-group'>
-                <label class='control-label'>Birth details</label>
+                <label class='control-label'>{{ 'Birth details' | translate | async }}</label>
                 <input class='form-control'
                     formControlName="birthInfo"
-                    placeholder='Enter your birth details'>
-                <p class='help-block'>Enter your birth details. E.g.: 31 Dec 1983 - Jaén, Spain</p>
+                    [placeholder]="'Enter your birth details' | translate | async">
+                <p class='help-block'>{{ 'Enter your birth details. E.g.: 31 Dec 1983 - Jaén, Spain' | translate | async }}</p>
             </div>
             <div class='form-group'>
-                <label class='control-label'>Where you live</label>
+                <label class='control-label'>{{ 'Where you live' | translate | async }}</label>
                 <input class='form-control'
                     formControlName="address"
-                    placeholder='Enter the place you live in'>
+                    [placeholder]="'Enter the place you live in' | translate | async">
             </div>
             <div class='form-group'>
-                <label class='control-label'>Email</label>
+                <label class='control-label'>{{ 'Email' | translate | async }}</label>
                 <input class='form-control'
                     formControlName="email"
-                    placeholder='Enter your email'>
+                    [placeholder]="'Enter your email' | translate | async">
                 <small
                     *ngIf="detailsFormGroup.get('email').touched && detailsFormGroup.get('email').errors"
                     [className]="'text-danger'"
                 >
-                    You should provide a valid email
+                    {{ 'You should provide a valid email' | translate | async }}
                 </small>
             </div>
             <div class='form-group'>
-                <label class='control-label'>Phone number</label>
+                <label class='control-label'>{{ 'Phone number' | translate | async }}</label>
                 <input class='form-control'
                     formControlName="phone"
-                    placeholder='Enter your phone number'>
+                    [placeholder]="'Enter your phone number' | translate | async">
+            </div>
+            <div class='form-group'>
+                <label class='control-label'>{{ 'Description' | translate | async }}</label>
+                <textarea class='form-control'
+                    formControlName="description"
+                    [placeholder]="'An optional description of yourself and your career' | translate | async"
+                    rows="5"
+                ></textarea>
             </div>
         </form>
     </fieldset>

@@ -20,6 +20,7 @@ const DetailsSchema = new Schema({
     primaryRole: String,
     secondaryRole: String,
     nickname: String,
+    description: String
 }, {
     collection,
     versionKey: false

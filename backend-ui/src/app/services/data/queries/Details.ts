@@ -1,52 +1,97 @@
-/**
- * Example of query:
- * 
- * const loginQuery = `{
- * 
-        
-        OPTION A)
-        query namedQuery
+import { query, mutation } from 'gql-query-builder'
 
-        OPTION B)
-        annonymous query
+const queryFields = [
+    'id: _id',
+    'profileImage',
+    'name',
+    'surname',
+    'address',
+    'phone',
+    'birthInfo',
+    'email',
+    'keywords',
+    'language',
+    'primaryRole',
+    'secondaryRole',
+    'nickname',
+    'description'
+]
 
-        query($email: String, $password: String) {
-            login(email: $email, password: $password) {
-                token
-                user
-            }
-        }
-    }`
- *
- */
-export const QueryDetails =
-    `
-    query Details($language: String!) {
-        details(language: $language) {
-            id: _id
-            profileImage
-            name
-            surname
-            address
-            phone
-            birthInfo
-            email
-            keywords
-            language
-            primaryRole
-            secondaryRole
-            nickname
-        }
+const mutationFields = [
+    'id: _id',
+]
+
+// export const QueryDetails =
+//     `
+//     query Details($language: String!) {
+//         details(language: $language) {
+//             id: _id
+//             profileImage
+//             name
+//             surname
+//             address
+//             phone
+//             birthInfo
+//             email
+//             keywords
+//             language
+//             primaryRole
+//             secondaryRole
+//             nickname
+//         }
+//     }
+// `;
+export const QueryDetails = (
+    lang: string,
+) => {
+    const { query: queryWithoutVars, variables } = query({
+        operation: 'details',
+        variables: {
+            language: {
+                value: lang,
+                required: true
+            },
+        },
+        fields: queryFields
+    })
+
+    return {
+        query: queryWithoutVars,
+        variables
     }
-`;
+}
 
 
-export const MutateDetails =
-`
-    mutation MutateDetails($details: DetailsInput!) {
-        putDetails(details: $details) {
-            # return id if everything was ok
-            id: _id
+// export const MutateDetails =
+// `
+//     mutation MutateDetails($details: DetailsInput!) {
+//         putDetails(details: $details) {
+//             # return id if everything was ok
+//             id: _id
+//         }
+//     }
+// `;
+
+
+export const MutateDetails = (
+    details
+) => {
+    const { query: queryWithoutVars, variables } = mutation(
+        {
+            operation: 'putDetails',
+            variables: {
+                details: {
+                    value: details,
+                    type: 'DetailsInput',
+                    required: true,
+                }
+            },
+            fields: mutationFields
         }
+    )
+
+    return {
+        query: queryWithoutVars,
+        variables
     }
-`;
+}

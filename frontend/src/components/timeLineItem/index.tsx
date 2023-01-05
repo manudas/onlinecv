@@ -3,20 +3,18 @@ import React from 'react';
 import './timeLineItem.scss';
 
 type TimeLineItemProps = {
-    index: string;
     children: React.ReactNode;
     className?: string | undefined;
     type?: 'work' | 'education' | 'point' | undefined;
 };
 
 const TimeLineItem = ({
-    index,
     children,
     className = '',
     type
 }: TimeLineItemProps) => {
     return (
-        <div key={index} className={`line row d-flex ${className}`}>
+        <div className={`line row d-flex ${className}`}>
             {/* Margin Colums (necessary for the timeline effect) */}
             <div className="col-md-1 bg1 hidden-sm hidden-xs" />
             <div

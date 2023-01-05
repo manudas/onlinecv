@@ -51,7 +51,8 @@ export const getUserFullResumeQuery = (lang: string) => {
                 'language',
                 'primaryRole',
                 'secondaryRole',
-                'nickname'
+                'nickname',
+                'description'
             ]
         },
         {

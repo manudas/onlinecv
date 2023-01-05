@@ -9,10 +9,7 @@ import * as COMMON_ACTIONS from '@store_actions/Common'
 
 import { DataService } from '@services/data/data.service'
 
-import {
-    QueryDetails,
-    MutateDetails
-} from '@services/data/queries'
+import { QueryDetails, MutateDetails } from '@services/data/queries'
 import { DetailsFetched, DetailsType } from '@app/types/Details'
 import { TranslationService } from '@app/services/translation/translation.service'
 import { logEasy } from '@app/services/logging/logging.service';
@@ -43,11 +40,12 @@ export class DetailsEffects {
                 language,
             } = action
 
-            const vars = {
-                language,
-            }
+            const {
+                query,
+                variables
+            } = QueryDetails(language)
 
-            return this.dataService.readData(QueryDetails, vars).pipe(
+            return this.dataService.readData(query, variables).pipe(
                 map((details: DetailsFetched) => {
                     return {
                         type: DETAILS.DETAILS_FETCHED.type,
@@ -79,11 +77,12 @@ export class DetailsEffects {
                 details,
             } = action
 
-            const vars = {
-                details,
-            }
+            const {
+                query,
+                variables
+            } = MutateDetails(details)
 
-            return this.dataService.setData(MutateDetails, vars).pipe(
+            return this.dataService.setData(query, variables).pipe(
                 map((details: DetailsType) => {
                     return {
                         type: COMMON_ACTIONS.SUCCESS.type,

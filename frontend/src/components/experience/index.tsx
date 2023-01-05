@@ -53,7 +53,7 @@ class Experience extends Component<PropDef> {
 
         /* SECTION ITEM */
         return (
-            <TimeLineItem index={index.toString()} type="work">
+            <TimeLineItem key={index.toString()} type="work">
                 <div className="line-content line-content-education">
                     {/* Work Place */}
                     <h3 className="section-item-title-1"> { companyData } </h3>
