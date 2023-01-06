@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TranslationService } from './services/translation/translation.service';
-import debounce from 'lodash/debounce';
+import debounce from 'lodash-es/debounce';
 import { useMemo } from '@utils/index'
 import { LocaleStore, ModuleTagPairType, TranslationStore, MessageType } from './types';
 import { select, Store } from '@ngrx/store';

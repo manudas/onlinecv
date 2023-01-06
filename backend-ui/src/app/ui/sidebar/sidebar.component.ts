@@ -36,7 +36,7 @@ export class SidebarComponent implements OnInit {
 
   constructor(private router: Router) {}
 
-  getRoute(elementName){
+  routeIsActive(elementName){
     if (this.router.url === `\/${elementName}`){
       return "active";
     }

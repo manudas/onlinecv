@@ -9,7 +9,7 @@
         [className]="'sidebar_dock'">
         <li [ngClass]="{
             'sidebar_dock_launcher': true,
-            'active': getRoute('dashboard')
+            'active': routeIsActive('dashboard')
         }"
             [routerLink]="'dashboard'">
             <fa-icon [icon]="faTachometerAlt"
@@ -19,7 +19,7 @@
         </li>
         <li [ngClass]="{
             'sidebar_dock_launcher': true,
-            'active': getRoute('details')
+            'active': routeIsActive('details')
         }"
             [routerLink]="'details'">
             <fa-icon [icon]="faFileAlt"

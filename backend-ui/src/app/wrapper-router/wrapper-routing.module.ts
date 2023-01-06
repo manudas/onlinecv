@@ -16,6 +16,9 @@ import {
     ExperienceModule
 } from '@app/ui/experience/experience.module'
 import {
+    OthersModule
+} from '@app/ui/others/others.module'
+import {
     NotfoundModule
 } from '@app/services/notfound/notfound.module'
 import {
@@ -43,6 +46,7 @@ import {
         DashboardModule,
         DetailsModule,
         ExperienceModule,
+        OthersModule,
         NotfoundModule,
         TrainingModule,
         SkillsModule,

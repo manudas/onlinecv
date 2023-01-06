@@ -3,6 +3,7 @@ import { DashboardComponent } from '@app/ui/dashboard/dashboard.component';
 import { DetailsComponent } from '@app/ui/details/details.component';
 import { TrainingComponent } from '@app/ui/training/training.component';
 import { ExperienceComponent } from '@app/ui/experience/experience.component';
+import { OthersComponent } from '@app/ui/others/others.component';
 import { SkillsComponent } from '@app/ui/skills/skills.component';
 import { TranslationComponent } from '@app/ui/translations/translations.component';
 import { SettingsComponent } from '@app/ui/settings/settings.component';
@@ -25,7 +26,7 @@ export const routes: Routes = [
     { path: 'skills/:type', component: SkillsComponent },
 
     { path: 'others', redirectTo: 'others/', pathMatch: 'full' },
-    { path: 'others/:type', component: ExperienceComponent },
+    { path: 'others/:type', component: OthersComponent },
 
     { path: 'translations', redirectTo: 'translations/', pathMatch: 'full' },
     { path: 'translations/:type', component: TranslationComponent },

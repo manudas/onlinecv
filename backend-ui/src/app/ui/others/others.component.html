@@ -1,0 +1,135 @@
+<ng-container *ngIf="isElementActive('professional-references'); then professionalReferencesTemplate"></ng-container>
+<ng-container *ngIf="isElementActive('all'); then separator"></ng-container>
+<ng-container *ngIf="isElementActive('upload-resume'); then uploadResumeFileTemplate"></ng-container>
+
+<ng-template #professionalReferencesTemplate>
+    <app-card [icon]="cardIcon"
+        [iconClass]="'mr-1'"
+        [panelBody]="panel"
+        [cardTitle]="'Professional references' | translate | async">
+    </app-card>
+</ng-template>
+
+<ng-template #uploadResumeFileTemplate>
+    <app-card [icon]="cardIcon"
+        [iconClass]="'mr-1'"
+        [panelBody]="panel"
+        [cardTitle]="'Upload resume file' | translate | async">
+    </app-card>
+</ng-template>
+
+
+<ng-template #panel>
+    <mat-table
+        *ngIf="referencesData.length"
+        [dataSource]="referencesData"
+
+        cdkDropList
+        [cdkDropListData]="referencesData"
+        (cdkDropListDropped)="onDrop($event)"
+        [cdkDropListDisabled]="dragDisabled"
+
+    >
+        <ng-container *ngFor="let col of colsToRender; let colIndex = index" matColumnDef="{{col}}">
+            <mat-header-cell
+                *matHeaderCellDef
+            >
+            {{ col === 'id' ? '#' : col | noUnderscore | translate | async | titlecase }}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element; let row; let rowIndex = index">
+
+                <ng-container *ngIf="col === 'edit'"
+                    [ngTemplateOutlet]="editTemplate"
+                    [ngTemplateOutletContext]="{
+                        rowIndex: rowIndex,
+                        type: type
+                    }"
+                ></ng-container>
+                <ng-container *ngIf="col === 'delete'"
+                    [ngTemplateOutlet]="deleteExperienceTemplate"
+                    [ngTemplateOutletContext]="{
+                        rowIndex: rowIndex,
+                        type: type
+                    }"
+                ></ng-container>
+                <ng-container *ngIf="col === 'order'"
+                    [ngTemplateOutlet]="dragHandle"
+                ></ng-container>
+                <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> {{ element[col] }} </ng-container>
+
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="colsToRender"></mat-header-row>
+        <mat-row
+            (cdkDragStarted)="onDragStart($event)"
+            cdkDrag
+            [cdkDragData]="row"
+            *matRowDef="let row; columns: colsToRender"
+        ></mat-row>
+    </mat-table>
+
+    <div
+        [className]="'text-right pt-3'"
+    >
+        <button
+            (click)="openAddEditDialog()"
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+        >
+            {{ 'Add' | translate | async }}
+        </button>
+    </div>
+
+</ng-template>
+
+<ng-template #separator>
+    <div [className]="'separator'"></div>
+</ng-template>
+
+<ng-template #editTemplate
+    let-index="rowIndex"
+>
+    <button [className]="'btn btn-info btn-experience-row'"
+        ngbButton
+        (click)="editData(index)"
+    >
+        <fa-icon
+            [icon]="faEdit"
+        ></fa-icon>
+    </button>
+</ng-template>
+
+
+
+<ng-template #deleteExperienceTemplate
+    let-index="rowIndex"
+>
+    <button [className]="'btn btn-danger'"
+        ngbButton
+        (click)="openDataRemovalConfirmDialog(index)"
+        >
+        <fa-icon
+            [icon]="faTrash"
+        ></fa-icon>
+    </button>
+</ng-template>
+
+
+<ng-template #dragHandle>
+
+    <fa-icon
+        [ngStyle]="{
+            color: '#737373',
+            marginRight: 'auto',
+            marginLeft: 'auto'
+        }"
+        [icon]="faArrowsAlt"
+        (mousedown)="dragDisabled = false;"
+        (mouseup)="dragDisabled = true;"
+        (touchstart)="dragDisabled = false;"
+        (touchend)="dragDisabled = true;"
+    ></fa-icon>
+
+</ng-template>

@@ -1,0 +1,220 @@
+<h2
+    mat-dialog-title
+    [className]="'dialog-title'"
+>
+    <div
+        [className]="'paddedContent'"
+    >
+        {{
+            editingIndex === null
+                ? ('Add a new reference: ' | translate | async)
+                : ('Edit your reference from: ' | translate | async) + (dataFormGroup.get('name').value | translate | async | titlecase)
+        }}
+    </div>
+</h2>
+
+<div mat-dialog-content>
+    <div
+        [className]="'paddedContent'"
+    >
+        <ng-container *ngTemplateOutlet="referenceTemplate"></ng-container>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div
+        [className]="'paddedContent'"
+    >
+        <button
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+            (click)="close()"
+        >
+            {{ 'Cancel' | translate | async }}
+        </button>
+        <button
+            [className]="'btn submitButton'"
+            type="submit"
+            ngbButton
+            (click)="submitHandler($event)"
+        >
+            {{ editingIndex === null ? ('Add' | translate | async) : ('Edit' | translate | async) }}
+        </button>
+    </div>
+</div>
+
+<ng-template #referenceTemplate>
+    <form
+        [formGroup]="dataFormGroup"
+    >
+        <div [className]="'row'">
+            <div
+                [className]="'col-md-6 col-sm-12'"
+            >
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Add your reference name' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Enter the name of your reference' | translate | async }}"
+                        placement="top"
+                        formControlName="name"
+                    >
+                    <p
+                        class='help-block'
+                        [ngStyle]="{
+                            'margin-bottom': dataFormGroup.get('name').touched && dataFormGroup.get('name').errors ? 0 : 'initial'
+                        }"
+                    >
+                        {{ 'E.g: Frontend engineer' | translate | async }}
+                    </p>
+                    <small
+                            *ngIf="dataFormGroup.get('name').touched && dataFormGroup.get('name').errors"
+                            [className]="'text-danger'"
+                    >
+                        {{ 'You should provide a name for your reference' | translate | async }}
+                    </small>
+                </div>
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Please enter the role of your reference' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Optional: your reference role' | translate | async }}"
+                        formControlName="role"
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'E.g.: Group lead, team manager...' | translate | async }}
+                    </p>
+                </div>
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'You can add a brief description of your reference here' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Optional: description of your reference within the related work' | translate | async }}"
+                        formControlName="description"
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'Eg: worked together for two year as a manager and team member' | translate | async }}
+                    </p>
+                </div>
+
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Provide your company or project name' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Optional: the company in which you worked with your reference' | translate | async }}"
+                        formControlName="company"
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'Eg: Google Inc' | translate | async }}
+                    </p>
+                </div>
+            </div>
+
+            <div
+                [className]="'col-md-6 col-sm-12'"
+            >
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Do you worked for a company or project with a web page?' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Optional: you could include your company web address here' | translate | async }}"
+                        formControlName="company_url"
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'E.g.: http://888sport.es' | translate | async }}
+                    </p>
+                </div>
+
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Your reference phone' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Optional: you can include your reference phone' | translate | async }}"
+                        formControlName="phone"
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'E.g.: +34 XXX XXX XXX' | translate | async }}
+                    </p>
+                    <small
+                        *ngIf="dataFormGroup.get('phone').touched && dataFormGroup.get('phone').errors"
+                        [className]="'text-danger'"
+                    >
+                        {{ 'Either a phone or an email address must be entered' | translate | async }}
+                    </small>
+                </div>
+
+                <div
+                    class='form-group'
+                >
+                    <label
+                        class='control-label'
+                    >
+                        {{ 'Your reference email' | translate | async }}
+                    </label>
+                    <input
+                        class='form-control'
+                        placeholder="{{ 'Optional: you can include your reference email' | translate | async }}"
+                        formControlName="email"
+                    >
+                    <p
+                        class='help-block'
+                    >
+                        {{ 'E.g.: info@xovis.com' | translate | async }}
+                    </p>
+                    <small
+                        *ngIf="dataFormGroup.get('email').touched && dataFormGroup.get('email').errors"
+                        [className]="'text-danger'"
+                    >
+                        {{ 'Either a phone or an email address must be entered' | translate | async }}
+                    </small>
+                </div>
+            </div>
+        </div>
+    </form>
+</ng-template>

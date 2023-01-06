@@ -34,7 +34,7 @@
     "bootstrap": "^4.6.2",
     "chart.js": "^3.9.1",
     "gql-query-builder": "^3.8.0",
-    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
     "ngx-cookie-service": "^15.0.0",
     "rxjs": "~7.8.0",
     "svg-country-flags": "^1.2.10",

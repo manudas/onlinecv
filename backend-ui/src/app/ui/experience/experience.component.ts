@@ -21,7 +21,7 @@ import { ExperienceDialogComponent } from './experience-dialog.component'
 
 type StoreType = { locale: LocaleStore } & {experience: { professional: ExperienceInterface[] } & { ong: ExperienceInterface[] } & { other: ExperienceInterface[] }}
 @Component({
-  selector: 'app-training',
+  selector: 'app-experience',
   templateUrl: './experience.component.html',
   styleUrls: ['./experience.component.scss']
 })
@@ -139,8 +139,8 @@ export class ExperienceComponent implements OnInit {
       const currentArr = [...this[`${type}Data`]]
       moveItemInArray(currentArr, event.previousIndex, event.currentIndex)
       // let's assign the new order properties inside the reordered list of objects
-      const newArr = currentArr.map((currentTraining, indexInArr): ExperienceInterface  => {
-        return {...currentTraining, order: indexInArr}
+      const newArr = currentArr.map((currentExperience, indexInArr): ExperienceInterface  => {
+        return {...currentExperience, order: indexInArr}
       })
 
       this.dispatchSave(newArr, type)
@@ -190,8 +190,8 @@ export class ExperienceComponent implements OnInit {
   }
 
 
-  deleteExperience(trainingIndex: number, type: ExperienceType) {
-    const experience = this[`${type}Data`][trainingIndex]
+  deleteExperience(index: number, type: ExperienceType) {
+    const experience = this[`${type}Data`][index]
     this.store.dispatch(EXPERIENCE_ACTIONS.REMOVE_EXPERIENCE({
       id: experience.id,
       experienceType: type.toString()
@@ -204,12 +204,12 @@ export class ExperienceComponent implements OnInit {
 
   editExperienceValues(index: number, experienceData: ExperienceInterface) {
     const dataIndex = `${experienceData.type}Data`
-    const newTrainings = [
+    const newExperiences = [
       ...this[dataIndex].slice(0, index),
       { ...experienceData},
       ...this[dataIndex].slice(index + 1)
     ];
-    this.dispatchSave(newTrainings, experienceData.type)
+    this.dispatchSave(newExperiences, experienceData.type)
   }
 
   addExperience(experienceData: ExperienceInterface) {

@@ -160,39 +160,15 @@ export const MenuListItems = [{
 				type: 'option',
 			},
 			{
-				name: 'Resume summary',
-				url: 'others',
-				urlSegments: 'resume-summary',
-				type: 'option',
-			},
-			{
-				name: 'Merits',
-				url: 'others',
-				urlSegments: 'merits',
-				type: 'option',
-			},
-			{
-				name: 'Ongs',
-				url: 'others',
-				urlSegments: 'ongs',
-				type: 'option',
-			},
-			{
-				name: 'Professional archivements',
-				url: 'others',
-				urlSegments: 'professional-archivements',
-				type: 'option',
-			},
-			{
 				name: 'Professional references',
 				url: 'others',
 				urlSegments: 'professional-references',
 				type: 'option',
 			},
 			{
-				name: 'Other data',
+				name: 'Attach resume document',
 				url: 'others',
-				urlSegments: 'other-data',
+				urlSegments: 'resume-document',
 				type: 'option',
 			}
 		]
