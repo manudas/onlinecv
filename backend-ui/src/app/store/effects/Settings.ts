@@ -34,7 +34,6 @@ export class SettingsEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public fetchSettingsEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof SETTINGS.FETCH_SETTINGS>>(SETTINGS.FETCH_SETTINGS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -52,7 +51,6 @@ export class SettingsEffects {
                 map((settings: SettingsFetched) => {
                     return SETTINGS.SETTINGS_FETCHED({...settings})
                 }),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     return of({
@@ -68,7 +66,6 @@ export class SettingsEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public mutateSettingsEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof SETTINGS.SAVE_SETTINGS>>(SETTINGS.SAVE_SETTINGS),
         tap((action) => logEasy({messages: [`Action caught in ${this.constructor.name}:`, action]})),
@@ -89,7 +86,6 @@ export class SettingsEffects {
                         message: `${this.translate.getResolvedTranslation('Settings saved successfully', this)}`
                     }
                 }),
-                // handle failure in todoListService.fetchTodoList()
                 catchError(({
                     error: {
                         errors = []

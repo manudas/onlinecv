@@ -1,4 +1,4 @@
-type WorkExperience {
+type Experience {
   _id: ID!
   description: String,
   type: String!,
@@ -13,7 +13,7 @@ type WorkExperience {
   order: Int!
 }
 
-input WorkExperienceInput {
+input ExperienceInput {
   id: ID
   description: String,
   type: String!,
@@ -29,11 +29,11 @@ input WorkExperienceInput {
 }
 
 extend type Query {
-  experiences(language: String!, type: String): [WorkExperience]!
+  experiences(language: String!, type: String): [Experience]!
   experienceTypes: [String]!
 }
 
 extend type Mutation {
-  putWorkExperience(workExperiences: [WorkExperienceInput]!): [WorkExperience]!
-  removeWorkExperience(id: ID!): Boolean!
+  putExperience(experiences: [ExperienceInput]!): [Experience]!
+  removeExperience(id: ID!): Boolean!
 }

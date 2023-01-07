@@ -44,7 +44,6 @@ export class LocaleEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public fetchLocaleEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType(LOCALE_ACTIONS.FETCH_AVAILABLE_LOCALES),
         tap((action) =>
@@ -63,7 +62,6 @@ export class LocaleEffects {
                         { payload: [...locales] }
                     )
                 }),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     return of({
@@ -79,7 +77,6 @@ export class LocaleEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public setLocaleEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType(LOCALE_ACTIONS.SET_LOCALE),
         tap((action) =>

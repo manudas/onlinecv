@@ -3,9 +3,9 @@ const {
     model,
 } = require('mongoose');
 
-const collection = 'professional_experience';
+const collection = 'experience';
 
-const WorkExperienceSchema = new Schema({
+const ExperienceSchema = new Schema({
     description: String,
     type: String, // professional, ong, other
     start_date: Date,
@@ -22,9 +22,9 @@ const WorkExperienceSchema = new Schema({
     versionKey: false
 });
 
-const WorkExperienceModel = model(collection, WorkExperienceSchema);
+const ExperienceModel = model(collection, ExperienceSchema);
 
 module.exports = {
-    WorkExperienceSchema,
-    WorkExperienceModel,
+    ExperienceSchema,
+    ExperienceModel,
 };

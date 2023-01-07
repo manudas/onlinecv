@@ -21,7 +21,7 @@ export class ExperienceDialogComponent {
     /*
      * GraphQL Schema:
 
-        type WorkExperience {
+        type Experience {
             id: ID!
             description: String,
             type: String!,

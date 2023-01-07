@@ -3,34 +3,29 @@ const cleanObject = require('@helpers/utils').cleanObject;
 
 module.exports = {
     Query: {
-        experiences: async (
-            { language, type },
-            { models: { WorkExperienceModel } },
+        references: async (
+            { language },
+            { models: { ReferenceModel } },
             info
         ) => {
-            const experienceList =
-                await WorkExperienceModel.find({
+            const referenceList = await ReferenceModel.find({
                     language,
-                    ...(type ? { type } : {})
-                })
-                    .sort({
-                        order: 1
-                    })
-                    .exec();
-            return experienceList;
+                }).sort({
+                    order: 1
+                }).exec();
+            return referenceList;
         },
-        experienceTypes: ['professional', 'ong', 'other']
     },
     Mutation: {
-        putWorkExperience: async (
-            { workExperiences },
-            { models: { WorkExperienceModel } },
+        putReferences: async (
+            { references },
+            { models: { ReferenceModel } },
             info
         ) => {
             const WriteResult = await Promise.all(
-                workExperiences.map(async (experience) => {
+                references.map(async (reference) => {
                     const cleanedObject = cleanObject(
-                        experience,
+                        reference,
                         {
                             id: '_id'
                         }
@@ -41,7 +36,7 @@ module.exports = {
                     }
 
                     const element =
-                        await WorkExperienceModel.findOneAndUpdate(
+                        await ReferenceModel.findOneAndUpdate(
                             {
                                 _id: cleanedObject._id
                             },
@@ -57,13 +52,13 @@ module.exports = {
             );
             return WriteResult ? WriteResult : false;
         },
-        removeWorkExperience: async (
+        removeReference: async (
             { id },
-            { models: { WorkExperienceModel } },
+            { models: { ReferenceModel } },
             info
         ) => {
             const WriteResult =
-                await WorkExperienceModel.remove(
+                await ReferenceModel.remove(
                     {
                         _id: id
                     },

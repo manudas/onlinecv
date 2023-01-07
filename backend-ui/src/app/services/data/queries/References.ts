@@ -2,16 +2,15 @@ import { query, mutation } from 'gql-query-builder'
 
 const queryFields = [
     'id: _id',
-    'description',
-    'type',
-    'start_date',
-    'finish_date',
+    'name',
     'role',
+    'description',
     'company',
     'company_url',
-    'details',
     'keywords',
     'language',
+    'phone',
+    'email',
     'order'
 ]
 
@@ -19,21 +18,16 @@ const mutationFields = [
     'id: _id',
 ]
 
-export const QueryExperiences = (
+export const QueryReferences = (
     lang: string,
-    type: string,
 ) => {
     const { query: queryWithoutVars, variables } = query({
-        operation: 'experiences',
+        operation: 'references',
         variables: {
             language: {
                 value: lang,
                 required: true
             },
-            type: {
-                value: type,
-                required: true,
-            }
         },
         fields: queryFields
     })
@@ -44,15 +38,15 @@ export const QueryExperiences = (
     }
 }
 
-export const MutateExperiences = (experiences) => {
+export const MutateReferences = (data) => {
     const { query: queryWithoutVars, variables } = mutation(
         {
-            operation: 'putExperience',
+            operation: 'putReferences',
             variables: {
-                experiences: {
-                    value: experiences,
+                references: {
+                    value: data,
                     required: true,
-                    type: '[ExperienceInput]'
+                    type: '[ReferenceInput]'
                 }
             },
             fields: mutationFields
@@ -66,12 +60,12 @@ export const MutateExperiences = (experiences) => {
 }
 
 
-export const RemoveExperience = (
+export const RemoveReference = (
     id: string
 ) => {
     const { query: queryWithoutVars, variables } = mutation(
         {
-            operation: 'removeExperience',
+            operation: 'removeReference',
             variables: {
                 id: {
                     value: id,

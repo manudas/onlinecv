@@ -17,6 +17,10 @@ export type EditReferenceStructure = {
     reference: ReferenceDef
 }
 
+export type ReferencesFetched = {
+    references: ReferenceDef[]
+}
+
 export enum OthersType {
     all,
     'professional-references',

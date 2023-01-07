@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Observable, of } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { Actions, createEffect, ofType } from '@ngrx/effects'
+import { Observable, of } from 'rxjs'
 
-import { switchMap, map, tap, catchError } from 'rxjs/operators';
+import { switchMap, map, tap, catchError } from 'rxjs/operators'
 
 import * as DETAILS from '@store_actions/Details'
 import * as COMMON_ACTIONS from '@store_actions/Common'
@@ -12,7 +12,7 @@ import { DataService } from '@services/data/data.service'
 import { QueryDetails, MutateDetails } from '@services/data/queries'
 import { DetailsFetched, DetailsType } from '@app/types/Details'
 import { TranslationService } from '@app/services/translation/translation.service'
-import { logEasy } from '@app/services/logging/logging.service';
+import { logEasy } from '@app/services/logging/logging.service'
 
 @Injectable()
 export class DetailsEffects {
@@ -31,7 +31,6 @@ export class DetailsEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public fetchDetailsEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof DETAILS.FETCH_DETAILS>>(DETAILS.FETCH_DETAILS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -52,7 +51,6 @@ export class DetailsEffects {
                         ...details
                     };
                 }),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     return of({
@@ -64,11 +62,10 @@ export class DetailsEffects {
         })
     ));
 
-        /**
+    /**
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public mutateDetailsEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof DETAILS.SAVE_DETAILS>>(DETAILS.SAVE_DETAILS),
         tap((action) => logEasy({messages: [`Action caught in ${this.constructor.name}:`, action]})),
@@ -83,13 +80,12 @@ export class DetailsEffects {
             } = MutateDetails(details)
 
             return this.dataService.setData(query, variables).pipe(
-                map((details: DetailsType) => {
+                map((_) => {
                     return {
                         type: COMMON_ACTIONS.SUCCESS.type,
                         message: `${this.translate.getResolvedTranslation('Details saved successfully', this)}`
                     };
                 }),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((error) => {
                     const { error: {errors = []} = {} } = error || {}
                     return of({

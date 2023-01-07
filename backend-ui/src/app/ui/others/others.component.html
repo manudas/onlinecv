@@ -46,7 +46,7 @@
                     }"
                 ></ng-container>
                 <ng-container *ngIf="col === 'delete'"
-                    [ngTemplateOutlet]="deleteExperienceTemplate"
+                    [ngTemplateOutlet]="deleteTemplate"
                     [ngTemplateOutletContext]="{
                         rowIndex: rowIndex,
                         type: type
@@ -91,7 +91,7 @@
 <ng-template #editTemplate
     let-index="rowIndex"
 >
-    <button [className]="'btn btn-info btn-experience-row'"
+    <button [className]="'btn btn-info'"
         ngbButton
         (click)="editData(index)"
     >
@@ -103,7 +103,7 @@
 
 
 
-<ng-template #deleteExperienceTemplate
+<ng-template #deleteTemplate
     let-index="rowIndex"
 >
     <button [className]="'btn btn-danger'"

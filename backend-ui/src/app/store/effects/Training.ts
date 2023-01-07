@@ -112,7 +112,6 @@ export class TrainingEffects {
                         trainingType
                     })
                 ]),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)
@@ -129,7 +128,6 @@ export class TrainingEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public removeTrainingEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof TRAINING_ACTIONS.REMOVE_TRAINING>>(TRAINING_ACTIONS.REMOVE_TRAINING),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -154,7 +152,6 @@ export class TrainingEffects {
                         trainingType
                     })
                 ]),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)

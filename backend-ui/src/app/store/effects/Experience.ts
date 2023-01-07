@@ -47,7 +47,6 @@ export class ExperienceEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public fetchExperience$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof EXPERIENCE_ACTIONS.FETCH_EXPERIENCE>>(EXPERIENCE_ACTIONS.FETCH_EXPERIENCE),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -87,7 +86,6 @@ export class ExperienceEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public mutateExperiencesEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof EXPERIENCE_ACTIONS.SAVE_EXPERIENCES>>(EXPERIENCE_ACTIONS.SAVE_EXPERIENCES),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -112,7 +110,6 @@ export class ExperienceEffects {
                         experienceType
                     })
                 ]),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)
@@ -129,7 +126,6 @@ export class ExperienceEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public removeExperienceEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof EXPERIENCE_ACTIONS.REMOVE_EXPERIENCE>>(EXPERIENCE_ACTIONS.REMOVE_EXPERIENCE),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -154,7 +150,6 @@ export class ExperienceEffects {
                         experienceType
                     })
                 ]),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     return of(COMMON_ACTIONS.FAIL({

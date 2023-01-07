@@ -12,7 +12,7 @@ import { experience, PropDef } from './types'
 import './experience.css'
 
 class Experience extends Component<PropDef> {
-    renderExperienceItem(work_experience_item: experience, index: number) {
+    renderExperienceItem(experience_item: experience, index: number) {
         const {
             company = '',
             company_url,
@@ -21,7 +21,7 @@ class Experience extends Component<PropDef> {
             role,
             description,
             details,
-        } = work_experience_item
+        } = experience_item
         const companyData = company_url ? (
             <a
                 rel="noreferrer"
@@ -140,7 +140,7 @@ function mapStateToProps(state: {
         } = {},
         language,
         translations: {
-            [language]: { WorkExperience = []} = {}
+            [language]: { Experience = []} = {}
         } = {}
     } = state
     return {
@@ -149,7 +149,7 @@ function mapStateToProps(state: {
             experienceTypes
         ),
         language,
-        translations: WorkExperience
+        translations: Experience
     }
 }
 

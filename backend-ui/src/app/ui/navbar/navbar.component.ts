@@ -70,8 +70,8 @@ export class NavbarComponent implements OnInit {
           type: 'option',
         }
       ]
-  } 
-  
+  }
+
   constructor() { }
 
   ngOnInit(): void {

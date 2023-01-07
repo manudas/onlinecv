@@ -63,7 +63,6 @@ export class TranslationEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public fetchTranslationsEffect$: Observable < any > = createEffect(() => this.actions$.pipe(
         ofType(TRANSLATION_ACTIONS.FETCH_TRANSLATIONS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -90,7 +89,6 @@ export class TranslationEffects {
                         }
                     };
                 }),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     return of({
@@ -105,7 +103,6 @@ export class TranslationEffects {
     /**
      * Effect to request missing translations
      */
-    
     public fetchMissingTranslationsEffect$: Observable < any > = createEffect(() => this.actions$.pipe(
         ofType(TRANSLATION_ACTIONS.FETCH_MISSING_TRANSLATIONS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -128,7 +125,6 @@ export class TranslationEffects {
                         }
                     };
                 }),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     return of({
@@ -143,7 +139,6 @@ export class TranslationEffects {
     /**
      * Effect to request translated translations
      */
-    
     public fetchTranslatedTranslationsEffect$: Observable < any > = createEffect(() => this.actions$.pipe(
         ofType(TRANSLATION_ACTIONS.FETCH_TRANSLATED_TRANSLATIONS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -165,7 +160,6 @@ export class TranslationEffects {
                         }
                     })
                 }),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     return of({
@@ -181,7 +175,6 @@ export class TranslationEffects {
     /**
      * Effect to request the upsert of a given translation
      */
-    
     public saveTranslationEffect$: Observable < any > = createEffect(() => this.actions$.pipe(
         ofType(TRANSLATION_ACTIONS.SAVE_TRANSLATION),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -219,7 +212,6 @@ export class TranslationEffects {
     /**
      * Effect to request the deletion of a given translation
      */
-    
     public deleteTranslationEffect$: Observable < any > = createEffect(() => this.actions$.pipe(
         ofType(TRANSLATION_ACTIONS.DELETE_TRANSLATION),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),

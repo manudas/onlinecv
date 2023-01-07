@@ -49,9 +49,6 @@ export class OthersComponent implements OnInit {
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
 
-  title: string = 'Others'
-
-  othersType = OthersType
   type: OthersType
 
   constructor(private activatedRoute:ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog) {
@@ -76,7 +73,9 @@ export class OthersComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedLocale$.subscribe((data: string) => this.selectedLocale = data)
-    this.referencesData$.subscribe((data: ReferenceDef[]) => this.referencesData = data ?? null)
+    this.referencesData$.subscribe((data: ReferenceDef[]) => {
+      this.referencesData = data ?? this.referencesData
+    })
     this.activatedRoute.paramMap.subscribe(() => this.fetchData())
   }
 
@@ -205,13 +204,13 @@ export class OthersComponent implements OnInit {
 
   fetchData() {
     if (this.type !== OthersType.all) {
-      this.store.dispatch(OTHERS_ACTIONS.FETCH(this.type, {
+      this.store.dispatch(OTHERS_ACTIONS.FETCH(this.type)({
         language: this.selectedLocale,
       }))
     } else {
       Object.values(OthersType).filter((type) => typeof type === 'string' ).forEach((type: string) => {
         type !== OthersType[OthersType.all] && this.store.dispatch(
-          OTHERS_ACTIONS.FETCH(this.type, {
+          OTHERS_ACTIONS.FETCH(OthersType[type])({
             language: this.selectedLocale,
           })
         )

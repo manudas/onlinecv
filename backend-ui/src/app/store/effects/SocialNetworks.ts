@@ -47,7 +47,6 @@ export class SocialNetworksEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public fetchSocialNetworks$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS>>(SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -82,7 +81,6 @@ export class SocialNetworksEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public mutateNetworksEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.SAVE_NETWORKS>>(SOCIAL_NETWORK_ACTIONS.SAVE_NETWORKS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -104,7 +102,6 @@ export class SocialNetworksEffects {
                         language: this.selectedLocale
                     })
                 ]),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     return of(COMMON_ACTIONS.FAIL({
@@ -120,7 +117,6 @@ export class SocialNetworksEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public removeNetworkEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK>>(SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -142,7 +138,6 @@ export class SocialNetworksEffects {
                         language: this.selectedLocale
                     })
                 ]),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     return of(COMMON_ACTIONS.FAIL({

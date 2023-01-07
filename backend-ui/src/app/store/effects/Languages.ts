@@ -84,7 +84,6 @@ export class LanguageEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public mutateLanguagesEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof LANGUAGE_ACTIONS.SAVE_LANGUAGES>>(LANGUAGE_ACTIONS.SAVE_LANGUAGES),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -106,7 +105,6 @@ export class LanguageEffects {
                         language: this.selectedLocale,
                     })
                 ]),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     return of(COMMON_ACTIONS.FAIL({
@@ -122,7 +120,6 @@ export class LanguageEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public removeLanguageEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof LANGUAGE_ACTIONS.REMOVE_LANGUAGE>>(LANGUAGE_ACTIONS.REMOVE_LANGUAGE),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -144,7 +141,6 @@ export class LanguageEffects {
                         language: this.selectedLocale,
                     })
                 ]),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     return of(COMMON_ACTIONS.FAIL({

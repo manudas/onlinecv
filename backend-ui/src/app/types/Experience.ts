@@ -8,7 +8,7 @@ export enum ExperienceType {
 /*
  * GraphQL Schema
 
-          type WorkExperience {
+          type Experience {
             id: ID!
             name: String!,
             description: String,
