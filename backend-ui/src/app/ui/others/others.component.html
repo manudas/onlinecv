@@ -6,18 +6,44 @@
     <app-card [icon]="cardIcon"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [cardTitle]="'Professional references' | translate | async">
+        [cardTitle]="'References' | translate | async">
     </app-card>
 </ng-template>
 
 <ng-template #uploadResumeFileTemplate>
     <app-card [icon]="cardIcon"
         [iconClass]="'mr-1'"
-        [panelBody]="panel"
+        [panelBody]="panelUploadResume"
         [cardTitle]="'Upload resume file' | translate | async">
     </app-card>
 </ng-template>
 
+<ng-template #panelUploadResume>
+    <fieldset>
+        <legend>{{ 'Resume document' | translate | async }}</legend>
+        <div class="form-group">
+            <label class="control-label">{{ 'Your resume' | translate | async }}</label>
+            <app-fileupload
+                [accept]="acceptedDocumentFileType"
+                [(data)]="resumeData"
+                [name]="'Upload your resume here' | translate | async"
+                [isLargeDocument]=true
+            ></app-fileupload>
+        </div>
+    </fieldset>
+    <div class='form-actions'>
+        <button [className]="'btn submitButton'"
+            type='submit'
+            ngbButton
+            (click)="submitResumeHandler($event)"
+        >
+            {{ 'Submit' | translate | async}}
+        </button>
+        <button [className]="'btn btn-outline-info'"
+            type='reset'
+            ngbButton>Cancel</button>
+    </div>
+</ng-template>
 
 <ng-template #panel>
     <mat-table

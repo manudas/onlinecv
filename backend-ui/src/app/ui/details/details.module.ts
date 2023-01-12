@@ -28,8 +28,8 @@ import {
     CardModule
 } from '@app/ui/card/card.module'
 import {
-    PictureuploadModule
-} from '@app/ui/pictureupload/pictureupload.module'
+    FileuploadModule
+} from '@app/ui/file-upload/file-upload.module'
 import {
     TranslationServiceModule
 } from '@services/translation'
@@ -63,7 +63,7 @@ import {
         FontAwesomeModule,
         NgbModule,
         CardModule,
-        PictureuploadModule,
+        FileuploadModule,
         MatTableModule,
         ReactiveFormsModule,
         TranslationServiceModule,

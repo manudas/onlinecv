@@ -9,10 +9,11 @@
         <legend>{{ 'Personal details' | translate | async }}</legend>
         <div class="form-group">
             <label class="control-label">{{ 'Your photo' | translate | async }}</label>
-            <app-pictureupload
+            <app-fileupload
                 [name]="getNicknameOrName()"
-               [(imageData)]="profileImage"
-            ></app-pictureupload>
+               [(data)]="profileImage"
+               [accept]="acceptedPhotoFileType"
+            ></app-fileupload>
         </div>
         <form
             [formGroup]="detailsFormGroup"

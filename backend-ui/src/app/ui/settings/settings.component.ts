@@ -8,6 +8,8 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 import * as ACTION_SETTINGS from '@store_actions/Settings'
 import { logEasy } from '@app/services/logging'
+import { definedFileTypes } from '@utils/Files'
+
 
 type StoreType = { locale: LocaleStore } & { settings: {data: SettingsType } }
 @Component({
@@ -48,6 +50,8 @@ export class SettingsComponent implements OnInit {
     smtpPassword: new FormControl(null, this.ValidateRequiredIfMessagingToEmailEnabled),
     messagingEmail: new FormControl(null, [Validators.email, this.ValidateRequiredIfMessagingToEmailEnabled]),
   })
+
+  acceptedPhotoFileType = definedFileTypes.image
 
   constructor(private store: Store<StoreType>) {
     this.settings$ = this.store.pipe(

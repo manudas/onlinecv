@@ -18,6 +18,7 @@ import { Observable } from 'rxjs'
 import * as OTHERS_ACTIONS from '@store_actions/Others'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { OthersDialogComponent } from './others-dialog.component'
+import { definedFileTypes } from '@app/utils/Files'
 
 type StoreType = { locale: LocaleStore } & { references: ReferenceDef[] }
 @Component({
@@ -51,6 +52,9 @@ export class OthersComponent implements OnInit {
 
   type: OthersType
 
+  resumeData: Blob
+  acceptedDocumentFileType = definedFileTypes.document
+
   constructor(private activatedRoute:ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog) {
     this.activatedRoute.paramMap.subscribe(params => {
       const passedType: string = params.get('type')
@@ -64,6 +68,82 @@ export class OthersComponent implements OnInit {
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
 
     this.referencesData$ = this.store.pipe(select(state => state?.references))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    console.log('AÑADIMOS AQUI LOGICA Y COMPONENTES PARA SUBIR CV EN FORMATO DOCUMENTO AL SERVIDOR')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 
   public isElementActive(type: string) {
@@ -216,5 +296,9 @@ export class OthersComponent implements OnInit {
         )
       })
     }
+  }
+
+  submitResumeHandler($event) {
+
   }
 }

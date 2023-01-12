@@ -22,8 +22,8 @@ export class OthersDialogComponent {
         company: new FormControl(null),
         company_url: new FormControl(null),
         keywords: new FormControl(null),
-        phone: new FormControl('', this.validatorEmailOrPhone.bind(this)),
-        email: new FormControl('', this.validatorEmailOrPhone.bind(this)),
+        phone: new FormControl(null, this.validatorEmailOrPhone.bind(this)),
+        email: new FormControl(null, this.validatorEmailOrPhone.bind(this)),
     })
 
     editingIndex: number = null
@@ -37,9 +37,7 @@ export class OthersDialogComponent {
         this.editingIndex = index
 
         for (const control in this.dataFormGroup.controls) {
-            if (control.includes('date')) {
-                this.dataFormGroup.get(control).setValue(new Date(Number(reference[control])))
-            }
+            this.dataFormGroup.get(control).setValue(reference[control])
         }
     }
 
@@ -78,7 +76,7 @@ export class OthersDialogComponent {
 
     validatorEmailOrPhone(_): ValidationErrors | null {
         // no email and no phone, not allowed
-        const emailOrPhone = !this.dataFormGroup?.get('email').value.trim() && !this.dataFormGroup?.get('phone').value.trim()
+        const emailOrPhone = !this.dataFormGroup?.get('email').value?.trim() && !this.dataFormGroup?.get('phone').value?.trim()
         if (emailOrPhone) { // is not valid, set both as erroneus
             this.dataFormGroup?.get('email').setErrors({ emailOrPhone: { value: true } })
             this.dataFormGroup?.get('phone').setErrors({ emailOrPhone: { value: true } })

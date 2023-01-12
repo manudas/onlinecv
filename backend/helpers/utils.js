@@ -1,5 +1,5 @@
 const cleanObject = (object, keyMapping) => Object.entries(object).reduce((prev, [currKey, currVal]) => {
-    currVal !== null && (prev[keyMapping[currKey] ? keyMapping[currKey] : currKey] = currVal);
+    (!!currVal || currVal === 0) && (prev[keyMapping[currKey] ? keyMapping[currKey] : currKey] = currVal);
     return prev;
 }, {});
 

@@ -9,11 +9,12 @@
         <legend>{{'Settings' | translate | async}}</legend>
         <div class="form-group">
             <label class="control-label">{{'Resume background image' | translate | async}}</label>
-            <app-pictureupload
-                [isLargeImage]="true"
+            <app-fileupload
+                [isLargeDocument]="true"
                 [name]="'Set a background image for your online Resume' | translate | async"
-               [(imageData)]="backgroundImage"
-            ></app-pictureupload>
+               [(data)]="backgroundImage"
+               [accept]="acceptedPhotoFileType"
+            ></app-fileupload>
         </div>
         <form
             [formGroup]="settingsFormGroup"

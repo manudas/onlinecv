@@ -3,7 +3,7 @@ import {
     MatDialogRef,
     MAT_DIALOG_DATA,
 } from "@angular/material/dialog"
-import { PictureOptions } from "@app/types/Picture";
+import { FileOptions } from "@app/types/File";
 
 @Component({
     templateUrl: './confirm.component.html',
@@ -12,14 +12,14 @@ import { PictureOptions } from "@app/types/Picture";
 export class ConfirmComponent {
 
 
-    get PictureOptions(): typeof PictureOptions {
-        return PictureOptions
+    get FileOptions(): typeof FileOptions {
+        return FileOptions
     }
 
     // we are not planning to pass data down to the constructor for now in this confirmation component
     constructor( public dialogRef: MatDialogRef<ConfirmComponent>, @Inject(MAT_DIALOG_DATA) public data: never) { }
 
-    close(message: PictureOptions) {
+    close(message: FileOptions) {
         /*
          * this is to get the message in the caller:
 

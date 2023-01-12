@@ -36,7 +36,7 @@ module.exports = {
                     }
 
                     const element =
-                        await ReferenceModel.findOneAndUpdate(
+                        await ReferenceModel.findOneAndReplace(
                             {
                                 _id: cleanedObject._id
                             },

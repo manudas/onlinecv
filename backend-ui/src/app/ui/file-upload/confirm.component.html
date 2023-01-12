@@ -13,7 +13,7 @@
     <div
         [className]="'paddedContent'"
     >
-        {{ 'You can remove your picture, upload a new one or cancel the operation' | translate | async }}
+        {{ 'You can remove your file, download, change to a new one or cancel the operation' | translate | async }}
     </div>
 </div>
 <div mat-dialog-actions>
@@ -24,7 +24,7 @@
             [className]="'btn btn-outline-info'"
             type='button'
             ngbButton
-            (click)="close(PictureOptions.cancel)"
+            (click)="close(FileOptions.cancel)"
         >
             {{ 'Cancel' | translate | async }}
         </button>
@@ -34,16 +34,23 @@
             <button
                 [className]="'btn'"
                 ngbButton
-                (click)="close(PictureOptions.delete)"
+                (click)="close(FileOptions.delete)"
             >
                 {{ 'Delete' | translate | async }}
             </button>
             <button
                 [className]="'btn'"
                 ngbButton
-                (click)="close(PictureOptions.upload)"
+                (click)="close(FileOptions.download)"
             >
-                {{ 'Upload' | translate | async }}
+                {{ 'Download' | translate | async }}
+            </button>
+            <button
+                [className]="'btn'"
+                ngbButton
+                (click)="close(FileOptions.change)"
+            >
+                {{ 'Change' | translate | async }}
             </button>
         </div>
     </div>

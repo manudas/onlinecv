@@ -1,0 +1,69 @@
+<div [ngClass]="{
+    'widget': true,
+    'large': isLargeDocument
+}">
+    <div [ngClass]="{
+        'modalBox': true,
+        'large': isLargeDocument
+    }">
+        <div id="dropArea"
+            [ngClass]="{
+                'dragging': dragging,
+                'hasData': data,
+                'hasError': incorrectFileType || documentPreviewError,
+                'large': isLargeDocument
+            }"
+            [ngStyle]="{
+                'background-image': hasImage
+                                        ? 'url(' + getBase64Data() + ')'
+                                        : 'none',
+                'height': isLargeDocument && largeDocumentHeight + 'px'
+            }"
+            (dragover)="onDragOver($event)"
+            (mouseover)="mouseOver = true"
+            (mouseout)="mouseOver = false"
+            (dragleave)="onDragLeave($event)"
+            (drop)="onReceiveFile($event)"
+            (click)="onClickHandler($event)"
+            #imageContainer
+        >
+            <object
+                *ngIf="data && !hasImage && !documentPreviewError"
+                [data]="getBase64Data() + '#toolbar=0' | safe"
+                [type]="fileUtils.getMimeType(data.toString())"
+                border="0"
+                height="100%"
+                width="100%"
+                (error)="handleError($event)"
+            ></object>
+            <div [ngClass]="{
+                'dashes': true,
+                'large': isLargeDocument
+            }"></div>
+            <label
+                [ngStyle]="{
+                    'background-image': (mouseOver || dragging || incorrectFileType || documentPreviewError)
+                                            ? 'linear-gradient(rgba(255,255,255,.8), rgba(255,255,255,.8))'
+                                            : 'none'
+                }"
+            >
+                {{ incorrectFileType ? ('The file type you are trying to upload is not supported' | translate | async) : null }}
+                {{ documentPreviewError ? ('Preview of uploaded file is not supported by the browser' | translate | async) : null }}
+                {{ !incorrectFileType && !documentPreviewError ? ('Click to browse or drag a file here' | translate | async) : null }}
+            </label>
+        </div>
+        <div class="name">
+            <h1
+                *ngIf="name"
+            >
+                {{ name }}
+            </h1>
+        </div>
+    </div>
+    <input type="file"
+        id="fileReference"
+        #fileReference
+        (change)="onReceiveFile($event)"
+        [accept]="acceptedExtensions ? acceptedExtensions : '*'"
+    />
+</div>

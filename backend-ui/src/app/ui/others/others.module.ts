@@ -9,7 +9,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 import { CardModule } from '@app/ui/card/card.module'
 import { ConfirmModule } from '@app/ui/confirm/confirm.module'
-
+import { FileuploadModule } from '@app/ui/file-upload/file-upload.module'
 import { TranslationServiceModule } from '@services/translation'
 
 import { OthersComponent } from './others.component'
@@ -30,6 +30,7 @@ import { MatIconModule } from '@angular/material/icon'
         ConfirmModule,
         CommonModule,
         DragDropModule,
+        FileuploadModule,
         FontAwesomeModule,
         MatDatepickerModule,
         MatNativeDateModule,

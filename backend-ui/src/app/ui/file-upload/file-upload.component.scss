@@ -1,6 +1,6 @@
 @import '../../globals/styles';
 
-.picture {
+.widget {
     margin-top: 50px;
     // ----- Variable Declarations -----
     @keyframes spin {
@@ -24,7 +24,7 @@
             padding-left: 0;
         }
     }
-    #mediaFile {
+    #fileReference {
         visibility: hidden;
         height: 0;
         width: 0;
@@ -40,7 +40,6 @@
         margin-bottom: -80px;
         cursor: pointer;
         background: $grey;
-        display: table;
         background-size: cover;
         background-position: center center;
         box-shadow: 0 5px 8px rgba($black, 0.35);
@@ -62,20 +61,28 @@
             }
         }
         label {
-            display: table-cell;
-            vertical-align: middle;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 100%;
+            margin: 4px;
             text-align: center;
             padding: 0 30px;
             color: $darkerGrey;
             opacity: 1;
         }
 
-        &.hasImage {
+        &.hasData {
             .dashes,
             label {
                 opacity: 0;
             }
-            &:hover {
+            &:hover,&.hasError {
                 .dashes,
                 label {
                     opacity: initial;
@@ -95,7 +102,7 @@
                 opacity: 0.5;
             }
         }
-        &.hasImage {
+        &.hasData {
             &.dragging {
                 /*
                  * If label is in a container
@@ -109,8 +116,11 @@
             }
         }
         &.large {
-            width: auto;
+            width: 80%;
             border-radius: 0;
+            label {
+                border-radius: 0;
+            }
         }
     }
     .name {

@@ -24,6 +24,7 @@ import * as COMMON_ACTIONS from '@store_actions/Common'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { logEasy } from '@app/services/logging'
+import { definedFileTypes } from '@utils/Files'
 
 type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } } & { socialNetworks: {list: SocialNetwork[] } }
 @Component({
@@ -98,6 +99,8 @@ export class DetailsComponent implements OnInit {
           : null
         )
   }
+
+  acceptedPhotoFileType = definedFileTypes.image
 
   constructor(private store: Store<StoreType>, private matDialog: MatDialog, private translate: TranslationService) {
     this.details$ = this.store.pipe(
