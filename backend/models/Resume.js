@@ -6,11 +6,12 @@ const {
 const collection = 'resume';
 
 const ResumeSchema = new Schema({
-    resume: String,
-    keywords: [],
+    resume: Schema.Types.Buffer,
+    keywords: [String],
     language: String
 }, {
     collection,
+    versionKey: false
 });
 
 const ResumeModel = model(collection, ResumeSchema);

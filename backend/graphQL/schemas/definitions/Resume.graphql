@@ -1,0 +1,24 @@
+type Resume {
+  _id: ID!
+  data: String!
+  keywords: [String]
+  language: String!
+}
+
+input ResumeInput {
+  id: ID
+  data: String!
+  keywords: [String]
+  language: String!
+}
+
+extend type Query {
+  resume(language: String!): Resume
+}
+
+extend type Mutation {
+  putResume(resume: ResumeInput!): Resume!
+
+  """ Will we need removeResume? """
+  removeResume(id: ID!): Boolean!
+}

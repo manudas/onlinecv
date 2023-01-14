@@ -1,5 +1,7 @@
-import { OthersType, ReferenceDef, ReferencesFetched } from '@app/types/References'
+import { ReferenceDef, ReferencesFetched } from '@app/types/References'
+import { OthersType } from '@app/types/Others'
 import { createAction, props } from '@ngrx/store'
+import { ResumeFetched } from '@app/types'
 
 export const SAVE_REFERENCES =  createAction(
     '[Others Component] SaveData',
@@ -37,4 +39,9 @@ export const REMOVE_REFERENCE = createAction(
     props<{
         id: string
     }>()
+)
+
+export const RESUME_FETCHED = createAction(
+    '[Others Effect] Resume fetched',
+    props<ResumeFetched>()
 )

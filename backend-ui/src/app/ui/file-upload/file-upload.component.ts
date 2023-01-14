@@ -1,10 +1,8 @@
 import { Component, OnInit, HostListener, Input, Output, EventEmitter, ViewChild, OnDestroy, ChangeDetectorRef } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { logEasy } from '@app/services/logging'
-import { TranslationService } from '@app/services/translation/translation.service'
 import { FileOptions } from '@app/types/File'
 import * as FILE_UTILS from '@app/utils/Files'
-import { Observable } from 'rxjs'
 import { ConfirmComponent } from './confirm.component'
 import { acceptedFileType, definedFileTypes } from '@utils/Files'
 
@@ -34,14 +32,11 @@ export class FileuploadComponent implements OnInit, OnDestroy {
   incorrectFileType = false
   documentPreviewError = false
 
-  // to be used in the template
-  fileUtils = FILE_UTILS
-
   _data: Blob
   @Input()
   set data(data: Blob) {
     this._data = data
-    if (data && this.fileUtils.isBase64Image(data)) {
+    if (data && FILE_UTILS.isBase64Image(data)) {
       this.hasImage = true
     } else {
       this.hasImage = false
@@ -62,7 +57,7 @@ export class FileuploadComponent implements OnInit, OnDestroy {
 
   private resizeObserverInstance
 
-  constructor(private matDialog: MatDialog, private changeDetector: ChangeDetectorRef, private translationService: TranslationService) { }
+  constructor(private matDialog: MatDialog, private changeDetector: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     if(this.isLargeDocument) {
@@ -103,7 +98,7 @@ export class FileuploadComponent implements OnInit, OnDestroy {
     this.dragging = false
   }
 
-  getBase64Data = () => this.fileUtils.attachUrlDataTypeToBase64(this._data)
+  getBase64Data = () => FILE_UTILS.attachUrlDataTypeToBase64(this._data)
 
   onReceiveFile($event) {
     $event.preventDefault()
@@ -120,7 +115,7 @@ export class FileuploadComponent implements OnInit, OnDestroy {
       return
 
     } else {
-      this.incorrectFileType = false
+      this.reset()
     }
 
     if (file) {
@@ -130,8 +125,7 @@ export class FileuploadComponent implements OnInit, OnDestroy {
       //attach event handlers here...
       reader.readAsDataURL(file)
       reader.onload = function(e) {
-        this.documentPreviewError = false
-        this.data = this.fileUtils.removeUrlDataFromBase64(reader.result)
+        this.data = FILE_UTILS.removeUrlDataFromBase64(reader.result)
         this.changeDetector.detectChanges()
       }.bind(this)
     }
@@ -141,6 +135,7 @@ export class FileuploadComponent implements OnInit, OnDestroy {
     this.fileReference.nativeElement.value = '';
     if (!preserveData) {
       this.documentPreviewError = false
+      this.documentInitialised = false
       this.incorrectFileType = false
       this.data = null
     }
@@ -189,16 +184,36 @@ export class FileuploadComponent implements OnInit, OnDestroy {
   downloadFile() {
     const downloadLink = document.createElement('a')
     let fileName =  definedFileTypes.document
-    if (this.fileUtils.isBase64Image(this.data)) {
+    if (FILE_UTILS.isBase64Image(this.data)) {
       fileName = definedFileTypes.image
     }
-    const extension = this.fileUtils.getMainExtension(this.data.toString())
+    const extension = FILE_UTILS.getMainExtension(this.data.toString())
     downloadLink.href = this.getBase64Data();
     downloadLink.download = `${fileName}${extension ? '.' + extension : ''}`
     downloadLink.click();
   }
 
+
+
+  documentInitialised = false
+  // error handling
   handleError(_$event) {
     this.documentPreviewError = true
+  }
+
+  /*
+   * Firefox doens't get well with sanatising resource urls
+   * so we don't have any choice but to do it like this
+   */
+  confirmLoading($event) {
+    const {
+      target
+    } = $event
+    if (!this.documentInitialised) {
+      target.type = FILE_UTILS.getMimeType(this.data.toString())
+      target.data = this.getBase64Data() + '#toolbar=0'
+      this.documentPreviewError = false
+      this.documentInitialised = true
+    }
   }
 }

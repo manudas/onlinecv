@@ -8,6 +8,8 @@ export * from './Locale'
 
 export * from './References'
 
+export * from './Resume'
+
 export * from './Settings'
 
 export * from './Skills'

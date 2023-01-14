@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { ActivatedRoute } from '@angular/router'
 import { logEasy } from '@app/services/logging'
-import { ReferenceDef, EditReferenceStructure, OthersType } from '@app/types/References'
+import { ReferenceDef, EditReferenceStructure } from '@app/types/References'
+import { OthersType } from '@app/types/Others'
 import { LocaleStore } from '@app/types/Locale'
 
 import {
@@ -68,82 +69,6 @@ export class OthersComponent implements OnInit {
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
 
     this.referencesData$ = this.store.pipe(select(state => state?.references))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    console.log('AÑADIMOS AQUI LOGICA Y COMPONENTES PARA SUBIR CV EN FORMATO DOCUMENTO AL SERVIDOR')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   }
 
   public isElementActive(type: string) {

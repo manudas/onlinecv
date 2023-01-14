@@ -20,9 +20,3 @@ export type EditReferenceStructure = {
 export type ReferencesFetched = {
     references: ReferenceDef[]
 }
-
-export enum OthersType {
-    all,
-    'professional-references',
-    'upload-resume'
-}

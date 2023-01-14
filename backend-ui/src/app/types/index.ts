@@ -10,7 +10,11 @@ export * from './Memo'
 
 export * from './Message'
 
+export * from './Others'
+
 export * from './References'
+
+export * from './Resume'
 
 export * from './SocialNetworks'
 

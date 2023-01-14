@@ -11,8 +11,8 @@ import { DataService } from '@services/data/data.service'
 
 import { TranslationService } from '@app/services/translation/translation.service'
 import { logEasy } from '@app/services/logging/logging.service'
-import { MutateReferences, QueryReferences, RemoveReference } from '@app/services/data/queries'
-import { LocaleStore, OthersType, ReferencesFetched } from '@app/types'
+import { MutateReferences, QueryReferences, QueryResume, RemoveReference } from '@app/services/data/queries'
+import { LocaleStore, OthersType, ReferencesFetched, ResumeFetched } from '@app/types'
 import { select, Store } from '@ngrx/store'
 
 type StoreType = { locale: LocaleStore }
@@ -141,6 +141,41 @@ export class OthersEffects {
                         message: errors.map(error => error.message),
                         timeout: 2000
                     }))
+                })
+            )
+        })
+    ))
+
+    /**
+     * Effect provides new actions as
+     * a result of the operation performed
+     */
+    public fetchResumeEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
+        ofType(OTHERS_ACTIONS.FETCH(OthersType['upload-resume'])),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
+        switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const {
+                language,
+            } = action
+
+            const {
+                query,
+                variables
+            } = QueryResume(language)
+
+            return this.dataService.readData(query, variables).pipe(
+
+                map((resume: ResumeFetched) => {
+                    return OTHERS_ACTIONS.RESUME_FETCHED({
+                        ...resume
+                    })
+                }),
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
+                    return of({
+                        type: COMMON_ACTIONS.FAIL.type,
+                        message: errors.map(error => error.message)
+                    })
                 })
             )
         })

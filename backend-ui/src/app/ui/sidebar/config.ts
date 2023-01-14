@@ -1,3 +1,4 @@
+import { ExperienceType, OthersType, SkillsType, TrainingType, TranslationEnum } from '@app/types';
 import {
 	faLanguage,
 	faBookmark,
@@ -49,19 +50,19 @@ export const MenuListItems = [{
 			{
 				name: 'Official',
 				url: 'training',
-				urlSegments: 'official',
+				urlSegments: TrainingType[TrainingType.official],
 				type: 'option',
 			},
 			{
 				name: 'Computer skills',
 				url: 'training',
-				urlSegments: 'computer',
+				urlSegments: TrainingType[TrainingType.computer],
 				type: 'option',
 			},
 			{
 				name: 'Other skills',
 				url: 'training',
-				urlSegments: 'other',
+				urlSegments: TrainingType[TrainingType.other],
 				type: 'option',
 			}
 		]
@@ -86,25 +87,24 @@ export const MenuListItems = [{
 			},
 			{
 				name: 'Professional',
-				urlSegments: 'professional',
 				url: 'experience',
+				urlSegments: ExperienceType[ExperienceType.professional],
 				type: 'option',
 			},
 			{
 				name: 'Ongs',
 				url: 'experience',
-				urlSegments: 'ong',
+				urlSegments: ExperienceType[ExperienceType.ong],
 				type: 'option',
 			},
 			{
 				name: 'Other experiences',
 				url: 'experience',
-				urlSegments: 'other',
+				urlSegments: ExperienceType[ExperienceType.other],
 				type: 'option',
 			}
 		]
 	},
-
 	{
 		name: 'SkillsDropdown',
 		start_icon: faCog,
@@ -125,19 +125,19 @@ export const MenuListItems = [{
 			{
 				name: 'Skills',
 				url: 'skills',
-				urlSegments: 'skills',
+				urlSegments: SkillsType[SkillsType.general],
 				type: 'option',
 			},
 			{
 				name: 'Computer skills',
 				url: 'skills',
-				urlSegments: 'computers',
+				urlSegments: SkillsType[SkillsType.computer],
 				type: 'option',
 			},
 			{
 				name: 'Languages',
 				url: 'skills',
-				urlSegments: 'languages',
+				urlSegments: SkillsType[SkillsType.language],
 				type: 'option',
 			}
 		]
@@ -162,13 +162,13 @@ export const MenuListItems = [{
 			{
 				name: 'Professional references',
 				url: 'others',
-				urlSegments: 'professional-references',
+				urlSegments: OthersType[OthersType['professional-references']],
 				type: 'option',
 			},
 			{
 				name: 'Attach resume document',
 				url: 'others',
-				urlSegments: 'resume-document',
+				urlSegments: OthersType[OthersType['upload-resume']],
 				type: 'option',
 			}
 		]
@@ -193,13 +193,13 @@ export const MenuListItems = [{
 			{
 				name: 'Missing translations',
 				url: 'translations',
-				urlSegments: 'missing',
+				urlSegments: TranslationEnum[TranslationEnum.missing],
 				type: 'option',
 			},
 			{
 				name: 'Translated strings',
 				url: 'translations',
-				urlSegments: 'translated',
+				urlSegments: TranslationEnum[TranslationEnum.translated],
 				type: 'option',
 			},
 		]

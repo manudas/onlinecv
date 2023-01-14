@@ -29,12 +29,13 @@
         >
             <object
                 *ngIf="data && !hasImage && !documentPreviewError"
-                [data]="getBase64Data() + '#toolbar=0' | safe"
-                [type]="fileUtils.getMimeType(data.toString())"
+                type="text/plain"
+                data="data:text/plain;base64,"
                 border="0"
                 height="100%"
                 width="100%"
                 (error)="handleError($event)"
+                (load)="confirmLoading($event)"
             ></object>
             <div [ngClass]="{
                 'dashes': true,
