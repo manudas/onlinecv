@@ -6,7 +6,7 @@ const {
 const collection = 'resume';
 
 const ResumeSchema = new Schema({
-    resume: Schema.Types.Buffer,
+    data: Schema.Types.Buffer,
     keywords: [String],
     language: String
 }, {

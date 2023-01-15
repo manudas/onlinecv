@@ -9,6 +9,7 @@ import { ComponentDef } from "helpers/types"
 import { translateString } from "helpers/translations"
 
 import "./menu.css"
+import { downloadDocument } from "helpers/files"
 
 class Menu extends Component<PropDef, StateDef> {
     constructor(props: PropDef) {
@@ -113,13 +114,13 @@ class Menu extends Component<PropDef, StateDef> {
         if ( this.state.componentRefs.length === 0 ) return null
 		const components = this.state.componentRefs
 
-		let name = this.props?.details?.name ?? 'Name example';
-        let surname = this.props?.details?.surname ?? 'LastName example';
-        name = name.split(' ')[0];
-        surname = surname.split(' ')[0];
+		let name = this.props?.details?.name
+        let surname = this.props?.details?.surname
+        name = name?.split(' ')[0]
+        surname = surname?.split(' ')[0]
 
-        const primaryJobName = this.props?.details?.primaryJobName ?? null;
-		const secondaryJobName = this.props?.details?.secondaryJobName ?? null;
+        const primaryJobName = this.props?.details?.primaryJobName ?? null
+		const secondaryJobName = this.props?.details?.secondaryJobName ?? null
 
 		const jobNames = primaryJobName ? primaryJobName + (secondaryJobName ? `/ ${secondaryJobName}` : '') : ''
 
@@ -154,12 +155,17 @@ class Menu extends Component<PropDef, StateDef> {
 
                 {/*<!-- Other Buttons -->*/}
                 <div className="side-menu-buttons">
-                    <a
-                        href="#downloadResume"
-                        className="btn btn-side-menu"
-                    >
-                        <i className="fa fa-download" /> { translateString('Download my resume', this) }
-                    </a>
+                    {
+                        this.props.resumeEncodedData
+                            ? <a
+                                onClick={() => downloadDocument(this.props.resumeEncodedData.data, `${name}${surname ? surname: ''}${jobNames ? ' - ' + jobNames : ''}`)}
+                                href="#downloadResume"
+                                className="btn btn-side-menu"
+                            >
+                                <i className="fa fa-download" /> { translateString('Download my resume', this) }
+                            </a>
+                            : null
+                    }
                     <a
                         href="#sendMessage"
                         className="btn btn-side-menu"
@@ -193,10 +199,12 @@ function mapStateToProps(state: any) {
 
     const details = data?.resume?.details;
     const language = state?.language;
+    const resumeEncodedData = data?.resume?.resume
 
     return {
-        details: details,
-        language: language,
+        details,
+        language,
+        resumeEncodedData
     };
 }
 

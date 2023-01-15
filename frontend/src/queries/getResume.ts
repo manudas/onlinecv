@@ -116,6 +116,16 @@ export const getUserFullResumeQuery = (lang: string) => {
                 'language',
                 'order'
             ]
+        },
+        {
+            operation: 'resume',
+            variables: {
+                language: { value: lang, required: true }
+            },
+            fields: [
+                'data',
+                'language',
+            ]
         }
     ])
 

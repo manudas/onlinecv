@@ -19,6 +19,7 @@ import { PropDef } from './types'
 import { ComponentDef } from "helpers/types"
 
 import './cvcontainer.css'
+import { downloadDocument } from 'helpers/files'
 class CVContainer extends Component<PropDef> {
     private cvComponents: ComponentDef[] = []
 
@@ -37,19 +38,35 @@ class CVContainer extends Component<PropDef> {
     }
 
     renderHeaderButtons() {
+        const { details } = this.props.resume
+        let name = details?.name
+        let surname = details?.surname
+        name = name?.split(' ')[0]
+        surname = surname?.split(' ')[0]
+
+        const primaryJobName = details?.primaryJobName
+		const secondaryJobName = details?.secondaryJobName
+
+		const jobNames = primaryJobName ? primaryJobName + (secondaryJobName ? `/ ${secondaryJobName}` : '') : ''
+
         /* Header Buttons */
         return (
             <div className="row">
                 <div className="header-buttons col-md-10 col-md-offset-1">
                     {/* Download Resume Button */}
-                    <a
-                        href="#downloadResumeTopBar"
-                        className="btn btn-default btn-top-resume">
-                        <i className="fa fa-download" />
-                        <span className="btn-hide-text">
-                            { translateString('Download my resume', this) }
-                        </span>
-                    </a>
+                    {
+                        this.props.resume.resume
+                            ? <a
+                                onClick={() => downloadDocument(this.props.resume.resume.data, `${name}${surname ? surname: ''}${jobNames ? ' - ' + jobNames : ''}`)}
+                                href="#downloadResumeTopBar"
+                                className="btn btn-default btn-top-resume">
+                                <i className="fa fa-download" />
+                                <span className="btn-hide-text">
+                                    { translateString('Download my resume', this) }
+                                </span>
+                            </a>
+                            : null
+                    }
                     {/* /Download Resume Button */}
                     {/* Mail Button */}
                     <a
@@ -157,7 +174,7 @@ class CVContainer extends Component<PropDef> {
 function mapStateToProps(state: any) {
     const {
         data: {
-            resume = null
+            resume = null,
         } = {},
         language,
         translations: {

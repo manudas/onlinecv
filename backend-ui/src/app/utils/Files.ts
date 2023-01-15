@@ -6,7 +6,7 @@ export const combinedSignatures = { ...imageSignature, ...documentSignature }
 export const getBase64ImageExtension = (encodedbase64_file) => Object.entries(imageSignature).find(([signature]) => encodedbase64_file.startsWith(signature))?.[1] ?? null
 export const getBase64DocumentExtension = (encodedbase64_file) => Object.entries(documentSignature).find(([signature]) => encodedbase64_file.startsWith(signature))?.[1] ?? null
 export const removeUrlDataFromBase64 = (encodedbase64_file) => encodedbase64_file.replace(/^data:[a-z]+\/[a-z\.\-]+;base64,/i , "")
-export const attachUrlDataTypeToBase64 = (encodedbase64_file) => `data:${getMimeType(encodedbase64_file)};base64,${encodedbase64_file}`
+export const attachUrlDataTypeToBase64 = (encodedbase64_file) => `data:${getBase64MimeType(encodedbase64_file)};base64,${encodedbase64_file}`
 
 export const isBase64Image = (encodedbase64_file) => !!getBase64ImageExtension(removeUrlDataFromBase64(encodedbase64_file))
 export const isBase64Document = (encodedbase64_file) => !!getBase64DocumentExtension(removeUrlDataFromBase64(encodedbase64_file))
@@ -19,7 +19,7 @@ export function getMainExtension(encodedbase64_file: string) {
 }
 
 
-export const getMimeType = (encodedbase64_file: string) => {
+export const getBase64MimeType = (encodedbase64_file: string) => {
     const extension = getMainExtension(encodedbase64_file)
     if (isBase64Image(encodedbase64_file)) {
         return `image/${extension}`

@@ -210,7 +210,7 @@ export class FileuploadComponent implements OnInit, OnDestroy {
       target
     } = $event
     if (!this.documentInitialised) {
-      target.type = FILE_UTILS.getMimeType(this.data.toString())
+      target.type = FILE_UTILS.getBase64MimeType(this.data.toString())
       target.data = this.getBase64Data() + '#toolbar=0'
       this.documentPreviewError = false
       this.documentInitialised = true

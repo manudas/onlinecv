@@ -11,7 +11,7 @@ import { DataService } from '@services/data/data.service'
 
 import { TranslationService } from '@app/services/translation/translation.service'
 import { logEasy } from '@app/services/logging/logging.service'
-import { MutateReferences, QueryReferences, QueryResume, RemoveReference } from '@app/services/data/queries'
+import { MutateReferences, MutateResume, QueryReferences, QueryResume, RemoveReference, RemoveResume } from '@app/services/data/queries'
 import { LocaleStore, OthersType, ReferencesFetched, ResumeFetched } from '@app/types'
 import { select, Store } from '@ngrx/store'
 
@@ -20,7 +20,7 @@ type StoreType = { locale: LocaleStore }
 @Injectable()
 export class OthersEffects {
 
-    translationsToRequest = ['References saved successfully', 'Reference removed successfully', 'Error']
+    translationsToRequest = ['References saved successfully', 'Reference removed successfully', 'Error', 'Resume updated successfully']
 
     selectedLocale: string // iso code
     selectedLocale$: Observable<string>
@@ -176,6 +176,81 @@ export class OthersEffects {
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)
                     })
+                })
+            )
+        })
+    ))
+
+    /**
+     * Effect provides new actions as
+     * a result of the operation performed
+     */
+    public mutateResumeEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
+        ofType(OTHERS_ACTIONS.SAVE_RESUME),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
+        switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const {
+                resume,
+            } = action
+
+            const {
+                query,
+                variables
+            } = MutateResume(resume)
+
+            return this.dataService.setData(query, variables).pipe(
+                mergeMap(() => [
+                    COMMON_ACTIONS.SUCCESS({
+                        message: `${this.translate.getResolvedTranslation('Resume updated successfully', this)}`
+                    }),
+                    OTHERS_ACTIONS.FETCH(OthersType['upload-resume'])({
+                        language: this.selectedLocale,
+                    })
+                ]),
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
+                    return of(COMMON_ACTIONS.FAIL({
+                        message: errors.map(error => error.message),
+                        timeout: 2000
+                    }))
+                })
+            )
+        })
+    ))
+
+
+    /**
+     * Effect provides new actions as
+     * a result of the operation performed
+     */
+    public removeResumeEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
+        ofType<ReturnType<typeof OTHERS_ACTIONS.REMOVE_RESUME>>(OTHERS_ACTIONS.REMOVE_RESUME),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
+        switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const {
+                language,
+            } = action
+
+            const {
+                query,
+                variables,
+            } = RemoveResume(language)
+
+            return this.dataService.setData(query, variables).pipe(
+                mergeMap(() => [
+                    COMMON_ACTIONS.SUCCESS({
+                        message: `${this.translate.getResolvedTranslation('Resume removed successfully', this)}`
+                    }),
+                    OTHERS_ACTIONS.FETCH(OthersType['upload-resume'])({
+                        language: this.selectedLocale,
+                    })
+                ]),
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
+                    return of(COMMON_ACTIONS.FAIL({
+                        message: errors.map(error => error.message),
+                        timeout: 2000
+                    }))
                 })
             )
         })

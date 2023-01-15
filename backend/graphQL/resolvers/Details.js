@@ -17,10 +17,7 @@ module.exports = {
             })
                 .lean()
                 .exec(); // lean to get the model as a plain javascript object
-            if (details)
-                details.profileImage =
-                    details.profileImage &&
-                    details.profileImage.toString();
+            if (details) details.profileImage = details?.profileImage.toString();
             return details;
         }
     },

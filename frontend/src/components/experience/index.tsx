@@ -81,11 +81,9 @@ class Experience extends Component<PropDef> {
                             details?.length
                                 ? <ul className="text-justify detail-list">
                                     {
-                                        details.map(detail =>
-                                            <li key={ detail }>{ detail }</li>
-                                        )
+                                        details.map(detail => detail ? <li key={ detail }>{ detail }</li> : null)
                                     }
-                                </ul>    
+                                </ul>
                                 : null
                         }
                     </div>
@@ -127,7 +125,7 @@ class Experience extends Component<PropDef> {
 function mapStateToProps(state: {
     data: {
         resume: {
-            experiences: Array<experience>, 
+            experiences: Array<experience>,
             experienceTypes: Array<string>
         }
     },

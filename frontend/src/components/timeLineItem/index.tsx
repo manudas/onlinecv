@@ -5,7 +5,7 @@ import './timeLineItem.scss';
 type TimeLineItemProps = {
     children: React.ReactNode;
     className?: string | undefined;
-    type?: 'work' | 'education' | 'point' | undefined;
+    type?: 'work' | 'education' | 'point' | 'mail' | undefined;
 };
 
 const TimeLineItem = ({
@@ -18,8 +18,8 @@ const TimeLineItem = ({
             {/* Margin Colums (necessary for the timeline effect) */}
             <div className="col-md-1 bg1 hidden-sm hidden-xs" />
             <div
-                className={`col-md-2 timeline-progress hidden-sm hidden-xs ${
-                    type ? 'timeline-' + type : null
+                className={`col-md-2 hidden-sm hidden-xs ${
+                    type ? 'timeline-' + type : 'progress'
                 }`}
             />
             {/* Margin Colums */}

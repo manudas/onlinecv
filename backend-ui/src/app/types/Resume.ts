@@ -1,7 +1,7 @@
 export type ResumeDef = {
-    id: string
+    id?: string
     data: string
-    keywords: string[]
+    keywords?: string[]
     language: string
 }
 

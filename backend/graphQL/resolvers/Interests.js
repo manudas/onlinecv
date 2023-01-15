@@ -37,8 +37,8 @@ module.exports = {
                     upsert: true // if no details found, create a new entry
                 }
             );
-            return WriteResult.nUpserted === 1 ||
-                WriteResult.nModified === 1
+            return WriteResult.modifiedCount === 1 ||
+                WriteResult.upsertedCount === 1
                 ? Interest
                 : false;
         },
@@ -54,7 +54,7 @@ module.exports = {
                 },
                 true
             ); // true == remove one
-            return WriteResult.nRemoved === 1;
+            return WriteResult.deletedCount === 1;
         }
     }
 };

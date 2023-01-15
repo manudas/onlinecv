@@ -63,7 +63,7 @@ module.exports = {
                 },
                 true
             ); // true == remove one
-            return WriteResult.nRemoved === 1;
+            return WriteResult.deletedCount === 1;
         }
     }
 };

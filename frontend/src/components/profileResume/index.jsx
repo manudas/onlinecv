@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import {
-    getBase64ImageMimeType,
+    getBase64MimeType,
     bufferToBase64
-} from './../../helpers/image';
+} from './../../helpers/files';
 
 import { translateString } from '../../helpers/translations';
 
@@ -18,7 +18,7 @@ class ProfileResume extends Component {
         }
 
         const _profilePicture = this.props.profilePicture
-            ? `data:${getBase64ImageMimeType(
+            ? `data:${getBase64MimeType(
                   this.props.profilePicture
               )};base64,${this.props.profilePicture}`
             : null;
@@ -30,7 +30,7 @@ class ProfileResume extends Component {
 
         const primaryRole = this.props?.details?.primaryRole;
         const secondaryRole = this.props?.details?.secondaryRole;
-     
+
         const description = this.props?.details?.description;
         const roles = `${primaryRole} ${primaryRole && secondaryRole ? '/' : ''} ${secondaryRole}`
 

@@ -20,8 +20,9 @@ import * as OTHERS_ACTIONS from '@store_actions/Others'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { OthersDialogComponent } from './others-dialog.component'
 import { definedFileTypes } from '@app/utils/Files'
+import { ResumeDef } from '@app/types'
 
-type StoreType = { locale: LocaleStore } & { references: ReferenceDef[] }
+type StoreType = { locale: LocaleStore } & { references: ReferenceDef[] } & { resume: ResumeDef }
 @Component({
   selector: 'app-others',
   templateUrl: './others.component.html',
@@ -53,7 +54,15 @@ export class OthersComponent implements OnInit {
 
   type: OthersType
 
-  resumeData: Blob
+  resumeData$: Observable<ResumeDef>
+  _resumeData: Blob
+  set resumeData(data: any) {
+    this._resumeData = data
+  }
+  get resumeData() {
+    return this._resumeData
+  }
+
   acceptedDocumentFileType = definedFileTypes.document
 
   constructor(private activatedRoute:ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog) {
@@ -69,6 +78,8 @@ export class OthersComponent implements OnInit {
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
 
     this.referencesData$ = this.store.pipe(select(state => state?.references))
+
+    this.resumeData$ = this.store.pipe(select(state => state?.resume))
   }
 
   public isElementActive(type: string) {
@@ -81,6 +92,7 @@ export class OthersComponent implements OnInit {
     this.referencesData$.subscribe((data: ReferenceDef[]) => {
       this.referencesData = data ?? this.referencesData
     })
+    this.resumeData$.subscribe((data: ResumeDef) => this.resumeData = data ? data?.data : null)
     this.activatedRoute.paramMap.subscribe(() => this.fetchData())
   }
 
@@ -223,7 +235,18 @@ export class OthersComponent implements OnInit {
     }
   }
 
-  submitResumeHandler($event) {
-
+  submitResumeHandler(_$event) {
+    if (this.resumeData) {
+      this.store.dispatch(OTHERS_ACTIONS.SAVE_RESUME({
+        resume: {
+          data: this.resumeData.toString(),
+          language: this.selectedLocale,
+        }
+      }))
+    } else {
+      this.store.dispatch(OTHERS_ACTIONS.REMOVE_RESUME({
+        language: this.selectedLocale,
+      }))
+    }
   }
 }

@@ -33,6 +33,7 @@ import { reducer as experienceReducer } from '@store_reducers/Experience'
 import { reducer as languageReducer } from '@store_reducers/Languages'
 import { reducer as localeReducer } from '@store_reducers/Locale'
 import { reducer as messageReducer } from '@store_reducers/Message'
+import { reducer as resumeReducer } from '@store_reducers/Resume'
 import { reducer as referencesReducer } from '@store_reducers/References'
 import { reducer as settingsReducer } from '@store_reducers/Settings'
 import { reducer as skillsReducer } from '@store_reducers/Skills'
@@ -81,6 +82,7 @@ if (environment.production) {
             languages: languageReducer,
             locale: localeReducer,
             message: messageReducer,
+            resume: resumeReducer,
             references: referencesReducer,
             settings: settingsReducer,
             skills: skillsReducer,

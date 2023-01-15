@@ -178,7 +178,7 @@ class ContactForm extends Component<PropDef, StateDef> {
         /* SECTION ITEM */
         return (
             <TimeLineItem
-                type="point"
+                type="mail"
             >
                 <div className="line-content contact-content">
                         {/* Subtitle */}

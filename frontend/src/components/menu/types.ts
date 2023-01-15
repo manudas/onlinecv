@@ -7,6 +7,9 @@ export type PropDef = {
         primaryJobName: string,
         secondaryJobName: string,
     },
+    resumeEncodedData: {
+        data: string
+    },
     language: string,
     onComponentClick: Function,
 }

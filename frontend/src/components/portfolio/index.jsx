@@ -14,9 +14,9 @@ import { translateString } from '../../helpers/translations';
 import 'react-image-lightbox/style.css';
 
 import {
-    getBase64ImageMimeType,
+    getBase64MimeType,
     bufferToBase64
-} from '../../helpers/image';
+} from '../../helpers/files';
 
 import './portfolio.css';
 
@@ -62,7 +62,7 @@ class PortFolio extends Component {
             ? bufferToBase64(portfolio_item.picture)
             : null;
         const mimetype = image_data
-            ? getBase64ImageMimeType(image_data)
+            ? getBase64MimeType(image_data)
             : null;
 
         // `url(data:${getBase64ImageMimeType(this.props.background)};base64,${this.props.background})`

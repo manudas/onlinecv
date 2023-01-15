@@ -10,9 +10,9 @@ import PageLoader from './components/pageloader';
 import InfoContainer from './components/infoContainer';
 
 import {
-    getBase64ImageMimeType,
+    getBase64MimeType,
     bufferToBase64
-} from './helpers/image';
+} from './helpers/files';
 
 import { connect } from 'react-redux';
 import debounce from 'lodash/debounce';
@@ -132,7 +132,7 @@ class App extends Component {
 
     render() {
         let _backgroundImage = this.props.background
-            ? `url(data:${getBase64ImageMimeType(
+            ? `url(data:${getBase64MimeType(
                   this.props.background
               )};base64,${this.props.background})`
             : null;

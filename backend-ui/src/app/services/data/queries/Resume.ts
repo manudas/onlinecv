@@ -6,10 +6,6 @@ const queryFields = [
     'language',
 ]
 
-const mutationFields = [
-    'id: _id',
-]
-
 export const QueryResume = (
     lang: string,
 ) => {
@@ -41,7 +37,6 @@ export const MutateResume = (data) => {
                     type: 'ResumeInput'
                 }
             },
-            fields: mutationFields
         }
     )
 
@@ -53,15 +48,15 @@ export const MutateResume = (data) => {
 
 
 export const RemoveResume = (
-    id: string
+    language: string
 ) => {
     const { query: queryWithoutVars, variables } = mutation(
         {
             operation: 'removeResume',
             variables: {
-                id: {
-                    value: id,
-                    type: 'ID',
+                language: {
+                    value: language,
+                    type: 'String',
                     required: true,
                 }
             },
