@@ -2,16 +2,17 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { debounce } from 'lodash'
 
-import ProfileResume from 'components/profileResume'
-import ProfileDetail from 'components/profileDetails'
-import Training from 'components/training'
+import ContactForm from 'components/contactForm'
 import Experience from 'components/experience'
-import Skill from 'components/skills'
+import Footer from 'components/footer'
 import Interest from 'components/interests'
 import PortFolio from 'components/portfolio'
-import ContactForm from 'components/contactForm'
+import ProfileDetail from 'components/profileDetails'
+import ProfileResume from 'components/profileResume'
+import References from 'components/references'
+import Skill from 'components/skills'
 import ThankYou from 'components/thank_you'
-import Footer from 'components/footer'
+import Training from 'components/training'
 
 import { EventType } from "helpers/customEvents"
 import { translateString } from 'helpers/translations'
@@ -142,6 +143,10 @@ class CVContainer extends Component<PropDef> {
                                 <PortFolio
                                     reference={ this.addToList(React.createRef(), 'PortFolio') }
                                     name={ translateString('PortFolio', this) }
+                                />
+                                <References
+                                    reference={ this.addToList(React.createRef(), 'References') }
+                                    name={ translateString('References', this) }
                                 />
                                 <ContactForm
                                     reference={this.addToList(React.createRef(), 'ContactForm') }

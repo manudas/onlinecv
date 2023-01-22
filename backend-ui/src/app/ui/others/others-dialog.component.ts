@@ -36,9 +36,7 @@ export class OthersDialogComponent {
 
         this.editingIndex = index
 
-        for (const control in this.dataFormGroup.controls) {
-            this.dataFormGroup.get(control).setValue(reference[control])
-        }
+        if (reference) Object.keys(this.dataFormGroup.controls).forEach(control => this.dataFormGroup.get(control).setValue(reference[control] ?? null))
     }
 
     submitHandler($event): void {

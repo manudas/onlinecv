@@ -5,7 +5,7 @@ import './timeLineItem.scss';
 type TimeLineItemProps = {
     children: React.ReactNode;
     className?: string | undefined;
-    type?: 'work' | 'education' | 'point' | 'mail' | undefined;
+    type?: 'work' | 'education' | 'point' | 'mail' | 'references' | undefined;
 };
 
 const TimeLineItem = ({
