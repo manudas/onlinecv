@@ -32,7 +32,7 @@ class ProfileResume extends Component {
         const secondaryRole = this.props?.details?.secondaryRole;
 
         const description = this.props?.details?.description;
-        const roles = `${primaryRole} ${primaryRole && secondaryRole ? '/' : ''} ${secondaryRole}`
+        const roles = `${primaryRole}${primaryRole && secondaryRole ? ' / ' : ''}${secondaryRole ? secondaryRole : ''}`;
 
         /* =============== PROFILE INTRO ====================*/
         return (

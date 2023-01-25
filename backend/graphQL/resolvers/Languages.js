@@ -1,3 +1,6 @@
+const ObjectId = require('mongodb').ObjectId;
+const cleanObject = require('@helpers/utils').cleanObject;
+
 module.exports = {
     Query: {
         languages: async (
@@ -19,24 +22,36 @@ module.exports = {
     },
     Mutation: {
         putLanguages: async (
-            { Language },
+            { languages },
             { models: { LanguagesModel } },
             info
         ) => {
-            const WriteResult = await LanguagesModel.update(
-                {
-                    name: Language.name,
-                    language: Language.language
-                },
-                Language,
-                {
-                    upsert: true // if no details found, create a new entry
-                }
+
+            const WriteResult = await Promise.all(
+                languages.map(async (language) => {
+                    const cleanedLang = cleanObject(
+                        language,
+                        { id: '_id' }
+                    );
+
+                    if (!cleanedLang._id) {
+                        cleanedLang._id = new ObjectId();
+                    }
+
+                    const element =
+                        await LanguagesModel.findOneAndUpdate(
+                            { _id: cleanedLang._id },
+                            cleanedLang,
+                            {
+                                upsert: true, // if no details found, create a new entry
+                                new: true // return the value of the object after the update and not before
+                            }
+                        );
+
+                    return element;
+                })
             );
-            return WriteResult.modifiedCount === 1 ||
-                WriteResult.upsertedCount === 1
-                ? Language
-                : false;
+            return WriteResult ? WriteResult : false;
         },
         removeLanguage: async (
             parent,

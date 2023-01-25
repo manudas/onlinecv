@@ -6,6 +6,7 @@ import ContactForm from 'components/contactForm'
 import Experience from 'components/experience'
 import Footer from 'components/footer'
 import Interest from 'components/interests'
+import Languages from 'components/languages'
 import PortFolio from 'components/portfolio'
 import ProfileDetail from 'components/profileDetails'
 import ProfileResume from 'components/profileResume'
@@ -14,13 +15,14 @@ import Skill from 'components/skills'
 import ThankYou from 'components/thank_you'
 import Training from 'components/training'
 
+import { downloadDocument } from 'helpers/files'
 import { EventType } from "helpers/customEvents"
 import { translateString } from 'helpers/translations'
 import { PropDef } from './types'
 import { ComponentDef } from "helpers/types"
 
 import './cvcontainer.css'
-import { downloadDocument } from 'helpers/files'
+
 class CVContainer extends Component<PropDef> {
     private cvComponents: ComponentDef[] = []
 
@@ -45,10 +47,10 @@ class CVContainer extends Component<PropDef> {
         name = name?.split(' ')[0]
         surname = surname?.split(' ')[0]
 
-        const primaryJobName = details?.primaryJobName
-		const secondaryJobName = details?.secondaryJobName
+        const primaryRole = details?.primaryRole;
+        const secondaryRole = details?.secondaryRole;
 
-		const jobNames = primaryJobName ? primaryJobName + (secondaryJobName ? `/ ${secondaryJobName}` : '') : ''
+        const jobNames = `${primaryRole}${primaryRole && secondaryRole ? ' / ' : ''}${secondaryRole ? secondaryRole : ''}`
 
         /* Header Buttons */
         return (
@@ -58,7 +60,7 @@ class CVContainer extends Component<PropDef> {
                     {
                         this.props.resume.resume
                             ? <a
-                                onClick={() => downloadDocument(this.props.resume.resume.data, `${name}${surname ? surname: ''}${jobNames ? ' - ' + jobNames : ''}`)}
+                                onClick={() => downloadDocument(this.props.resume.resume.data, `${name}${surname ? ' ' + surname : ''}${jobNames ? ' - ' + jobNames : ''}`)}
                                 href="#downloadResumeTopBar"
                                 className="btn btn-default btn-top-resume">
                                 <i className="fa fa-download" />
@@ -135,6 +137,10 @@ class CVContainer extends Component<PropDef> {
                                 <Skill
                                     reference={ this.addToList(React.createRef(), 'Skill') }
                                     name={ translateString('Skill', this) }
+                                />
+                                <Languages
+                                    reference={ this.addToList(React.createRef(), 'Languages') }
+                                    name={ translateString('Languages', this) }
                                 />
                                 <Interest
                                     reference={ this.addToList(React.createRef(), 'Interest') }

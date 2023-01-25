@@ -118,6 +118,23 @@ export const getUserFullResumeQuery = (lang: string) => {
             ]
         },
         {
+            operation: 'languages',
+            variables: {
+                language: { value: lang, required: true }
+            },
+            fields: [
+                'name',
+                'certification',
+                'school',
+                'school_url',
+                'written_level',
+                'spoken_level',
+                'keywords',
+                'language',
+                'order'
+            ]
+        },
+        {
             operation: 'references',
             variables: {
                 language: { value: lang, required: true }

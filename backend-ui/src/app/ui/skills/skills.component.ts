@@ -24,7 +24,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import { EditLanguageStructure, LanguageInterface } from '@app/types/Languages'
 import { LanguageDialogComponent } from './languages-dialog.component'
 
-type StoreType = { locale: LocaleStore } & {skills: { general: SkillInterface[] } & { computer: SkillInterface[] } } & { language: { list: LanguageInterface[] } }
+type StoreType = { locale: LocaleStore } & {skills: { general: SkillInterface[] } & { computer: SkillInterface[] } } & { languages: { list: LanguageInterface[] } }
 @Component({
   selector: 'app-skills',
   templateUrl: './skills.component.html',
@@ -91,7 +91,7 @@ export class SkillsComponent implements OnInit {
     this.generalData$ = this.store.pipe(select(state => state?.skills?.general))
     this.computerData$ = this.store.pipe(select(state => state?.skills?.computer))
 
-    this.languageData$ = this.store.pipe(select(state => state?.language?.list))
+    this.languageData$ = this.store.pipe(select(state => state?.languages?.list))
 
     this.translate.prefetch(this.translationsToRequest, this)
 
@@ -192,7 +192,7 @@ export class SkillsComponent implements OnInit {
   }
 
   editLanguageValues(index: number, languageData: LanguageInterface) {
-    const dataIndex = 'languagesData'
+    const dataIndex = 'languageData'
     const newLanguages = [
       ...this[dataIndex].slice(0, index),
       { ...languageData},
@@ -236,14 +236,21 @@ export class SkillsComponent implements OnInit {
 
   editSkill(index: number, type: string) {
     const skill = this[`${type}Data`][index]
-    this.openSkillDialog({
-      skill,
-      index
-    })
+    if (type === SkillsType[SkillsType.language]) {
+      this.openLanguageDialog({
+        language: skill,
+        index
+      })
+    } else {
+      this.openSkillDialog({
+        skill,
+        index
+      })
+    }
   }
 
   addLanguage(languageData: LanguageInterface) {
-    const dataIndex = 'languagesData'
+    const dataIndex = 'languageData'
     this.editLanguageValues(this[dataIndex].length, {
       ...languageData,
       language: this.selectedLocale,

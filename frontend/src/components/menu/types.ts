@@ -4,8 +4,8 @@ export type PropDef = {
     details: {
         name: string,
         surname: string,
-        primaryJobName: string,
-        secondaryJobName: string,
+        primaryRole: string,
+        secondaryRole: string,
     },
     resumeEncodedData: {
         data: string

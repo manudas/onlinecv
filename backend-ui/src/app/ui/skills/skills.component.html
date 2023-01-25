@@ -89,7 +89,7 @@
         [className]="'text-right pt-3'"
     >
         <button
-            *ngIf="getSkillTypeName(type) !== 'languages'"
+            *ngIf="getSkillTypeName(type) !== 'language'"
             (click)="openSkillDialog(getSkillTypeName(type))"
             [className]="'btn btn-outline-info'"
             type='button'
@@ -98,7 +98,7 @@
             {{ 'Add Skills' | translate | async }}
         </button>
         <button
-            *ngIf="getSkillTypeName(type) === 'languages'"
+            *ngIf="getSkillTypeName(type) === 'language'"
             (click)="openLanguageDialog(getSkillTypeName(type))"
             [className]="'btn btn-outline-info'"
             type='button'

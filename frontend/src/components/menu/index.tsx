@@ -119,10 +119,11 @@ class Menu extends Component<PropDef, StateDef> {
         name = name?.split(' ')[0]
         surname = surname?.split(' ')[0]
 
-        const primaryJobName = this.props?.details?.primaryJobName ?? null
-		const secondaryJobName = this.props?.details?.secondaryJobName ?? null
+        const primaryRole = this.props?.details?.primaryRole;
+        const secondaryRole = this.props?.details?.secondaryRole;
 
-		const jobNames = primaryJobName ? primaryJobName + (secondaryJobName ? `/ ${secondaryJobName}` : '') : ''
+        const jobNames = `${primaryRole}${primaryRole && secondaryRole ? ' / ' : ''}${secondaryRole ? secondaryRole : ''}`
+
 
         return (
             <div className={"side-menu " + this.getSideMenuOpenedStateClass()}>
@@ -158,7 +159,7 @@ class Menu extends Component<PropDef, StateDef> {
                     {
                         this.props.resumeEncodedData
                             ? <a
-                                onClick={() => downloadDocument(this.props.resumeEncodedData.data, `${name}${surname ? surname: ''}${jobNames ? ' - ' + jobNames : ''}`)}
+                                onClick={() => downloadDocument(this.props.resumeEncodedData.data, `${name}${surname ? ' ' + surname : ''}${jobNames ? ' - ' + jobNames : ''}`)}
                                 href="#downloadResume"
                                 className="btn btn-side-menu"
                             >
