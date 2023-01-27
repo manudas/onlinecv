@@ -7,6 +7,7 @@ import Experience from 'components/experience'
 import Footer from 'components/footer'
 import Interest from 'components/interests'
 import Languages from 'components/languages'
+import LanguageSwitcher from 'components/languageSwitcher'
 import PortFolio from 'components/portfolio'
 import ProfileDetail from 'components/profileDetails'
 import ProfileResume from 'components/profileResume'
@@ -56,6 +57,7 @@ class CVContainer extends Component<PropDef> {
         return (
             <div className="row">
                 <div className="header-buttons col-md-10 col-md-offset-1">
+                    <LanguageSwitcher />
                     {/* Download Resume Button */}
                     {
                         this.props.resume.resume

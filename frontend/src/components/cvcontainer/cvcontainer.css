@@ -49,8 +49,10 @@
 }
 
 .header-buttons {
-    text-align: right;
     padding-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: end;
 }
 
 .resume-container {
@@ -64,7 +66,7 @@
 .timeline-wrap {
     background: #249991;
     position: relative;
-    z-index: 88;
+    /*z-index: 1;*/
 }
 
 @media (min-width:992px) {

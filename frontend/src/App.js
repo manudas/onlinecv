@@ -22,8 +22,8 @@ import { Memoization } from './helpers/Memo';
 import {
     requestUserDataLoad,
     requestTranslations,
-    setLanguageAC
-} from './store/actions';
+    setLanguage
+} from 'store/actions';
 
 import { bindActionCreators } from 'redux';
 
@@ -47,7 +47,8 @@ class App extends Component {
         this.cookies = new Cookies();
         const lang = this.cookies.get(LANG_COOKIE);
         this.props.setLanguage(
-            lang ?? DEFAULT_LANGUAGE_ISO
+            lang ?? DEFAULT_LANGUAGE_ISO,   // Set redux language data
+            lang ? false : true             // Set cookie language data
         );
 
         /*
@@ -57,6 +58,8 @@ class App extends Component {
          * the input (requested translations
          * array), hasn't changed
          */
+        
+        console.warn('review this, memo may not be working properly')
         this.debouncedHandler = Memoization(
             debounce(
                 ([params, iso]) => {
@@ -190,7 +193,7 @@ function mapDistpatchToProps(dispatch) {
         {
             requestUserDataLoad,
             requestTranslations,
-            setLanguage: setLanguageAC
+            setLanguage
         },
         dispatch
     );

@@ -82,10 +82,12 @@ export function userDetailsLoadAction(data) {
 }
 
 export const setLanguageAction = 'setLanguage';
-export function setLanguageAC(data) {
+export function setLanguage(data, setCookie = true) {
     // setLanguageActionCreator
-    const cookie = new Cookies();
-    cookie.set(LANG_COOKIE, data);
+    if (setCookie) {
+        const cookie = new Cookies();
+        cookie.set(LANG_COOKIE, data);
+    }
     return {
         type: setLanguageAction,
         payload: data
