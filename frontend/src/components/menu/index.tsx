@@ -7,10 +7,9 @@ import { EventType } from "helpers/customEvents"
 import { PropDef, StateDef } from "./types"
 import { ComponentDef } from "helpers/types"
 import { translateString } from "helpers/translations"
-
-import "./menu.css"
 import { downloadDocument } from "helpers/files"
 
+import "./menu.css"
 class Menu extends Component<PropDef, StateDef> {
     constructor(props: PropDef) {
         super(props);
@@ -119,11 +118,10 @@ class Menu extends Component<PropDef, StateDef> {
         name = name?.split(' ')[0]
         surname = surname?.split(' ')[0]
 
-        const primaryRole = this.props?.details?.primaryRole;
-        const secondaryRole = this.props?.details?.secondaryRole;
+        const primaryRole = this.props?.details?.primaryRole
+        const secondaryRole = this.props?.details?.secondaryRole
 
-        const jobNames = `${primaryRole}${primaryRole && secondaryRole ? ' / ' : ''}${secondaryRole ? secondaryRole : ''}`
-
+        const jobNames = primaryRole ? `${primaryRole}${primaryRole && secondaryRole ? ' / ' : ''}${secondaryRole ? secondaryRole : ''}` : null
 
         return (
             <div className={"side-menu " + this.getSideMenuOpenedStateClass()}>
@@ -134,11 +132,15 @@ class Menu extends Component<PropDef, StateDef> {
                 {/*<!-- /close button -->*/}
 
                 {/*<!-- Menu header -->*/}
-                <div className="side-menu-name">
-                    {/*<!-- edit with your name -->*/}
-                    {name} <strong>{ surname }</strong>
-                    {/*<!-- /edit with your name -->*/}
-                </div>
+                {
+                    name || surname
+                        ? <div className="side-menu-name">
+                            {/*<!-- edit with your name -->*/}
+                            {name} <strong>{ surname }</strong>
+                            {/*<!-- /edit with your name -->*/}
+                        </div>
+                        : null
+                }
                 {/*<!-- edit with your Job -->*/}
                 <p className="side-menu-job">{ jobNames }</p>
                 {/*<!-- /edit with your job -->*/}

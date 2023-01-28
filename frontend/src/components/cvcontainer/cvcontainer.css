@@ -52,7 +52,9 @@
     padding-top: 15px;
     display: flex;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
+    /* z-index: Needed when no details in some language, so the language selector doesn't get hidden */
+    z-index: 1;
 }
 
 .resume-container {
@@ -66,7 +68,6 @@
 .timeline-wrap {
     background: #249991;
     position: relative;
-    /*z-index: 1;*/
 }
 
 @media (min-width:992px) {

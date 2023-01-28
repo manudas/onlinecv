@@ -170,7 +170,13 @@ export const MenuListItems = [{
 				url: 'others',
 				urlSegments: OthersType[OthersType['upload-resume']],
 				type: 'option',
-			}
+			},
+			{
+				name: 'Resume quote',
+				url: 'others',
+				urlSegments: OthersType[OthersType.quote],
+				type: 'option',
+			},
 		]
 	},
 	{

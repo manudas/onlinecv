@@ -11,8 +11,8 @@ import { DataService } from '@services/data/data.service'
 
 import { TranslationService } from '@app/services/translation/translation.service'
 import { logEasy } from '@app/services/logging/logging.service'
-import { MutateReferences, MutateResume, QueryReferences, QueryResume, RemoveReference, RemoveResume } from '@app/services/data/queries'
-import { LocaleStore, OthersType, ReferencesFetched, ResumeFetched } from '@app/types'
+import { MutateReferences, MutateResume, QueryReferences, QueryResume, RemoveReference, RemoveResume, QueryQuote, MutateQuote, RemoveQuote } from '@app/services/data/queries'
+import { LocaleStore, OthersType, ReferencesFetched, ResumeFetched, QuoteFetched } from '@app/types'
 import { select, Store } from '@ngrx/store'
 
 type StoreType = { locale: LocaleStore }
@@ -20,7 +20,7 @@ type StoreType = { locale: LocaleStore }
 @Injectable()
 export class OthersEffects {
 
-    translationsToRequest = ['References saved successfully', 'Reference removed successfully', 'Error', 'Resume updated successfully']
+    translationsToRequest = ['References saved successfully', 'Reference removed successfully', 'Error', 'Resume updated successfully', 'Quote updated successfully', 'Quote removed successfully']
 
     selectedLocale: string // iso code
     selectedLocale$: Observable<string>
@@ -242,6 +242,140 @@ export class OthersEffects {
                         message: `${this.translate.getResolvedTranslation('Resume removed successfully', this)}`
                     }),
                     OTHERS_ACTIONS.FETCH(OthersType['upload-resume'])({
+                        language: this.selectedLocale,
+                    })
+                ]),
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
+                    return of(COMMON_ACTIONS.FAIL({
+                        message: errors.map(error => error.message),
+                        timeout: 2000
+                    }))
+                })
+            )
+        })
+    ))
+
+
+    /**
+     * Effect provides new actions as
+     * a result of the operation performed
+     */
+    public fetchQuoteEffect$: Observable<any> = createEffect(() =>
+        this.actions$.pipe(
+            ofType(
+                OTHERS_ACTIONS.FETCH(
+                    OthersType.quote
+                )
+            ),
+            tap((action) =>
+                logEasy(
+                    `Action caught in ${this.constructor.name}:`,
+                    action
+                )
+            ),
+            switchMap((action) => {
+                // if a new Actions arrives, the old Observable will be canceled
+                const { language } = action;
+
+                const { query, variables } = QueryQuote(language);
+
+                return this.dataService
+                    .readData(query, variables)
+                    .pipe(
+                        map((quote: QuoteFetched) => {
+                            return OTHERS_ACTIONS.QUOTE_FETCHED(
+                                {
+                                    ...quote
+                                }
+                            );
+                        }),
+                        catchError((response) => {
+                            const {
+                                error: {
+                                    errors = []
+                                } = {}
+                            } = response || {};
+                            return of(COMMON_ACTIONS.FAIL({
+                                message: errors.map((error) => error.message),
+                                timeout: 2000
+                            }))
+                        })
+                    );
+            })
+        )
+    )
+
+    /**
+     * Effect provides new actions as
+     * a result of the operation performed
+     */
+    public mutateQuoteEffect$: Observable<any> = createEffect(() =>
+        this.actions$.pipe(
+            ofType( OTHERS_ACTIONS.SAVE_QUOTE ),
+            tap((action) =>
+                logEasy(
+                    `Action caught in ${this.constructor.name}:`,
+                    action
+                )
+            ),
+            switchMap((action) => {
+                // if a new Actions arrives, the old Observable will be canceled
+                const { quote } = action;
+
+                const { query, variables } = MutateQuote(quote);
+
+                return this.dataService
+                    .setData(query, variables)
+                    .pipe(
+                        mergeMap(() => [
+                            COMMON_ACTIONS.SUCCESS({
+                                message: `${this.translate.getResolvedTranslation('Quote updated successfully', this)}`
+                            }),
+                            OTHERS_ACTIONS.FETCH(OthersType.quote)({
+                                language: this.selectedLocale,
+                            })
+                        ]),
+                        catchError((response) => {
+                            const {
+                                error: {
+                                    errors = []
+                                } = {}
+                            } = response || {};
+                            return of(COMMON_ACTIONS.FAIL({
+                                message: errors.map((error) => error.message),
+                                timeout: 2000
+                            }))
+                        })
+                    );
+            })
+        )
+    )
+
+
+    /**
+     * Effect provides new actions as
+     * a result of the operation performed
+     */
+    public removeQuoteEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
+        ofType<ReturnType<typeof OTHERS_ACTIONS.REMOVE_QUOTE>>(OTHERS_ACTIONS.REMOVE_QUOTE),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
+        switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const {
+                id,
+            } = action
+
+            const {
+                query,
+                variables,
+            } = RemoveQuote(id)
+
+            return this.dataService.setData(query, variables).pipe(
+                mergeMap(() => [
+                    COMMON_ACTIONS.SUCCESS({
+                        message: `${this.translate.getResolvedTranslation('Quote removed successfully', this)}`
+                    }),
+                    OTHERS_ACTIONS.FETCH(OthersType.quote)({
                         language: this.selectedLocale,
                     })
                 ]),

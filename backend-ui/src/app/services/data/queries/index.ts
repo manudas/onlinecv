@@ -6,6 +6,8 @@ export * from './Languages'
 
 export * from './Locale'
 
+export * from './Quote'
+
 export * from './References'
 
 export * from './Resume'

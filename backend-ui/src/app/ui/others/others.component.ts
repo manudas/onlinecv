@@ -20,9 +20,10 @@ import * as OTHERS_ACTIONS from '@store_actions/Others'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { OthersDialogComponent } from './others-dialog.component'
 import { definedFileTypes } from '@app/utils/Files'
-import { ResumeDef } from '@app/types'
+import { QuoteDef, ResumeDef } from '@app/types'
+import { FormControl, FormGroup, Validators } from '@angular/forms'
 
-type StoreType = { locale: LocaleStore } & { references: ReferenceDef[] } & { resume: ResumeDef }
+type StoreType = { locale: LocaleStore } & { references: ReferenceDef[] } & { resume: ResumeDef } & { quote: QuoteDef }
 @Component({
   selector: 'app-others',
   templateUrl: './others.component.html',
@@ -52,6 +53,9 @@ export class OthersComponent implements OnInit {
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
 
+  quoteData$: Observable<QuoteDef>
+  quoteData: QuoteDef
+
   type: OthersType
 
   resumeData$: Observable<ResumeDef>
@@ -75,6 +79,8 @@ export class OthersComponent implements OnInit {
       }
     })
 
+    this.quoteData$ = this.store.pipe(select(state => state?.quote))
+
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
 
     this.referencesData$ = this.store.pipe(select(state => state?.references))
@@ -88,6 +94,13 @@ export class OthersComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.quoteData$.subscribe((data: QuoteDef) => {
+      if (data && Object.keys(data).length) {
+        for (const control in this.quoteFormGroup.controls) {
+          this.quoteFormGroup.get(control).setValue(data[control])
+        }
+      } else this.quoteFormGroup.reset()
+    })
     this.selectedLocale$.subscribe((data: string) => this.selectedLocale = data)
     this.referencesData$.subscribe((data: ReferenceDef[]) => {
       this.referencesData = data ?? this.referencesData
@@ -184,7 +197,6 @@ export class OthersComponent implements OnInit {
     })
   }
 
-
   deleteData(index: number) {
     const ref = this.referencesData[index]
     this.store.dispatch(OTHERS_ACTIONS.REMOVE_REFERENCE({
@@ -246,6 +258,32 @@ export class OthersComponent implements OnInit {
     } else {
       this.store.dispatch(OTHERS_ACTIONS.REMOVE_RESUME({
         language: this.selectedLocale,
+      }))
+    }
+  }
+
+  // Write your Quote section
+  quoteFormGroup: FormGroup = new FormGroup({
+    id: new FormControl(null),
+    author: new FormControl(null), // new FormControl(initialValue)
+    quote: new FormControl(null, Validators.required), // new FormControl(initialValue, validators)
+  })
+
+  submitQuoteHandler($event) {
+    if (this.quoteFormGroup.valid) {
+      const data = this.quoteFormGroup.value
+      this.store.dispatch(OTHERS_ACTIONS.SAVE_QUOTE({
+        quote: { ...data, language: this.selectedLocale }
+      }))
+    } else {
+      this.quoteFormGroup.markAllAsTouched()
+    }
+  }
+
+  deleteQuoteHandler($event) {
+    if (this.quoteFormGroup.get('id').value) {
+      this.store.dispatch(OTHERS_ACTIONS.REMOVE_QUOTE({
+        id: this.quoteFormGroup.get('id').value
       }))
     }
   }

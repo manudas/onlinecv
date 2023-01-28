@@ -1,7 +1,7 @@
 const cleanObject = require('@helpers/utils').cleanObject;
 
 module.exports = {
-    Queryu: {
+    Query: {
         settings: async (
             // 1st arg: arguments
             {

@@ -12,6 +12,8 @@ export * from './Message'
 
 export * from './Others'
 
+export * from './Quote'
+
 export * from './References'
 
 export * from './Resume'

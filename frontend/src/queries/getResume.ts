@@ -135,6 +135,16 @@ export const getUserFullResumeQuery = (lang: string) => {
             ]
         },
         {
+            operation: 'quote',
+            variables: {
+                language: { value: lang, required: true }
+            },
+            fields: [
+                'author',
+                'quote',
+            ]
+        },
+        {
             operation: 'references',
             variables: {
                 language: { value: lang, required: true }

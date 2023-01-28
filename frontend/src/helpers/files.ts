@@ -30,7 +30,7 @@ export const getBase64MimeType = (encodedbase64_file: string) => {
     return null
 }
 
-const removeUrlDataFromBase64 = (encodedbase64_file: string) => encodedbase64_file.replace(/^data:[a-z]+\/[a-z\.\-]+;base64,/i , "")
+const removeUrlDataFromBase64 = (encodedbase64_file: string) => encodedbase64_file.replace(/^data:[a-z]+\/[a-z.-]+;base64,/i , "")
 export function getMainExtension(encodedbase64_file: string) {
     const data = removeUrlDataFromBase64(encodedbase64_file)
     const extensions = Object.entries(combinedSignatures).find(([signature]) => data.startsWith(signature))?.[1] ?? null

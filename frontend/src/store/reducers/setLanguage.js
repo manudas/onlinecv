@@ -1,6 +1,15 @@
 import { setLanguageAction } from '../actions'
+import Cookies from 'universal-cookie';
 
-const setLanguage = function (state = null, action) {
+import {
+    DEFAULT_LANGUAGE_ISO,
+    LANG_COOKIE,
+} from 'helpers/constants';
+
+const cookies = new Cookies();
+const DEFAULT_LANGUAGE_STATE = cookies.get(LANG_COOKIE) ?? DEFAULT_LANGUAGE_ISO;
+
+const setLanguage = function (state = DEFAULT_LANGUAGE_STATE, action) {
     const { payload, type } = action
     switch (type) {
         case setLanguageAction:
