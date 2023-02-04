@@ -1,8 +1,10 @@
 module.exports = {
     Query: {
         locales: async (
+            _parent,
             _params,
-            { models: { LocaleModel } }
+            { models: { LocaleModel } },
+            _info
         ) => {
             const localesList = await LocaleModel.find()
                 .sort({
@@ -14,9 +16,10 @@ module.exports = {
     },
     Mutation: {
         putLocale: async (
+            _parent,
             { Locale },
             { models: { Locale: LocaleModel } },
-            info
+            _info
         ) => {
             const WriteResult = await LocaleModel.update(
                 {
@@ -34,9 +37,10 @@ module.exports = {
                 : false;
         },
         removeLocale: async (
+            _parent,
             { _id },
             { models: { Locale: LocaleModel } },
-            info
+            _info
         ) => {
             const WriteResult = await LocaleModel.remove(
                 {

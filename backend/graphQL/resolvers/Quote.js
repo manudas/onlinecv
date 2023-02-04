@@ -3,6 +3,7 @@ const cleanObject = require('@helpers/utils').cleanObject;
 module.exports = {
     Query: {
         quote: async (
+            _parent,
             // 1st arg: arguments
             {
                 language,
@@ -11,7 +12,7 @@ module.exports = {
             {
                 models: { QuoteModel }
             },
-            info
+            _info
         ) => {
             const quote = await QuoteModel.findOne({
                 language
@@ -21,6 +22,7 @@ module.exports = {
     },
     Mutation: {
         putQuote: async (
+            _parent,
             // 1st arg: arguments
             {
                 quote,
@@ -29,7 +31,7 @@ module.exports = {
             {
                 models: { QuoteModel }
             },
-            info
+            _info
         ) => {
             const cleanedSettings = cleanObject(quote, {
                 id: '_id'
@@ -44,9 +46,10 @@ module.exports = {
             return await document.save();
         },
         removeQuote: async (
+            _parent,
             { id },
             { models: { QuoteModel } },
-            info
+            _info
         ) => {
             const WriteResult =
                 await QuoteModel.remove(

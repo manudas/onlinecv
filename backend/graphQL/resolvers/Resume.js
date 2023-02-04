@@ -1,9 +1,10 @@
 module.exports = {
     Query: {
         resume: async (
+            _parent,
             { language },
             { models: { ResumeModel } },
-            info
+            _info
         ) => {
             const resume = await ResumeModel.findOne({
                 language
@@ -15,9 +16,10 @@ module.exports = {
     },
     Mutation: {
         putResume: async (
+            _parent,
             { resume },
             { models: { ResumeModel } },
-            info
+            _info
         ) => {
             const WriteResult = await ResumeModel.update(
                 {
@@ -34,9 +36,10 @@ module.exports = {
                 : false;
         },
         removeResume: async (
+            _parent,
             { language },
             { models: { ResumeModel } },
-            info
+            _info
         ) => {
             const WriteResult = await ResumeModel.remove(
                 {

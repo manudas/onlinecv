@@ -4,9 +4,10 @@ const cleanObject = require('@helpers/utils').cleanObject;
 module.exports = {
     Query: {
         skills: async (
+            _parent,
             { language, type },
             { models: { SkillsModel } },
-            info
+            _info
         ) => {
             const skillList = await SkillsModel.find({
                 language,
@@ -21,9 +22,10 @@ module.exports = {
     },
     Mutation: {
         putSkills: async (
+            _parent,
             { skills },
             { models: { SkillsModel } },
-            info
+            _info
         ) => {
             const WriteResult = await Promise.all(
                 skills.map(async (skill) => {
@@ -52,10 +54,10 @@ module.exports = {
             return WriteResult ? WriteResult : false;
         },
         removeSkill: async (
-            parent,
+            _parent,
             { id },
             { models: { skillsModel } },
-            info
+            _info
         ) => {
             const WriteResult = await skillsModel.remove(
                 {

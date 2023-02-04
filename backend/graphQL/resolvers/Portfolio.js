@@ -1,13 +1,14 @@
 module.exports = {
     Query: {
         portfolio: async (
+            _parent,
             { language },
             {
                 models: {
                     PortfolioModel // configModel
                 }
             },
-            info
+            _info
         ) => {
             const portfolioList = await PortfolioModel.find(
                 {
@@ -23,9 +24,10 @@ module.exports = {
     },
     Mutation: {
         putPortfolio: async (
+            _parent,
             { Portfolio },
             { models: { PortfolioModel } },
-            info
+            _info
         ) => {
             const WriteResult = await PortfolioModel.update(
                 {
@@ -42,9 +44,10 @@ module.exports = {
                 : false;
         },
         removePortfolio: async (
+            _parent,
             { id },
             { models: { PortfolioModel } },
-            info
+            _info
         ) => {
             const WriteResult = await PortfolioModel.remove(
                 {

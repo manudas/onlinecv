@@ -1,58 +1,13 @@
 import React, { Component } from "react"
 import { bindActionCreators, Dispatch } from "redux"
 import { connect } from "react-redux"
-import { language, selectorTypeDef } from "./types"
+import { language, localeDef, selectorTypeDef, switcherDev } from "./types"
 import { setLanguage } from 'store/actions'
 
-
 import './styles.scss'
-
-const languages = [
-    { code: 'en', name: 'English'},
-    { code: 'es', name: 'Español'},
-    { code: 'deu', name: 'Deutsch'}
-]
-
-const translations: { [key in language]?: Record<string, string> } = {
-    [language[language.en]]: {
-        'lang-choice': 'Language:'
-    },
-    [language[language.deu]]: {
-        'lang-choice': 'Sprache:'
-    },
-    [language[language.es]]: {
-        'lang-choice': 'Idioma:'
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// PRIMERO: ENGANCHARLO A LA COOKIE, SEGUNDO ENCANCHARLO AL SISTEMA DE TRADUCCIONES REALES
-
-const getTranslation = (lang: string, text: string) => {
-    const isoLang: language = lang as any
-    return translations?.[isoLang]?.[text]
-}
-class LanguageSwitcher extends Component<any, { language: language } >{
-    // state = {
-    //     lang: language.en
-    // }
-
+import { translateString } from "helpers/translations"
+import { DEFAULT_LANGUAGE_ISO } from "helpers/constants"
+class LanguageSwitcher extends Component<switcherDev, { language: language } >{
     changeLanguageHandler = (lang: string) => {
         this.props.setLanguage(lang)
     }
@@ -61,11 +16,12 @@ class LanguageSwitcher extends Component<any, { language: language } >{
         return (
             <div className="languageSwitcher">
                 <p className="small d-none d-sm-block">
-                    { getTranslation(this.props.language, 'lang-choice') }
+                    { translateString('Language', this) }:
                 </p>
                 <LanguageSwitcherSelector
                     lang={this.props.language}
                     handleChangeLanguage={this.changeLanguageHandler}
+                    locales={this.props.locales}
                 />
             </div>
         )
@@ -79,11 +35,11 @@ class LanguageSwitcherSelector extends Component<selectorTypeDef> {
     }
 
     render() {
-        const options = languages.map(langOpt => {
-            if (langOpt.code !== this.props.lang) {
+        const options = this.props.locales.map(langOpt => {
+            if (langOpt.iso !== this.props.lang) {
                 return (
-                    <li key={langOpt.code} onClick={this.onChange}>
-                        <div data-flag={langOpt.code} className={ `flag ${langOpt.code}` }></div>
+                    <li key={langOpt.iso} onClick={this.onChange}>
+                        <div data-flag={langOpt.iso} className={ `flag ${langOpt.flag}` }></div>
                     </li>
                 )
             }
@@ -94,7 +50,7 @@ class LanguageSwitcherSelector extends Component<selectorTypeDef> {
         return (
             <div className="lang">
                 <div
-                    className={ `flag ${this.props.lang}` }
+                    className={ `flag ${this.props.locales.find(locale => locale.iso === this.props.lang)?.flag}` }
                 >
                 </div>
                 <ul className="dropdown" >
@@ -106,11 +62,12 @@ class LanguageSwitcherSelector extends Component<selectorTypeDef> {
 }
 
 function mapStateToProps(state: {
-  language: string
+  language: string,
+  locales: localeDef[]
 }) {
-    const { language = null } = state
+    const { language = DEFAULT_LANGUAGE_ISO, locales = [] } = state
 
-    return { language }
+    return { language, locales }
 }
 
 function mapDispatchToProps(dispatch: Dispatch) {

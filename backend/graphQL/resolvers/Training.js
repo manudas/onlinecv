@@ -4,9 +4,10 @@ const cleanObject = require('@helpers/utils').cleanObject;
 module.exports = {
     Query: {
         trainings: async (
+            _parent,
             { language, type },
             { models: { TrainingModel } },
-            info
+            _info
         ) => {
             const trainingList = await TrainingModel.find({
                 language,
@@ -18,13 +19,14 @@ module.exports = {
                 .exec();
             return trainingList;
         },
-        trainingTypes: ['official', 'computer', 'other']
+        trainingTypes: () => ['official', 'computer', 'other']
     },
     Mutation: {
         putTrainings: async (
+            _parent,
             { trainings },
             { models: { TrainingModel } },
-            info
+            _info
         ) => {
             const TrainingWriteResult = await Promise.all(
                 trainings.map(async (training) => {
@@ -56,9 +58,10 @@ module.exports = {
                 : false;
         },
         removeTraining: async (
+            _parent,
             { id },
             { models: { TrainingModel } },
-            info
+            _info
         ) => {
             const WriteResult = await TrainingModel.remove(
                 { _id: id },

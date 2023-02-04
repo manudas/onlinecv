@@ -69,7 +69,7 @@ app.use(express.static(path.join(__dirname, 'static')));
  * /graphql. Used mainly in the backend to
  * modify the data and make consultations
  */
-app.use("/graphql", graphql(env));
+app.use("/graphql", graphql);
 
 /**
  * Route for no found response. Used

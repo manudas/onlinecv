@@ -4,9 +4,10 @@ const cleanObject = require('@helpers/utils').cleanObject;
 module.exports = {
     Query: {
         references: async (
+            _parent,
             { language },
             { models: { ReferenceModel } },
-            info
+            _info
         ) => {
             const referenceList = await ReferenceModel.find({
                     language,
@@ -18,9 +19,10 @@ module.exports = {
     },
     Mutation: {
         putReferences: async (
+            _parent,
             { references },
             { models: { ReferenceModel } },
-            info
+            _info
         ) => {
             const WriteResult = await Promise.all(
                 references.map(async (reference) => {
@@ -53,9 +55,10 @@ module.exports = {
             return WriteResult ? WriteResult : false;
         },
         removeReference: async (
+            _parent,
             { id },
             { models: { ReferenceModel } },
-            info
+            _info
         ) => {
             const WriteResult =
                 await ReferenceModel.remove(

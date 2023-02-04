@@ -10,6 +10,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TRANSLATION_DOMAIN } from './utils/constants'
 
 import * as COMMON_ACTIONS from '@store_actions/Common'
+import { Authentication } from './types/Authentication';
+import { checkToken } from './store/actions/Authentication';
 
 type StoreType = {
     locale: LocaleStore
@@ -17,6 +19,8 @@ type StoreType = {
     translations: TranslationStore
 } & {
     message: MessageType
+} & {
+    authentication: Authentication & { adminUserExist: boolean }
 }
 
 @Component({
@@ -34,9 +38,82 @@ export class AppComponent implements OnInit { // added OnInit to make a regular 
 
     appMessage$: Observable < MessageType >
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // USAR INTERCEPTORS. SI ALGUNA QUERY DE BACKEND RESPONDE NO AUTORIZADO, BORRAR TOKEN Y REDIRIGIR A PANTALLA DE LOGIN, PONIENDO userLoggedIn variable a false.
+    userLoggedIn$: Observable<boolean>
+    userLoggedIn: boolean = false
+
+    adminUserExists$: Observable<boolean>
+    adminUserExists: boolean = false
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     constructor(private store: Store < StoreType > , private translationService: TranslationService, private snackBar: MatSnackBar) {
-        this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
+        this.adminUserExists$ = this.store.pipe(select(state => state?.authentication?.adminUserExist))
         this.appMessage$ = this.store.pipe(select(state => state?.message))
+        this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
+        this.userLoggedIn$ = this.store.pipe(select(state => state?.authentication?.authenticated))
     }
 
     /*
@@ -79,6 +156,10 @@ export class AppComponent implements OnInit { // added OnInit to make a regular 
                 this.openSnackBar(data.message, data.timeout || 1000, data.type)
             }
         })
+        this.userLoggedIn$.subscribe(data => this.userLoggedIn = data)
+        this.adminUserExists$.subscribe(data => this.adminUserExists = data)
+
+        this.store.dispatch(checkToken())
     }
 
     openSnackBar(message: string | string[], duration: number, type: string = null) {

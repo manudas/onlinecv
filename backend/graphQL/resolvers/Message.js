@@ -3,6 +3,7 @@ const nodemailer = require("nodemailer")
 module.exports = {
     Mutation: {
         sendMessage: async (
+            _parent,
             // 1st arg: arguments
             {
                 message: {
@@ -18,7 +19,7 @@ module.exports = {
                     SettingsModel,
                 }
             },
-            info
+            _info
         ) => {
 
             console.log("TOMAR EL LENGUAJE DE OTRO LADO!!!")

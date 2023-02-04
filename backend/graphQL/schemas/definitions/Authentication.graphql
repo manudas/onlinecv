@@ -1,0 +1,19 @@
+type Authentication {
+    token: String
+    authenticated: Boolean!
+}
+
+input AuthenticationInput {
+    username: String!
+    password: String!
+}
+
+extend type Query {
+  checkToken: Authentication!
+  checkAdminUserExists: Boolean!
+}
+
+extend type Mutation {
+  authentication(authenticationData: AuthenticationInput!): Authentication!
+  signup(authenticationData: AuthenticationInput!): Authentication!
+}

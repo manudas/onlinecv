@@ -4,9 +4,10 @@ const cleanObject = require('@helpers/utils').cleanObject;
 module.exports = {
     Query: {
         experiences: async (
+            _parent,
             { language, type },
             { models: { ExperienceModel } },
-            info
+            _info
         ) => {
             const experienceList =
                 await ExperienceModel.find({
@@ -19,13 +20,14 @@ module.exports = {
                     .exec();
             return experienceList;
         },
-        experienceTypes: ['professional', 'ong', 'other']
+        experienceTypes: () => ['professional', 'ong', 'other']
     },
     Mutation: {
         putExperience: async (
+            _parent,
             { experiences },
             { models: { ExperienceModel } },
-            info
+            _info
         ) => {
             const WriteResult = await Promise.all(
                 experiences.map(async (experience) => {
@@ -58,9 +60,10 @@ module.exports = {
             return WriteResult ? WriteResult : false;
         },
         removeExperience: async (
+            _parent,
             { id },
             { models: { ExperienceModel } },
-            info
+            _info
         ) => {
             const WriteResult =
                 await ExperienceModel.remove(

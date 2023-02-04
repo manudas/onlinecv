@@ -24,6 +24,7 @@ class Menu extends Component<PropDef, StateDef> {
             previousMenuState: "closed",
             componentRefs: []
         };
+        console.warn('en css existe un "active" para los item li del menu seleccionados. Implementar o borrar de CSS')
 	}
 
     addResumeComponent(customEvent: Event): void {

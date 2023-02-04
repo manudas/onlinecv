@@ -8,6 +8,7 @@ import {  StoreDevtoolsModule } from '@ngrx/store-devtools'
 import {  EffectsModule } from '@ngrx/effects'
 
 import { AppComponent } from './app.component'
+import { LoginModule } from './ui/login/login.module';
 import { NavbarModule } from './ui/navbar/navbar.module'
 import { WrapperModule } from './ui/wrapper/wrapper.module'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -17,6 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog'
 
 import { TranslationServiceModule } from '@services/translation'
 
+import { AuthenticationEffects } from '@store_effects/Authentication'
 import { DetailsEffects } from '@store_effects/Details'
 import { ExperienceEffects } from './store/effects/Experience'
 import { LanguageEffects } from '@store_effects/Languages'
@@ -28,6 +30,7 @@ import { TrainingEffects } from '@store_effects/Training'
 import { TranslationEffects } from '@store_effects/Translation'
 import { SettingsEffects } from './store/effects/Settings';
 
+import { reducer as authReducer } from '@store_reducers/Authentication'
 import { reducer as detailsReducer } from '@store_reducers/Details'
 import { reducer as experienceReducer } from '@store_reducers/Experience'
 import { reducer as languageReducer } from '@store_reducers/Languages'
@@ -61,6 +64,7 @@ if (environment.production) {
         BrowserModule,
         BrowserAnimationsModule,
         EffectsModule.forRoot([
+            AuthenticationEffects,
             DetailsEffects,
             ExperienceEffects,
             LanguageEffects,
@@ -73,11 +77,12 @@ if (environment.production) {
             TranslationEffects,
         ]),
         HttpClientModule,
-
+        LoginModule,
         MatDialogModule,
         MatSnackBarModule,
         NavbarModule,
         StoreModule.forRoot({
+            authentication: authReducer,
             details: detailsReducer,
             experience: experienceReducer,
             languages: languageReducer,

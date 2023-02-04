@@ -9,26 +9,26 @@ import { map, catchError } from 'rxjs/operators';
 export class DataService {
 
   private httpOptions = {
-    headers: new HttpHeaders({
+    headers: {
       'Content-Type':  'application/json',
       // 'Authorization': 'my-auth-token'
       responseType: 'json'
-    })
+    }
   }
 
   url: string = 'graphql'
 
   constructor(private http: HttpClient) { }
 
-  public readData(readQuery, vars: any = {}): Observable<any> {
-    return this.query(readQuery, vars)
+  public readData(readQuery: string, vars: any = {}, headers: any = {}): Observable<any> {
+    return this.query(readQuery, vars, headers)
   }
 
-  public setData(mutateQuery: string, vars: any = {}): Observable<any> {
-    return this.mutation(mutateQuery, vars)
+  public setData(mutateQuery: string, vars: any = {}, headers: any = {}): Observable<any> {
+    return this.mutation(mutateQuery, vars, headers)
   }
 
-  private execute = (type: 'query' | 'mutation', query: string, vars: any = {}): Observable<any> => {
+  private execute = (type: 'query' | 'mutation', query: string, vars: any = {}, headers: any = {}): Observable<any> => {
     if (type === 'query' || type === 'mutation') {
       return (
         this.http.post(
@@ -37,7 +37,7 @@ export class DataService {
             // mutation: mutation but query: mutation, so first word is always
             // query independently of the query type
             JSON.stringify({ query, variables: vars }),
-            this.httpOptions
+            { headers: new HttpHeaders({ ...this.httpOptions.headers, ...headers }) }
         ).pipe(map(
           (response) => response['data']
         ), catchError(e => throwError(e))))
@@ -46,11 +46,11 @@ export class DataService {
     }
   }
 
-  private query = (query: string, vars: any = {}): Observable<any> => {
-    return this.execute('query', query, vars)
+  private query = (query: string, vars: any = {}, headers: any = {}): Observable<any> => {
+    return this.execute('query', query, vars, headers)
   }
 
-  private mutation = (mutation: string, vars: any = {}): Observable<any> => {
-    return this.execute('mutation', mutation, vars)
+  private mutation = (mutation: string, vars: any = {}, headers: any = {}): Observable<any> => {
+    return this.execute('mutation', mutation, vars, headers)
   }
 }

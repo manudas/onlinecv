@@ -4,9 +4,10 @@ const cleanObject = require('@helpers/utils').cleanObject;
 module.exports = {
     Query: {
         languages: async (
+            _parent,
             { language },
             { models: { LanguagesModel } },
-            info
+            _info
         ) => {
             const lang =
                 language === 'gb' ? 'en' : language;
@@ -22,9 +23,10 @@ module.exports = {
     },
     Mutation: {
         putLanguages: async (
+            _parent,
             { languages },
             { models: { LanguagesModel } },
-            info
+            _info
         ) => {
 
             const WriteResult = await Promise.all(
@@ -54,10 +56,10 @@ module.exports = {
             return WriteResult ? WriteResult : false;
         },
         removeLanguage: async (
-            parent,
+            _parent,
             { id },
             { models: { LanguagesModel } },
-            info
+            _info
         ) => {
             const WriteResult = await LanguagesModel.remove(
                 {

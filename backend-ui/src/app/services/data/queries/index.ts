@@ -1,3 +1,5 @@
+export * from './Authentication'
+
 export * from './Details'
 
 export * from './Experience'

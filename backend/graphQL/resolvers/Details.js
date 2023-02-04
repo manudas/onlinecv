@@ -3,14 +3,16 @@ const cleanObject = require('@helpers/utils').cleanObject;
 module.exports = {
     Query: {
         details: async (
+            _parent,
             {
-                // 1st arg: arguments
+                // 2st arg: arguments
                 language
             },
             {
-                // 2nd arg: context
+                // 3nd arg: context
                 models: { DetailsModel }
-            }
+            },
+            _info
         ) => {
             const details = await DetailsModel.findOne({
                 language: language
@@ -23,9 +25,10 @@ module.exports = {
     },
     Mutation: {
         putDetails: async (
+            _parent,
             { details },
             { models: { DetailsModel } },
-            info
+            _info
         ) => {
             const cleanedDetails = cleanObject(details, {
                 id: '_id'

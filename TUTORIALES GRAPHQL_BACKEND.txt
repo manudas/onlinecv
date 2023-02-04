@@ -1,0 +1,6 @@
+AUTH JWT EN RESOLVERS https://stackoverflow.com/questions/51644840/graphql-apollo-server-express-how-to-handle-auth-error-in-express-authmiddlew
+ELIMINAR EXPRESS-GRAPHQL https://github.com/graphql/graphql-http
+
+COMO NO PASAR RootResolver a traves de makeExecutableSchema: https://www.digitalocean.com/community/tutorials/how-to-set-up-a-graphql-api-server-in-node-js
+
+Accessing the request object with express-graphql (AHORA SERA EXPRESS-GRAPHQL) PERO ES SIMILAR https://stackoverflow.com/questions/46325756/accessing-the-request-object-with-express-graphql

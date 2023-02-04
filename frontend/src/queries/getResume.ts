@@ -4,19 +4,29 @@ export const getUserIntroductionQuery = (lang: string) => {
     const {
         query: queryWithoutVars,
         variables
-    } = query({
-        operation: 'details',
-        variables: {
-            language: { value: lang, required: true },
+    } = query([
+        {
+            operation: 'details',
+            variables: {
+                language: { value: lang, required: true },
+            },
+            fields: [
+                'name',
+                'surname',
+                'primaryRole',
+                'secondaryRole',
+                'nickname'
+            ]
         },
-        fields: [
-            'name',
-            'surname',
-            'primaryRole',
-            'secondaryRole',
-            'nickname'
-        ]
-    })
+        {
+            operation: 'locales',
+            fields: [
+                'name',
+                'iso',
+                'flag'
+            ]
+        }
+    ])
 
     return {
         query: queryWithoutVars,
