@@ -1,7 +1,7 @@
 import { environment } from '../environments/environment'; // Angular CLI environment
 import {  BrowserModule } from '@angular/platform-browser'
 import {  NgModule } from '@angular/core'
-import {  HttpClientModule } from '@angular/common/http'
+import {  HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 
 import {  StoreModule } from '@ngrx/store'
 import {  StoreDevtoolsModule } from '@ngrx/store-devtools'
@@ -45,6 +45,8 @@ import { reducer as socialNetworkReducer } from '@store_reducers/SocialNetworks'
 import { reducer as trainingReducer } from '@store_reducers/Trainings'
 import { reducer as translationReducer } from '@store_reducers/Translation'
 
+import { LoadingInterceptor } from '@ui/loading-spinner/interceptor/http-interceptor'
+import { SpinnerServiceModule } from '@ui/loading-spinner/loading-spinner.module'
 
 let dev = [
     StoreDevtoolsModule.instrument({
@@ -97,12 +99,17 @@ if (environment.production) {
             trainings: trainingReducer,
             translation: translationReducer,
         }, {}),
+        SpinnerServiceModule,
         TranslationServiceModule,
 
         WrapperModule,
         ...dev
     ],
-    providers: [],
+    providers: [
+        {
+          provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
+        }
+    ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}

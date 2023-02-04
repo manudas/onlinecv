@@ -21,7 +21,6 @@ module.exports = {
             _context,
             _info
         ) => {
-            functi();
             return await checkUserExists();
         },
     },

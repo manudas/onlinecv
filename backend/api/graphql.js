@@ -1,4 +1,3 @@
-const { GraphQLError } = require('graphql');
 const { createHandler } = require('graphql-http/lib/use/express');
 
 // Require and construct the schema
@@ -29,23 +28,13 @@ const onOperation = (request, _arguments, result) => {
     const { headers: { accept }} = request;
     if (errors) {
         const unauthenticated = errors.some(err => err?.extensions?.code === 'UNAUTHENTICATED');
-        const someErorIsNotGraphQLError = errors.some(err => err instanceof GraphQLError);
-
-
-
-
-
-       console.error(errors[0].extensions?.code)
-
-
-
 
         return [
             JSON.stringify(result),
             Object.assign(Object.assign({}, (!unauthenticated
                 ? {
-                    status: 400,
-                    statusText: 'Bad Request',
+                    status: 500,
+                    statusText: 'Bad Request / Internal Server Error',
                 }
                 : {
                     status: 401,
@@ -57,10 +46,9 @@ const onOperation = (request, _arguments, result) => {
                 } }),
         ];
     }
+
     return null;
 }
-
-
 
 module.exports = createHandler({
     onOperation,

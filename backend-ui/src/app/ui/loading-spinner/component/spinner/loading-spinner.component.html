@@ -1,8 +1,7 @@
 <div class="wrapper">
-    <div class="overlay" *ngIf="showSpinner">
+    <div class="overlay" >
         <div class="spinner-wrapper">
-            <div class="container">
-                <div class="row">
+     
                     <div id="loader">
                         <div class="dot"></div>
                         <div class="dot"></div>
@@ -15,15 +14,14 @@
                         <div class="loading"></div>
                     </div>
 
-                    <p class="spinner-message" *ngIf="message && message !== ''">
+                    <p class="spinner-message" *ngIf="!!message">
                         {{ message }}
                     </p>
-                </div>
-            </div>
+           
         </div>
     </div>
 
-    <div class="loaded-content" [class.blurred]="showSpinner">
+    <div class="loaded-content" >
         <ng-content></ng-content>
     </div>
 </div>

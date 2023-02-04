@@ -1,34 +1,37 @@
 import { Overlay, OverlayRef } from '@angular/cdk/overlay'
 import { ComponentPortal } from '@angular/cdk/portal'
-import { Injectable } from '@angular/core'
+import { ComponentRef, Injectable } from '@angular/core'
 import { SpinnerOverlayComponent } from '@ui/loading-spinner/component/overlay/spinner-overlay.component'
 
 @Injectable({
     providedIn: 'root'
 })
 export class SpinnerOverlayService {
-    private overlayRef: OverlayRef = null;
+    private overlayRef: OverlayRef = null
+    private componentRef: ComponentRef<SpinnerOverlayComponent>
 
     constructor(private overlay: Overlay) {}
 
     public show(message = null) {
-        // Returns an OverlayRef (which is a PortalHost)
-
         if (!this.overlayRef) {
-        this.overlayRef = this.overlay.create();
+            // Returns an OverlayRef (which is a PortalHost)
+            this.overlayRef = this.overlay.create()
         }
 
-        // Create ComponentPortal that can be attached to a PortalHost
-        const spinnerOverlayPortal = new ComponentPortal(SpinnerOverlayComponent);
-        const componentRef = this.overlayRef.attach(spinnerOverlayPortal); // Attach ComponentPortal to PortalHost
+        // Check if we have a previous overlay attached to the a PortalHost
+        if (!this.overlayRef.hasAttached()) {
+            // Create ComponentPortal that can be attached to a PortalHost
+            const spinnerOverlayPortal = new ComponentPortal(SpinnerOverlayComponent)
+            this.componentRef = this.overlayRef.attach(spinnerOverlayPortal) // Attach ComponentPortal to PortalHost
+        }
 
         // pass data via Input:
-        componentRef.instance.message = message // Will we need to detect changes?
+        this.componentRef.instance.message = message // Will we need to detect changes?
     }
 
     public hide() {
         if (!!this.overlayRef) {
-            this.overlayRef.detach();
+            setTimeout(() => this.overlayRef.detach(), 1000)
         }
     }
 }
