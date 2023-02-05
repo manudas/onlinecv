@@ -17,6 +17,8 @@ import { SettingsFetched, SettingsType } from '@app/types/Settings'
 import { TranslationService } from '@app/services/translation/translation.service'
 import { logEasy } from '@app/services/logging/logging.service'
 
+import { LoginService } from '@app/ui/login/login-service/login.service'
+
 @Injectable()
 export class SettingsEffects {
 
@@ -25,6 +27,7 @@ export class SettingsEffects {
     constructor(
         private actions$: Actions,
         private dataService: DataService,
+        private loginService: LoginService,
         private translate: TranslationService,
     ) {
         this.translate.prefetch(this.translationsToRequest, this)
@@ -38,6 +41,8 @@ export class SettingsEffects {
         ofType<ReturnType<typeof SETTINGS.FETCH_SETTINGS>>(SETTINGS.FETCH_SETTINGS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 language,
             } = action
@@ -47,7 +52,7 @@ export class SettingsEffects {
                 variables,
             } = QuerySettings(language)
 
-            return this.dataService.readData(query, variables).pipe(
+            return this.dataService.readData(query, variables, headers).pipe(
                 map((settings: SettingsFetched) => {
                     return SETTINGS.SETTINGS_FETCHED({...settings})
                 }),

@@ -31,10 +31,10 @@ module.exports = {
             _context,
             _info
         ) => {
-            const { username, password } = authenticationData;
+            const { username, password, rememberMe } = authenticationData;
             await authGuard(username, password);
 
-            const token = await generateToken(username);
+            const token = await generateToken(username, rememberMe);
             return {
                 token,
                 authenticated: true
@@ -47,20 +47,23 @@ module.exports = {
             _info
         ) => {
             await userExistsGuard();
-            const { username } = authenticationData;
+            const { username, rememberMe } = authenticationData;
 
             // hashing password
             const salt = await bcrypt.genSalt(10);
-            authenticationData.password = await bcrypt.hash(authenticationData.password, salt);
+            const password = await bcrypt.hash(authenticationData.password, salt);
 
             const data = {
                 key: 'adminUser',
-                value: authenticationData
+                value: {
+                    username,
+                    password
+                }
             }
             const document = new ConfigModel(data);
             await document.save();
 
-            const token = await generateToken(username);
+            const token = await generateToken(username, rememberMe);
             return {
                 token,
                 authenticated: true

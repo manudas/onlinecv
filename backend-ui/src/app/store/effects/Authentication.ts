@@ -14,8 +14,9 @@ import { logEasy } from '@app/services/logging/logging.service'
 import { MutateAuthentication, MutateSignUp, QueryAdminUserExists, QueryCheckToken } from '@app/services/data/queries'
 import { LocaleStore } from '@app/types'
 import { select, Store } from '@ngrx/store'
-import { TOKEN_NAME } from '@app/utils/constants'
+
 import { AdminUserExistResponse, Authentication, AuthenticationInput, AuthenticationResponse } from '@app/types/Authentication';
+import { LoginService } from '@app/ui/login/login-service/login.service'
 
 type StoreType = { locale: LocaleStore }
 
@@ -30,6 +31,7 @@ export class AuthenticationEffects {
     constructor(
         private actions$: Actions,
         private dataService: DataService,
+        private loginService: LoginService,
         private translate: TranslationService,
         private store: Store<StoreType>
     ) {
@@ -48,20 +50,11 @@ export class AuthenticationEffects {
         ofType(AUTH_ACTIONS.checkToken),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((_action) => { // if a new Actions arrives, the old Observable will be canceled
-
-            const token = window.localStorage.getItem(TOKEN_NAME)
-            if (!token) {
-                // no token found, throwing failure actioncheckAdminUserExists
-                return of(AUTH_ACTIONS.checkTokenFailure({}))
-            }
+            const headers = this.loginService.processHeader()
 
             const {
                 query,
             } = QueryCheckToken()
-
-            const headers = {
-                Authorization: `Bearer ${token}`
-            }
 
             return this.dataService.readData(query, null, headers).pipe(
                 map(({
@@ -100,7 +93,7 @@ export class AuthenticationEffects {
                 token
             }
         }) => { // if a new Actions arrives, the old Observable will be canceled
-            window.localStorage.setItem(TOKEN_NAME, token)
+            this.loginService.setToken(token)
         })
     ), { dispatch: false })
 
@@ -112,7 +105,7 @@ export class AuthenticationEffects {
         ofType(AUTH_ACTIONS.checkTokenFailure),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         tap(() =>{
-            window.localStorage.removeItem(TOKEN_NAME)
+            this.loginService.removeToken()
         }),
         switchMap((_action) => { // if a new Actions arrives, the old Observable will be canceled
             return of(AUTH_ACTIONS.checkAdminUserExists())
@@ -126,8 +119,8 @@ export class AuthenticationEffects {
     public loginSuccessEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType(AUTH_ACTIONS.loginSuccess),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
-        tap(({ Authentication: { token } }) =>{
-            window.localStorage.setItem(TOKEN_NAME, token)
+        tap(({ Authentication: { token } }) => {
+            this.loginService.setToken(token)
         }),
     ), { dispatch: false })
 
@@ -138,8 +131,8 @@ export class AuthenticationEffects {
     public loginFailureEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType(AUTH_ACTIONS.loginFailure),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
-        tap(() =>{
-            window.localStorage.removeItem(TOKEN_NAME)
+        tap(() => {
+            this.loginService.removeToken()
         }),
     ), { dispatch: false })
 
@@ -156,9 +149,7 @@ export class AuthenticationEffects {
             } = QueryAdminUserExists()
 
             return this.dataService.readData(query).pipe(
-                map(({
-                    data
-                }: AdminUserExistResponse) => {
+                map((data: AdminUserExistResponse) => {
                     return AUTH_ACTIONS.checkAdminUserExistsFetched(data)
                 }),
                 catchError((response) => {
@@ -179,11 +170,11 @@ export class AuthenticationEffects {
     public singUpEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType(AUTH_ACTIONS.singUp),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
-        switchMap(({username, password}) => { // if a new Actions arrives, the old Observable will be canceled
+        switchMap(({username, password, rememberMe}) => { // if a new Actions arrives, the old Observable will be canceled
             const {
                 query,
                 variables
-            } = MutateSignUp({username, password} as AuthenticationInput)
+            } = MutateSignUp({username, password, rememberMe} as AuthenticationInput)
 
             return this.dataService.setData(query, variables).pipe(
                 map((data: AuthenticationResponse) => {
@@ -212,25 +203,24 @@ export class AuthenticationEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    public loginUpEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
+    public loginEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType(AUTH_ACTIONS.login),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
-        switchMap(({username, password}) => { // if a new Actions arrives, the old Observable will be canceled
+        switchMap(({username, password, rememberMe}) => { // if a new Actions arrives, the old Observable will be canceled
             const {
                 query,
                 variables
-            } = MutateAuthentication({username, password} as AuthenticationInput)
+            } = MutateAuthentication({username, password, rememberMe} as AuthenticationInput)
 
             return this.dataService.setData(query, variables).pipe(
-                map((data: AuthenticationResponse) => {
+                map(({ authentication }: AuthenticationResponse) => {
                     const {
-                        login
-                    } = data
-                    const { authenticated } = login
+                        authenticated
+                    } = authentication
                     if (authenticated) {
-                        return AUTH_ACTIONS.loginSuccess({ Authentication: login })
+                        return AUTH_ACTIONS.loginSuccess({ Authentication: authentication })
                     } else {
-                        return AUTH_ACTIONS.loginFailure({ Authentication: login })
+                        return AUTH_ACTIONS.loginFailure({ Authentication: authentication })
                     }
                 }),
                 catchError((response) => {

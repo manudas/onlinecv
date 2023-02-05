@@ -1,3 +1,4 @@
+import { environment } from '@environments/environment'
 import { Injectable } from '@angular/core'
 import {
     HttpRequest,
@@ -16,12 +17,12 @@ export class LoadingInterceptor implements HttpInterceptor {
     constructor( private loadingService: SpinnerOverlayService ) {}
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-        console.log('++Intercepted Http call')
+        if (!environment.production) console.log('++Intercepted Http call for loading spinner')
         this.totalRequests++
         this.loadingService.show()
         return next.handle(request).pipe(
             finalize(() => {
-                console.log('--Intercepted Http call')
+                if (!environment.production) console.log('--Intercepted Http call for loading spinner')
                 this.totalRequests--
                 if (this.totalRequests == 0) {
                     this.loadingService.hide()

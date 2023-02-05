@@ -6,6 +6,7 @@ type Authentication {
 input AuthenticationInput {
     username: String!
     password: String!
+    rememberMe: Boolean
 }
 
 extend type Query {

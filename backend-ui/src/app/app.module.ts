@@ -48,6 +48,8 @@ import { reducer as translationReducer } from '@store_reducers/Translation'
 import { LoadingInterceptor } from '@ui/loading-spinner/interceptor/http-interceptor'
 import { SpinnerServiceModule } from '@ui/loading-spinner/loading-spinner.module'
 
+import { LoginInterceptor } from '@ui/login/interceptor/http-interceptor'
+
 let dev = [
     StoreDevtoolsModule.instrument({
         maxAge: 25, // Retains last 25 states
@@ -107,7 +109,10 @@ if (environment.production) {
     ],
     providers: [
         {
-          provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
+            provide: HTTP_INTERCEPTORS, useClass: LoginInterceptor, multi: true,
+        },
+        {
+            provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
         }
     ],
     bootstrap: [AppComponent],

@@ -20,7 +20,8 @@ export class LoginComponent implements OnInit {
   formGroup: FormGroup = new FormGroup({
     user: new FormControl(null, [ Validators.required, Validators.email ]),
     password: new FormControl(null, Validators.required),
-    confirmPassword: new FormControl(null)
+    confirmPassword: new FormControl(null),
+    rememberMe: new FormControl(null)
   }, { validators: this.matchingPasswords() })
 
   constructor(private store: Store) { }
@@ -47,13 +48,13 @@ export class LoginComponent implements OnInit {
 
   singUp() {
     if (this.formGroup.valid) {
-      this.store.dispatch(singUp({username: this.formGroup.controls.user.value, password: this.formGroup.controls.password.value}))
+      this.store.dispatch(singUp({username: this.formGroup.controls.user.value, password: this.formGroup.controls.password.value, rememberMe: this.formGroup.controls.rememberMe.value}))
     }
   }
 
   login() {
     if (this.formGroup.valid) {
-      this.store.dispatch(login({username: this.formGroup.controls.user.value, password: this.formGroup.controls.password.value}))
+      this.store.dispatch(login({username: this.formGroup.controls.user.value, password: this.formGroup.controls.password.value, rememberMe: this.formGroup.controls.rememberMe.value}))
     }
   }
 

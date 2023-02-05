@@ -3,7 +3,7 @@ export type Authentication = {
     authenticated: boolean
 }
 
-export type AuthenticationResponse = { signup: Authentication, login: never } | { login: Authentication, signup: never }
+export type AuthenticationResponse = { signup: Authentication, authentication: never } | { authentication: Authentication, signup: never }
 
 export type AuthenticationInput = {
     username: string
@@ -11,7 +11,5 @@ export type AuthenticationInput = {
 }
 
 export type AdminUserExistResponse = {
-    data: {
-        checkAdminUserExists: boolean
-    }
+    checkAdminUserExists: boolean
 }

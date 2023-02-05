@@ -6,17 +6,25 @@ const bcrypt = require('bcrypt');
 const { ConfigModel } = require('@models/Config');
 const { GraphQLError } = require('graphql');
 
-const checkUserPassword = async (user, password) => {
-    let validPassword = false;
-    const db_User = await ConfigModel.findOne({
-        '$and': [
-            { key: 'adminUser'},
-            { 'value.user': user }
-        ]
-    });
+const getUser = async (username = null) => {
+    return await ConfigModel.findOne(
+        username ?
+            {
+                '$and': [
+                    { key: 'adminUser'},
+                    { 'value.username': username }
+                ]
+            }
+            : { key: 'adminUser'}
+    );
+}
 
-    if (db_User) {
-        validPassword = await bcrypt.compare(password, db_User.password);
+const checkUserPassword = async (username, password) => {
+    const db_User = await getUser(username);
+
+    let validPassword = false;
+    if (db_User.value) {
+        validPassword = await bcrypt.compare(password, db_User.value.password);
     }
 
     return {
@@ -25,9 +33,19 @@ const checkUserPassword = async (user, password) => {
     }
 }
 
-const checkUserExists = async () => {
-    const db_User = await ConfigModel.findOne({ key: 'adminUser'});
-
+/**
+ * Checks whether the user exists or not
+ * If the user param is not provided it
+ * checks for the existence of the admin user
+ *
+ * @param { string } user Optional, the username
+ * to be checked
+ *
+ * @returns true if user or admin user exists,
+ * false otherwise
+ */
+const checkUserExists = async (username = null) => {
+    const db_User = await getUser(username);
     return !!db_User;
 }
 
@@ -72,13 +90,16 @@ const tokenGuard = async (request, throwError = true) => {
 
     let verified = false
     try {
-        verified = jsonwebtoken.verify(token, jwtSecret);
+        const token_values = jsonwebtoken.verify(token, jwtSecret);
+        verified = await checkUserExists(token_values.username)
     } catch (error) {
         verified = false
-        if (throwError) {
-            badCredentialsGraphQL_Error();
-        }
     }
+
+    if (!verified && throwError) {
+        badCredentialsGraphQL_Error();
+    }
+
     return verified
 }
 
@@ -106,9 +127,10 @@ const getJwtSecret = async () => {
     return jwtSecret.value;
 }
 
-const generateToken = async (user) => {
+const generateToken = async (username, rememberMe = false) => {
     const jwtSecret = await getJwtSecret();
-    return jsonwebtoken.sign({ user }, jwtSecret)
+    // We remember the user a minimum of 20 minutes, even if the rememberMe parameter is not set
+    return jsonwebtoken.sign({ username }, jwtSecret, {...(rememberMe ? {} : { expiresIn: '20 minutes' }) })
 }
 
 module.exports = {

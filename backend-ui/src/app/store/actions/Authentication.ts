@@ -3,12 +3,12 @@ import { createAction, props } from '@ngrx/store'
 
 export const login = createAction(
   '[Login Page] Login',
-  props<{ username: string; password: string }>()
+  props<{ username: string; password: string, rememberMe: boolean }>()
 )
 
 export const singUp = createAction(
   '[Login Page] Sign Up',
-  props<{ username: string; password: string }>()
+  props<{ username: string; password: string, rememberMe: boolean }>()
 )
 
 export const loginSuccess = createAction(
@@ -18,7 +18,7 @@ export const loginSuccess = createAction(
 
 export const loginFailure = createAction(
   '[Login Effect] Login Failure',
-  props<{ Authentication: Authentication }>()
+  props<{ Authentication?: Authentication }>()
 )
 
 export const checkToken = createAction(

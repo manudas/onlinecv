@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms'
 import { TranslationServiceModule } from '@services/translation'
 
 import { LoginComponent } from '@app/ui/login/login.component'
+import { LoginService } from './login-service/login.service'
 
 @NgModule({
   declarations: [LoginComponent],
@@ -14,6 +15,7 @@ import { LoginComponent } from '@app/ui/login/login.component'
     ReactiveFormsModule,
     TranslationServiceModule
   ],
-  exports: [LoginComponent]
+  exports: [LoginComponent],
+  providers: [LoginService]
 })
 export class LoginModule { }

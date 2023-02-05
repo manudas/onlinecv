@@ -20,7 +20,7 @@ type StoreType = {
 } & {
     message: MessageType
 } & {
-    authentication: Authentication & { adminUserExist: boolean }
+    authentication: Authentication & { adminUserExists: boolean }
 }
 
 @Component({
@@ -81,36 +81,10 @@ export class AppComponent implements OnInit { // added OnInit to make a regular 
     userLoggedIn: boolean = false
 
     adminUserExists$: Observable<boolean>
-    adminUserExists: boolean = false
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    adminUserExists: boolean = true
 
     constructor(private store: Store < StoreType > , private translationService: TranslationService, private snackBar: MatSnackBar) {
-        this.adminUserExists$ = this.store.pipe(select(state => state?.authentication?.adminUserExist))
+        this.adminUserExists$ = this.store.pipe(select(state => state?.authentication?.adminUserExists))
         this.appMessage$ = this.store.pipe(select(state => state?.message))
         this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
         this.userLoggedIn$ = this.store.pipe(select(state => state?.authentication?.authenticated))
@@ -157,7 +131,7 @@ export class AppComponent implements OnInit { // added OnInit to make a regular 
             }
         })
         this.userLoggedIn$.subscribe(data => this.userLoggedIn = data)
-        this.adminUserExists$.subscribe(data => this.adminUserExists = data)
+        this.adminUserExists$.subscribe(data => data !=  null && (this.adminUserExists = data))
 
         this.store.dispatch(checkToken())
     }
@@ -167,7 +141,7 @@ export class AppComponent implements OnInit { // added OnInit to make a regular 
         const className = type === COMMON_ACTIONS.FAIL.type ? 'SnackFailed' : 'SnackSuccess'
         msg_arr.forEach( (message, index) => {
             setTimeout(() => {
-                this.snackBar.open( message, null, { duration, panelClass: className} )
+                this.snackBar.open( message, null, { duration, panelClass: ['Snack', className]} )
             }, index * (duration + 500)) // 500 => timeout between two messages
         })
     }

@@ -8,14 +8,20 @@
 
 }
 
-::ng-deep .SnackFailed {
-    --mdc-snackbar-container-color: red;
-    --mdc-snackbar-supporting-text-color: white;
-    --mdc-snackbar-supporting-text-weight: bold;
+::ng-deep .Snack {
+    > * {
+        min-width: initial !important;
+    }
+    &.SnackFailed {
+        --mdc-snackbar-container-color: red;
+        --mdc-snackbar-supporting-text-color: white;
+        --mdc-snackbar-supporting-text-weight: bold;
+    }
+
+    &.SnackSuccess {
+        --mdc-snackbar-container-color: green;
+        --mdc-snackbar-supporting-text-color: white;
+        --mdc-snackbar-supporting-text-weight: bold;
+    }
 }
 
-::ng-deep .SnackSuccess {
-    --mdc-snackbar-container-color: green;
-    --mdc-snackbar-supporting-text-color: white;
-    --mdc-snackbar-supporting-text-weight: bold;
-}

@@ -76,7 +76,10 @@
               <div class='text-center'>
                 <div class='checkbox'>
                   <label>
-                    <input type='checkbox'>
+                    <input
+                      formControlName="rememberMe"
+                      type='checkbox'
+                    />
                     {{ 'Remember me on this computer' | translate | async }}
                   </label>
                 </div>
