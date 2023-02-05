@@ -10,9 +10,10 @@ import * as COMMON_ACTIONS from '@store_actions/Common'
 import { DataService } from '@services/data/data.service'
 
 import { QueryDetails, MutateDetails } from '@services/data/queries'
-import { DetailsFetched, DetailsType } from '@app/types/Details'
+import { DetailsFetched } from '@app/types/Details'
 import { TranslationService } from '@app/services/translation/translation.service'
 import { logEasy } from '@app/services/logging/logging.service'
+import { LoginService } from '@app/ui/login/login-service/login.service'
 
 @Injectable()
 export class DetailsEffects {
@@ -22,6 +23,7 @@ export class DetailsEffects {
     constructor(
         private actions$: Actions,
         private dataService: DataService,
+        private loginService: LoginService,
         private translate: TranslationService,
     ) {
         this.translate.prefetch(this.translationsToRequest, this)
@@ -60,7 +62,7 @@ export class DetailsEffects {
                 })
             )
         })
-    ));
+    ))
 
     /**
      * Effect provides new actions as
@@ -70,6 +72,8 @@ export class DetailsEffects {
         ofType<ReturnType<typeof DETAILS.SAVE_DETAILS>>(DETAILS.SAVE_DETAILS),
         tap((action) => logEasy({messages: [`Action caught in ${this.constructor.name}:`, action]})),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 details,
             } = action
@@ -79,7 +83,7 @@ export class DetailsEffects {
                 variables
             } = MutateDetails(details)
 
-            return this.dataService.setData(query, variables).pipe(
+            return this.dataService.setData(query, variables, headers).pipe(
                 map((_) => {
                     return {
                         type: COMMON_ACTIONS.SUCCESS.type,
@@ -95,5 +99,5 @@ export class DetailsEffects {
                 })
             )
         })
-    ));
+    ))
 }

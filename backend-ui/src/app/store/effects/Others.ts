@@ -14,6 +14,7 @@ import { logEasy } from '@app/services/logging/logging.service'
 import { MutateReferences, MutateResume, QueryReferences, QueryResume, RemoveReference, RemoveResume, QueryQuote, MutateQuote, RemoveQuote } from '@app/services/data/queries'
 import { LocaleStore, OthersType, ReferencesFetched, ResumeFetched, QuoteFetched } from '@app/types'
 import { select, Store } from '@ngrx/store'
+import { LoginService } from '@app/ui/login/login-service/login.service'
 
 type StoreType = { locale: LocaleStore }
 
@@ -28,6 +29,7 @@ export class OthersEffects {
     constructor(
         private actions$: Actions,
         private dataService: DataService,
+        private loginService: LoginService,
         private translate: TranslationService,
         private store: Store<StoreType>
     ) {
@@ -81,6 +83,8 @@ export class OthersEffects {
         ofType<ReturnType<typeof OTHERS_ACTIONS.SAVE_REFERENCES>>(OTHERS_ACTIONS.SAVE_REFERENCES),
         tap((action) => logEasy({messages: [`Action caught in ${this.constructor.name}:`, action]})),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 references,
             } = action
@@ -90,7 +94,7 @@ export class OthersEffects {
                 variables
             } = MutateReferences(references)
 
-            return this.dataService.setData(query, variables).pipe(
+            return this.dataService.setData(query, variables, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('References saved successfully', this)}`
@@ -117,6 +121,8 @@ export class OthersEffects {
         ofType<ReturnType<typeof OTHERS_ACTIONS.REMOVE_REFERENCE>>(OTHERS_ACTIONS.REMOVE_REFERENCE),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 id,
             } = action
@@ -126,7 +132,7 @@ export class OthersEffects {
                 variables,
             } = RemoveReference(id)
 
-            return this.dataService.setData(query, variables).pipe(
+            return this.dataService.setData(query, variables, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Reference removed successfully', this)}`
@@ -189,6 +195,8 @@ export class OthersEffects {
         ofType(OTHERS_ACTIONS.SAVE_RESUME),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 resume,
             } = action
@@ -198,7 +206,7 @@ export class OthersEffects {
                 variables
             } = MutateResume(resume)
 
-            return this.dataService.setData(query, variables).pipe(
+            return this.dataService.setData(query, variables, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Resume updated successfully', this)}`
@@ -227,6 +235,8 @@ export class OthersEffects {
         ofType<ReturnType<typeof OTHERS_ACTIONS.REMOVE_RESUME>>(OTHERS_ACTIONS.REMOVE_RESUME),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 language,
             } = action
@@ -236,7 +246,7 @@ export class OthersEffects {
                 variables,
             } = RemoveResume(language)
 
-            return this.dataService.setData(query, variables).pipe(
+            return this.dataService.setData(query, variables, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Resume removed successfully', this)}`
@@ -320,13 +330,15 @@ export class OthersEffects {
                 )
             ),
             switchMap((action) => {
+                const headers = this.loginService.processHeader()
+
                 // if a new Actions arrives, the old Observable will be canceled
                 const { quote } = action;
 
                 const { query, variables } = MutateQuote(quote);
 
                 return this.dataService
-                    .setData(query, variables)
+                    .setData(query, variables, headers)
                     .pipe(
                         mergeMap(() => [
                             COMMON_ACTIONS.SUCCESS({
@@ -361,6 +373,8 @@ export class OthersEffects {
         ofType<ReturnType<typeof OTHERS_ACTIONS.REMOVE_QUOTE>>(OTHERS_ACTIONS.REMOVE_QUOTE),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 id,
             } = action
@@ -370,7 +384,7 @@ export class OthersEffects {
                 variables,
             } = RemoveQuote(id)
 
-            return this.dataService.setData(query, variables).pipe(
+            return this.dataService.setData(query, variables, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Quote removed successfully', this)}`

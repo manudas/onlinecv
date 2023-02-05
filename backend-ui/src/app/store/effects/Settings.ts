@@ -75,6 +75,8 @@ export class SettingsEffects {
         ofType<ReturnType<typeof SETTINGS.SAVE_SETTINGS>>(SETTINGS.SAVE_SETTINGS),
         tap((action) => logEasy({messages: [`Action caught in ${this.constructor.name}:`, action]})),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 settings,
             } = action
@@ -84,8 +86,8 @@ export class SettingsEffects {
                 variables,
             } = MutateSettings(settings)
 
-            return this.dataService.setData(query, variables).pipe(
-                map((settings: SettingsType) => {
+            return this.dataService.setData(query, variables, headers).pipe(
+                map((_settings: SettingsType) => {
                     return {
                         type: COMMON_ACTIONS.SUCCESS.type,
                         message: `${this.translate.getResolvedTranslation('Settings saved successfully', this)}`

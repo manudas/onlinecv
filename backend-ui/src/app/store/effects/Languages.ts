@@ -19,6 +19,7 @@ import { select, Store } from '@ngrx/store';
 import { LocaleStore } from '@app/types/Locale';
 import { LanguagesFetched } from '@app/types/Languages';
 import { logEasy } from '@app/services/logging/logging.service';
+import { LoginService } from '@app/ui/login/login-service/login.service';
 
 type StoreType = { locale: LocaleStore }
 
@@ -33,6 +34,7 @@ export class LanguageEffects {
     constructor(
         private actions$: Actions,
         private dataService: DataService,
+        private loginService: LoginService,
         private translate: TranslationService,
         private store: Store<StoreType>
     ) {
@@ -47,7 +49,6 @@ export class LanguageEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public fetchLanguages$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof LANGUAGE_ACTIONS.FETCH_LANGUAGES>>(LANGUAGE_ACTIONS.FETCH_LANGUAGES),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -88,6 +89,8 @@ export class LanguageEffects {
         ofType<ReturnType<typeof LANGUAGE_ACTIONS.SAVE_LANGUAGES>>(LANGUAGE_ACTIONS.SAVE_LANGUAGES),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 languages
             } = action
@@ -96,7 +99,7 @@ export class LanguageEffects {
                 languages,
             }
 
-            return this.dataService.setData(MutateLanguages, vars).pipe(
+            return this.dataService.setData(MutateLanguages, vars, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Languages saved successfully', this)}`
@@ -124,6 +127,8 @@ export class LanguageEffects {
         ofType<ReturnType<typeof LANGUAGE_ACTIONS.REMOVE_LANGUAGE>>(LANGUAGE_ACTIONS.REMOVE_LANGUAGE),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 id,
             } = action
@@ -132,7 +137,7 @@ export class LanguageEffects {
                 id,
             }
 
-            return this.dataService.setData(RemoveLanguage, vars).pipe(
+            return this.dataService.setData(RemoveLanguage, vars, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Language removed successfully', this)}`
@@ -150,5 +155,5 @@ export class LanguageEffects {
                 })
             )
         })
-    ));
+    ))
 }

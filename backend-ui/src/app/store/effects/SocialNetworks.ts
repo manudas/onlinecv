@@ -19,6 +19,7 @@ import { select, Store } from '@ngrx/store';
 import { LocaleStore } from '@app/types/Locale';
 import { SocialNetworkFetched } from '@app/types/SocialNetworks';
 import { logEasy } from '@app/services/logging/logging.service';
+import { LoginService } from '@app/ui/login/login-service/login.service';
 
 type StoreType = { locale: LocaleStore }
 
@@ -33,6 +34,7 @@ export class SocialNetworksEffects {
     constructor(
         private actions$: Actions,
         private dataService: DataService,
+        private loginService: LoginService,
         private translate: TranslationService,
         private store: Store<StoreType>
     ) {
@@ -75,7 +77,7 @@ export class SocialNetworksEffects {
                 })
             )
         })
-    ));
+    ))
 
     /**
      * Effect provides new actions as
@@ -85,6 +87,8 @@ export class SocialNetworksEffects {
         ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.SAVE_NETWORKS>>(SOCIAL_NETWORK_ACTIONS.SAVE_NETWORKS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 socialNetworks,
             } = action
@@ -93,7 +97,7 @@ export class SocialNetworksEffects {
                 socialNetworks,
             }
 
-            return this.dataService.setData(MutateSocialNetworks, vars).pipe(
+            return this.dataService.setData(MutateSocialNetworks, vars, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Social Networks saved successfully', this)}`
@@ -121,6 +125,8 @@ export class SocialNetworksEffects {
         ofType<ReturnType<typeof SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK>>(SOCIAL_NETWORK_ACTIONS.REMOVE_NETWORK),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 id,
             } = action
@@ -129,7 +135,7 @@ export class SocialNetworksEffects {
                 id,
             }
 
-            return this.dataService.setData(RemoveNetwork, vars).pipe(
+            return this.dataService.setData(RemoveNetwork, vars, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Social Network removed successfully', this)}`
@@ -147,5 +153,5 @@ export class SocialNetworksEffects {
                 })
             )
         })
-    ));
+    ))
 }

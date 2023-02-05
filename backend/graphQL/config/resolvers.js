@@ -14,8 +14,8 @@ const protectedResolvers = {
         removeInterest:         true, // to be implemented or removed
         putLanguages:           true,
         removeLanguage:         true,
-        putLocale:              true, // to be implemented or removed
-        removeLocale:           true, // to be implemented or removed
+        putLocale:              true, // to be implemented or removed  --> no hay efecto para este en BE-UI
+        removeLocale:           true, // to be implemented or removed  --> no hay efecto para este en BE-UI
         putPortfolio:           true, // to be implemented or removed
         removePortfolio:        true, // to be implemented or removed
         putQuote:               true,
@@ -42,7 +42,7 @@ const protectResolver = (type, name, resolverFn) => {
         return async (parent, params, context, info) => {
             const { request } = context;
             await tokenGuard(request);
-            resolverFn(parent, params, context, info);
+            return resolverFn(parent, params, context, info);
         }
     }
 
