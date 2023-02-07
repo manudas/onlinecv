@@ -13,3 +13,7 @@ export type AuthenticationInput = {
 export type AdminUserExistResponse = {
     checkAdminUserExists: boolean
 }
+
+export type AdminUserResponse = {
+    adminUser: string
+}

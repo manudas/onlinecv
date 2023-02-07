@@ -1,5 +1,5 @@
 var bcrypt = require('bcrypt');
-const { authGuard, checkUserExists, generateToken, getToken, userExistsGuard, tokenGuard } = require('@helpers/auth');
+const { authGuard, checkUserExists, generateToken, getToken, getUser, userExistsGuard, tokenGuard } = require('@helpers/auth');
 
 module.exports = {
     Query: {
@@ -22,6 +22,15 @@ module.exports = {
             _info
         ) => {
             return await checkUserExists();
+        },
+        adminUser: async (
+            _parent,
+            _params,
+            _context,
+            _info
+        ) => {
+            const userObject = await getUser();
+            return userObject.value.username;
         },
     },
     Mutation: {

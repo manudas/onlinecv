@@ -1,10 +1,13 @@
-import { Component, OnInit, Input } from '@angular/core';
-import {
-  faBeer,
-  faEnvelope,
-  faCog,
-  faUser,
-} from '@fortawesome/free-solid-svg-icons';
+import { Component, OnInit } from '@angular/core'
+import { faCaretDown, faCog, faIdCard, IconDefinition } from '@fortawesome/free-solid-svg-icons'
+import { Observable } from 'rxjs'
+import { MenuSelector } from '../menu/types'
+import { messageMenu, userMenu } from './config'
+
+import { select, Store } from '@ngrx/store'
+import { getAdminUser } from '@app/store/actions/Authentication'
+
+type StoreDef = { adminUser: string }
 
 @Component({
   selector: 'app-navbar',
@@ -13,68 +16,28 @@ import {
 })
 export class NavbarComponent implements OnInit {
 
-  @Input() userName: string = 'Username';
+  appIcon:  IconDefinition   = faIdCard
+  faCog:    IconDefinition   = faCog
+  faCaretDown: IconDefinition = faCaretDown
 
-  faBeer = faBeer;
-  faEnvelope = faEnvelope;
-  faCog = faCog;
-  faUser = faUser;
+  userMenu: MenuSelector
+  messageMenu: MenuSelector
 
-  messageMenu = {
-    name: 'MessagesDropdown',
-    start_icon: faEnvelope,
-    title: 'Messages',
-    badge: '5',
-    options: [
-        {
-            name: 'New message',
-            url: '/new-message',
-            type: 'option',
-        },
-        {
-          name: 'Inbox',
-          url: '/inbox',
-          type: 'option',
-        },
-        {
-          name: 'Outbox',
-          url: '/outbox',
-          type: 'option',
-        },
-        {
-          name: 'Trash',
-          url: '/trash',
-          type: 'option',
-        }
-      ]
+  private adminUser$: Observable<string>
+  public adminUser: string = ''
+
+  constructor(private store: Store<StoreDef>) {
+    this.adminUser$ = this.store.pipe(select(state => state?.adminUser))
+    this.store.dispatch(getAdminUser())
   }
-
-  userMenu = {
-    name: 'UserDropdown',
-    start_icon: faUser,
-    title: this.userName,
-    image: '//placehold.it/20x20/ccc/777',
-    classDropToggle: 'test',
-    options: [
-        {
-            name: 'Edit Profile',
-            url: '/edit-profile',
-            type: 'option',
-        },
-        {
-          type: 'separator',
-        },
-        {
-          name: 'Sign out',
-          url: '/sign-out',
-          type: 'option',
-        }
-      ]
-  }
-
-  constructor() { }
 
   ngOnInit(): void {
-  }
+    this.adminUser$.subscribe(data => {
+      this.adminUser = data
 
+      this.userMenu = userMenu(this.adminUser)
+    })
+    this.userMenu = userMenu(this.adminUser)
+    this.messageMenu = messageMenu
+  }
 }

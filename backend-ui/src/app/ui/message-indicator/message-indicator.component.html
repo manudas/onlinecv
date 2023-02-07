@@ -1,0 +1,17 @@
+<span
+    [ngClass]="{
+        'message-indicator': true,
+        'has-message': unread > 0
+    }"
+>
+    {{ unread > 100 ? '100+' : unread }}
+
+    <span
+        class="message-indicator--tooltip"
+        [ngStyle]="{
+            zIndex
+        }"
+    >
+        {{ ('Unread messages:' | translate | async) + ' ' + unread }}
+    </span>
+</span>

@@ -4,7 +4,8 @@ const protectedResolvers = {
     Query: {
         settings:               true,
         missingTranslations:    true,
-        translatedStrings:      true
+        translatedStrings:      true,
+        getAdminUser:           true,
     },
     Mutation: {
         putDetails:             true,

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ToolbarComponent } from './toolbar.component';
 import { BreadcrumbModule } from '../breadcrumb/breadcrumb.module';
@@ -13,7 +12,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     CommonModule,
     BreadcrumbModule,
     FontAwesomeModule,
-    NgbModule
   ],
   exports: [ToolbarComponent]
 })

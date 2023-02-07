@@ -2,20 +2,28 @@
     id='navbar'>
     <a [className]="'navbar-brand'"
         href='#'>
-        <fa-icon [icon]="faBeer"
+        <fa-icon [icon]="appIcon"
             flip="horizontal"
-            size="lg"></fa-icon> user.name || application.name
+            size="lg">
+        </fa-icon>
+        {{ 'Online CV' | translate | async }}
     </a>
 
     <app-language-selector></app-language-selector>
 
 
     <nav [className]="'nav navbar-nav navigation-bar float-right'">
-        <app-menu [name]="messageMenu.name"
-            [start_icon]="messageMenu.start_icon"
+        <app-menu
+            *ngIf="messageMenu"
+            [handlerInline]="messageMenu.handlerInline"
+            [icon]="messageMenu.icon"
             [title]="messageMenu.title"
-            [badge]="messageMenu.badge"
-            [options]="messageMenu.options"></app-menu>
+            [options]="messageMenu.options"
+            [position]="messageMenu.position"
+        ></app-menu>
+        <app-message-indicator
+            [unread]=5
+        ></app-message-indicator>
         <div>
             <a
                 [routerLink]="'settings'"
@@ -25,12 +33,18 @@
                     Settings
             </a>
         </div>
-        <app-menu [name]="userMenu.name"
-            [start_icon]="userMenu.start_icon"
+        <app-menu
+            *ngIf="userMenu"
+            [handlerInline]="userMenu.handlerInline"
+            [icon]="userMenu.icon"
             [title]="userMenu.title"
-            [image]="userMenu.image"
             [options]="userMenu.options"
-            [stylesDropToggle]="'font-weight: bolder;'"></app-menu>
+            [position]="userMenu.position"
+        ></app-menu>
+        <fa-icon
+            class="caretDown"
+            [icon]="faCaretDown"
+        ></fa-icon>
     </nav>
 </section>
 

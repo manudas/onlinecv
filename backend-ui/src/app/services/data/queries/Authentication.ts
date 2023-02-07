@@ -32,6 +32,16 @@ export const QueryAdminUserExists = () => {
     }
 }
 
+export const QueryAdminUser = () => {
+    const { query: queryWithoutVars } = query({
+        operation: 'adminUser',
+    })
+
+    return {
+        query: queryWithoutVars,
+    }
+}
+
 export const MutateSignUp = (authenticationData: AuthenticationInput) => {
     const { query: queryWithoutVars, variables } = mutation({
         operation: 'signup',

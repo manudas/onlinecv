@@ -12,6 +12,7 @@ input AuthenticationInput {
 extend type Query {
   checkToken: Authentication!
   checkAdminUserExists: Boolean!
+  adminUser: String!
 }
 
 extend type Mutation {

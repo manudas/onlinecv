@@ -1,19 +1,16 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common'
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
+import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { MenuComponent } from './menu.component';
-
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MenuComponent } from './menu.component'
 
 @NgModule({
   declarations: [MenuComponent],
   imports: [
     CommonModule,
-    NgbModule,
+    FontAwesomeModule,
     RouterModule,
-    FontAwesomeModule
   ],
   exports: [MenuComponent]
 })

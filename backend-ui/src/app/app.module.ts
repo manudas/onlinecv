@@ -30,6 +30,7 @@ import { TrainingEffects } from '@store_effects/Training'
 import { TranslationEffects } from '@store_effects/Translation'
 import { SettingsEffects } from './store/effects/Settings';
 
+import { reducer as adminUserReducer } from '@store_reducers/AdminUser'
 import { reducer as authReducer } from '@store_reducers/Authentication'
 import { reducer as detailsReducer } from '@store_reducers/Details'
 import { reducer as experienceReducer } from '@store_reducers/Experience'
@@ -86,6 +87,7 @@ if (environment.production) {
         MatSnackBarModule,
         NavbarModule,
         StoreModule.forRoot({
+            adminUser: adminUserReducer,
             authentication: authReducer,
             details: detailsReducer,
             experience: experienceReducer,

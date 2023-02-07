@@ -43,3 +43,12 @@ export const checkAdminUserExistsFetched = createAction(
   '[Auth] Check Admin User Fetched',
   props<{ checkAdminUserExists: boolean }>()
 )
+
+export const getAdminUser = createAction(
+  '[Auth] Get Admin User',
+)
+
+export const getAdminUserFetched = createAction(
+  '[Auth] Check Admin User Fetched',
+  props<{ adminUser: string }>()
+)

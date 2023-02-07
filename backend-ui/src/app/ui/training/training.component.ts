@@ -288,25 +288,23 @@ export class TrainingComponent implements OnInit {
         dialogRef
             .afterClosed()
             .subscribe(
-                ({
-                    indexToRemove = null,
-                    type = null
-                } = {}) => {
+                (data) => {
+                    const { index } = data ?? {}
                     logEasy(
                         `The dialog was closed.`,
-                        indexToRemove !== null
+                        index !== null
                             ? `The following message was received: ${JSON.stringify(
-                                  indexToRemove
+                                data
                               )}`
                             : ''
                     );
 
                     if (
-                        indexToRemove !== null &&
+                        index !== null &&
                         type !== null
                     ) {
                         this.deleteTraining(
-                            indexToRemove,
+                            index,
                             type
                         );
                     }
@@ -318,11 +316,11 @@ export class TrainingComponent implements OnInit {
         trainingIndex: number,
         type: TrainingType
     ) {
-        const training = this[`${type}Data`][trainingIndex];
+        const training = this[`${TrainingType[type]}Data`][trainingIndex];
         this.store.dispatch(
             TRAINING_ACTIONS.REMOVE_TRAINING({
                 id: training.id,
-                trainingType: type.toString()
+                trainingType: TrainingType[type]
             })
         );
     }

@@ -11,11 +11,11 @@ import { DataService } from '@services/data/data.service'
 
 import { TranslationService } from '@app/services/translation/translation.service'
 import { logEasy } from '@app/services/logging/logging.service'
-import { MutateAuthentication, MutateSignUp, QueryAdminUserExists, QueryCheckToken } from '@app/services/data/queries'
+import { MutateAuthentication, MutateSignUp, QueryAdminUser, QueryAdminUserExists, QueryCheckToken } from '@app/services/data/queries'
 import { LocaleStore } from '@app/types'
 import { select, Store } from '@ngrx/store'
 
-import { AdminUserExistResponse, Authentication, AuthenticationInput, AuthenticationResponse } from '@app/types/Authentication';
+import { AdminUserExistResponse, AdminUserResponse, Authentication, AuthenticationInput, AuthenticationResponse } from '@app/types/Authentication';
 import { LoginService } from '@app/ui/login/login-service/login.service'
 
 type StoreType = { locale: LocaleStore }
@@ -162,6 +162,34 @@ export class AuthenticationEffects {
             )
         })
     ))
+
+    /**
+     * Effect provides new actions as
+     * a result of the operation performed
+     */
+    public getAdminUserEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
+        ofType(AUTH_ACTIONS.getAdminUser),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
+        switchMap((_action) => { // if a new Actions arrives, the old Observable will be canceled
+            const {
+                query,
+            } = QueryAdminUser()
+
+            return this.dataService.readData(query).pipe(
+                map((data: AdminUserResponse) => {
+                    return AUTH_ACTIONS.getAdminUserFetched(data)
+                }),
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
+                    return of({
+                        type: COMMON_ACTIONS.FAIL.type,
+                        message: errors.map(error => error.message)
+                    })
+                })
+            )
+        })
+    ))
+
 
     /**
      * Effect provides new actions as

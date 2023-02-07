@@ -1,88 +1,49 @@
-<div *ngIf="options && options.length > 0"
-    ngbDropdown
-    [style]="stylesDropDown"
-    [placement]="placement">
-    <span [style]="stylesDropToggle"
-        [ngStyle]="onDropDownActiveOrFocusedToggleStyles()"
-        (mouseover)="onDropDownToggleMouseOver($event)"
-        (click)="onDropDownToggleClick($event)"
-        (mouseleave)="onDropDownToggleMouseLeave($event)"
-        ngbDropdownToggle
-        [id]="name || title"
-        [ngClass]="
-            {
-                'dropdown_nav-link': true,
-                'noCaret': !caret
-            }"> 
-        <ng-container *ngTemplateOutlet="dropDownNavLinkContent"></ng-container>
-    </span>
-    <div [style]="stylesDropDownMenu"
-        ngbDropdownMenu>
-        <ng-template ngFor
-            let-option
-            [ngForOf]="options">
-
-            <div [ngClass]="'dropdown-menu_header'"
-                [style]="stylesHeader"
-                *ngIf="
-                        (
-                            option.type.toString() ==  MenuItem.header.toString()
-                            || MenuItem[option.type].toString() == MenuItem.header.toString()
-                        )">
-                {{ option.name }}
-            </div>
-            <button *ngIf="
-                    (
-                        option.type.toString() ==  MenuItem.option.toString()
-                        || MenuItem[option.type].toString() == MenuItem.option.toString()
-                    ) 
-                    && !option.onclick"
-                ngbDropdownItem
+<div
+    class="selector"
+>
+    <div
+        class="handler"
+        [routerLink]="getRouterUrl()"
+    >
+        <fa-icon
+            [size]="iconSize ? iconSize + 'x' : null"
+            [icon]="icon"
+        ></fa-icon>
+        <div
+            class="handler_title"
+            [ngStyle]="{
+                display: handlerInline ? 'inline': 'block'
+            }"
+        >
+            {{ title }}
+        </div>
+    </div>
+    <div
+        *ngIf="options && options.length"
+        [ngClass]="['dropdown_menu', DropDownPosition[position]]"
+        [ngStyle]="{
+            zIndex
+        }"
+    >
+        <div
+            [ngClass]="['options_wrapper', DropDownPosition[position]]"
+        >
+            <div
+                *ngFor="let option of options"
                 [routerLink]="getRouterUrl(option)"
-                [ngClass]="'dropdown-menu_option'"
-                [style]="stylesOption">{{ option.name }}</button>
-            <button *ngIf="
-                    (
-                        option.type.toString() ==  MenuItem.option.toString()
-                        || MenuItem[option.type].toString() == MenuItem.option.toString()   
-                    )
-                    && option.onclick"
-                ngbDropdownItem
-                (click)="option.onclick"
-                [ngClass]="'dropdown-menu_option'"
-                [style]="stylesOption">{{ option.name }}</button>
-            <div *ngIf="
-                        (
-                            option.type.toString() ==  MenuItem.separator.toString()
-                            || MenuItem[option.type].toString() == MenuItem.separator.toString()
-                        )"
-                [ngClass]="'dropdown-menu_divider'"
-                [style]="stylesDivider"></div>
-        </ng-template>
-        <span [ngClass]="
-            {
-                'dropdown-menu_arrow': true,
-                'bottom': !placement || placement.toLowerCase().startsWith('bottom'),
-                'right': placement && placement.toLowerCase().startsWith('right')
-            }"></span>
+                [className]="MenuOptionType[option.type]"
+            >
+                <fa-icon
+                    *ngIf="option.icon"
+                    [icon]="option.icon"
+                ></fa-icon>
+                <span>
+                    {{ option.title }}
+                </span>
+            </div>
+        </div>
+        <span
+            [ngClass]="['arrow', DropDownPosition[position]]"
+        ></span>
     </div>
 </div>
-
-<ng-template #dropDownNavLinkContent>
-    <fa-icon *ngIf="start_icon"
-        [icon]="start_icon"
-        [ngClass]="'dropdown_start_icon mr-2'"
-        [style]="stylesStartIcon"></fa-icon>
-    {{ title }}
-    <span *ngIf="badge"
-        [ngClass]="'dropdown_badge'"
-        [style]="stylesBadge">{{badge}}</span>
-    <fa-icon *ngIf="end_icon"
-        [icon]="end_icon"
-        [ngClass]="'dropdown_end_icon'"
-        [style]="stylesEndIcon"></fa-icon>
-    <img *ngIf="image"
-        [src]="image"
-        [ngClass]="'dropdown_image'"
-        [style]="stylesImage" />
-</ng-template>

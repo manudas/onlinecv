@@ -69,8 +69,8 @@ export const RemoveTraining = (id) => {
         {
             operation: 'removeTraining',
             variables: {
-                trainings: {
-                    id: id,
+                id: {
+                    value: id,
                     required: true,
                     type: 'ID'
                 }

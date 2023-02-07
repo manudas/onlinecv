@@ -23,7 +23,6 @@
             &_launcher {
                 list-style: none;
                 margin-top: 20px;
-                cursor: pointer;
                 // indicador de opcion
                  :hover:before,
                 &.active:before {
@@ -56,10 +55,6 @@
             bottom: 5px;
             left: 0;
             right: 0;
-        }
-        &_icons {
-            display: block;
-            z-index: 1;
         }
     }
 }

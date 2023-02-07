@@ -65,7 +65,6 @@ const badUserGraphQL_Error = () => {
     });
 }
 
-
 const authGuard = async (user, password) => {
     const { validUser, validPassword } = await checkUserPassword(user, password);
 
@@ -141,6 +140,7 @@ module.exports = {
     checkUserPassword,
     generateToken,
     getToken,
+    getUser,
     tokenGuard,
     userExistsGuard,
 };

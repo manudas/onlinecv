@@ -1,0 +1,47 @@
+:host {
+    margin: 5px;
+    .message-indicator {
+        position: relative;
+
+        cursor: pointer;
+        border-radius: 50%;
+        background-color: #777777;
+        color: whitesmoke;
+
+        padding: 3px 7px;
+
+        &.has-message {
+            background-color: #dc3545;
+            font-weight: bold;
+        }
+
+        .message-indicator--tooltip {
+            position: absolute;
+            top: 120%;
+
+            background-color: #000000BF;
+            width: max-content;
+            border-radius: 5px;
+            padding: 5px;
+
+            font-weight: bold;
+            transform: translateX(-50%);
+            left: 50%;
+
+            height: 0;
+            width: 0;
+            opacity: 0;
+
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        &:hover {
+            .message-indicator--tooltip {
+                height: auto;
+                width: max-content;
+
+                opacity: 1;
+            }
+        }
+    }
+}

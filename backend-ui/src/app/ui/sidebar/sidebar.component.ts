@@ -1,18 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router';
 
-import {
-  faBars,
-  faBug,
-  faCloud,
-  faFlask,
-  faTachometerAlt,
-  IconDefinition,
-} from '@fortawesome/free-solid-svg-icons';
-
-import {
-  faFileAlt
-} from '@fortawesome/free-regular-svg-icons';
+import { faBars, faFlask, IconDefinition } from '@fortawesome/free-solid-svg-icons'
 
 import { MenuListItems } from './config'
 
@@ -21,16 +10,10 @@ import { MenuListItems } from './config'
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent {
 
   faBars: IconDefinition = faBars
-  faBug: IconDefinition = faBug
-  faCloud: IconDefinition = faCloud
   faFlask: IconDefinition = faFlask
-  faFileAlt: IconDefinition = faFileAlt
-  faTachometerAlt: IconDefinition = faTachometerAlt
-
-  sidebar_icon = 'sidebar_icons';
 
   menuItems = MenuListItems
 
@@ -42,8 +25,4 @@ export class SidebarComponent implements OnInit {
     }
     return null;
   }
-
-  ngOnInit(): void {
-  }
-
 }
