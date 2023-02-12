@@ -56,14 +56,14 @@ module.exports = {
         removeSkill: async (
             _parent,
             { id },
-            { models: { skillsModel } },
+            { models: { SkillsModel } },
             _info
         ) => {
-            const WriteResult = await skillsModel.remove(
+            const WriteResult = await SkillsModel.remove(
                 {
-                    id
+                    _id: id
                 },
-                true
+                { justOne: true }
             ); // true == remove one
             return WriteResult.deletedCount === 1;
         }

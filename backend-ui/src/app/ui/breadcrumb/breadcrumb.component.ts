@@ -1,5 +1,5 @@
 import { LocationStrategy } from '@angular/common'
-import { Component, OnChanges, SimpleChanges } from '@angular/core'
+import { Component } from '@angular/core'
 import { Observable } from 'rxjs'
 import { Breadcrumb } from './service/breadcrumb.model'
 
@@ -10,7 +10,7 @@ import { BreadcrumbService } from './service/breadcrumb.service'
   templateUrl: './breadcrumb.component.html',
   styleUrls: ['./breadcrumb.component.scss']
 })
-export class BreadcrumbComponent implements OnChanges {
+export class BreadcrumbComponent {
 
   breadcrumbs$: Observable<Breadcrumb[]>
   breadcrumbs: Breadcrumb[]
@@ -23,9 +23,6 @@ export class BreadcrumbComponent implements OnChanges {
         url: this.locationStrategy.getBaseHref()
       }, ...data]
     })
-  }
-  ngOnChanges(changes: SimpleChanges): void {
-    throw new Error('Method not implemented.')
   }
 
   getRouterUrl(index: number) {

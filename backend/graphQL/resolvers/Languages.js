@@ -63,10 +63,10 @@ module.exports = {
         ) => {
             const WriteResult = await LanguagesModel.remove(
                 {
-                    id
+                    _id: id
                 },
-                true
-            ); // true == remove one
+                { justOne: true }
+            );
             return WriteResult.deletedCount === 1;
         }
     }

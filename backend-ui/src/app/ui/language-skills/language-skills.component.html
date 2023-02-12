@@ -1,43 +1,28 @@
-<ng-container *ngIf="isSkillsActive('general'); then skillsTemplate"></ng-container>
-<ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isSkillsActive('computer'); then computerTemplate"></ng-container>
-<ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
-<app-language-skills *ngIf="isSkillsActive('language')"></app-language-skills>
+
+<ng-container [ngTemplateOutlet]="languagesTemplate"></ng-container>
 
 
-<ng-template #skillsTemplate>
+<ng-template #languagesTemplate>
     <app-card [icon]="cardIcon"
         [iconClass]="'mr-1'"
         [panelBody]="panel"
-        [panelParameters]="{type: SkillsType.general, cols: colsToRender}"
-        [cardTitle]="'General Skills' | translate | async">
-    </app-card>
-</ng-template>
-
-<ng-template #computerTemplate>
-    <app-card [icon]="cardIcon"
-        [iconClass]="'mr-1'"
-        [panelBody]="panel"
-        [panelParameters]="{type: SkillsType.computer, cols: colsToRender}"
-        [cardTitle]="'Computer' | translate | async">
+        [cardTitle]="'Languages' | translate | async">
     </app-card>
 </ng-template>
 
 <ng-template #panel
-    let-type="type"
-    let-cols="cols"
 >
     <mat-table
-        *ngIf="getSkillsSource(type).length"
-        [dataSource]="getSkillsSource(type)"
+        *ngIf="languageData.length"
+        [dataSource]="languageData"
 
         cdkDropList
-        [cdkDropListData]="getSkillsSource(type)"
+        [cdkDropListData]="languageData"
         (cdkDropListDropped)="onDrop($event)"
         [cdkDropListDisabled]="dragDisabled"
 
     >
-        <ng-container *ngFor="let col of cols; let colIndex = index" matColumnDef="{{col}}">
+        <ng-container *ngFor="let col of languageColsToRender; let colIndex = index" matColumnDef="{{col}}">
             <mat-header-cell
                 *matHeaderCellDef
             >
@@ -46,17 +31,15 @@
             <mat-cell *matCellDef="let element; let row; let rowIndex = index">
 
                 <ng-container *ngIf="col === 'edit'"
-                    [ngTemplateOutlet]="editSkillTemplate"
+                    [ngTemplateOutlet]="editTemplate"
                     [ngTemplateOutletContext]="{
-                        rowIndex: rowIndex,
-                        type: type
+                        rowIndex: rowIndex
                     }"
                 ></ng-container>
                 <ng-container *ngIf="col === 'delete'"
-                    [ngTemplateOutlet]="deleteTrainingTemplate"
+                    [ngTemplateOutlet]="deleteTemplate"
                     [ngTemplateOutletContext]="{
-                        rowIndex: rowIndex,
-                        type: type
+                        rowIndex: rowIndex
                     }"
                 ></ng-container>
                 <ng-container *ngIf="col === 'order'"
@@ -67,12 +50,12 @@
             </mat-cell>
         </ng-container>
 
-        <mat-header-row *matHeaderRowDef="cols"></mat-header-row>
+        <mat-header-row *matHeaderRowDef="languageColsToRender"></mat-header-row>
         <mat-row
             (cdkDragStarted)="onDragStart($event)"
             cdkDrag
             [cdkDragData]="row"
-            *matRowDef="let row; columns: cols"
+            *matRowDef="let row; columns: languageColsToRender"
         ></mat-row>
     </mat-table>
 
@@ -80,28 +63,24 @@
         [className]="'text-right pt-3'"
     >
         <button
-            (click)="openSkillDialog(getSkillTypeName(type))"
+            (click)="openLanguageDialog()"
             [className]="'btn btn-outline-info'"
             type='button'
             ngbButton
         >
-            {{ 'Add Skills' | translate | async }}
+            {{ 'Add Language' | translate | async }}
         </button>
     </div>
 
 </ng-template>
 
-<ng-template #separator>
-    <div [className]="'separator'"></div>
-</ng-template>
 
-<ng-template #editSkillTemplate
+<ng-template #editTemplate
     let-index="rowIndex"
-    let-type="type"
 >
     <button [className]="'btn btn-info btn-training-row'"
         ngbButton
-        (click)="editSkill(index, getSkillTypeName(type))"
+        (click)="editLanguage(index)"
     >
         <fa-icon
             [icon]="faEdit"
@@ -111,13 +90,12 @@
 
 
 
-<ng-template #deleteTrainingTemplate
+<ng-template #deleteTemplate
     let-index="rowIndex"
-    let-type="type"
 >
     <button [className]="'btn btn-danger'"
         ngbButton
-        (click)="openSkillsRemovalConfirmDialog(index, type)"
+        (click)="openRemovalConfirmDialog(index)"
         >
         <fa-icon
             [icon]="faTrash"

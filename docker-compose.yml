@@ -1,17 +1,17 @@
-version: '3.9' #version of docker compose format document
+version: '3.9' # version of docker compose format document
 services:
   db:
     build:
-        context: dockerMongo
-        dockerfile: Dockerfile-mongo
+        context: docker/mongo
+        dockerfile: Dockerfile
     container_name: db
     ports:
      - "27017:27017"
     volumes:
-     - ./data/mongo/db:/data/db #data/db is where mongo stores database files
+     - ./data/mongo/db:/data/db # data/db is where mongo stores database files
      - ./data/config/mongodb/init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     env_file:
-     - "dockerMongo/.env"
+     - "docker/mongo/.env"
     healthcheck:
       test: ["CMD-SHELL", "db.runCommand('ping').ok", "|", "mongo", "db:27017/onlinecv", "--quiet", "1"]
       interval: 30s
@@ -24,8 +24,8 @@ services:
       - app_mongo_root_password
   backend:
     build:
-        context: dockerNode
-        dockerfile: Dockerfile-node
+        context: docker/node
+        dockerfile: Dockerfile
     container_name: backend
     ports:
      - "80:80"
