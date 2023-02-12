@@ -38,45 +38,6 @@ export class AppComponent implements OnInit { // added OnInit to make a regular 
 
     appMessage$: Observable < MessageType >
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // USAR INTERCEPTORS. SI ALGUNA QUERY DE BACKEND RESPONDE NO AUTORIZADO, BORRAR TOKEN Y REDIRIGIR A PANTALLA DE LOGIN, PONIENDO userLoggedIn variable a false.
     userLoggedIn$: Observable<boolean>
     userLoggedIn: boolean = false
 

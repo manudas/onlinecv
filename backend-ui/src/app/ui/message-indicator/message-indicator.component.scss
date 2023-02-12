@@ -17,7 +17,7 @@
 
         .message-indicator--tooltip {
             position: absolute;
-            top: 120%;
+            top: 0%;
 
             background-color: #000000BF;
             width: max-content;
@@ -32,15 +32,18 @@
             width: 0;
             opacity: 0;
 
-            transition: opacity 0.4s ease-in-out;
+            transition: top  0.4s ease-in-out, opacity 0.4s ease-in-out;
+            color: transparent;
         }
 
         &:hover {
             .message-indicator--tooltip {
                 height: auto;
+                top: 120%;
                 width: max-content;
 
                 opacity: 1;
+                color: whitesmoke;
             }
         }
     }

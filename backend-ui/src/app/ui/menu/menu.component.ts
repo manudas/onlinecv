@@ -32,7 +32,8 @@ export class MenuComponent implements MenuSelector {
   constructor() { }
 
   getRouterUrl(option?: MenuOption) {
-    if(!option) { // handler element
+    if (option?.onClick) return [] // onclick func instead
+    if(!option) { // handler element (not option element)
       return [...(this.urlSegments ?? [])]
     } else if (option.urlSegments) { // option element with URL
       return [...(this.urlSegments ?? []), ...(option.urlSegments ?? [])]

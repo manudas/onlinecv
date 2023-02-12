@@ -1,52 +1,58 @@
-<section [className]="'navbar navbar-default'"
+<section [className]="'navbar navbar-default row'"
     id='navbar'>
-    <a [className]="'navbar-brand'"
+    <a [className]="'navbar-brand col-4'"
         href='#'>
         <fa-icon [icon]="appIcon"
             flip="horizontal"
             size="lg">
         </fa-icon>
-        {{ 'Online CV' | translate | async }}
+        {{ 'ONLINE CV' | translate | async }}
     </a>
 
-    <app-language-selector></app-language-selector>
+    <app-language-selector
+        class="col-3"
+    ></app-language-selector>
 
-
-    <nav [className]="'nav navbar-nav navigation-bar float-right'">
-        <app-menu
-            *ngIf="messageMenu"
-            [handlerInline]="messageMenu.handlerInline"
-            [icon]="messageMenu.icon"
-            [title]="messageMenu.title"
-            [options]="messageMenu.options"
-            [position]="messageMenu.position"
-        ></app-menu>
-        <app-message-indicator
-            [unread]=5
-        ></app-message-indicator>
+    <nav [className]="'nav navbar-nav navigation-bar float-right col-12 col-lg-5 justify-content-between justify-content-lg-end'">
+        <div class="d-flex align-items-center">
+            <app-menu
+                *ngIf="messageMenu"
+                [handlerInline]="messageMenu.handlerInline"
+                [icon]="messageMenu.icon"
+                [title]="messageMenu.title"
+                [options]="messageMenu.options"
+                [position]="messageMenu.position"
+                [zIndex]="messageMenu.zIndex"
+            ></app-menu>
+            <app-message-indicator
+                zIndex=2
+                [unread]=5
+            ></app-message-indicator>
+        </div>
         <div>
             <a
                 [routerLink]="'settings'"
                 [ngClass]="'navigation-bar_nav-link'">
                 <fa-icon [className]="'mr-1'"
-                    [icon]="faCog"></fa-icon>
-                    Settings
+                    [icon]="faCog">
+                </fa-icon>
+                    {{ 'Settings' | translate | async }}
             </a>
         </div>
-        <app-menu
-            *ngIf="userMenu"
-            [handlerInline]="userMenu.handlerInline"
-            [icon]="userMenu.icon"
-            [title]="userMenu.title"
-            [options]="userMenu.options"
-            [position]="userMenu.position"
-        ></app-menu>
-        <fa-icon
-            class="caretDown"
-            [icon]="faCaretDown"
-        ></fa-icon>
+        <div class="d-flex align-items-center">
+            <app-menu
+                *ngIf="userMenu"
+                class="userMenu"
+                [handlerInline]="userMenu.handlerInline"
+                [icon]="userMenu.icon"
+                [title]="userMenu.title"
+                [options]="userMenu.options"
+                [position]="userMenu.position"
+            ></app-menu>
+            <fa-icon
+                class="caretDown"
+                [icon]="faCaretDown"
+            ></fa-icon>
+        </div>
     </nav>
 </section>
-
-
-

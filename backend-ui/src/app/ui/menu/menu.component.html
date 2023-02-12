@@ -10,7 +10,7 @@
             [icon]="icon"
         ></fa-icon>
         <div
-            class="handler_title"
+            class="handler_title text-truncate"
             [ngStyle]="{
                 display: handlerInline ? 'inline': 'block'
             }"
@@ -30,6 +30,7 @@
         >
             <div
                 *ngFor="let option of options"
+                (click)="option.onClick($event)"
                 [routerLink]="getRouterUrl(option)"
                 [className]="MenuOptionType[option.type]"
             >

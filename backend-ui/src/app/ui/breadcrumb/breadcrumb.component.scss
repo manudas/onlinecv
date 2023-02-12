@@ -1,6 +1,6 @@
 @import '../../globals/styles';
 .breadcrumb {
-    // font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-left: 15px;
     font-size: 14px;
     line-height: 1.428571429;
     padding: 15px 20px;
@@ -17,12 +17,15 @@
         &.active {
             font-weight: bold;
         }
+
+    }
+    &_link {
+        text-decoration: none;
+        color: $darkGrey;
+
         &.title {
             font-weight: 800;
             color: #1abc9c;
         }
-    }
-    &_link {
-        color: $darkGrey;
     }
 }

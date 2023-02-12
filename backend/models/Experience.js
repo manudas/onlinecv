@@ -13,8 +13,14 @@ const ExperienceSchema = new Schema({
     role: String,
     company: String,
     company_url: String,
-    keywords: [String],
-    details: [String],
+    keywords: {
+        type: [String],
+        default: undefined
+    },
+    details: {
+        type: [String],
+        default: undefined
+    },
     language: String,
     order: Number,
 }, {

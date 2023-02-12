@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router';
-
 import { faBars, faFlask, IconDefinition } from '@fortawesome/free-solid-svg-icons'
 
 import { MenuListItems } from './config'
@@ -15,14 +13,13 @@ export class SidebarComponent {
   faBars: IconDefinition = faBars
   faFlask: IconDefinition = faFlask
 
+  openMenu: boolean = true
+
   menuItems = MenuListItems
 
-  constructor(private router: Router) {}
+  constructor() {}
 
-  routeIsActive(elementName){
-    if (this.router.url === `\/${elementName}`){
-      return "active";
-    }
-    return null;
+  toggleMenu() {
+    this.openMenu = !this.openMenu
   }
 }

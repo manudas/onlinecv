@@ -1,5 +1,5 @@
 const ObjectId = require('mongodb').ObjectId;
-const cleanObject = require('@helpers/utils').cleanObject;
+const cleanAndMapObject = require('@helpers/utils').cleanAndMapObject;
 
 module.exports = {
     Query: {
@@ -29,7 +29,7 @@ module.exports = {
         ) => {
             const WriteResult = await Promise.all(
                 skills.map(async (skill) => {
-                    const cleanedSkill = cleanObject(
+                    const cleanedSkill = cleanAndMapObject(
                         skill,
                         { id: '_id' }
                     );

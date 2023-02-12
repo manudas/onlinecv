@@ -14,7 +14,7 @@ import { TranslationServiceModule } from '@services/translation'
 
 import { OthersComponent } from './others.component'
 import { DragDropModule } from '@angular/cdk/drag-drop'
-import { UnderscoreModule } from '@app/services/underscore'
+import { SpecialCharsModule } from '@app/services/specialChars'
 
 import { OthersDialogComponent } from './others-dialog.component'
 import { ReactiveFormsModule } from '@angular/forms'
@@ -37,8 +37,8 @@ import { MatIconModule } from '@angular/material/icon'
         MatTableModule,
         MatIconModule,
         ReactiveFormsModule,
+        SpecialCharsModule,
         TranslationServiceModule,
-        UnderscoreModule
     ],
     exports: [OthersComponent]
 })

@@ -7,13 +7,7 @@ import { ReferenceDef, EditReferenceStructure } from '@app/types/References'
 import { OthersType } from '@app/types/Others'
 import { LocaleStore } from '@app/types/Locale'
 
-import {
-  faArrowsAlt,
-  faEdit,
-  faTable,
-  faTrash,
-  IconDefinition,
-} from '@fortawesome/free-solid-svg-icons'
+import { faArrowsAlt, faEdit, faTable, faTrash, IconDefinition } from '@fortawesome/free-solid-svg-icons'
 import { select, Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
 import * as OTHERS_ACTIONS from '@store_actions/Others'
@@ -31,24 +25,20 @@ type StoreType = { locale: LocaleStore } & { references: ReferenceDef[] } & { re
 })
 export class OthersComponent implements OnInit {
 
-  faArrowsAlt: IconDefinition = faArrowsAlt
-  faEdit: IconDefinition = faEdit
-  cardIcon: IconDefinition = faTable
-  faTrash: IconDefinition = faTrash
+  faArrowsAlt: IconDefinition                       = faArrowsAlt
+  faEdit: IconDefinition                            = faEdit
+  cardIcon: IconDefinition                          = faTable
+  faTrash: IconDefinition                           = faTrash
 
-  colsToRender = [
-    'name',
-    'company',
-    'edit',
-    'delete',
-    'order',
-  ]
+  colsToRender                                      = [ 'name', 'company', 'edit', 'delete', 'order' ]
 
   // initial state of dragging for reordering data
-  dragDisabled: boolean = true
+  dragDisabled: boolean                             = true
 
-  referencesData: ReferenceDef[] = []
+  referencesData: ReferenceDef[]                    = []
   referencesData$: Observable<ReferenceDef[]>
+
+  acceptedDocumentFileType                          = definedFileTypes.document
 
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
@@ -67,9 +57,7 @@ export class OthersComponent implements OnInit {
     return this._resumeData
   }
 
-  acceptedDocumentFileType = definedFileTypes.document
-
-  constructor(private activatedRoute:ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog) {
+  constructor( private activatedRoute:ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog ) {
     this.activatedRoute.paramMap.subscribe(params => {
       const passedType: string = params.get('type')
       if (!(passedType in OthersType)) {
@@ -79,19 +67,14 @@ export class OthersComponent implements OnInit {
       }
     })
 
-    this.quoteData$ = this.store.pipe(select(state => state?.quote))
-
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
 
+    this.quoteData$ = this.store.pipe(select(state => state?.quote))
     this.referencesData$ = this.store.pipe(select(state => state?.references))
-
     this.resumeData$ = this.store.pipe(select(state => state?.resume))
   }
 
-  public isElementActive(type: string) {
-    return this.type === OthersType.all
-            || this.type === OthersType[type]
-  }
+  public isElementActive = (type: string) => this.type === OthersType.all || this.type === OthersType[type]
 
   ngOnInit(): void {
     this.quoteData$.subscribe((data: QuoteDef) => {
@@ -101,7 +84,10 @@ export class OthersComponent implements OnInit {
         }
       } else this.quoteFormGroup.reset()
     })
-    this.selectedLocale$.subscribe((data: string) => this.selectedLocale = data)
+    this.selectedLocale$.subscribe((data: string) => {
+      this.selectedLocale = data
+      this.fetchData()
+    })
     this.referencesData$.subscribe((data: ReferenceDef[]) => {
       this.referencesData = data ?? this.referencesData
     })
@@ -109,7 +95,7 @@ export class OthersComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(() => this.fetchData())
   }
 
-  openAddEditDialog(data: EditReferenceStructure = {
+  openAddEditDialog( data: EditReferenceStructure = {
     index: null,
     reference: null
   }): void {
@@ -140,7 +126,7 @@ export class OthersComponent implements OnInit {
     })
   }
 
-  onDragStart($event) {
+  onDragStart( _$event ) {
     const draggingElement: HTMLElement = document.querySelector('mat-row.cdk-drag-preview')
     if (draggingElement) {
       draggingElement.style['box-shadow'] =
@@ -150,7 +136,7 @@ export class OthersComponent implements OnInit {
     }
   }
 
-  onDrop(event: CdkDragDrop<ReferenceDef[]>) {
+  onDrop( event: CdkDragDrop<ReferenceDef[]> ) {
     this.dragDisabled = true
     if (event.previousIndex !== event.currentIndex) {
       const currentArr = [...this.referencesData]
@@ -164,7 +150,7 @@ export class OthersComponent implements OnInit {
     }
   }
 
-  openDataRemovalConfirmDialog(index: number): void {
+  openDataRemovalConfirmDialog( index: number ): void {
     const ref = this.referencesData[index]
     const dialogRef = this.matDialog.open(ConfirmComponent, {
       width: '80%',
@@ -189,26 +175,19 @@ export class OthersComponent implements OnInit {
     })
   }
 
-  editData(index: number) {
+  editData( index: number ) {
     const reference = this.referencesData[index]
-    this.openAddEditDialog({
-      reference,
-      index
-    })
+    this.openAddEditDialog({ reference, index })
   }
 
-  deleteData(index: number) {
+  deleteData( index: number ) {
     const ref = this.referencesData[index]
-    this.store.dispatch(OTHERS_ACTIONS.REMOVE_REFERENCE({
-      id: ref.id,
-    }))
+    this.store.dispatch(OTHERS_ACTIONS.REMOVE_REFERENCE({ id: ref.id }))
   }
 
-  isDataEdit(data: EditReferenceStructure | Object = {}): data is EditReferenceStructure {
-    return (data as EditReferenceStructure).index !== undefined
-  }
+  isDataEdit = ( data: EditReferenceStructure | Object = {} ): data is EditReferenceStructure => (data as EditReferenceStructure).index !== undefined
 
-  editDataValues(index: number, refData: ReferenceDef) {
+  editDataValues( index: number, refData: ReferenceDef ) {
     const newReferences = [
       ...this.referencesData.slice(0, index),
       { ...refData},
@@ -217,7 +196,7 @@ export class OthersComponent implements OnInit {
     this.dispatchSave(newReferences)
   }
 
-  addData(data: ReferenceDef) {
+  addData( data: ReferenceDef ) {
     this.editDataValues(this.referencesData.length, {
       ...data,
       language: this.selectedLocale,
@@ -225,11 +204,7 @@ export class OthersComponent implements OnInit {
     })
   }
 
-  dispatchSave(references) {
-    this.store.dispatch(OTHERS_ACTIONS.SAVE_REFERENCES({
-      references,
-    }))
-  }
+  dispatchSave = ( references ) => this.store.dispatch(OTHERS_ACTIONS.SAVE_REFERENCES({ references }))
 
   fetchData() {
     if (this.type !== OthersType.all) {
@@ -247,7 +222,7 @@ export class OthersComponent implements OnInit {
     }
   }
 
-  submitResumeHandler(_$event) {
+  submitResumeHandler( _$event ) {
     if (this.resumeData) {
       this.store.dispatch(OTHERS_ACTIONS.SAVE_RESUME({
         resume: {
@@ -269,22 +244,18 @@ export class OthersComponent implements OnInit {
     quote: new FormControl(null, Validators.required), // new FormControl(initialValue, validators)
   })
 
-  submitQuoteHandler($event) {
+  submitQuoteHandler( _$event ) {
     if (this.quoteFormGroup.valid) {
       const data = this.quoteFormGroup.value
-      this.store.dispatch(OTHERS_ACTIONS.SAVE_QUOTE({
-        quote: { ...data, language: this.selectedLocale }
-      }))
+      this.store.dispatch(OTHERS_ACTIONS.SAVE_QUOTE({ quote: { ...data, language: this.selectedLocale } }))
     } else {
       this.quoteFormGroup.markAllAsTouched()
     }
   }
 
-  deleteQuoteHandler($event) {
+  deleteQuoteHandler( _$event ) {
     if (this.quoteFormGroup.get('id').value) {
-      this.store.dispatch(OTHERS_ACTIONS.REMOVE_QUOTE({
-        id: this.quoteFormGroup.get('id').value
-      }))
+      this.store.dispatch(OTHERS_ACTIONS.REMOVE_QUOTE({ id: this.quoteFormGroup.get('id').value }))
     }
   }
 }

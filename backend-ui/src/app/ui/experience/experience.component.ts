@@ -6,20 +6,14 @@ import { logEasy } from '@app/services/logging'
 import { EditExperienceStructure, ExperienceInterface, ExperienceType } from '@app/types/Experience'
 import { LocaleStore } from '@app/types/Locale'
 
-import {
-  faArrowsAlt,
-  faEdit,
-  faTable,
-  faTrash,
-  IconDefinition,
-} from '@fortawesome/free-solid-svg-icons'
+import { faArrowsAlt, faEdit, faTable, faTrash, IconDefinition } from '@fortawesome/free-solid-svg-icons'
 import { select, Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
 import * as EXPERIENCE_ACTIONS from '@store_actions/Experience'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { ExperienceDialogComponent } from './experience-dialog.component'
 
-type StoreType = { locale: LocaleStore } & {experience: { professional: ExperienceInterface[] } & { ong: ExperienceInterface[] } & { other: ExperienceInterface[] }}
+type StoreType = { locale: LocaleStore } & {experience: { professional: ExperienceInterface[] } & { ong: ExperienceInterface[] } & { other: ExperienceInterface[] } }
 @Component({
   selector: 'app-experience',
   templateUrl: './experience.component.html',
@@ -27,38 +21,31 @@ type StoreType = { locale: LocaleStore } & {experience: { professional: Experien
 })
 export class ExperienceComponent implements OnInit {
 
-  faArrowsAlt: IconDefinition = faArrowsAlt
-  faEdit: IconDefinition = faEdit
-  cardIcon: IconDefinition = faTable
-  faTrash: IconDefinition = faTrash
+  faArrowsAlt: IconDefinition                             = faArrowsAlt
+  faEdit: IconDefinition                                  = faEdit
+  cardIcon: IconDefinition                                = faTable
+  faTrash: IconDefinition                                 = faTrash
 
-  type: ExperienceType = null;
+  type: ExperienceType                                    = null
 
-  colsToRender = [
-    // 'id',
-    'role',
-    'company',
-    'edit',
-    'delete',
-    'order',
-  ]
+  colsToRender                                            = ['role', 'company', 'edit', 'delete', 'order']
 
   // initial state of dragging for reordering working experience
-  dragDisabled: boolean = true
+  dragDisabled: boolean                                   = true
 
-  professionalData: ExperienceInterface[] = []
+  professionalData: ExperienceInterface[]                 = []
   professionalData$: Observable<ExperienceInterface[]>
-  ongData: ExperienceInterface[] = []
+  ongData: ExperienceInterface[]                          = []
   ongData$: Observable<ExperienceInterface[]>
-  otherData: ExperienceInterface[] = []
+  otherData: ExperienceInterface[]                        = []
   otherData$: Observable<ExperienceInterface[]>
 
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
 
-  @Input() title: string = 'Experience'
+  @Input() title: string                                  = 'Experience'
 
-  constructor(private activatedRoute:ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog) {
+  constructor( private activatedRoute:ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog ) {
     this.activatedRoute.paramMap.subscribe(params => {
       const passedType: string = params.get('type')
       if (!(passedType in ExperienceType)) {
@@ -81,7 +68,10 @@ export class ExperienceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.selectedLocale$.subscribe((data: string) => this.selectedLocale = data)
+    this.selectedLocale$.subscribe((data: string) => {
+      this.selectedLocale = data
+      this.fetchData()
+    })
 
     this.professionalData$.subscribe((data: ExperienceInterface[]) => data ? this.professionalData = data : null)
     this.ongData$.subscribe((data: ExperienceInterface[]) => data ? this.ongData = data : null)
@@ -90,11 +80,11 @@ export class ExperienceComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(() => this.fetchData())
   }
 
-  getExperienceTypeName(type: ExperienceType) {
+  getExperienceTypeName( type: ExperienceType ) {
     return ExperienceType[type]
   }
 
-  openExperienceDialog(data: EditExperienceStructure | string): void {
+  openExperienceDialog( data: EditExperienceStructure | string ): void {
     const dialogRef = this.matDialog.open(ExperienceDialogComponent, {
       height: '80%',
       maxHeight: '100%',
@@ -122,7 +112,7 @@ export class ExperienceComponent implements OnInit {
     })
   }
 
-  onDragStart($event) {
+  onDragStart( _$event ) {
     const draggingElement: HTMLElement = document.querySelector('mat-row.cdk-drag-preview')
     if (draggingElement) {
       draggingElement.style['box-shadow'] =
@@ -132,7 +122,7 @@ export class ExperienceComponent implements OnInit {
     }
   }
 
-  onDrop(event: CdkDragDrop<ExperienceInterface[]>) {
+  onDrop( event: CdkDragDrop<ExperienceInterface[]> ) {
     this.dragDisabled = true
     const type = event.item.data.type
     if (event.previousIndex !== event.currentIndex) {
@@ -147,15 +137,13 @@ export class ExperienceComponent implements OnInit {
     }
   }
 
-  getExperienceSource(type: ExperienceType) {
-    return this[`${ExperienceType[type]}Data`]
-  }
+  getExperienceSource = (type: ExperienceType) => this[`${ExperienceType[type]}Data`]
 
   get ExperienceType() {
     return ExperienceType
   }
 
-  openExperienceRemovalConfirmDialog(experienceIndex: number, type: ExperienceType): void {
+  openExperienceRemovalConfirmDialog( experienceIndex: number, type: ExperienceType ): void {
     const experience = this[`${ExperienceType[type]}Data`][experienceIndex]
     const dialogRef = this.matDialog.open(ConfirmComponent, {
       width: '80%',
@@ -177,11 +165,10 @@ export class ExperienceComponent implements OnInit {
       if (index !== null && type !== null) {
         this.deleteExperience(index, type)
       }
-
     })
   }
 
-  editExperience(index: number, type: string) {
+  editExperience( index: number, type: string ) {
     const experience = this[`${type}Data`][index]
     this.openExperienceDialog({
       experience,
@@ -189,8 +176,7 @@ export class ExperienceComponent implements OnInit {
     })
   }
 
-
-  deleteExperience(index: number, type: ExperienceType) {
+  deleteExperience( index: number, type: ExperienceType ) {
     const experience = this[`${type}Data`][index]
     this.store.dispatch(EXPERIENCE_ACTIONS.REMOVE_EXPERIENCE({
       id: experience.id,
@@ -198,11 +184,11 @@ export class ExperienceComponent implements OnInit {
     }))
   }
 
-  isExperienceEdit(data: ExperienceInterface | EditExperienceStructure | Object = {}): data is EditExperienceStructure {
+  isExperienceEdit( data: ExperienceInterface | EditExperienceStructure | Object = {} ): data is EditExperienceStructure {
     return (data as EditExperienceStructure).index !== undefined
   }
 
-  editExperienceValues(index: number, experienceData: ExperienceInterface) {
+  editExperienceValues( index: number, experienceData: ExperienceInterface ) {
     const dataIndex = `${experienceData.type}Data`
     const newExperiences = [
       ...this[dataIndex].slice(0, index),
@@ -212,7 +198,7 @@ export class ExperienceComponent implements OnInit {
     this.dispatchSave(newExperiences, experienceData.type)
   }
 
-  addExperience(experienceData: ExperienceInterface) {
+  addExperience( experienceData: ExperienceInterface ) {
     this.editExperienceValues(this[`${experienceData.type}Data`].length, {
       ...experienceData,
       language: this.selectedLocale,
@@ -220,7 +206,7 @@ export class ExperienceComponent implements OnInit {
     })
   }
 
-  dispatchSave(data, type) {
+  dispatchSave( data, type ) {
     this.store.dispatch(EXPERIENCE_ACTIONS.SAVE_EXPERIENCES({
       experiences: data,
       experienceType: type
@@ -244,5 +230,4 @@ export class ExperienceComponent implements OnInit {
       })
     }
   }
-
 }

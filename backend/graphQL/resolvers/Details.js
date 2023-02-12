@@ -1,4 +1,4 @@
-const cleanObject = require('@helpers/utils').cleanObject;
+const cleanAndMapObject = require('@helpers/utils').cleanAndMapObject;
 
 module.exports = {
     Query: {
@@ -30,7 +30,7 @@ module.exports = {
             { models: { DetailsModel } },
             _info
         ) => {
-            const cleanedDetails = cleanObject(details, {
+            const cleanedDetails = cleanAndMapObject(details, {
                 id: '_id'
             });
             const DetailsRemovalResult =

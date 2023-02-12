@@ -15,7 +15,10 @@ const TrainingSchema = new Schema({
     final_project: String,
     school_url: String,
     average_grade: Number,
-    keywords: [],
+    keywords: {
+        type: [String],
+        default: undefined
+    },
     language: String,
     order: Number
 }, {

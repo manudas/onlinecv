@@ -2,12 +2,7 @@ import { Component, OnInit, Input } from '@angular/core'
 import { Store, select } from '@ngrx/store'
 import { Observable } from 'rxjs'
 
-import {
-  faEdit,
-  faTrash,
-  faArrowsAlt
-} from '@fortawesome/free-solid-svg-icons'
-
+import { faEdit, faTrash, faArrowsAlt } from '@fortawesome/free-solid-svg-icons'
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 import * as ACTION_DETAILS from '@store_actions/Details'
@@ -34,26 +29,20 @@ type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } } & {
 })
 export class DetailsComponent implements OnInit {
 
-  cardIcon: IconDefinition = faEdit
-  faTrash: IconDefinition = faTrash
-  faArrowsAlt: IconDefinition = faArrowsAlt
+  cardIcon: IconDefinition                        = faEdit
+  faTrash: IconDefinition                         = faTrash
+  faArrowsAlt: IconDefinition                     = faArrowsAlt
 
   // initial state of dragging for reordering social networks
-  dragDisabled: boolean = true
+  dragDisabled: boolean                           = true
 
   details$: Observable<DetailsType>
   details: DetailsType
 
   socialNetworks$: Observable<SocialNetwork[]>
-  socialNetworks: SocialNetwork[] = []
-  socialNetworkColsToRender = [
-    // 'id',
-    'label',
-    'description',
-    'edit',
-    'delete',
-    'order',
-  ]
+  socialNetworks: SocialNetwork[]                 = []
+  socialNetworkColsToRender                       = ['label', 'description', 'edit', 'delete', 'order']
+  acceptedPhotoFileType                           = definedFileTypes.image
 
   _profileImage: Blob
   get profileImage() {
@@ -67,14 +56,14 @@ export class DetailsComponent implements OnInit {
     this._profileImage = image
   }
 
-  translationsToRequest = ['Network deleted successfully']
+  translationsToRequest                           = ['Network deleted successfully']
 
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
 
-  @Input() title: string = 'Personal details'
+  @Input() title: string                          = 'Personal details'
 
-  detailsFormGroup: FormGroup = new FormGroup({
+  detailsFormGroup: FormGroup                     = new FormGroup({
     profileImage: new FormControl(),
     name: new FormControl(null, Validators.required), // new FormControl(initialValue, validators)
     surname: new FormControl(),
@@ -100,8 +89,6 @@ export class DetailsComponent implements OnInit {
         )
   }
 
-  acceptedPhotoFileType = definedFileTypes.image
-
   constructor(private store: Store<StoreType>, private matDialog: MatDialog, private translate: TranslationService) {
     this.details$ = this.store.pipe(
       select(
@@ -116,13 +103,17 @@ export class DetailsComponent implements OnInit {
     this.detailsFormGroup.controls.profileImage.valueChanges.subscribe((newImage: Blob) => {this.profileImageFromSubscription = newImage})
   }
 
+  fetchData() {
+    this.store.dispatch(ACTION_DETAILS.FETCH_DETAILS({ language: this.selectedLocale }))
+    this.store.dispatch(SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS({ language: this.selectedLocale }))
+  }
+
   ngOnInit(): void {
     this.selectedLocale$.subscribe((data: string) => {
       this.selectedLocale = data
+      this.fetchData()
     })
-    this.store.dispatch(ACTION_DETAILS.FETCH_DETAILS({
-      language: this.selectedLocale
-    }))
+
     this.details$.subscribe((data: DetailsType) => {
       if (data) {
         this.details = data
@@ -131,9 +122,7 @@ export class DetailsComponent implements OnInit {
         }
       }
     })
-    this.store.dispatch(SOCIAL_NETWORK_ACTIONS.FETCH_NETWORKS({
-      language: this.selectedLocale
-    }))
+
     this.socialNetworks$.subscribe((data: SocialNetwork[]) => {
       if (data) {
         this.socialNetworks = data

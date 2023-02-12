@@ -1,11 +1,21 @@
+@import 'bootstrap/scss/bootstrap';
+
 :host {
-    padding: 10px 20px 0px 20px;
+    @extend .pr-0;
+    @extend .pl-0;
+    @extend .pl-sm-3;
+    @extend .pr-sm-3;
+
+    padding-top: 0;
+    padding-bottom: 5px;
+
     background-color: #bdc3c7;
     position: fixed;
     width: 100%;
     height: 100%;
 
-
+    display: flex;
+    flex-direction: column;
 }
 
 ::ng-deep .Snack {

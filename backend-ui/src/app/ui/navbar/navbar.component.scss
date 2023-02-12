@@ -6,12 +6,15 @@
 
     .navbar-brand {
         color: #2c3e50;
+        margin-right: 0;
+        font-weight: bold;
     }
 
     .navigation-bar {
         color: #777777;
         flex-direction: row;
         align-items: center;
+        padding-left: 15px;
 
         transition-property: color, font-weight;
         transition-duration: 0.4s;
@@ -37,6 +40,8 @@
 
         ::ng-deep.handler {
             .handler_title {
+                @extend .d-none;
+                @extend .d-sm-inline;
                 font-size: 0.8rem;
             }
             transition-property: color, font-weight;
@@ -46,6 +51,17 @@
             &:hover {
                 color: #555555;
                 font-weight: bold;
+            }
+        }
+
+        .userMenu {
+            ::ng-deep.dropdown_menu {
+                right: -5px;
+
+                .arrow {
+                    right: 4px;
+                    left: auto !important;
+                }
             }
         }
 

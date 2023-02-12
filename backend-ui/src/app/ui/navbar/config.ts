@@ -7,6 +7,7 @@ export const messageMenu: MenuSelector = {
     icon: faEnvelope,
     position: DropDownPosition.down,
     title: 'Messages',
+    zIndex: 2,
     urlSegments: ['mail'],
     options: [
         {
@@ -32,7 +33,7 @@ export const messageMenu: MenuSelector = {
     ]
 }
 
-export const userMenu = (userName: string): MenuSelector => {
+export const userMenu = (userName: string, logOut: Function): MenuSelector => {
     return {
         handlerInline: true,
         icon: faUser,
@@ -49,7 +50,7 @@ export const userMenu = (userName: string): MenuSelector => {
             },
             {
                 title: 'Sign out',
-                urlSegments: ['sign-out'],
+                onClick: logOut,
                 type: MenuOptionType.option,
             }
         ]

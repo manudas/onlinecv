@@ -5,7 +5,7 @@ import { MenuSelector } from '../menu/types'
 import { messageMenu, userMenu } from './config'
 
 import { select, Store } from '@ngrx/store'
-import { getAdminUser } from '@app/store/actions/Authentication'
+import { getAdminUser, logOut } from '@app/store/actions/Authentication'
 
 type StoreDef = { adminUser: string }
 
@@ -31,13 +31,15 @@ export class NavbarComponent implements OnInit {
     this.store.dispatch(getAdminUser())
   }
 
+  logOut = () => this.store.dispatch(logOut())
+
   ngOnInit(): void {
     this.adminUser$.subscribe(data => {
       this.adminUser = data
 
-      this.userMenu = userMenu(this.adminUser)
+      this.userMenu = userMenu(this.adminUser, this.logOut)
     })
-    this.userMenu = userMenu(this.adminUser)
+    this.userMenu = userMenu(this.adminUser, this.logOut)
     this.messageMenu = messageMenu
   }
 }

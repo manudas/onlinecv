@@ -1,6 +1,6 @@
 const findAndUpdateMany =
     require('@helpers/utils').findAndUpdateMany;
-const cleanObject = require('@helpers/utils').cleanObject;
+const cleanAndMapObject = require('@helpers/utils').cleanAndMapObject;
 const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
@@ -203,7 +203,7 @@ module.exports = {
             { models: { TranslationsModel } },
             _info
         ) => {
-            const cleanedObject = cleanObject(translation, {
+            const cleanedObject = cleanAndMapObject(translation, {
                 id: '_id'
             });
 

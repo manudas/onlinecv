@@ -7,7 +7,10 @@ const collection = 'resume';
 
 const ResumeSchema = new Schema({
     data: Schema.Types.Buffer,
-    keywords: [String],
+    keywords: {
+        type: [String],
+        default: undefined
+    },
     language: String
 }, {
     collection,

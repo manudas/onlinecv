@@ -21,6 +21,10 @@ export const loginFailure = createAction(
   props<{ Authentication?: Authentication }>()
 )
 
+export const logOut = createAction(
+  '[Login Effect] Login Out',
+)
+
 export const checkToken = createAction(
   '[Auth] Check Token',
 )

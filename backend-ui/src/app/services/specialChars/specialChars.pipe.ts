@@ -5,13 +5,13 @@ import { Pipe, PipeTransform } from '@angular/core';
 * Changes underscores in a string for spaces
 */
 @Pipe({
-  name: 'noUnderscore',
+  name: 'noSpecialChars',
 })
-export class UnderscorePipe implements PipeTransform {
+export class SpecialCharsPipe implements PipeTransform {
 
   constructor() { }
 
   transform(input: string): string {
-    return input.replace(/_/g, " ");
+    return input.replace(/[_-]/g, " ");
   }
 }

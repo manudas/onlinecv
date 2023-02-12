@@ -24,12 +24,7 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              {
-                "glob": "**/*",
-                "input": "./node_modules/svg-country-flags/svg",
-                "output": "assets/svg-country-flags/svg"
-              }
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss",

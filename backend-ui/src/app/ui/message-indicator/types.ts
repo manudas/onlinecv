@@ -16,7 +16,6 @@ export type MenuOption = {
     type:           MenuOptionType
     title?:         string
     urlSegments?:   Array<string>
-    onClick?:       Function
 }
 
 export enum MenuOptionType {

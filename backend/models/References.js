@@ -11,7 +11,10 @@ const ReferenceSchema = new Schema({
     description: String,
     company: String,
     company_url: String,
-    keywords: [String],
+    keywords: {
+        type: [String],
+        default: undefined
+    },
     language: String,
     phone: String,
     email: String,

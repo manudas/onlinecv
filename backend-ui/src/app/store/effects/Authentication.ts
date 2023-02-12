@@ -102,7 +102,7 @@ export class AuthenticationEffects {
      * a result of the operation performed
      */
     public checkTokenFailureEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
-        ofType(AUTH_ACTIONS.checkTokenFailure),
+        ofType(AUTH_ACTIONS.checkTokenFailure, AUTH_ACTIONS.logOut),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         tap(() =>{
             this.loginService.removeToken()

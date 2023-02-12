@@ -1,5 +1,5 @@
 const ObjectId = require('mongodb').ObjectId;
-const cleanObject = require('@helpers/utils').cleanObject;
+const cleanAndMapObject = require('@helpers/utils').cleanAndMapObject;
 
 module.exports = {
     Query: {
@@ -31,7 +31,7 @@ module.exports = {
 
             const WriteResult = await Promise.all(
                 languages.map(async (language) => {
-                    const cleanedLang = cleanObject(
+                    const cleanedLang = cleanAndMapObject(
                         language,
                         { id: '_id' }
                     );

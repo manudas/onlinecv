@@ -27,4 +27,8 @@ export const reducer = createReducer(
     // do some more logic here if needed
     return {...state, authenticated: false}
   }),
+  on(AUTH_ACTIONS.logOut, (state, _action) => {
+    // do some more logic here if needed
+    return {...state, authenticated: false}
+  }),
 )

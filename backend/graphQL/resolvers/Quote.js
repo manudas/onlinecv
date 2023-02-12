@@ -1,4 +1,4 @@
-const cleanObject = require('@helpers/utils').cleanObject;
+const cleanAndMapObject = require('@helpers/utils').cleanAndMapObject;
 
 module.exports = {
     Query: {
@@ -33,7 +33,7 @@ module.exports = {
             },
             _info
         ) => {
-            const cleanedSettings = cleanObject(quote, {
+            const cleanedSettings = cleanAndMapObject(quote, {
                 id: '_id'
             });
             const QuoteRemovalResult =

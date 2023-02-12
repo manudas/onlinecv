@@ -12,7 +12,7 @@ import { DetailsComponent } from './details.component'
 import { DataService } from '@services/data/data.service'
 import { SocialNetworkDialogComponent } from './social-network-dialog.component'
 import { ConfirmModule } from '@app/ui/confirm/confirm.module'
-import { UnderscoreModule } from '@app/services/underscore'
+import { SpecialCharsModule } from '@app/services/specialChars'
 
 @NgModule({
     declarations: [
@@ -29,8 +29,8 @@ import { UnderscoreModule } from '@app/services/underscore'
         FileuploadModule,
         MatTableModule,
         ReactiveFormsModule,
+        SpecialCharsModule,
         TranslationServiceModule,
-        UnderscoreModule,
     ],
     exports: [DetailsComponent],
     providers: [DataService]

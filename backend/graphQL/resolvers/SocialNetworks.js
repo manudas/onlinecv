@@ -1,5 +1,5 @@
 const ObjectId = require('mongodb').ObjectId;
-const cleanObject = require('@helpers/utils').cleanObject;
+const cleanAndMapObject = require('@helpers/utils').cleanAndMapObject;
 
 module.exports = {
     Query: {
@@ -30,7 +30,7 @@ module.exports = {
             const SocialNetworkWriteResult =
                 await Promise.all(
                     socialNetworks.map(async (network) => {
-                        const cleanedNetwork = cleanObject(
+                        const cleanedNetwork = cleanAndMapObject(
                             network,
                             { id: '_id' }
                         );

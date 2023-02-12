@@ -1,11 +1,19 @@
 <section id='sidebar'
-    [className]="'sidebar'">
+    [className]="{
+        sidebar: true,
+        closed: !openMenu
+    }">
     <fa-icon [icon]="faBars"
         size="lg"
-        [ngClass]="['sidebar_menu-icon']"></fa-icon>
-    <i class='icon-align-justify icon-large'
-        id='toggle'></i>
-    <ul id='dock'
+        [ngClass]="{
+            'sidebar_menu-icon': true,
+            floating: !openMenu
+        }"
+        (click)="toggleMenu()"
+    ></fa-icon>
+    <ul
+        *ngIf="openMenu"
+        id='dock'
         [className]="'sidebar_dock'">
         <li
             *ngFor="let menu of menuItems"
@@ -19,7 +27,9 @@
             ></app-menu>
         </li>
     </ul>
-    <fa-icon [icon]="faFlask"
+    <fa-icon
+        *ngIf="openMenu"
+        [icon]="faFlask"
         id='beaker'
         [ngClass]="['sidebar_breaker']"
         placement="top"
