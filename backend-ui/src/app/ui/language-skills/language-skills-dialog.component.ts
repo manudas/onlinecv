@@ -1,11 +1,8 @@
-import { Component, Inject } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import {
-    MatDialogRef,
-    MAT_DIALOG_DATA,
-} from "@angular/material/dialog"
+import { Component, Inject } from "@angular/core"
+import { FormControl, FormGroup, Validators } from "@angular/forms"
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog"
 import { LanguageInterface } from "@app/types/Languages";
-import { EditLanguageStructure } from "@app/types/Languages";
+import { EditLanguageStructure } from "@app/types/Languages"
 
 import { assessmentFromOneToTen } from '@utils/commonFormValidators'
 
@@ -30,23 +27,17 @@ export class LanguageDialogComponent {
 
     constructor( public dialogRef: MatDialogRef<LanguageDialogComponent>, @Inject(MAT_DIALOG_DATA) public data?: EditLanguageStructure) {
         if (data) { // is EditLanguageStructure type
-            const {
-                index,
-                language
-            } = data
+            const { index, language } = data
 
             this.editingIndex = index
 
             for (const control in this.languageFormGroup.controls) {
                 this.languageFormGroup.get(control).setValue(language[control])
             }
-        } else { // is new Language
-            // passing type "language" as data, no need to do anything here
-            // this.languageFormGroup.get('type').setValue(data)
-        }
+        } else { /* is new Language */ }
     }
 
-    submitHandler($event): void {
+    submitHandler(_$event): void {
         if (this.languageFormGroup.valid /* && this.socialNetworksFormGroup.valid*/) {
             const language = this.languageFormGroup.value
             let result
@@ -60,7 +51,6 @@ export class LanguageDialogComponent {
             }
             this.close(result);
         } else {
-          //this.detailsFormGroup.markAllAsTouched()
           this.languageFormGroup.markAllAsTouched()
         }
       }

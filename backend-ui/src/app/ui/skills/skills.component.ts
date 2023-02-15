@@ -31,7 +31,7 @@ export class SkillsComponent implements OnInit {
 
   type: SkillsType                                    = null
 
-  colsToRender                                        = [ 'tag', 'description', 'school', 'average_grade', 'edit', 'delete', 'order' ]
+  colsToRender                                        = [ 'tag', 'description', 'skill_level', 'edit', 'delete', 'order' ]
 
   generalData$: Observable<SkillInterface[]>
   generalData: SkillInterface[]                       = []

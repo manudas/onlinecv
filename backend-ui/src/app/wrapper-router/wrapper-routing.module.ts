@@ -5,7 +5,7 @@ import { DashboardModule } from '@app/ui/dashboard/dashboard.module'
 import { DetailsModule } from '@app/ui/details/details.module'
 import { ExperienceModule } from '@app/ui/experience/experience.module'
 import { OthersModule } from '@app/ui/others/others.module'
-import { NotfoundModule } from '@app/services/notfound/notfound.module'
+import { NotFoundModule } from '@ui/not-found/not-found.module'
 import { routes } from './config/routes'
 import { SkillsModule } from '@app/ui/skills/skills.module'
 import { TrainingModule } from '@app/ui/training/training.module'
@@ -19,7 +19,7 @@ import { SettingsModule } from '@app/ui/settings/settings.module'
         DetailsModule,
         ExperienceModule,
         OthersModule,
-        NotfoundModule,
+        NotFoundModule,
         TrainingModule,
         SkillsModule,
         TranslationsModule,

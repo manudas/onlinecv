@@ -22,11 +22,11 @@ services:
     secrets:
       - app_mongo_password
       - app_mongo_root_password
-  backend:
+  server:
     build:
         context: docker/node
         dockerfile: Dockerfile
-    container_name: backend
+    container_name: server
     ports:
      - "80:80"
      - "443:443"

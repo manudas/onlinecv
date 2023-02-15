@@ -17,16 +17,11 @@
             flex-direction: column;
             width: 100%;
             &_content {
-                padding: 20px 20px 0px 20px;
+                padding: 20px 20px 20px 20px;
                 background-color: white;
                 width: 100%;
                 overflow: auto;
                 flex-grow: 1;
-                &::after {
-                    padding-top: 20px;
-                    display: flex;
-                    content: '';
-                }
             }
         }
     }

@@ -29,7 +29,7 @@
             "styles": [
               "src/styles.scss",
               {
-                "input": "./node_modules/bootstrap/dist/css/bootstrap.css"
+                "input": "node_modules/bootstrap/scss/bootstrap.scss"
               }
             ],
             "scripts": [],
@@ -48,6 +48,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+              "baseHref": ".",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -64,7 +65,7 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumError": "23kb"
                 }
               ]
             }

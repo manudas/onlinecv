@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-// import { Details } from '@services/data/queries';
+import { environment } from '@environments/environment'
 
 import { map, catchError } from 'rxjs/operators';
 
@@ -11,12 +11,11 @@ export class DataService {
   private httpOptions = {
     headers: {
       'Content-Type':  'application/json',
-      // 'Authorization': 'my-auth-token'
       responseType: 'json'
     }
   }
 
-  url: string = 'graphql'
+  url: string = environment.production ? './../graphql' : 'graphql'
 
   constructor(private http: HttpClient) { }
 

@@ -1,14 +1,13 @@
-import { Routes } from '@angular/router'; // CLI imports router
-import { DashboardComponent } from '@app/ui/dashboard/dashboard.component';
-import { DetailsComponent } from '@app/ui/details/details.component';
-import { TrainingComponent } from '@app/ui/training/training.component';
-import { ExperienceComponent } from '@app/ui/experience/experience.component';
-import { OthersComponent } from '@app/ui/others/others.component';
-import { SkillsComponent } from '@app/ui/skills/skills.component';
-import { TranslationComponent } from '@app/ui/translations/translations.component';
-import { SettingsComponent } from '@app/ui/settings/settings.component';
-
-import { NotfoundGuardService } from '@app/services/notfound/notfound.service';
+import { Routes } from '@angular/router' // CLI imports router
+import { DashboardComponent } from '@app/ui/dashboard/dashboard.component'
+import { DetailsComponent } from '@app/ui/details/details.component'
+import { TrainingComponent } from '@app/ui/training/training.component'
+import { ExperienceComponent } from '@app/ui/experience/experience.component'
+import { OthersComponent } from '@app/ui/others/others.component'
+import { SkillsComponent } from '@app/ui/skills/skills.component'
+import { TranslationComponent } from '@app/ui/translations/translations.component'
+import { SettingsComponent } from '@app/ui/settings/settings.component'
+import { NotFoundComponent } from '@app/ui/not-found/not-found.component'
 
 export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // redirect to `DashboardComponent`
@@ -33,11 +32,5 @@ export const routes: Routes = [
 
     { path: 'settings', component: SettingsComponent },
 
-    {
-        path: 'notfound',
-        canActivate: [NotfoundGuardService],
-        children: [],
-        pathMatch: 'full'
-    },
-    // { path: '**', redirectTo: 'notfound' },
-];
+    { path: '**', component: NotFoundComponent },
+]

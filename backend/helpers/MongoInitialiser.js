@@ -2,13 +2,7 @@ const mongoose = require('mongoose');
 
 const mongodb_settings = require('@config/backend/mongo_settings');
 
-const {
-    user,
-    password,
-    host,
-    port,
-    database
-} = mongodb_settings;
+const { user, password, host, port, database } = mongodb_settings;
 
 const credentials_str = (user && password) ? `${user}:${password}@` : '';
 

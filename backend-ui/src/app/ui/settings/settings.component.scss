@@ -1,7 +1,10 @@
-/* Importing Bootstrap SCSS file. */
+@use '../../globals/styles' as *;
 
-@import 'bootstrap/scss/bootstrap';
-@import '../../globals/styles';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/utilities/background';
 
 :host {
     font-size: 15px;
@@ -71,8 +74,5 @@
                 }
             }
         }
-    }
-    .text-danger {
-        color: $red;
     }
 }
