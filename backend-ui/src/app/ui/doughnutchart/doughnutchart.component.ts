@@ -1,8 +1,6 @@
-import { Component, OnInit, ChangeDetectorRef, Input, ViewChild, ElementRef } from '@angular/core';
-
+import { Component, OnInit, ChangeDetectorRef, Input, ViewChild, ElementRef } from '@angular/core'
 import { Chart, DoughnutController, ArcElement } from 'chart.js'
-
-import { MaterialDesignColors } from './config/colors';
+import { MaterialDesignColors } from './config/colors'
 
 @Component({
   selector: 'app-doughnutchart',
@@ -11,27 +9,27 @@ import { MaterialDesignColors } from './config/colors';
 })
 export class DoughnutChartComponent implements OnInit {
 
-  @Input() labels: string[] = [];
-  @Input() data: number[] = [];
-  @Input() backgroundColor: string[] = [];
-  @Input() hoverBackgroundColor: string[] = [];
-  @Input() hoverBorderWidth: number = null;
-  @Input() displayLegend: boolean = true;
-  
-  @ViewChild('canvas') canvasRef: ElementRef;
+  @Input() labels: string[]                         = []
+  @Input() data: number[]                           = []
+  @Input() backgroundColor: string[]                = []
+  @Input() hoverBackgroundColor: string[]           = []
+  @Input() hoverBorderWidth: number                 = null
+  @Input() displayLegend: boolean                   = true
+
+  @ViewChild('canvas') canvasRef: ElementRef
 
   chart: Chart = null;
-  
+
   ngAfterViewInit() {
     if (this.data) {
       const ctx = this.canvasRef.nativeElement.getContext('2d');
 
       this.chart = new Chart(ctx, {
-        type: 'doughnut', 
+        type: 'doughnut',
         data: {
           labels: this.labels,
           datasets: [
-            { 
+            {
               data: this.data,
               backgroundColor: this.backgroundColor.length ? this.backgroundColor : this.data.map(() => this.getRandomColor()),
               hoverBackgroundColor: this.hoverBackgroundColor.length ? this.hoverBackgroundColor : this.data.map(() => this.getRandomColor()),
@@ -40,7 +38,8 @@ export class DoughnutChartComponent implements OnInit {
           ],
         },
         options: {
-          responsive: false,
+          responsive: true,
+          onResize: this.resize,
           plugins: {
             legend: {
               display: this.displayLegend,
@@ -50,7 +49,7 @@ export class DoughnutChartComponent implements OnInit {
             animateScale: true,
           }
         }
-        
+
       });
       this.changeDetector.detectChanges();
     }
@@ -65,5 +64,9 @@ export class DoughnutChartComponent implements OnInit {
   private getRandomColor(): string {
     const color = MaterialDesignColors[Math.floor(Math.random() * (MaterialDesignColors.length))];
     return color;
+  }
+
+  public resize(...params): void {
+    console.log(`resizing params ${params}`)
   }
 }

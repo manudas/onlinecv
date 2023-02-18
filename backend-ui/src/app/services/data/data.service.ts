@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { Observable, throwError } from 'rxjs'
 import { environment } from '@environments/environment'
 
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators'
 
 @Injectable()
 export class DataService {

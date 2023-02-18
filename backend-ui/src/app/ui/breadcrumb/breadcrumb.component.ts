@@ -20,7 +20,7 @@ export class BreadcrumbComponent {
     this.breadcrumbs$.subscribe(data => {
       this.breadcrumbs = [{
         label: 'Home',
-        url: this.locationStrategy.getBaseHref()
+        url: '/'
       }, ...data]
     })
   }

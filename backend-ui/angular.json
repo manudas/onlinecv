@@ -37,6 +37,7 @@
             "extractLicenses": false,
             "buildOptimizer": false,
             "sourceMap": true,
+            "baseHref": ".",
             "optimization": false,
             "namedChunks": true
           },
@@ -48,7 +49,6 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "baseHref": ".",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -66,6 +66,14 @@
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb",
                   "maximumError": "23kb"
+                }
+              ]
+            },
+            "notOptimizedProduction": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
                 }
               ]
             }
