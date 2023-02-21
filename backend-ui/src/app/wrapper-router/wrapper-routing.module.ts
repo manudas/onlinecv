@@ -12,6 +12,7 @@ import { TrainingModule } from '@app/ui/training/training.module'
 import { TranslationsModule } from '@app/ui/translations/translations.module'
 import { TranslationServiceModule } from '@app/services/translation'
 import { SettingsModule } from '@app/ui/settings/settings.module'
+import { APP_BASE_HREF } from '@angular/common'
 
 @NgModule({
     imports: [
@@ -29,6 +30,9 @@ import { SettingsModule } from '@app/ui/settings/settings.module'
             enableTracing: isDevMode()
         }),
     ],
-    exports: [RouterModule]
+    exports: [RouterModule],
+    providers: [
+
+    ]
 })
 export class WrapperRoutingModule {}

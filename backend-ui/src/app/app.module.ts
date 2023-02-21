@@ -1,11 +1,11 @@
 import { environment } from '../environments/environment'; // Angular CLI environment
-import {  BrowserModule } from '@angular/platform-browser'
-import {  NgModule } from '@angular/core'
-import {  HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
+import { BrowserModule } from '@angular/platform-browser'
+import { NgModule } from '@angular/core'
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
 
-import {  StoreModule } from '@ngrx/store'
-import {  StoreDevtoolsModule } from '@ngrx/store-devtools'
-import {  EffectsModule } from '@ngrx/effects'
+import { StoreModule } from '@ngrx/store'
+import { StoreDevtoolsModule } from '@ngrx/store-devtools'
+import { EffectsModule } from '@ngrx/effects'
 
 import { AppComponent } from './app.component'
 import { LoginModule } from './ui/login/login.module';
@@ -13,8 +13,7 @@ import { NavbarModule } from './ui/navbar/navbar.module'
 import { WrapperModule } from './ui/wrapper/wrapper.module'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { MatSnackBarModule } from '@angular/material/snack-bar'
-// dialog will be used all along the app, so better to import here and reuse
-import { MatDialogModule } from '@angular/material/dialog'
+import { MatDialogModule } from '@angular/material/dialog' // will be used all along the app
 
 import { TranslationServiceModule } from '@services/translation'
 
@@ -50,6 +49,8 @@ import { LoadingInterceptor } from '@ui/loading-spinner/interceptor/http-interce
 import { SpinnerServiceModule } from '@ui/loading-spinner/loading-spinner.module'
 
 import { LoginInterceptor } from '@ui/login/interceptor/http-interceptor'
+import { DataService } from './services/data/data.service';
+import { APP_BASE_HREF } from '@angular/common';
 
 let dev = [
     StoreDevtoolsModule.instrument({
@@ -105,16 +106,20 @@ if (environment.production) {
         }, {}),
         SpinnerServiceModule,
         TranslationServiceModule,
-
         WrapperModule,
         ...dev
     ],
     providers: [
+        DataService,
         {
             provide: HTTP_INTERCEPTORS, useClass: LoginInterceptor, multi: true,
         },
         {
             provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true
+        },
+        {
+            provide: APP_BASE_HREF,
+            useFactory: () => window['baseUrl']
         }
     ],
     bootstrap: [AppComponent],

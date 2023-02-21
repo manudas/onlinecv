@@ -11,7 +11,7 @@ const zlib = require('zlib');
 const cookieParser = require('cookie-parser')
 const path = require("path");
 
-const { adminMiddleware, graphql, notFoundMiddleware } = require("./api");
+const { adminMiddleware, graphql, loggingMidleware, notFoundMiddleware } = require("./api");
 
 let certs = null;
 let privateKey = null;
@@ -48,18 +48,20 @@ app.use(express.json({ limit: '1mb' }));
 // lets parse cookies with cookie-parser midleware
 app.use(cookieParser());
 
-//  "frontend/build" static folder files
-app.use(express.static(path.join(__dirname, '..', 'frontend', 'build')));
-// "backend/build" static folder files
-app.use(adminMiddleware)
-
+/** Logging middleware */
+app.use(loggingMidleware);
 
 /*
- * Route to graphQL api if url starts with
+ * Route to graphQL api if url contains
  * /graphql. Used mainly in the backend to
  * modify the data and make consultations
  */
-app.use("/graphql", graphql);
+app.use(/(\/.+)*\/graphql/, graphql);
+
+//  "frontend/build" static folder files
+app.use(express.static(path.join(__dirname, '..', 'webroot', 'frontend')));
+// "backend/build" static folder files
+app.use(adminMiddleware);
 
 /**
  * Middleware for no found response. Used
@@ -67,7 +69,6 @@ app.use("/graphql", graphql);
  * and none of them matched the request url
  */
 app.use(notFoundMiddleware);
-
 
 // let's create the server
 const httpServer = http.createServer(app);

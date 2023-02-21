@@ -1,0 +1,31 @@
+version: '3.9'                                                  # developer file to enable nodejs debugging
+x-ports: &dev_ports                                             # anchor to reuse the definition of dev server
+  ports:
+      - "4000:4000"                                             # node server port for development
+      - "9229:9229"                                             # node port for debugging purposes
+      - "3000:3000"                                             # create react app frontend port for development
+      - "4200:4200"                                             # ng serve angular app backend-ui port for development
+
+services:
+  server:
+    << : *dev_ports
+    command:
+      - npx
+      - --prefix
+      - /app/backend
+      - nodemon                                                 # restart on every change
+      - --inspect=0.0.0.0:9229                                  # debug node option to listen for a connection in all ips
+      - /app/backend
+      - -w                                                      # watch next folder
+      - /app/backend/*
+  server-brk:
+    << : *dev_ports
+    command:
+      - npx
+      - --prefix
+      - /app/backend
+      - nodemon                                                 # restart on every change
+      - --inspect-brk=0.0.0.0:9229                              # debug node option to listen for a connection in all ips
+      - /app/backend
+      - -w                                                      # watch next folder
+      - /app/backend/*

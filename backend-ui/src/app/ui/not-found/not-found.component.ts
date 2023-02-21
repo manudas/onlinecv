@@ -1,4 +1,6 @@
 import { Component } from '@angular/core'
+import { Router } from '@angular/router';
+import { BreadcrumbService } from '@ui/breadcrumb/service/breadcrumb.service';
 
 @Component({
   selector: 'app-not-found',

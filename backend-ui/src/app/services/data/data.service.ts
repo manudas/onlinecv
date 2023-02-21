@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable, throwError } from 'rxjs'
-import { environment } from '@environments/environment'
 
 import { map, catchError } from 'rxjs/operators'
 
@@ -15,7 +14,7 @@ export class DataService {
     }
   }
 
-  url: string = environment.production ? './../graphql' : 'graphql'
+  url: string = 'graphql'
 
   constructor(private http: HttpClient) { }
 

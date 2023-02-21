@@ -1,3 +1,5 @@
+const { ConfigModel } = require('@models/Config');
+
 const cleanAndMapObject = (object, keyMapping) => Object.fromEntries(Object.entries(cleanObject(object)).map(([key, value]) => [keyMapping[key] ?? key, value] ))
 
 const isObj = o => o?.constructor === Object
@@ -56,7 +58,14 @@ const findAndUpdateMany = (model, filter, updateOptions) => {
         })
 }
 
+const getAdminFolder = async () => {
+    return await ConfigModel.findOne(
+            { key: 'adminFolder'}
+    );
+}
+
 module.exports = {
-    findAndUpdateMany,
     cleanAndMapObject,
+    findAndUpdateMany,
+    getAdminFolder,
 }

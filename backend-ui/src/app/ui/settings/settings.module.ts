@@ -9,7 +9,6 @@ import { CardModule } from '@app/ui/card/card.module'
 import { FileuploadModule } from '@app/ui/file-upload/file-upload.module'
 import { TranslationServiceModule } from '@services/translation'
 import { SettingsComponent } from './settings.component'
-import { DataService } from '@services/data/data.service'
 import { ConfirmModule } from '@app/ui/confirm/confirm.module'
 
 @NgModule({
@@ -29,6 +28,5 @@ import { ConfirmModule } from '@app/ui/confirm/confirm.module'
         TranslationServiceModule,
     ],
     exports: [SettingsComponent],
-    providers: [DataService]
 })
 export class SettingsModule {}

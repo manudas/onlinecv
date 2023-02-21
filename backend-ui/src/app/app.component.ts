@@ -8,7 +8,6 @@ import { select, Store } from '@ngrx/store';
 import { FETCH_TRANSLATIONS } from '@store_actions/Translation';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TRANSLATION_DOMAIN } from './utils/constants'
-
 import * as COMMON_ACTIONS from '@store_actions/Common'
 import { Authentication } from './types/Authentication';
 import { checkToken } from './store/actions/Authentication';

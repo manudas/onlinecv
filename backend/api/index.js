@@ -1,36 +1,56 @@
-const express = require('express');
 const fs = require('fs')
 const path = require('path');
 
-const { ConfigModel } = require('@models/Config');
 const { Init: MongoInitialiser } = require('@helpers/MongoInitialiser');
 const graphql = require('./graphql');
+const { getAdminFolder } = require('@helpers/utils');
 
 MongoInitialiser();
 
-const getAdminFolder = async () => {
-    return await ConfigModel.findOne(
-            { key: 'adminFolder'}
-    );
+const loggingMidleware = (req, _res, next) => {
+    console.log(`Requested URL: ${req.url}`);
+    next();
 }
 
 const adminMiddleware = async(req, res, next) => {
-    const adminVirtualFolder = `^/${(await getAdminFolder())?.value ?? 'admin'}[/]{0,1}`;
-    const regex = new RegExp(adminVirtualFolder, 'i');
-    if (req.url.match(regex)) {
-        const adminPath = path.join(__dirname, '..', '..', 'backend-ui', 'dist', 'backend-ui');
-        const relativeUrl = req.url.replace(regex, '/');
-        if (fs.existsSync(`${adminPath}${relativeUrl}`)) {
-            const modifiedRequest = Object.create(Object.getPrototypeOf(req), Object.getOwnPropertyDescriptors(req));
-            modifiedRequest.url = relativeUrl;
-            express.static(adminPath)(modifiedRequest, res, next);
+    const adminVirtualFolder = (await getAdminFolder())?.value ?? 'admin';
+    const adminVirtualFolderReg = `^/${adminVirtualFolder}[/]{0,1}`;
+    const regexAdminFolder = new RegExp(adminVirtualFolderReg, 'i');
+    const regexNotFound = /\/notfound/;
+    if (req.url.match(regexAdminFolder) && !req.url.match(regexNotFound)) {
+        const adminPath = path.join(__dirname, '..', '..', 'webroot', 'backend-ui');
+        const relativeUrl = req.url.replace(regexAdminFolder, '/');
+
+        const pathArr = path.join(`${adminPath}/${relativeUrl}`).match(/[^\/]+/g) || [];
+
+        let index = 0;
+        while (!fs.existsSync(`${adminPath}/${pathArr.slice(index).join('/')}`) && index < pathArr.length - 1) {
+            index++
+        }
+
+        const pathname = `${adminPath}/${pathArr.slice(index).join('/')}`;
+
+
+        if (fs.existsSync(pathname)) {
+
+            const stat = fs.lstatSync(pathname);
+            if (stat.isDirectory()) {
+                if (!req.url.endsWith('/')) {
+                    res.redirect(301, `${req.url}/`);
+                } else {
+                    res.sendFile(`${pathname}/index.html`);
+                }
+            } else { // it's a file
+                res.sendFile(pathname);
+            }
+
         } else {
             res.sendFile("index.html", {
                 root: adminPath
             });
         }
     } else {
-        next()
+        next();
     }
 }
 
@@ -43,7 +63,7 @@ const notFoundMiddleware = async(req, res, next) => {
             }
         })
     } else {
-        const notFoundPath = path.join(__dirname, '..', '..', 'notfound');
+        const notFoundPath = path.join(__dirname, '..', '..', 'webroot', 'notfound');
 
         const pathArr = req.path.match(/[^\/]+/g) || [];
         let index = 0;
@@ -73,7 +93,8 @@ const notFoundMiddleware = async(req, res, next) => {
 }
 
 module.exports = {
-    graphql,
     adminMiddleware,
+    graphql,
+    loggingMidleware,
     notFoundMiddleware
 };

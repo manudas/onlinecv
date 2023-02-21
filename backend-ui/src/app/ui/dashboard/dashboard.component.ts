@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import {
   faBeer,
@@ -11,7 +11,7 @@ import {
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
 
   cardIcon = faBeer;
   faSyncAlt= faSyncAlt;
@@ -38,8 +38,4 @@ export class DashboardComponent implements OnInit {
   }
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

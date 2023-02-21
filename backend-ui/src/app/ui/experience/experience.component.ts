@@ -45,7 +45,7 @@ export class ExperienceComponent implements OnInit {
 
   @Input() title: string                                  = 'Experience'
 
-  constructor( private activatedRoute:ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog ) {
+  constructor( private activatedRoute: ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog ) {
     this.activatedRoute.paramMap.subscribe(params => {
       const passedType: string = params.get('type')
       if (!(passedType in ExperienceType)) {

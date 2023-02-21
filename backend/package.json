@@ -7,6 +7,7 @@
         "start": "node index",
         "debug": "node --nolazy --inspect=9229 index",
         "debug:break": "node --nolazy --inspect-brk=9229 index",
+        "watch:debug": "node nodemon --inspect-brk=9229 --exec node index",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Manuel José Pulgar Anguita",
@@ -32,6 +33,9 @@
         "@views": "./views",
         "@data": "../data",
         "@helpers": "./helpers",
-        "@config": "../data/config"
+        "@config": "../config"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.20"
     }
 }

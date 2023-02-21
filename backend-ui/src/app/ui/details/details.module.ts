@@ -9,7 +9,6 @@ import { CardModule } from '@app/ui/card/card.module'
 import { FileuploadModule } from '@app/ui/file-upload/file-upload.module'
 import { TranslationServiceModule } from '@services/translation'
 import { DetailsComponent } from './details.component'
-import { DataService } from '@services/data/data.service'
 import { SocialNetworkDialogComponent } from './social-network-dialog.component'
 import { ConfirmModule } from '@app/ui/confirm/confirm.module'
 import { SpecialCharsModule } from '@app/services/specialChars'
@@ -33,6 +32,5 @@ import { SpecialCharsModule } from '@app/services/specialChars'
         TranslationServiceModule,
     ],
     exports: [DetailsComponent],
-    providers: [DataService]
 })
 export class DetailsModule {}

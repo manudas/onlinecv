@@ -14,6 +14,7 @@ export class BreadcrumbService {
   // Observable exposing the breadcrumb hierarchy
   readonly breadcrumbs$ = this._breadcrumbs$.asObservable()
   public asObservable = () => this.breadcrumbs$
+  public getValue = () => this._breadcrumbs$.value
 
   constructor(private router: Router, private activatedRoute : ActivatedRoute) {
     this.router.events.pipe(

@@ -1,5 +1,7 @@
 export * from './Authentication'
 
+export * from './BaseUrl'
+
 export * from './Details'
 
 export * from './Experience'
