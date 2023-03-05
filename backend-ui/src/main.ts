@@ -11,11 +11,14 @@ if (environment.production) {
 
 const baseUrlService = new BaseUrlService()
 baseUrlService.fetchBaseUrl().then(baseUrl => {
-  const adminVirtualFolderReg = `^[/]{0,1}(${baseUrl})[/]{0,1}`
-  const regexAdminFolder = new RegExp(adminVirtualFolderReg, 'i')
-  const processedUrl = baseUrl.replace(regexAdminFolder, '/$1')
 
-  window['baseUrl'] = processedUrl
+  if (environment.production) {
+    const adminVirtualFolderReg = `^[/]{0,1}(${baseUrl})[/]{0,1}`
+    const regexAdminFolder = new RegExp(adminVirtualFolderReg, 'i')
+    const processedUrl = baseUrl.replace(regexAdminFolder, '/$1')
+
+    window['baseUrl'] = processedUrl
+  } // will be undefined on dev mode
 
   platformBrowserDynamic().bootstrapModule(AppModule)
     .catch(err => console.error(err));
