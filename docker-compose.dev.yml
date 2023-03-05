@@ -9,6 +9,8 @@ x-ports: &dev_ports                                             # anchor to reus
 services:
   server:
     << : *dev_ports
+    env_file:
+      - "docker/node/.env_dev"
     command:
       - npx
       - --prefix
@@ -20,6 +22,8 @@ services:
       - /app/backend/*
   server-brk:
     << : *dev_ports
+    env_file:
+      - "docker/node/.env_dev"
     command:
       - npx
       - --prefix

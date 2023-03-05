@@ -21,6 +21,8 @@ x-server:
     - ./backend-ui:/app/dev/webroot/backend-ui                                    # DEV backend-ui volume
     - ./frontend/:/app/dev/webroot/frontend                                       # DEV frontend volume
   command: /app/backend/index
+  env_file:
+   - "docker/node/.env"
 services:
   db:
     build:
