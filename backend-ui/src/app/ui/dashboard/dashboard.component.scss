@@ -1,7 +1,6 @@
-/* Importing Bootstrap SCSS file. */
-
-@import 'bootstrap/scss/bootstrap';
 :host {
+    // width: 100%;
+    display: block;
     .btn-group {
         .btn {
             font-size: inherit;

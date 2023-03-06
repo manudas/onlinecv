@@ -15,11 +15,15 @@ const DetailsSchema = new Schema({
     birthInfo: String, // date && born city, province... and so on...
     email: String,
     // qr_code: String, // qr_code will be made on the fly
-    keywords: [],
+    keywords: {
+        type: [String],
+        default: undefined
+    },
     language: String,
     primaryRole: String,
     secondaryRole: String,
     nickname: String,
+    description: String
 }, {
     collection,
     versionKey: false

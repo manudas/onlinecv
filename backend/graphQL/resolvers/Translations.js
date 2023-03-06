@@ -1,14 +1,15 @@
 const findAndUpdateMany =
     require('@helpers/utils').findAndUpdateMany;
-const cleanObject = require('@helpers/utils').cleanObject;
+const cleanAndMapObject = require('@helpers/utils').cleanAndMapObject;
 const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {
     Query: {
         translations: async (
+            _parent,
             { modules, tags, domain, language },
             { models: { TranslationsModel } },
-            info
+            _info
         ) => {
             const lang =
                 language === 'gb' ? 'en' : language;
@@ -173,9 +174,10 @@ module.exports = {
             return translationList;
         },
         missingTranslations: async (
+            _parent,
             { language },
             { models: { TranslationsModel } },
-            info
+            _info
         ) => {
             return await TranslationsModel.find({
                 language,
@@ -183,9 +185,10 @@ module.exports = {
             });
         },
         translatedStrings: async (
+            _parent,
             { language },
             { models: { TranslationsModel } },
-            info
+            _info
         ) => {
             return await TranslationsModel.find({
                 language,
@@ -195,11 +198,12 @@ module.exports = {
     },
     Mutation: {
         putTranslation: async (
+            _parent,
             { translation },
             { models: { TranslationsModel } },
-            info
+            _info
         ) => {
-            const cleanedObject = cleanObject(translation, {
+            const cleanedObject = cleanAndMapObject(translation, {
                 id: '_id'
             });
 
@@ -227,9 +231,10 @@ module.exports = {
             return element;
         },
         removeTranslation: async (
+            _parent,
             { id },
             { models: { TranslationsModel } },
-            info
+            _info
         ) => {
             const removedElement =
                 await TranslationsModel.findOneAndDelete({

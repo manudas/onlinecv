@@ -1,8 +1,9 @@
-const cleanObject = require('@helpers/utils').cleanObject;
+const cleanAndMapObject = require('@helpers/utils').cleanAndMapObject;
 
 module.exports = {
-    Queryu: {
+    Query: {
         settings: async (
+            _parent,
             // 1st arg: arguments
             {
                 language,
@@ -11,7 +12,7 @@ module.exports = {
             {
                 models: { SettingsModel }
             },
-            info
+            _info
         ) => {
             const settings = await SettingsModel.findOne({
                 language: language
@@ -21,6 +22,7 @@ module.exports = {
     },
     Mutation: {
         putSettings: async (
+            _parent,
             // 1st arg: arguments
             {
                 settings,
@@ -29,9 +31,9 @@ module.exports = {
             {
                 models: { SettingsModel }
             },
-            info
+            _info
         ) => {
-            const cleanedSettings = cleanObject(settings, {
+            const cleanedSettings = cleanAndMapObject(settings, {
                 id: '_id'
             });
             const SettingsRemovalResult =

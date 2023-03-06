@@ -4,19 +4,29 @@ export const getUserIntroductionQuery = (lang: string) => {
     const {
         query: queryWithoutVars,
         variables
-    } = query({
-        operation: 'details',
-        variables: {
-            language: { value: lang, required: true },
+    } = query([
+        {
+            operation: 'details',
+            variables: {
+                language: { value: lang, required: true },
+            },
+            fields: [
+                'name',
+                'surname',
+                'primaryRole',
+                'secondaryRole',
+                'nickname'
+            ]
         },
-        fields: [
-            'name',
-            'surname',
-            'primaryRole',
-            'secondaryRole',
-            'nickname'
-        ]
-    })
+        {
+            operation: 'locales',
+            fields: [
+                'name',
+                'iso',
+                'flag'
+            ]
+        }
+    ])
 
     return {
         query: queryWithoutVars,
@@ -51,7 +61,8 @@ export const getUserFullResumeQuery = (lang: string) => {
                 'language',
                 'primaryRole',
                 'secondaryRole',
-                'nickname'
+                'nickname',
+                'description'
             ]
         },
         {
@@ -68,6 +79,7 @@ export const getUserFullResumeQuery = (lang: string) => {
                 'company',
                 'company_url',
                 'keywords',
+                'details',
                 'language',
                 'order',
             ]
@@ -113,6 +125,61 @@ export const getUserFullResumeQuery = (lang: string) => {
                 'keywords',
                 'language',
                 'order'
+            ]
+        },
+        {
+            operation: 'languages',
+            variables: {
+                language: { value: lang, required: true }
+            },
+            fields: [
+                'name',
+                'certification',
+                'school',
+                'school_url',
+                'written_level',
+                'spoken_level',
+                'keywords',
+                'language',
+                'order'
+            ]
+        },
+        {
+            operation: 'quote',
+            variables: {
+                language: { value: lang, required: true }
+            },
+            fields: [
+                'author',
+                'quote',
+            ]
+        },
+        {
+            operation: 'references',
+            variables: {
+                language: { value: lang, required: true }
+            },
+            fields: [
+                'name',
+                'role',
+                'description',
+                'company',
+                'company_url',
+                'keywords',
+                'language',
+                'phone',
+                'email',
+                'order',
+            ]
+        },
+        {
+            operation: 'resume',
+            variables: {
+                language: { value: lang, required: true }
+            },
+            fields: [
+                'data',
+                'language',
             ]
         }
     ])

@@ -1,6 +1,3 @@
-// const fs = require('fs');
-// const path = require('path');
-
 const rootSchema = `
     type Mutation
     type Query

@@ -1,0 +1,66 @@
+/* ==========================================================
+! XX. Section: Languages
+========================================================== */
+
+.progress {
+    position: relative;
+	height: 25px;
+	margin-bottom: 20px
+}
+
+.progress>.progress-type {
+    position: absolute;
+    left: 0px;
+    font-size: 13px;
+    padding: 3px 30px 2px 10px;
+    color: #ffffff;
+    background-color: rgba(25, 25, 25, 0.2);
+}
+
+.progress>.progress-completed {
+    position: absolute;
+    right: 0px;
+    font-weight: 800;
+    padding: 3px 10px 2px;
+    color: #888;
+    font-size: 14px;
+}
+
+.list {
+    list-style: none;
+}
+
+.languages-subsection {
+    min-height: 100px;
+    .content-wrap {
+        display: flex;
+        // flex-grow: 1;
+        align-items: center;
+        .line-content {
+            flex-grow: 1;
+        }
+    }
+    .certification {
+        font-size: 14px;
+        font-weight: bold;
+        color: #999999;
+
+        &-level {
+            font-style: italic;
+            font-weight: 200;
+        }
+    }
+}
+
+.progress-bar {
+    background: #249991;
+    width: 20%;
+}
+
+.progress-bar-2 {
+    background: #3b658a;
+}
+
+.progress-bar-3 {
+    background: #ce5f5f;
+}

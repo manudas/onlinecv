@@ -1,5 +1,9 @@
+<!-- Login -->
+<app-login *ngIf="!userLoggedIn"
+    [adminUserExists]="adminUserExists"
+></app-login>
 <!-- Navbar -->
-<app-navbar></app-navbar>
+<app-navbar *ngIf="userLoggedIn"></app-navbar>
 <!-- Wrapper -->
-<app-wrapper></app-wrapper>
+<app-wrapper *ngIf="userLoggedIn"></app-wrapper>
 <!-- Footer -->

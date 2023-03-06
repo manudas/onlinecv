@@ -1,36 +1,36 @@
-const cleanObject = require('@helpers/utils').cleanObject;
+const cleanAndMapObject = require('@helpers/utils').cleanAndMapObject;
 
 module.exports = {
     Query: {
         details: async (
+            _parent,
             {
-                // 1st arg: arguments
+                // 2st arg: arguments
                 language
             },
             {
-                // 2nd arg: context
+                // 3nd arg: context
                 models: { DetailsModel }
-            }
+            },
+            _info
         ) => {
             const details = await DetailsModel.findOne({
                 language: language
             })
                 .lean()
                 .exec(); // lean to get the model as a plain javascript object
-            if (details)
-                details.profileImage =
-                    details.profileImage &&
-                    details.profileImage.toString();
+            if (details) details.profileImage = details?.profileImage.toString();
             return details;
         }
     },
     Mutation: {
         putDetails: async (
+            _parent,
             { details },
             { models: { DetailsModel } },
-            info
+            _info
         ) => {
-            const cleanedDetails = cleanObject(details, {
+            const cleanedDetails = cleanAndMapObject(details, {
                 id: '_id'
             });
             const DetailsRemovalResult =

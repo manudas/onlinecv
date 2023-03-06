@@ -232,7 +232,7 @@ export class TranslationService {
         return result;
     };
 
-    transform(
+    asyncTranslate(
         key: string,
         componentOrComponentName: string | object
     ): Subject<string> {
@@ -277,7 +277,7 @@ export class TranslationService {
         componentOrComponentName: string | object
     ) {
         for (let translationKey of translationRequest) {
-            this.transform(
+            this.asyncTranslate(
                 translationKey,
                 componentOrComponentName
             );

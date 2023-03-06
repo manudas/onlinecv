@@ -178,8 +178,7 @@ class ContactForm extends Component<PropDef, StateDef> {
         /* SECTION ITEM */
         return (
             <TimeLineItem
-                index={`${this.props.name}_section`}
-                type="point"
+                type="mail"
             >
                 <div className="line-content contact-content">
                         {/* Subtitle */}

@@ -1,61 +1,38 @@
 <section id='sidebar'
-    [className]="'sidebar'">
+    [className]="{
+        sidebar: true,
+        closed: !openMenu
+    }">
     <fa-icon [icon]="faBars"
         size="lg"
-        [ngClass]="['sidebar_menu-icon', sidebar_icon]"></fa-icon>
-    <i class='icon-align-justify icon-large'
-        id='toggle'></i>
-    <ul id='dock'
+        [ngClass]="{
+            'sidebar_menu-icon': true,
+            floating: !openMenu
+        }"
+        (click)="toggleMenu()"
+    ></fa-icon>
+    <ul
+        *ngIf="openMenu"
+        id='dock'
         [className]="'sidebar_dock'">
-        <li [ngClass]="{
-            'sidebar_dock_launcher': true,
-            'active': getRoute('dashboard')
-        }"
-            [routerLink]="'dashboard'">
-            <fa-icon [icon]="faTachometerAlt"
-                size="2x"
-                [className]="sidebar_icon"></fa-icon>
-            <a [className]="'sidebar_dock_link'">Dashboard</a>
-        </li>
-        <li [ngClass]="{
-            'sidebar_dock_launcher': true,
-            'active': getRoute('details')
-        }"
-            [routerLink]="'details'">
-            <fa-icon [icon]="faFileAlt"
-                size="2x"
-                [className]="sidebar_icon"></fa-icon>
-            <a [className]="'sidebar_dock_link'">Details</a>
-        </li>
         <li
             *ngFor="let menu of menuItems"
             [className]="'sidebar_dock_launcher'">
-            <app-menu [name]="menu.name"
-                [start_icon]="menu.start_icon"
+            <app-menu
+                [icon]="menu.icon"
+                [iconSize]="menu.iconSize"
                 [title]="menu.title"
                 [options]="menu.options"
-                [caret]="menu.caret"
-                [stylesStartIcon]="menu.stylesStartIcon"
-                [stylesDropToggle]="menu.stylesDropToggle"
-                [placement]="'right-top'"
-                [dropDownActiveOrFocusedToggleStyles]="menu.dropDownActiveOrFocusedToggleStyles"></app-menu>
-        </li>
-        <li [className]="'sidebar_dock_launcher'">
-            <fa-icon [icon]="faCloud"
-                size="2x"
-                [className]="sidebar_icon"></fa-icon>
-            <a [className]="'sidebar_dock_link'">Backup</a>
-        </li>
-        <li [className]="'sidebar_dock_launcher'">
-            <fa-icon [icon]="faBug"
-                size="2x"
-                [className]="sidebar_icon"></fa-icon>
-            <a [className]="'sidebar_dock_link'">Feedback</a>
+                [urlSegments]="menu.urlSegments"
+            ></app-menu>
         </li>
     </ul>
-    <fa-icon [icon]="faFlask"
+    <fa-icon
+        *ngIf="openMenu"
+        [icon]="faFlask"
         id='beaker'
-        [ngClass]="['sidebar_breaker', sidebar_icon]"
+        [ngClass]="['sidebar_breaker']"
         placement="top"
-        ngbTooltip="Made by lab2023. Angularised by Manu"></fa-icon>
+        ngbTooltip="Made by lab2023. Angularised by Manu"
+    ></fa-icon>
 </section>

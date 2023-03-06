@@ -8,7 +8,7 @@ export enum ExperienceType {
 /*
  * GraphQL Schema
 
-          type WorkExperience {
+          type Experience {
             id: ID!
             name: String!,
             description: String,
@@ -18,6 +18,7 @@ export enum ExperienceType {
             company: String,
             company_url: String,
             keywords: [String]!,
+            details: [String],
             language: String!
         }
 
@@ -34,6 +35,7 @@ export type ExperienceInterface = {
     company_url: string
     keywords: string[]
     language: string
+    details: string[]
     order: number
 }
 
@@ -41,11 +43,6 @@ export type EditExperienceStructure = {
     index: number
     experience: ExperienceInterface
 }
-
-// export type EditTrainingStructure = {
-//     index: number
-//     training: TrainingInterface
-// }
 
 export type ExperienceFetched = {
     experienceType: string

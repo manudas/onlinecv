@@ -1,0 +1,22 @@
+input QuoteInput {
+  id: ID
+  author: String
+  quote: String!
+  language: String!
+}
+
+type Quote {
+  _id: ID!
+  author: String
+  quote: String!
+  language: String!
+}
+
+extend type Query {
+  quote(language: String!): Quote
+}
+
+extend type Mutation {
+  putQuote(quote: QuoteInput!): Quote!
+  removeQuote(id: ID!): Boolean!
+}

@@ -1,231 +1,179 @@
-import {
-	faLanguage,
-	faBookmark,
-	faCog,
-	faFlagCheckered,
-	faTable,
-} from '@fortawesome/free-solid-svg-icons';
+import { ExperienceType, OthersType, SkillsType, TrainingType, TranslationEnum } from '@app/types';
+import { faLanguage, faBookmark, faCog, faFlagCheckered, faTable, faTachometerAlt, faFileAlt, faCloud, faBug } from '@fortawesome/free-solid-svg-icons';
+import { DropDownPosition, MenuOptionType, MenuSelector } from '../menu/types';
 
-const stylesDropToggle = `
-	padding:0;
-	font-size: 0.8em;
-	display: block;
-	width: 100%;
-	border-right: 5px solid transparent;
-	color: #ecf0f1;
-	box-sizing: content-box;
-`;
-
-const dropDownActiveOrFocusedToggleStyles = {
-	'transition-property': 'color',
-	'transition-duration': '0.4s',
-	'transition-timing-function': 'ease-in-out',
-	'color': '#1abc9c'
-};
-
-const stylesStartIcon = `
-	font-size: 2.8em;
-	display:block;
-	width:100%;
-`;
-
-export const MenuListItems = [{
-		name: 'TrainingDropdown',
-		start_icon: faTable,
+export const MenuListItems: Array<MenuSelector> = [
+	{
+		icon: faTachometerAlt,
+		iconSize: 2,
+		position: DropDownPosition.right,
+		title: 'Dashboard',
+		urlSegments: ['dashboard'],
+	},
+	{
+		icon: faFileAlt,
+		iconSize: 2,
+		title: 'Details',
+		urlSegments: ['details'],
+	},
+	{
+		icon: faTable,
+		iconSize: 2,
 		title: 'Training',
-		caret: false,
-		stylesStartIcon,
-		stylesDropToggle,
-		dropDownActiveOrFocusedToggleStyles,
+		urlSegments: ['training'],
 		options: [{
-				name: 'Training',
-				type: 'header',
+				title: 'Training',
+				type: MenuOptionType.header,
 			},
 			{
-				name: 'All',
-				url: 'training',
-				type: 'option',
+				title: 'All',
+				urlSegments: [],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Official',
-				url: 'training',
-				urlSegments: 'official',
-				type: 'option',
+				title: 'Official',
+				urlSegments: [TrainingType[TrainingType.official]],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Computer skills',
-				url: 'training',
-				urlSegments: 'computer',
-				type: 'option',
+				title: 'Computer skills',
+				urlSegments: [TrainingType[TrainingType.computer]],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Other skills',
-				url: 'training',
-				urlSegments: 'other',
-				type: 'option',
+				title: 'Other skills',
+				urlSegments: [TrainingType[TrainingType.other]],
+				type: MenuOptionType.option,
 			}
 		]
 	},
-
 	{
-		name: 'ExperienceDropdown',
-		start_icon: faFlagCheckered,
+		icon: faFlagCheckered,
+		iconSize: 2,
 		title: 'Experience',
-		caret: false,
-		stylesStartIcon,
-		stylesDropToggle,
-		dropDownActiveOrFocusedToggleStyles,
+		urlSegments: ['experience'],
 		options: [{
-				name: 'Professional & others',
-				type: 'header',
+				title: 'Professional & others',
+				type: MenuOptionType.header,
 			},
 			{
-				name: 'All',
-				url: 'experience',
-				type: 'option',
+				title: 'All',
+				urlSegments: [],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Professional',
-				urlSegments: 'professional',
-				url: 'experience',
-				type: 'option',
+				title: 'Professional',
+				urlSegments: [ExperienceType[ExperienceType.professional]],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Ongs',
-				url: 'experience',
-				urlSegments: 'ong',
-				type: 'option',
+				title: 'Ongs',
+				urlSegments: [ExperienceType[ExperienceType.ong]],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Other experiences',
-				url: 'experience',
-				urlSegments: 'other',
-				type: 'option',
+				title: 'Other experiences',
+				urlSegments: [ExperienceType[ExperienceType.other]],
+				type: MenuOptionType.option,
 			}
 		]
 	},
-
 	{
-		name: 'SkillsDropdown',
-		start_icon: faCog,
+		icon: faCog,
+		iconSize: 2,
 		title: 'Skills',
-		caret: false,
-		stylesStartIcon,
-		stylesDropToggle,
-		dropDownActiveOrFocusedToggleStyles,
+		urlSegments: ['skills'],
 		options: [{
-				name: 'Skills',
-				type: 'header',
+				title: 'Skills',
+				type: MenuOptionType.header,
 			},
 			{
-				name: 'All',
-				url: 'skills',
-				type: 'option',
+				title: 'All',
+				urlSegments: [],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Skills',
-				url: 'skills',
-				urlSegments: 'skills',
-				type: 'option',
+				title: 'Skills',
+				urlSegments: [SkillsType[SkillsType.general]],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Computer skills',
-				url: 'skills',
-				urlSegments: 'computers',
-				type: 'option',
+				title: 'Computer skills',
+				urlSegments: [SkillsType[SkillsType.computer]],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Languages',
-				url: 'skills',
-				urlSegments: 'languages',
-				type: 'option',
+				title: 'Languages',
+				urlSegments: [SkillsType[SkillsType.language]],
+				type: MenuOptionType.option,
 			}
 		]
 	},
 	{
-		name: 'OthersDropdown',
-		start_icon: faBookmark,
+		icon: faBookmark,
+		iconSize: 2,
 		title: 'Others',
-		caret: false,
-		stylesStartIcon,
-		stylesDropToggle,
-		dropDownActiveOrFocusedToggleStyles,
+		urlSegments: ['others'],
 		options: [{
-				name: 'Others',
-				type: 'header',
+				title: 'Others',
+				type: MenuOptionType.header,
 			},
 			{
-				name: 'All',
-				url: 'others',
-				type: 'option',
+				title: 'All',
+				urlSegments: [],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Resume summary',
-				url: 'others',
-				urlSegments: 'resume-summary',
-				type: 'option',
+				title: 'Professional references',
+				urlSegments: [OthersType[OthersType['professional-references']]],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Merits',
-				url: 'others',
-				urlSegments: 'merits',
-				type: 'option',
+				title: 'Attach resume document',
+				urlSegments: [OthersType[OthersType['upload-resume']]],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Ongs',
-				url: 'others',
-				urlSegments: 'ongs',
-				type: 'option',
+				title: 'Resume quote',
+				urlSegments: [OthersType[OthersType.quote]],
+				type: MenuOptionType.option,
 			},
-			{
-				name: 'Professional archivements',
-				url: 'others',
-				urlSegments: 'professional-archivements',
-				type: 'option',
-			},
-			{
-				name: 'Professional references',
-				url: 'others',
-				urlSegments: 'professional-references',
-				type: 'option',
-			},
-			{
-				name: 'Other data',
-				url: 'others',
-				urlSegments: 'other-data',
-				type: 'option',
-			}
 		]
 	},
 	{
-		name: 'TranslationsDropdown',
-		start_icon: faLanguage,
+		icon: faLanguage,
+		iconSize: 2,
 		title: 'Translations',
-		caret: false,
-		stylesStartIcon,
-		stylesDropToggle,
-		dropDownActiveOrFocusedToggleStyles,
+		urlSegments: ['translations'],
 		options: [{
-				name: 'Translations',
-				type: 'header',
+				title: 'Translations',
+				type: MenuOptionType.header,
 			},
 			{
-				name: 'All',
-				url: 'translations',
-				type: 'option',
+				title: 'All',
+				urlSegments: [],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Missing translations',
-				url: 'translations',
-				urlSegments: 'missing',
-				type: 'option',
+				title: 'Missing translations',
+				urlSegments: [TranslationEnum[TranslationEnum.missing]],
+				type: MenuOptionType.option,
 			},
 			{
-				name: 'Translated strings',
-				url: 'translations',
-				urlSegments: 'translated',
-				type: 'option',
+				title: 'Translated strings',
+				urlSegments: [TranslationEnum[TranslationEnum.translated]],
+				type: MenuOptionType.option,
 			},
 		]
-	}
+	},
+	{
+		icon: faCloud,
+		iconSize: 2,
+		title: 'Backup',
+	},
+	{
+		icon: faBug,
+		iconSize: 2,
+		title: 'Feedback',
+	},
 ]

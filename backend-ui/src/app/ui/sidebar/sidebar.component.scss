@@ -1,21 +1,38 @@
 :host {
     background-color: #2c3e50;
-    width: 80px;
+
     z-index: 1;
     text-align: center;
     display: block;
     position: relative;
     .sidebar {
+        min-width: 40px;
+        &.closed {
+            min-width: none;
+        }
         height: 100%;
         width: 100%;
         &_menu-icon {
             margin-top: 20px;
             display: inline-block;
             color: #3e5771;
+
+            &.floating {
+                position: absolute;
+                background-color: #2c3e50;
+                border-bottom-right-radius: 10px;
+                margin-top: 0;
+                padding: 8px;
+                border-top-left-radius: 10px;
+            }
         }
         &_dock {
             padding: 0;
-            width: 80px;
+            @media only screen and (min-width: 576px) {
+                width: 80px;
+            }
+
+            width: 40px;
             text-align: center;
             color: #ecf0f1;
             border-right: 1px solid #1a242f;
@@ -23,7 +40,6 @@
             &_launcher {
                 list-style: none;
                 margin-top: 20px;
-                cursor: pointer;
                 // indicador de opcion
                  :hover:before,
                 &.active:before {
@@ -39,7 +55,7 @@
                 }
                 // fin de indicador de opcion
             }
-             :hover,
+            :hover,
             .active {
                 transition-property: color;
                 transition-duration: 0.4s;
@@ -56,10 +72,6 @@
             bottom: 5px;
             left: 0;
             right: 0;
-        }
-        &_icons {
-            display: block;
-            z-index: 1;
         }
     }
 }

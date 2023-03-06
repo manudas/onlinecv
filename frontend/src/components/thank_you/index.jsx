@@ -24,7 +24,7 @@ class ThankYou extends Component {
                     <div className="col-md-9 bg1" />
                 </div>
                 {/* /VERTICAL MARGIN */}
-                <TimeLineItem key={'thank_you'} type="point" className={'line-thank-you'}>
+                <TimeLineItem type="point" className={'line-thank-you'}>
                     <div className="line-content">
                         {/* Subtitle */}
                         <h3 className="thank-you">

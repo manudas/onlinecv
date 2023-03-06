@@ -28,7 +28,7 @@ export class TranslatePipe implements PipeTransform {
             this.cdRef as EmbeddedViewRef<Type<any>>
         ).context;
         const caller: string = context?.constructor?.name; // otherwise, undefined
-        return this.translationService.transform(
+        return this.translationService.asyncTranslate(
             key,
             caller
         );

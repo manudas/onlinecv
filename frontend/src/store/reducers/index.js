@@ -1,12 +1,14 @@
 import { combineReducers } from "redux"
-import dataLoad from "./dataLoad"
-import setLanguage from './setLanguage'
 
+import languageReducer from './language'
+import localeReducer from "./locale"
 import translations from "./translation"
+import userDataReducer from "./user"
 
 const rootReducer = combineReducers({
-  data: dataLoad,
-  language: setLanguage,
+  data: userDataReducer,
+  language: languageReducer,
+  locales: localeReducer,
   translations
 })
 

@@ -1,0 +1,86 @@
+@font-face {
+    font-family: SpongeBob;
+    src: url(Spongeboytt2.ttf);
+}
+
+html {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: SpongeBob;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    animation: bg-colours 1.2s ease infinite alternate;
+    overflow: hidden;
+}
+
+.not-found__header {
+    font-size: 7em;
+    position: relative;
+}
+
+.calamardo {
+    position: absolute;
+    bottom: 1em;
+    right: 0;
+    z-index: -1;
+    max-width: 100%;
+    max-height: 150%;
+}
+
+.message {
+    font-size: 2em;
+}
+
+@keyframes colours {
+	  0% {  color: #39f;      }
+	 15% {  color: #8bc5d1;   }
+	 30% {  color: #f8cb4a;   }
+	 45% {  color: #95b850;   }
+	 60% {  color: #944893;   }
+	 75% {  color: #c71f00;   }
+	 90% {  color: #bdb280;   }
+	100% {  color: #39f;      }
+}
+
+.codeError, .codeMessage {
+    display: block;
+}
+.first, .second, .third {
+    animation: 1.2s colours infinite ease;
+}
+.first {
+    animation-delay: 0.1s;
+}
+.second {
+    animation-delay: 0.2s;
+}
+.third {
+    animation-delay: 0.3s;
+}
+
+@keyframes bg-colours {
+    0% {  background: linear-gradient(90deg, rgba(52,230,175,0.6208684157256652) 0%, rgba(165,246,228,0.329551889115021) 0%, rgba(0,212,255,0.329551889115021) 100%);       }
+   15% {  background: linear-gradient(90deg, rgba(52,230,175,0.6208684157256652) 0%, rgba(165,246,228,0.329551889115021) 15%, rgba(0,212,255,0.329551889115021) 100%);      }
+   30% {  background: linear-gradient(90deg, rgba(52,230,175,0.6208684157256652) 0%, rgba(165,246,228,0.329551889115021) 30%, rgba(0,212,255,0.329551889115021) 100%);      }
+   45% {  background: linear-gradient(90deg, rgba(52,230,175,0.6208684157256652) 0%, rgba(165,246,228,0.329551889115021) 45%, rgba(0,212,255,0.329551889115021) 100%);      }
+   60% {  background: linear-gradient(90deg, rgba(52,230,175,0.6208684157256652) 0%, rgba(165,246,228,0.329551889115021) 60%, rgba(0,212,255,0.329551889115021) 100%);      }
+   75% {  background: linear-gradient(90deg, rgba(52,230,175,0.6208684157256652) 0%, rgba(165,246,228,0.329551889115021) 75%, rgba(0,212,255,0.329551889115021) 100%);      }
+   90% {  background: linear-gradient(90deg, rgba(52,230,175,0.6208684157256652) 0%, rgba(165,246,228,0.329551889115021) 90%, rgba(0,212,255,0.329551889115021) 100%);      }
+  100% {  background: linear-gradient(90deg, rgba(52,230,175,0.6208684157256652) 0%, rgba(165,246,228,0.329551889115021) 100%, rgba(0,212,255,0.329551889115021) 100%);     }
+}
+
+/* CSS FOR TRAIL ELEMENTS */
+.trail { /* className for the trail elements */
+    position: absolute;
+    height: 33px; width: 33px;
+    border-radius: 3px;
+    background-image: url(sad-but-relieved-face.svg);
+}

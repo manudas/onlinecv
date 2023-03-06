@@ -1,13 +1,14 @@
 module.exports = {
     Query: {
         portfolio: async (
+            _parent,
             { language },
             {
                 models: {
                     PortfolioModel // configModel
                 }
             },
-            info
+            _info
         ) => {
             const portfolioList = await PortfolioModel.find(
                 {
@@ -23,9 +24,10 @@ module.exports = {
     },
     Mutation: {
         putPortfolio: async (
+            _parent,
             { Portfolio },
             { models: { PortfolioModel } },
-            info
+            _info
         ) => {
             const WriteResult = await PortfolioModel.update(
                 {
@@ -36,15 +38,16 @@ module.exports = {
                     upsert: true // if no details found, create a new entry
                 }
             );
-            return WriteResult.nUpserted === 1 ||
-                WriteResult.nModified === 1
+            return WriteResult.modifiedCount === 1 ||
+                WriteResult.upsertedCount === 1
                 ? Portfolio
                 : false;
         },
         removePortfolio: async (
+            _parent,
             { id },
             { models: { PortfolioModel } },
-            info
+            _info
         ) => {
             const WriteResult = await PortfolioModel.remove(
                 {
@@ -52,7 +55,7 @@ module.exports = {
                 },
                 true
             ); // true == remove one
-            return WriteResult.nRemoved === 1;
+            return WriteResult.deletedCount === 1;
         }
     }
 };

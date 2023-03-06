@@ -1,6 +1,6 @@
 {
   "name": "onlinecv",
-  "version": "1.0.0",
+  "version": "0.5.0",
   "description": "Your online resume with React-Redux and NodeJS",
   "main": "index.js",
   "scripts": {

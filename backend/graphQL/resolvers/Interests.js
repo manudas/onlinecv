@@ -1,6 +1,7 @@
 module.exports = {
     Query: {
         interests: async (
+            _parent,
             {
                 // 1st arg: arguments
                 language
@@ -9,7 +10,7 @@ module.exports = {
                 // 2nd arg: context
                 models: { InterestsModel }
             },
-            info
+            _info
         ) => {
             const interestList = await InterestsModel.find({
                 language: language
@@ -23,10 +24,10 @@ module.exports = {
     },
     Mutation: {
         putInterest: async (
-            parent,
+            _parent,
             { Interest },
             { models: { interestsModel } },
-            info
+            _info
         ) => {
             const WriteResult = await interestsModel.update(
                 {
@@ -37,16 +38,16 @@ module.exports = {
                     upsert: true // if no details found, create a new entry
                 }
             );
-            return WriteResult.nUpserted === 1 ||
-                WriteResult.nModified === 1
+            return WriteResult.modifiedCount === 1 ||
+                WriteResult.upsertedCount === 1
                 ? Interest
                 : false;
         },
         removeInterest: async (
-            parent,
+            _parent,
             { id },
             { models: { interestsModel } },
-            info
+            _info
         ) => {
             const WriteResult = await interestsModel.remove(
                 {
@@ -54,7 +55,7 @@ module.exports = {
                 },
                 true
             ); // true == remove one
-            return WriteResult.nRemoved === 1;
+            return WriteResult.deletedCount === 1;
         }
     }
 };

@@ -1,0 +1,57 @@
+<h2
+    mat-dialog-title
+    [className]="''"
+>
+    <div
+        [className]="'paddedContent'"
+    >
+        {{ 'What do you want to do?' | translate | async }}
+    </div>
+</h2>
+
+<div mat-dialog-content>
+    <div
+        [className]="'paddedContent'"
+    >
+        {{ 'You can remove your file, download, change to a new one or cancel the operation' | translate | async }}
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div
+        [className]="'paddedContent'"
+    >
+        <button
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+            (click)="close(FileOptions.cancel)"
+        >
+            {{ 'Cancel' | translate | async }}
+        </button>
+        <div
+            [className]="'actionButtonGroup'"
+        >
+            <button
+                [className]="'btn'"
+                ngbButton
+                (click)="close(FileOptions.delete)"
+            >
+                {{ 'Delete' | translate | async }}
+            </button>
+            <button
+                [className]="'btn'"
+                ngbButton
+                (click)="close(FileOptions.download)"
+            >
+                {{ 'Download' | translate | async }}
+            </button>
+            <button
+                [className]="'btn'"
+                ngbButton
+                (click)="close(FileOptions.change)"
+            >
+                {{ 'Change' | translate | async }}
+            </button>
+        </div>
+    </div>
+</div>

@@ -19,6 +19,7 @@ import { select, Store } from '@ngrx/store';
 import { LocaleStore } from '@app/types/Locale';
 import { ExperienceFetched } from '@app/types/Experience';
 import { logEasy } from '@app/services/logging/logging.service';
+import { LoginService } from '@app/ui/login/login-service/login.service';
 
 type StoreType = { locale: LocaleStore }
 
@@ -33,6 +34,7 @@ export class ExperienceEffects {
     constructor(
         private actions$: Actions,
         private dataService: DataService,
+        private loginService: LoginService,
         private translate: TranslationService,
         private store: Store<StoreType>
     ) {
@@ -47,7 +49,6 @@ export class ExperienceEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public fetchExperience$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof EXPERIENCE_ACTIONS.FETCH_EXPERIENCE>>(EXPERIENCE_ACTIONS.FETCH_EXPERIENCE),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -57,12 +58,12 @@ export class ExperienceEffects {
                 experienceType,
             } = action
 
-            const vars = {
-                language,
-                type: experienceType,
-            }
+            const {
+                query,
+                variables,
+            } = QueryExperiences(language, experienceType)
 
-            return this.dataService.readData(QueryExperiences, vars).pipe(
+            return this.dataService.readData(query, variables).pipe(
                 map((experienceData: ExperienceFetched) => {
                     return EXPERIENCE_ACTIONS.EXPERIENCE_FETCHED(
                         {
@@ -87,21 +88,23 @@ export class ExperienceEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public mutateExperiencesEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof EXPERIENCE_ACTIONS.SAVE_EXPERIENCES>>(EXPERIENCE_ACTIONS.SAVE_EXPERIENCES),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 experiences,
                 experienceType
             } = action
 
-            const vars = {
-                experiences,
-            }
+            const {
+                query,
+                variables,
+            } = MutateExperiences(experiences)
 
-            return this.dataService.setData(MutateExperiences, vars).pipe(
+            return this.dataService.setData(query, variables, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Experience saved successfully', this)}`
@@ -111,7 +114,6 @@ export class ExperienceEffects {
                         experienceType
                     })
                 ]),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)
@@ -128,21 +130,23 @@ export class ExperienceEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public removeExperienceEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof EXPERIENCE_ACTIONS.REMOVE_EXPERIENCE>>(EXPERIENCE_ACTIONS.REMOVE_EXPERIENCE),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 id,
                 experienceType
             } = action
 
-            const vars = {
-                id,
-            }
+            const {
+                query,
+                variables,
+            } = RemoveExperience(id)
 
-            return this.dataService.setData(RemoveExperience, vars).pipe(
+            return this.dataService.setData(query, variables, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Experience removed successfully', this)}`
@@ -152,7 +156,6 @@ export class ExperienceEffects {
                         experienceType
                     })
                 ]),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     return of(COMMON_ACTIONS.FAIL({
@@ -162,5 +165,5 @@ export class ExperienceEffects {
                 })
             )
         })
-    ));
+    ))
 }

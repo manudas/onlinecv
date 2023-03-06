@@ -1,12 +1,13 @@
 const ObjectId = require('mongodb').ObjectId;
-const cleanObject = require('@helpers/utils').cleanObject;
+const cleanAndMapObject = require('@helpers/utils').cleanAndMapObject;
 
 module.exports = {
     Query: {
         socialNetworks: async (
+            _parent,
             { language },
             { models: { SocialNetworksModel } },
-            info
+            _info
         ) => {
             const socialNetworkList =
                 await SocialNetworksModel.find({
@@ -21,14 +22,15 @@ module.exports = {
     },
     Mutation: {
         putSocialNetworks: async (
+            _parent,
             { socialNetworks },
             { models: { SocialNetworksModel } },
-            info
+            _info
         ) => {
             const SocialNetworkWriteResult =
                 await Promise.all(
                     socialNetworks.map(async (network) => {
-                        const cleanedNetwork = cleanObject(
+                        const cleanedNetwork = cleanAndMapObject(
                             network,
                             { id: '_id' }
                         );
@@ -56,9 +58,10 @@ module.exports = {
                 : false;
         },
         removeSocialNetwork: async (
+            _parent,
             { id },
             { models: { SocialNetworksModel } },
-            info
+            _info
         ) => {
             const WriteResult =
                 await SocialNetworksModel.remove(

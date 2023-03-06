@@ -1,0 +1,39 @@
+type Experience {
+  _id: ID!
+  description: String,
+  type: String!,
+  start_date: String,
+  finish_date: String,
+  role: String!,
+  company: String,
+  company_url: String,
+  keywords: [String],
+  details: [String],
+  language: String!,
+  order: Int!
+}
+
+input ExperienceInput {
+  id: ID
+  description: String,
+  type: String!,
+  start_date: String,
+  finish_date: String,
+  role: String!,
+  company: String,
+  company_url: String,
+  keywords: [String],
+  details: [String],
+  language: String!,
+  order: Int!
+}
+
+extend type Query {
+  experiences(language: String!, type: String): [Experience]!
+  experienceTypes: [String]!
+}
+
+extend type Mutation {
+  putExperience(experiences: [ExperienceInput]!): [Experience]!
+  removeExperience(id: ID!): Boolean!
+}

@@ -1,0 +1,138 @@
+@import '../../globals/styles';
+
+.widget {
+    margin-top: 50px;
+    // ----- Variable Declarations -----
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    // ----- Styles -----
+    .modalBox {
+        width: 300px;
+        margin: 0 auto;
+        background: $white;
+        box-shadow: 0 15px 50px -5px rgba($black, 0.35);
+        padding: 40px;
+        &.large {
+            width: 80%;
+            padding-right: 0;
+            padding-left: 0;
+        }
+    }
+    #fileReference {
+        visibility: hidden;
+        height: 0;
+        width: 0;
+        display: inline-block;
+    }
+    #dropArea {
+        border-radius: 100%;
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+        position: relative;
+        top: -80px;
+        margin-bottom: -80px;
+        cursor: pointer;
+        background: $grey;
+        background-size: cover;
+        background-position: center center;
+        box-shadow: 0 5px 8px rgba($black, 0.35);
+        * {
+            // prevent events from this child
+            pointer-events: none;
+        }
+        .dashes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 100%;
+            width: 100%;
+            height: 100%;
+            border: 4px dashed $darkishGrey;
+            opacity: 1;
+            &.large {
+                border-radius: 0;
+            }
+        }
+        label {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 100%;
+            margin: 4px;
+            text-align: center;
+            padding: 0 30px;
+            color: $darkerGrey;
+            opacity: 1;
+        }
+
+        &.hasData {
+            .dashes,
+            label {
+                opacity: 0;
+            }
+            &:hover,&.hasError {
+                .dashes,
+                label {
+                    opacity: initial;
+                }
+            }
+        }
+        &.dragging {
+            background-image: none;
+            .dashes {
+                animation-duration: 10s;
+                animation-name: spin;
+                animation-iteration-count: infinite;
+                animation-timing-function: linear;
+                opacity: initial;
+            }
+            label {
+                opacity: 0.5;
+            }
+        }
+        &.hasData {
+            &.dragging {
+                /*
+                 * If label is in a container
+                 * that has image and at the
+                 * same is having another image
+                 * being dragged in
+                 */
+                label {
+                    opacity: initial;
+                }
+            }
+        }
+        &.large {
+            width: 80%;
+            border-radius: 0;
+            label {
+                border-radius: 0;
+            }
+        }
+    }
+    .name {
+        border-bottom: 1px solid $darkishGrey;
+        padding-top: 20px;
+        h1 {
+            text-align: center;
+            font-size: 20px;
+            font-weight: normal;
+            letter-spacing: 1px;
+        }
+    }
+    // ----- Mobile styles -----
+    @media only screen and (max-device-width: 736px) {}
+}

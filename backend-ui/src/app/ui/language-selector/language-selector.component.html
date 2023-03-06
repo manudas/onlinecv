@@ -1,52 +1,39 @@
-<mat-form-field
-    >
-    <mat-label>{{'Choose your language' | translate | async}}</mat-label>
-    <mat-select
-        required
-        [value]="selectedLocale"
-        (selectionChange)="onSelected($event)"
-        (openedChange)="$event && !selectedLocale && dataInput.focus()"
-    >
-        <mat-select-trigger>
-            <span
-                [ngClass]="'location-option-container'"
-            >
-                {{getSelectedLangageNameFromIso(selectedLocale) | translate | async}}
-                <img
-                    [ngStyle]="{
-                        maxWidth: '22px'
-                    }"
-                    [ngClass]="'flag-image'"
-                    src="{{ getImgUrl(selectedLocale) }}"
-                />
-            </span>
-        </mat-select-trigger>
-        <div [className]="'box-search'">
-        <input
-            #dataInput
-            [(ngModel)]="filterInput"
-            (keyup)="onFilter($event)"
-        />
-        <mat-icon
-            (click)="clearFilter($event)"
-        >clear</mat-icon>
+<div class="languageSwitcher float-right">
+    <p class="small d-none d-md-block">
+        {{ 'Language' | translate | async }}:
+    </p>
+    <ng-container [ngTemplateOutlet]="switcherSelector"></ng-container>
+</div>
+
+<ng-template
+    #switcherSelector
+>
+    <div class="lang">
+        <div
+            class="flag"
+            [ngClass]="getClassName()"
+        >
         </div>
-        <mat-option>--</mat-option>
-        <mat-option *ngFor="let locale of toLanguageArray()" [value]="locale.iso">
-            <span
-                [ngClass]="'location-option-container'"
-            >
-                {{locale.name | translate | async}}
-                <img
-                    [ngStyle]="{
-                        maxWidth: '22px'
-                    }"
-                    [ngClass]="'flag-image'"
-                    src="{{ getImgUrl(locale.iso) }}"
-                />
-                </span>
-        </mat-option>
-    </mat-select>
-    <mat-error *ngIf="!selectedLocale">{{'Please choose a language' | translate | async}}</mat-error>
-    <mat-hint *ngIf="selectedLocale">{{ 'Selected'| translate | async}}: {{ getSelectedLangageNameFromIso(selectedLocale) | translate  | async}}</mat-hint>
-</mat-form-field>
+        <ul class="dropdown" >
+            <ng-container
+                *ngFor="let option of getLocaleOptions()"
+                [ngTemplateOutlet]="flagOption"
+                [ngTemplateOutletContext]="{
+                    option
+                }"
+            ></ng-container>
+        </ul>
+    </div>
+</ng-template>
+
+<ng-template
+    #flagOption
+    let-langOpt="option"
+>
+    <li
+        *ngIf="langOpt.iso !== selectedLocale"
+        (click)="handleChangeLanguage(langOpt.iso)"
+    >
+        <div [attr.data-flag]="langOpt.iso" [className]="'flag' + ' ' + langOpt.flag"></div>
+    </li>
+</ng-template>

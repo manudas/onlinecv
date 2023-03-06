@@ -19,6 +19,7 @@ import { select, Store } from '@ngrx/store';
 import { LocaleStore } from '@app/types/Locale';
 import { TrainingFetched } from '@app/types/Training';
 import { logEasy } from '@app/services/logging/logging.service';
+import { LoginService } from '@app/ui/login/login-service/login.service';
 
 type StoreType = { locale: LocaleStore }
 
@@ -33,6 +34,7 @@ export class TrainingEffects {
     constructor(
         private actions$: Actions,
         private dataService: DataService,
+        private loginService: LoginService,
         private translate: TranslationService,
         private store: Store<StoreType>
     ) {
@@ -47,7 +49,6 @@ export class TrainingEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public fetchTraining$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof TRAINING_ACTIONS.FETCH_TRAINING>>(TRAINING_ACTIONS.FETCH_TRAINING),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
@@ -87,11 +88,12 @@ export class TrainingEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public mutateTrainingsEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof TRAINING_ACTIONS.SAVE_TRAININGS>>(TRAINING_ACTIONS.SAVE_TRAININGS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 trainings,
                 trainingType
@@ -102,7 +104,7 @@ export class TrainingEffects {
                 variables,
             } = MutateTrainings(trainings)
 
-            return this.dataService.setData(query, variables).pipe(
+            return this.dataService.setData(query, variables, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Training saved successfully', this)}`
@@ -112,7 +114,6 @@ export class TrainingEffects {
                         trainingType
                     })
                 ]),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)
@@ -129,11 +130,12 @@ export class TrainingEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public removeTrainingEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof TRAINING_ACTIONS.REMOVE_TRAINING>>(TRAINING_ACTIONS.REMOVE_TRAINING),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 id,
                 trainingType
@@ -144,7 +146,7 @@ export class TrainingEffects {
                 variables,
             } = RemoveTraining(id)
 
-            return this.dataService.setData(query, variables).pipe(
+            return this.dataService.setData(query, variables, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Training removed successfully', this)}`
@@ -154,7 +156,6 @@ export class TrainingEffects {
                         trainingType
                     })
                 ]),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)
@@ -165,5 +166,5 @@ export class TrainingEffects {
                 })
             )
         })
-    ));
+    ))
 }

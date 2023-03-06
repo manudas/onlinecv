@@ -1,27 +1,74 @@
-/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/utilities/display';
 
-@import 'bootstrap/scss/bootstrap';
 :host {
-    // font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 14px;
+    font-size: 0.8rem;
+
     .navbar-brand {
         color: #2c3e50;
+        margin-right: 0;
+        font-weight: bold;
     }
+
     .navigation-bar {
         color: #777777;
         flex-direction: row;
         align-items: center;
+        padding-left: 15px;
+
+        transition-property: color, font-weight;
+        transition-duration: 0.4s;
+        transition-timing-function: ease-in-out;
+
         &_nav-link {
+            color: #777777;
             cursor: pointer;
+            text-decoration: none;
+
             padding: 10px 15px;
+
             &:hover,
             &:focus {
-                background-color: rgba(0, 0, 0, 0);
+                font-weight: bold;
                 color: #555555
             }
+
             &-bold {
                 font-weight: bolder;
             }
+        }
+
+        ::ng-deep.handler {
+            .handler_title {
+                @extend .d-none;
+                @extend .d-sm-inline;
+                font-size: 0.8rem;
+            }
+            transition-property: color, font-weight;
+            transition-duration: 0.4s;
+            transition-timing-function: ease-in-out;
+
+            &:hover {
+                color: #555555;
+                font-weight: bold;
+            }
+        }
+
+        .userMenu {
+            ::ng-deep.dropdown_menu {
+                right: -5px;
+
+                .arrow {
+                    right: 4px;
+                    left: auto !important;
+                }
+            }
+        }
+
+        .caretDown {
+            margin-left: 5px;
         }
     }
 }

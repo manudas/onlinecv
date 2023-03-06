@@ -1,12 +1,13 @@
 const ObjectId = require('mongodb').ObjectId;
-const cleanObject = require('@helpers/utils').cleanObject;
+const cleanAndMapObject = require('@helpers/utils').cleanAndMapObject;
 
 module.exports = {
     Query: {
         skills: async (
+            _parent,
             { language, type },
             { models: { SkillsModel } },
-            info
+            _info
         ) => {
             const skillList = await SkillsModel.find({
                 language,
@@ -21,13 +22,14 @@ module.exports = {
     },
     Mutation: {
         putSkills: async (
+            _parent,
             { skills },
             { models: { SkillsModel } },
-            info
+            _info
         ) => {
             const WriteResult = await Promise.all(
                 skills.map(async (skill) => {
-                    const cleanedSkill = cleanObject(
+                    const cleanedSkill = cleanAndMapObject(
                         skill,
                         { id: '_id' }
                     );
@@ -52,18 +54,18 @@ module.exports = {
             return WriteResult ? WriteResult : false;
         },
         removeSkill: async (
-            parent,
+            _parent,
             { id },
-            { models: { skillsModel } },
-            info
+            { models: { SkillsModel } },
+            _info
         ) => {
-            const WriteResult = await skillsModel.remove(
+            const WriteResult = await SkillsModel.remove(
                 {
-                    id
+                    _id: id
                 },
-                true
+                { justOne: true }
             ); // true == remove one
-            return WriteResult.nRemoved === 1;
+            return WriteResult.deletedCount === 1;
         }
     }
 };

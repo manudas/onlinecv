@@ -14,6 +14,22 @@ class ProfileDetail extends Component {
         'language',
     ];
 
+    getIcon(key) {
+        switch (key) {
+            case 'name':
+                return <i className="fa fa-user" aria-hidden="true"></i>
+            case 'phone':
+                return <i className="fa fa-phone" aria-hidden="true"></i>
+            case 'email':
+                return <i className="fa fa-envelope" aria-hidden="true"></i>
+            default:
+                if (key.toLowerCase().includes('role')) {
+                    return <i className="fa fa-tasks" aria-hidden="true"></i>
+                }
+                return null
+        }
+    }
+
     renderProfileDetailItem(profile_detail_key, profile_detail_value, index) {
         if (!profile_detail_value || this.notRenderableColumns.includes(profile_detail_key.toLowerCase())) return null;
         /* SECTION ITEM */
@@ -22,7 +38,7 @@ class ProfileDetail extends Component {
                 <div className="line-content">
                         {/* Subtitle */}
                         <h3 className="section-item-title-1">
-                            {profile_detail_key}
+                            { <span>{ this.getIcon(profile_detail_key)} { profile_detail_key }</span> }
                         </h3>
                         {/* /Subtitle */}
                         {/* content */}

@@ -12,7 +12,10 @@ const LanguagesSchema = new Schema({
     school_url: String,
     written_level: Number,
     spoken_level: Number,
-    keywords: [],
+    keywords: {
+        type: [String],
+        default: undefined
+    },
     language: String,
     order: Number
 }, {

@@ -2,7 +2,7 @@
 <ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
 <ng-container *ngIf="isSkillsActive('computer'); then computerTemplate"></ng-container>
 <ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isSkillsActive('language'); then languagesTemplate"></ng-container>
+<app-language-skills *ngIf="isSkillsActive('language')"></app-language-skills>
 
 
 <ng-template #skillsTemplate>
@@ -20,15 +20,6 @@
         [panelBody]="panel"
         [panelParameters]="{type: SkillsType.computer, cols: colsToRender}"
         [cardTitle]="'Computer' | translate | async">
-    </app-card>
-</ng-template>
-
-<ng-template #languagesTemplate>
-    <app-card [icon]="cardIcon"
-        [iconClass]="'mr-1'"
-        [panelBody]="panel"
-        [panelParameters]="{type: SkillsType.language, cols: languageColsToRender}"
-        [cardTitle]="'Languages' | translate | async">
     </app-card>
 </ng-template>
 
@@ -50,7 +41,7 @@
             <mat-header-cell
                 *matHeaderCellDef
             >
-            {{ col === 'id' ? '#' : col | noUnderscore | translate | async | titlecase }}
+            {{ col === 'id' ? '#' : col | noSpecialChars | translate | async | titlecase }}
             </mat-header-cell>
             <mat-cell *matCellDef="let element; let row; let rowIndex = index">
 
@@ -89,22 +80,12 @@
         [className]="'text-right pt-3'"
     >
         <button
-            *ngIf="getSkillTypeName(type) !== 'languages'"
             (click)="openSkillDialog(getSkillTypeName(type))"
             [className]="'btn btn-outline-info'"
             type='button'
             ngbButton
         >
             {{ 'Add Skills' | translate | async }}
-        </button>
-        <button
-            *ngIf="getSkillTypeName(type) === 'languages'"
-            (click)="openLanguageDialog(getSkillTypeName(type))"
-            [className]="'btn btn-outline-info'"
-            type='button'
-            ngbButton
-        >
-            {{ 'Add Language' | translate | async }}
         </button>
     </div>
 

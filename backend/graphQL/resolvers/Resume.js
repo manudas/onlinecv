@@ -1,50 +1,55 @@
 module.exports = {
     Query: {
         resume: async (
+            _parent,
             { language },
             { models: { ResumeModel } },
-            info
+            _info
         ) => {
             const resume = await ResumeModel.findOne({
                 language
-            }).exec();
+            }).lean().exec();
+            if (resume) resume.data = resume?.data.toString();
+
             return resume;
         }
     },
     Mutation: {
         putResume: async (
-            parent,
-            { Resume },
-            { models: { resumeModel } },
-            info
+            _parent,
+            { resume },
+            { models: { ResumeModel } },
+            _info
         ) => {
-            const WriteResult = await resumeModel.update(
+            const WriteResult = await ResumeModel.update(
                 {
-                    id: Resume.id
+                    language: resume.language // only one resume per language
                 },
-                Resume,
+                resume,
                 {
-                    upsert: true // if no details found, create a new entry
+                    upsert: true, // if no details found, create a new entry,
                 }
             );
-            return WriteResult.nUpserted === 1 ||
-                WriteResult.nModified === 1
-                ? Resume
+            return WriteResult.modifiedCount === 1 ||
+                WriteResult.upsertedCount === 1
+                ? true
                 : false;
         },
         removeResume: async (
-            parent,
-            { id },
-            { models: { resumeModel } },
-            info
+            _parent,
+            { language },
+            { models: { ResumeModel } },
+            _info
         ) => {
-            const WriteResult = await resumeModel.remove(
+            const WriteResult = await ResumeModel.remove(
                 {
-                    id
+                    language
                 },
-                true
-            ); // true == remove one
-            return WriteResult.nRemoved === 1;
+                {
+                    justOne: true // true == remove one
+                }
+            );
+            return WriteResult.deletedCount === 1;
         }
     }
 };

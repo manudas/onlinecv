@@ -1,8 +1,10 @@
 module.exports = {
     Query: {
         locales: async (
+            _parent,
             _params,
-            { models: { LocaleModel } }
+            { models: { LocaleModel } },
+            _info
         ) => {
             const localesList = await LocaleModel.find()
                 .sort({
@@ -14,9 +16,10 @@ module.exports = {
     },
     Mutation: {
         putLocale: async (
+            _parent,
             { Locale },
             { models: { Locale: LocaleModel } },
-            info
+            _info
         ) => {
             const WriteResult = await LocaleModel.update(
                 {
@@ -28,15 +31,16 @@ module.exports = {
                     upsert: true // if no details found, create a new entry
                 }
             );
-            return WriteResult.nUpserted === 1 ||
-                WriteResult.nModified === 1
+            return WriteResult.modifiedCount === 1 ||
+                WriteResult.upsertedCount === 1
                 ? Locale
                 : false;
         },
         removeLocale: async (
+            _parent,
             { _id },
             { models: { Locale: LocaleModel } },
-            info
+            _info
         ) => {
             const WriteResult = await LocaleModel.remove(
                 {
@@ -44,7 +48,7 @@ module.exports = {
                 },
                 true
             ); // true == remove one
-            return WriteResult.nRemoved === 1;
+            return WriteResult.deletedCount === 1;
         }
     }
 };

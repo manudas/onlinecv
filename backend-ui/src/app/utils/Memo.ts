@@ -1,5 +1,5 @@
 import { MemoOptions } from '@app/types/Memo';
-import isEqual from 'lodash/isEqual';
+import isEqual from 'lodash-es/isEqual';
 
 export const useMemo = <T>(
     func: (...any) => T,

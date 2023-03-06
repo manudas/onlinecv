@@ -1,14 +1,16 @@
+export * from './Common'
+
 export * from './Details'
 
 export * from './Languages'
 
 export * from './Locale'
 
-export * from './Translation'
-
-export * from './Common'
+export * from './Others'
 
 export * from './Training'
+
+export * from './Translation'
 
 export * from './Settings'
 

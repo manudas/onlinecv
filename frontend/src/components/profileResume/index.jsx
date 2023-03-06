@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import {
-    getBase64ImageMimeType,
+    getBase64MimeType,
     bufferToBase64
-} from './../../helpers/image';
+} from './../../helpers/files';
 
 import { translateString } from '../../helpers/translations';
 
@@ -18,7 +18,7 @@ class ProfileResume extends Component {
         }
 
         const _profilePicture = this.props.profilePicture
-            ? `data:${getBase64ImageMimeType(
+            ? `data:${getBase64MimeType(
                   this.props.profilePicture
               )};base64,${this.props.profilePicture}`
             : null;
@@ -28,21 +28,17 @@ class ProfileResume extends Component {
         name = name.split(' ')[0];
         surname = surname.split(' ')[0];
 
-        const primaryJobName =
-            this.props?.details?.primaryJobName ?? null;
-        const secondaryJobName =
-            this.props?.details?.secondaryJobName ?? null;
-        console.log(
-            '¿QUE ES this.props.details.smallDescription??'
-        );
-        const smallDescription =
-            this.props?.details?.smallDescription ?? null;
+        const primaryRole = this.props?.details?.primaryRole;
+        const secondaryRole = this.props?.details?.secondaryRole;
+
+        const description = this.props?.details?.description;
+        const roles = `${primaryRole}${primaryRole && secondaryRole ? ' / ' : ''}${secondaryRole ? secondaryRole : ''}`;
 
         /* =============== PROFILE INTRO ====================*/
         return (
             <div className="profile-intro row">
                 {/* Left Collum with Avatar pic */}
-                <div className="col-md-4 profile-col">
+                <div className="col-md-5 col-lg-4 profile-col">
                     {/* Avatar pic */}
                     <div className="profile-pic">
                         <div className="profile-border">
@@ -53,7 +49,8 @@ class ProfileResume extends Component {
                                           src: _profilePicture
                                       }
                                     : '')}
-                                alt=""
+                                alt={`${name} ${surname} ${roles}`}
+                                title={`${name} ${surname} ${roles}`}
                             />
                             {/* /Put your picture here */}
                         </div>
@@ -62,7 +59,7 @@ class ProfileResume extends Component {
                 </div>
                 {/* /Left columm with avatar pic */}
                 {/* Right Columm */}
-                <div className="col-md-7">
+                <div className="col-md-6 col-lg-7">
                     {/* Welcome Title*/}
                     <h1 className="intro-title1">
                         {translateString(
@@ -77,20 +74,11 @@ class ProfileResume extends Component {
                     {/* Welcome Title */}
                     {/* Job - */}
                     <h2 className="intro-title2">
-                        {primaryJobName}{' '}
-                        {primaryJobName && secondaryJobName
-                            ? '/'
-                            : ''}{' '}
-                        {secondaryJobName}
+                        { roles }
                     </h2>
                     {/* job */}
                     {/* Description */}
-                    <p
-                        className="text-justify"
-                        dangerouslySetInnerHTML={{
-                            __html: smallDescription
-                        }}
-                    ></p>
+                    <p className="text-justify">{ description }</p>
                     {/* /Description */}
                 </div>
                 {/* /Right Collum */}
@@ -103,7 +91,7 @@ class ProfileResume extends Component {
 function mapStateToProps(state) {
     const data = state?.data
     const language = state?.language
-    const details = state?.details
+    const details = data?.resume?.details
     const profileImage = details?.profileImage
     const translations = state?.[language]?.ProfileResume
 

@@ -82,7 +82,7 @@ textarea.form-control {
     margin-top: 20px;
 }
 
-@media (min-width:992px) {
+@media (min-width:1200px) {
     .contact-subtitle-1 {
         font-size: 14px;
         margin-top: 0;
@@ -100,56 +100,10 @@ textarea.form-control {
     font-size: 16px;
 }
 
-@media (min-width:992px) {
+@media (min-width:1200px) {
     .contact-infos {
         text-align: left;
         margin-top: 0;
         font-size: 14px;
     }
-}
-
-/* @todo: when adding modal for message success/failure, use those classes bellow */
-.modal-wrap {
-    display: none;
-}
-
-.modal-bg {
-    background: #333;
-    opacity: 0.9;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 999;
-}
-
-.modal-content {
-    background: #fafafa;
-    font-size: 18px;
-    position: fixed;
-    top: 40%;
-    left: 50%;
-    margin-left: -125px;
-    width: 250px;
-    z-index: 9999;
-    padding: 10px 20px;
-}
-
-.modal-content .modal-title {
-    color: #3b658a;
-    font-size: 22px;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.modal-content p {
-    font-size: 14px;
-    margin-bottom: 0;
-}
-
-/* @todo: when adding modal for message success/failure, use those classes bellow */
-#contactError .modal-title {
-    color: #fff;
 }

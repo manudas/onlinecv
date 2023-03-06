@@ -12,7 +12,10 @@ const SkillsSchema = new Schema({
     related_knowledge: {}, // subquery ?
     type: String,
     developed_projects: [],
-    keywords: [],
+    keywords: {
+        type: [String],
+        default: undefined
+    },
     language: String,
     order: Number
 }, {

@@ -1,104 +1,104 @@
-/* Importing Bootstrap SCSS file. */
+.selector {
+    position: relative;
 
-@import 'bootstrap/scss/bootstrap';
-@import '../../globals/styles';
+    .handler {
+        cursor: pointer;
+        &_title {
+            font-size: 0.7rem;
+        }
+    }
 
-.dropdown {
-    color: #777777;
-    &-menu {
-        @extend .dropdown-menu;
-        font-size: 14px;
-        background-color: #2c3e50;
-        border: 1px solid #1a242f;
-        border-radius: 4px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-        &_arrow {
-            display: inline-block;
-            position: absolute;
-            &.bottom {
-                border-left: 6px solid transparent;
-                border-right: 6px solid transparent;
-                border-bottom: 6px solid #2c3e50;
-                top: -6px;
-                right: 20px;
-            }
+    &:hover {
+        .dropdown_menu {
+            display: initial;
+        }
+    }
+    .dropdown_menu {
+        display: none;
+        position: absolute;
+
+        &.right {
+            left: 100%;
+            top: 0;
+        }
+
+        &.down {
+            top: 100%;
+        }
+
+        .options_wrapper {
+
+            width: max-content;
+
+            font-size: 14px;
+            background-color: #2c3e50;
+            border: 1px solid #1a242f;
+            border-radius: 4px;
+            box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
+
+            padding: 5px;
+
             &.right {
+                margin-left: 5px;
+            }
+
+            &.down {
+                margin-top: 5px;
+            }
+
+            .header {
+                color: #1abc9c;
+                padding: 3px 20px;
+                font-size: 0.85em;
+                line-height: 1.43em;
+            }
+
+            .option {
+                cursor: pointer;
+                padding: 3px 20px;
+                line-height: 1.4em;
+                color: #ecf0f1;
+                text-align: left;
+                &:hover {
+                    color: #262626;
+                    background-color: whitesmoke;
+                }
+            }
+
+            .separator {
+                height: 1px;
+                margin: 9px 0;
+                overflow: hidden;
+                background-color: #1a242f;
+            }
+        }
+
+        .arrow {
+            position: absolute;
+
+            &.right {
+                /*
+                 * if position is right,
+                 * the arrow will be the left
+                 */
                 border-right: 6px solid #2c3e50;
                 border-top: 6px solid transparent;
                 border-bottom: 6px solid transparent;
-                left: -7px;
-                top: 20px;
+                left: 0px;
+                top: 22px;
+            }
+
+            &.down {
+                /*
+                 * if position is down,
+                 * the arrow will be the top
+                 */
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+                border-bottom: 6px solid #2c3e50;
+                top: 0px;
+                left: 22px;
             }
         }
-        &_divider {
-            height: 1px;
-            margin: 9px 0;
-            overflow: hidden;
-            background-color: #1a242f;
-        }
-        &_option {
-            // @extend .dropdown-menu-item;
-            display: block;
-            padding: 3px 20px;
-            clear: both;
-            font-weight: normal;
-            line-height: 1.4em;
-            color: #ecf0f1;
-            white-space: nowrap;
-            &:hover,
-            &:focus {
-                text-decoration: none;
-                color: #262626;
-                background-color: whitesmoke;
-                outline: none;
-            }
-        }
-        &_header {
-            cursor: pointer;
-            color: #1abc9c;
-            display: block;
-            margin-top: -3px;
-            padding: 3px 20px;
-            font-size: 0.85em;
-            line-height: 1.43em;
-        }
-    }
-    &_nav-link {
-        cursor: pointer;
-        padding: 10px 15px;
-        &:hover,
-        &:focus {
-            background-color: rgba(0, 0, 0, 0);
-            color: #555555
-        }
-        &.noCaret::after {
-            display: none;
-        }
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    &_badge {
-        @extend .badge;
-
-        background-color: $darkerGrey;
-
-        font-size: 0.8rem;
-        padding: 3px 7px;
-        display: inline-flex;
-        margin-left: 10px;
-        border-radius: 10px;
-        height: 1rem;
-        width: max-content;
-        min-width: 1rem;
-    }
-    &_image {
-        border-radius: 6px;
-        margin: 0px 5px 0 5px;
-        width: 20px;
-        height: 20px;
-        border: 1px solid;
-        padding: 1px;
-        background-color: rgba(255, 255, 255, 0.6)
     }
 }

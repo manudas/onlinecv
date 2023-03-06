@@ -3,10 +3,10 @@ type elementType = {
     order: number
 }
 
-export const sortElementsByTypeAndOrder = (
-    elements: elementType[],
+export const sortElementsByTypeAndOrder = <T extends elementType>(
+    elements: Array<T>,
     types: string[]
-): elementType[] => {
+): Array<T> => {
     let typeObject: Record<string, number>
     if (types) {
         typeObject =

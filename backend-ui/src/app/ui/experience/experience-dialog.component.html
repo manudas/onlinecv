@@ -1,6 +1,6 @@
 <h2
     mat-dialog-title
-    [className]="''"
+    [className]="'dialog-title'"
 >
     <div
         [className]="'paddedContent'"
@@ -196,6 +196,50 @@
                     </p>
                 </div>
             </div>
+            <ng-template
+                [ngIf]="isFormArray(experienceFormGroup.controls.details)"
+            >
+                <label
+                        class='control-label label-details'
+                >
+                    {{ 'Detail your experience' | translate | async }}
+                </label>
+                <div
+                    *ngFor="let detail of experienceFormGroup.controls.details.controls; let i = index"
+                    [className]="'col-12'" 
+                >
+                    <div
+                        class='form-group'
+                    >        
+                        <div class='d-flex'>
+                            <input
+                                class='form-control'
+                                placeholder="{{ 'Optional: Used React to migrate from a server rendered app to a SPA...' | translate | async }}"
+                                [formControl]="detail"
+                            >
+                            <mat-icon
+                                (click)="deleteDetail(i)"
+                                [className]="'cancel-icon'"
+                            >
+                                cancel
+                            </mat-icon>
+                        </div>
+                        <p
+                            class='help-block'
+                        >
+                            {{ 'Add a more detailed description. Click more if you need to describe another scope' | translate | async }}
+                        </p>
+                    </div>
+                </div>
+                <button
+                    [className]="'btn btn-outline-info more-button'"
+                    type='button'
+                    ngbButton
+                    (click)="addDetails()"
+                >
+                    {{ 'More' | translate | async }}
+                </button>
+            </ng-template>
         </div>
     </form>
 </ng-template>

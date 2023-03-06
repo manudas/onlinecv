@@ -2,23 +2,28 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { debounce } from 'lodash'
 
-import ProfileResume from 'components/profileResume'
-import ProfileDetail from 'components/profileDetails'
-import Training from 'components/training'
-import WorkExperience from 'components/work_experience'
-import Skill from 'components/skills'
-import Interest from 'components/interests'
-import PortFolio from 'components/portfolio'
 import ContactForm from 'components/contactForm'
-import ThankYou from 'components/thank_you'
+import Experience from 'components/experience'
 import Footer from 'components/footer'
+import Interest from 'components/interests'
+import Languages from 'components/languages'
+import LanguageSwitcher from 'components/languageSwitcher'
+import PortFolio from 'components/portfolio'
+import ProfileDetail from 'components/profileDetails'
+import ProfileResume from 'components/profileResume'
+import References from 'components/references'
+import Skill from 'components/skills'
+import ThankYou from 'components/thank_you'
+import Training from 'components/training'
 
+import { downloadDocument } from 'helpers/files'
 import { EventType } from "helpers/customEvents"
 import { translateString } from 'helpers/translations'
 import { PropDef } from './types'
 import { ComponentDef } from "helpers/types"
 
 import './cvcontainer.css'
+
 class CVContainer extends Component<PropDef> {
     private cvComponents: ComponentDef[] = []
 
@@ -37,19 +42,36 @@ class CVContainer extends Component<PropDef> {
     }
 
     renderHeaderButtons() {
+        const { details } = this.props.resume
+        let name = details?.name
+        let surname = details?.surname
+        name = name?.split(' ')[0]
+        surname = surname?.split(' ')[0]
+
+        const primaryRole = details?.primaryRole;
+        const secondaryRole = details?.secondaryRole;
+
+        const jobNames = `${primaryRole}${primaryRole && secondaryRole ? ' / ' : ''}${secondaryRole ? secondaryRole : ''}`
+
         /* Header Buttons */
         return (
             <div className="row">
                 <div className="header-buttons col-md-10 col-md-offset-1">
+                    <LanguageSwitcher />
                     {/* Download Resume Button */}
-                    <a
-                        href="#downloadResumeTopBar"
-                        className="btn btn-default btn-top-resume">
-                        <i className="fa fa-download" />
-                        <span className="btn-hide-text">
-                            { translateString('Download my resume', this) }
-                        </span>
-                    </a>
+                    {
+                        this.props.resume.resume
+                            ? <a
+                                onClick={() => downloadDocument(this.props.resume.resume.data, `${name}${surname ? ' ' + surname : ''}${jobNames ? ' - ' + jobNames : ''}`)}
+                                href="#downloadResumeTopBar"
+                                className="btn btn-default btn-top-resume">
+                                <i className="fa fa-download" />
+                                <span className="btn-hide-text">
+                                    { translateString('Download my resume', this) }
+                                </span>
+                            </a>
+                            : null
+                    }
                     {/* /Download Resume Button */}
                     {/* Mail Button */}
                     <a
@@ -110,13 +132,17 @@ class CVContainer extends Component<PropDef> {
                                     reference={ this.addToList(React.createRef(), 'Training') }
                                     name={ translateString('Training', this) }
                                 />
-                                <WorkExperience
-                                    reference={ this.addToList(React.createRef(), 'WorkExperience') }
-                                    name={ translateString('WorkExperience', this) }
+                                <Experience
+                                    reference={ this.addToList(React.createRef(), 'Experience') }
+                                    name={ translateString('Experience', this) }
                                 />
                                 <Skill
                                     reference={ this.addToList(React.createRef(), 'Skill') }
                                     name={ translateString('Skill', this) }
+                                />
+                                <Languages
+                                    reference={ this.addToList(React.createRef(), 'Languages') }
+                                    name={ translateString('Languages', this) }
                                 />
                                 <Interest
                                     reference={ this.addToList(React.createRef(), 'Interest') }
@@ -125,6 +151,10 @@ class CVContainer extends Component<PropDef> {
                                 <PortFolio
                                     reference={ this.addToList(React.createRef(), 'PortFolio') }
                                     name={ translateString('PortFolio', this) }
+                                />
+                                <References
+                                    reference={ this.addToList(React.createRef(), 'References') }
+                                    name={ translateString('References', this) }
                                 />
                                 <ContactForm
                                     reference={this.addToList(React.createRef(), 'ContactForm') }
@@ -157,7 +187,7 @@ class CVContainer extends Component<PropDef> {
 function mapStateToProps(state: any) {
     const {
         data: {
-            resume = null
+            resume = null,
         } = {},
         language,
         translations: {

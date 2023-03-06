@@ -8,7 +8,10 @@ const collection = 'interests';
 const InterestsSchema = new Schema({
     name: String,
     description: String,
-    keywords: [],
+    keywords: {
+        type: [String],
+        default: undefined
+    },
     language: String
 }, {
     collection,

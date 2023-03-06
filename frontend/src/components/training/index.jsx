@@ -33,11 +33,7 @@ class Training extends Component {
                 title={school_name}
             >
                 {school_name}
-                <span
-                    className={
-                        'text-decoration-none d-inline-block ms-1'
-                    }
-                >
+                <span class="text-decoration-none d-inline-block ms-1">
                     🡕
                 </span>
             </a>
@@ -61,20 +57,14 @@ class Training extends Component {
                         {
                             start_date_string
                                 ? <span className="graduation-date">
-                                    {translateString(
-                                        'started',
-                                        this
-                                    )}
+                                    { translateString('started', this) }
                                     {' ' + start_date_string}
                                 </span>
                                 : null
                         }
                         {start_date_string ? ' - ' : null}
                         <span className="graduation-date">
-                            {translateString(
-                                'graduation',
-                                this
-                            )}
+                            { translateString('graduation', this) }
                             {' ' + finish_date_string}
                         </span>
                     </h4>
@@ -82,30 +72,25 @@ class Training extends Component {
                     {/* content */}
                     <div className="graduation-description">
                         <p className="text-justify">
-                            {training.description ??
-                                null}
-                            {training.description &&
-                            training.final_project
-                                ? '. '
-                                : null}
-                            {training.final_project
-                                ? `. ${translateString(
-                                        'final_project',
-                                        this
-                                    )}: `
-                                : null}
-                            {training.final_project ??
-                                null}
+                            { training.description ?? null }
+                            {
+                                training.description && training.final_project
+                                    ? '. '
+                                    : null
+                            }
+                            {
+                                training.final_project
+                                    ? `. ${ translateString('final_project', this) }: `
+                                    : null
+                            }
+                            { training.final_project ?? null }
                         </p>
                     </div>
                     {training.average_grade ? (
                         <div>
                             <p>
                                 <span>
-                                    {`${translateString(
-                                        'average_grade',
-                                        this
-                                    )}: `}
+                                    {`${ translateString('average_grade', this) }: `}
                                 </span>
                                 <strong>
                                     {`${training.average_grade}/10`}
@@ -121,29 +106,25 @@ class Training extends Component {
     }
 
     renderRegulatedTrainingItems() {
-        if (!this.props.training) {
-            return null;
-        } else {
-            return this.props.training.map(
-                (training_item, index) => {
-                    return this.renderTrainingItem(
-                        training_item,
-                        index
-                    );
-                }
-            );
-        }
+        if (!this.props.training?.length) return null;
+        return this.props.training.map(
+            (training_item, index) => {
+                return this.renderTrainingItem(
+                    training_item,
+                    index
+                );
+            }
+        );
     }
 
     renderTitle() {
         console.log('pensar como clasificar por tipo de training. Creo que mejor añadir tipo de experiencia')
+        if (!this.props.training?.length) return null;
         return <TimeLineHeader name={this.props.name} />;
     }
 
     render() {
-        if (!this.props.training) {
-            return null;
-        }
+        if (!this.props.training?.length) return null;
         /* ====>> SECTION: TRAINING <<====*/
         return (
             <section

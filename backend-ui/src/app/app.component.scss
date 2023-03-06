@@ -1,21 +1,41 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/utilities/spacing';
+@import 'bootstrap/scss/utilities/display';
+
 :host {
-    padding: 10px 20px 0px 20px;
+    @extend .pr-0;
+    @extend .pl-0;
+    @extend .pl-sm-3;
+    @extend .pr-sm-3;
+
+    padding-top: 0;
+    padding-bottom: 5px;
+
     background-color: #bdc3c7;
     position: fixed;
     width: 100%;
     height: 100%;
 
-
+    display: flex;
+    flex-direction: column;
 }
 
-::ng-deep .SnackFailed {
-    background-color: red;
-    font-weight: bold;
-    color: white;
+::ng-deep .Snack {
+    > * {
+        min-width: initial !important;
+    }
+    &.SnackFailed {
+        --mdc-snackbar-container-color: red;
+        --mdc-snackbar-supporting-text-color: white;
+        --mdc-snackbar-supporting-text-weight: bold;
+    }
+
+    &.SnackSuccess {
+        --mdc-snackbar-container-color: green;
+        --mdc-snackbar-supporting-text-color: white;
+        --mdc-snackbar-supporting-text-weight: bold;
+    }
 }
 
-::ng-deep .SnackSuccess {
-    background-color: green;
-    font-weight: bold;
-    color: white;
-}

@@ -1,0 +1,226 @@
+<ng-container *ngIf="isElementActive('professional-references'); then professionalReferencesTemplate"></ng-container>
+<ng-container *ngIf="isElementActive('all'); then separator"></ng-container>
+<ng-container *ngIf="isElementActive('upload-resume'); then uploadResumeFileTemplate"></ng-container>
+<ng-container *ngIf="isElementActive('all'); then separator"></ng-container>
+<ng-container *ngIf="isElementActive('quote'); then quoteTemplate"></ng-container>
+
+<ng-template #professionalReferencesTemplate>
+    <app-card [icon]="cardIcon"
+        [iconClass]="'mr-1'"
+        [panelBody]="panel"
+        [cardTitle]="'References' | translate | async">
+    </app-card>
+</ng-template>
+
+<ng-template #uploadResumeFileTemplate>
+    <app-card [icon]="cardIcon"
+        [iconClass]="'mr-1'"
+        [panelBody]="panelUploadResume"
+        [cardTitle]="'Upload resume file' | translate | async">
+    </app-card>
+</ng-template>
+
+<ng-template #panelUploadResume>
+    <fieldset>
+        <legend>{{ 'Resume document' | translate | async }}</legend>
+        <div class="form-group">
+            <label class="control-label">{{ 'Your resume' | translate | async }}</label>
+            <app-fileupload
+                [accept]="acceptedDocumentFileType"
+                [(data)]="resumeData"
+                [name]="'Upload your resume here' | translate | async"
+                [isLargeDocument]=true
+            ></app-fileupload>
+        </div>
+    </fieldset>
+    <div class='form-actions'>
+        <button [className]="'btn submitButton'"
+            type='submit'
+            ngbButton
+            (click)="submitResumeHandler($event)"
+        >
+            {{ 'Submit' | translate | async}}
+        </button>
+        <button [className]="'btn btn-outline-info'"
+            type='reset'
+            ngbButton>Cancel</button>
+    </div>
+</ng-template>
+
+<ng-template #panel>
+    <mat-table
+        *ngIf="referencesData.length"
+        [dataSource]="referencesData"
+
+        cdkDropList
+        [cdkDropListData]="referencesData"
+        (cdkDropListDropped)="onDrop($event)"
+        [cdkDropListDisabled]="dragDisabled"
+
+    >
+        <ng-container *ngFor="let col of colsToRender; let colIndex = index" matColumnDef="{{col}}">
+            <mat-header-cell
+                *matHeaderCellDef
+            >
+            {{ col === 'id' ? '#' : col | noSpecialChars | translate | async | titlecase }}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element; let row; let rowIndex = index">
+
+                <ng-container *ngIf="col === 'edit'"
+                    [ngTemplateOutlet]="editTemplate"
+                    [ngTemplateOutletContext]="{
+                        rowIndex: rowIndex,
+                        type: type
+                    }"
+                ></ng-container>
+                <ng-container *ngIf="col === 'delete'"
+                    [ngTemplateOutlet]="deleteTemplate"
+                    [ngTemplateOutletContext]="{
+                        rowIndex: rowIndex,
+                        type: type
+                    }"
+                ></ng-container>
+                <ng-container *ngIf="col === 'order'"
+                    [ngTemplateOutlet]="dragHandle"
+                ></ng-container>
+                <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> {{ element[col] }} </ng-container>
+
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="colsToRender"></mat-header-row>
+        <mat-row
+            (cdkDragStarted)="onDragStart($event)"
+            cdkDrag
+            [cdkDragData]="row"
+            *matRowDef="let row; columns: colsToRender"
+        ></mat-row>
+    </mat-table>
+
+    <div
+        [className]="'text-right pt-3'"
+    >
+        <button
+            (click)="openAddEditDialog()"
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+        >
+            {{ 'Add' | translate | async }}
+        </button>
+    </div>
+
+</ng-template>
+
+<ng-template #separator>
+    <div [className]="'separator'"></div>
+</ng-template>
+
+<ng-template #editTemplate
+    let-index="rowIndex"
+>
+    <button [className]="'btn btn-info'"
+        ngbButton
+        (click)="editData(index)"
+    >
+        <fa-icon
+            [icon]="faEdit"
+        ></fa-icon>
+    </button>
+</ng-template>
+
+
+
+<ng-template #deleteTemplate
+    let-index="rowIndex"
+>
+    <button [className]="'btn btn-danger'"
+        ngbButton
+        (click)="openDataRemovalConfirmDialog(index)"
+        >
+        <fa-icon
+            [icon]="faTrash"
+        ></fa-icon>
+    </button>
+</ng-template>
+
+
+<ng-template #dragHandle>
+
+    <fa-icon
+        [ngStyle]="{
+            color: '#737373',
+            marginRight: 'auto',
+            marginLeft: 'auto'
+        }"
+        [icon]="faArrowsAlt"
+        (mousedown)="dragDisabled = false;"
+        (mouseup)="dragDisabled = true;"
+        (touchstart)="dragDisabled = false;"
+        (touchend)="dragDisabled = true;"
+    ></fa-icon>
+
+</ng-template>
+
+<ng-template #quoteTemplate>
+    <app-card [icon]="cardIcon"
+        [iconClass]="'mr-1'"
+        [panelBody]="quotePanel"
+        [cardTitle]="'Resume quote' | translate | async">
+    </app-card>
+</ng-template>
+
+<ng-template #quotePanel>
+    <fieldset>
+        <legend>{{ 'Optional insightful quote' | translate | async }}</legend>
+aparece mas grande de la cuenta, mirar estilos de details
+        <form
+            [formGroup]="quoteFormGroup"
+        >
+            <div class='form-group'>
+                <label class='control-label'>{{ 'Author name' | translate | async }}</label>
+                estilos no en negrita, mirar en estilos de details
+                <input class='form-control'
+                    formControlName="author"
+                    [placeholder]="'Enter your author\'s quote name' | translate | async">
+                <small
+                    *ngIf="quoteFormGroup.get('author').touched && quoteFormGroup.get('author').errors"
+                    [className]="'text-danger'"
+                >
+                    {{ 'You should provide an author name' | translate | async }}
+                </small>
+            </div>
+            <div class='form-group'>
+                <label class='control-label'>{{ 'Quote' | translate | async }}</label>
+                <input class='form-control'
+                    formControlName="quote"
+                    [placeholder]="'Enter your quote' | translate | async">
+                <small
+                    *ngIf="quoteFormGroup.get('quote').touched && quoteFormGroup.get('quote').errors"
+                    [className]="'text-danger'"
+                >
+                    {{ 'You should provide a quote' | translate | async }}
+                </small>
+            </div>
+        </form>
+    </fieldset>
+
+    <div class='form-actions'>
+        <button [className]="'btn submitButton'"
+            type='submit'
+            ngbButton
+            (click)="submitQuoteHandler($event)"
+        >
+            {{ 'Submit' | translate | async}}
+        </button>
+        <button
+            *ngIf="quoteFormGroup.get('id').value"
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+            (click)="deleteQuoteHandler($event)"
+        >
+            {{ 'Delete' | translate | async }}
+        </button>
+    </div>
+</ng-template>

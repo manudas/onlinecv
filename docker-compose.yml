@@ -1,17 +1,41 @@
-version: '3.9' #version of docker compose format document
+version: '3.9'                                                                    # version of docker compose format document
+x-server:
+  &default-server                                                                 # anchor to reuse the definition of NodeJS server
+  build:
+      context: docker/node
+      dockerfile: Dockerfile
+  container_name: server
+  ports:
+    - "80:80"
+    - "443:443"
+  restart: on-failure
+  depends_on:
+    - db
+  volumes:
+    - ./backend:/app/backend                                                      # backend volume
+    - ./config:/app/config                                                        # backend config volume
+    - ./notfound:/app/webroot/notfound                                            # notfound volume
+    - ./backend-ui/dist/backend-ui:/app/webroot/backend-ui                        # backend-ui volume
+    - ./frontend/build:/app/webroot/frontend                                      # frontend volume
+    # DEV VOLUMES
+    - ./backend-ui:/app/dev/webroot/backend-ui                                    # DEV backend-ui volume
+    - ./frontend/:/app/dev/webroot/frontend                                       # DEV frontend volume
+  command: /app/backend/index
+  env_file:
+   - "docker/node/.env"
 services:
   db:
     build:
-        context: dockerMongo
-        dockerfile: Dockerfile-mongo
+        context: docker/mongo
+        dockerfile: Dockerfile
     container_name: db
     ports:
      - "27017:27017"
     volumes:
-     - ./data/mongo/db:/data/db #data/db is where mongo stores database files
-     - ./data/config/mongodb/init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+     - ./data/mongo/db:/data/db                                                   # host folder to hold Mongo DB
+     - ./config/mongodb/init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro      # MongoDB entrypoint run only once in installation time
     env_file:
-     - "dockerMongo/.env"
+     - "docker/mongo/.env"
     healthcheck:
       test: ["CMD-SHELL", "db.runCommand('ping').ok", "|", "mongo", "db:27017/onlinecv", "--quiet", "1"]
       interval: 30s
@@ -22,20 +46,12 @@ services:
     secrets:
       - app_mongo_password
       - app_mongo_root_password
-  backend:
-    build:
-        context: dockerNode
-        dockerfile: Dockerfile-node
-    container_name: backend
-    ports:
-     - "80:80"
-     - "443:443"
-    restart: on-failure
-    depends_on:
-      - db
-    volumes:
-      - ./data/backend_static:/opt/app/static
-      - ./data:/data
+  server:
+    << : *default-server                                                          # Default NODEJS Server definition
+  server-brk:                                                                     # To be used in DEV ENV
+    << : *default-server
+    container_name: server-brk
+    command: "exit"
   # certbot:
   #   build:
   #     context: letsencrypt-autorenew
@@ -66,6 +82,6 @@ services:
 #docker run -d -p 80:80 -v /data:/data --name onlinecv onlinecv
 secrets:
   app_mongo_password:
-    file: ./data/config/mongodb/app_mongo_password.txt
+    file: ./config/mongodb/app_mongo_password.txt
   app_mongo_root_password:
-    file: ./data/config/mongodb/app_mongo_root_password.txt
+    file: ./config/mongodb/app_mongo_root_password.txt

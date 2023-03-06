@@ -1,7 +1,10 @@
-/* Importing Bootstrap SCSS file. */
+@use '../../globals/styles' as *;
 
-@import 'bootstrap/scss/bootstrap';
-@import '../../globals/styles';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/utilities/background';
 
 :host {
     // font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -19,6 +22,11 @@
         font-weight: bold;
     }
     .form-group {
+
+        textarea.form-control {
+            height: auto;
+        }
+
         .form-control {
             display: block;
             width: 100%;
@@ -47,11 +55,6 @@
             margin-bottom: 10px;
             color: #737373;
         }
-        /*
-        input[type="file"] {
-            display: block;
-        }
-        */
     }
     .form-actions {
         background-color: $grey;
@@ -70,9 +73,6 @@
                 }
             }
         }
-    }
-    .text-danger {
-        color: $red;
     }
 
     .btn-network-row {

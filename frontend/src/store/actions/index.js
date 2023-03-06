@@ -13,7 +13,7 @@ import {
 
 import { DataService } from 'queries/data.service';
 
-export const getUserDataAction = 'getUserData';
+export const briefUserDetailsIntroduction = 'briefUserDetailsIntroduction';
 export function requestUserDataLoad(lang) {
     // action creator
     return async function (dispatch) {
@@ -22,13 +22,15 @@ export function requestUserDataLoad(lang) {
             variables: variablesUserData
         } = getUserIntroductionQuery(lang);
         const dataService = DataService.factory();
-        const { data: { details } } = await dataService.readData(
+        const { data: { details, locales } } = await dataService.readData(
             queryUserData,
             variablesUserData
         );
 
+        dispatch(localeLoadAction(locales))
+
         dispatch({
-            type: getUserDataAction,
+            type: briefUserDetailsIntroduction,
             payload: { introduction: details }
         });
 
@@ -41,7 +43,7 @@ export function requestUserDataLoad(lang) {
             variablesUserDetails
         );
 
-        dispatch(userDetailsLoadAction({ resume: fullDetails }));
+        dispatch(fullResumeDetailsLoadAction({ resume: fullDetails }));
     };
 }
 
@@ -73,19 +75,29 @@ export function requestTranslations(lang, moduleTagsPairs) {
     };
 }
 
-export const userDetailsLoad = 'userDetailsLoad';
-export function userDetailsLoadAction(data) {
+export const fullResumeDetailsLoad = 'fullResumeDetailsLoad';
+export function fullResumeDetailsLoadAction(data) {
     return {
-        type: userDetailsLoad,
+        type: fullResumeDetailsLoad,
+        payload: data
+    };
+}
+
+export const localeLoad = 'localeLoad';
+export function localeLoadAction(data) {
+    return {
+        type: localeLoad,
         payload: data
     };
 }
 
 export const setLanguageAction = 'setLanguage';
-export function setLanguageAC(data) {
+export function setLanguage(data, setCookie = true) {
     // setLanguageActionCreator
-    const cookie = new Cookies();
-    cookie.set(LANG_COOKIE, data);
+    if (setCookie) {
+        const cookie = new Cookies();
+        cookie.set(LANG_COOKIE, data);
+    }
     return {
         type: setLanguageAction,
         payload: data

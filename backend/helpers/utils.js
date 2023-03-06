@@ -1,7 +1,50 @@
-const cleanObject = (object, keyMapping) => Object.entries(object).reduce((prev, [currKey, currVal]) => {
-    currVal !== null && (prev[keyMapping[currKey] ? keyMapping[currKey] : currKey] = currVal);
-    return prev;
-}, {});
+const { ConfigModel } = require('@models/Config');
+
+const cleanAndMapObject = (object, keyMapping) => Object.fromEntries(Object.entries(cleanObject(object)).map(([key, value]) => [keyMapping[key] ?? key, value] ))
+
+const isObj = o => o?.constructor === Object
+
+const cleanObject = (obj) => {
+    const result = {}
+    Object.entries(obj).forEach(([key, element]) => {
+        if (Array.isArray(element)) {
+            const filteredElement = cleanArray(element)
+            if (filteredElement.length) {
+                result[key] = filteredElement
+            }
+        } else if (isObj(element)) {
+            const filteredElement = cleanObject(element)
+            if (Object.values(filteredElement).length) {
+                result[key] = filteredElement
+            }
+        } else if (element != null) { // primitive, accepts 0
+            result[key] = element
+        }
+    })
+
+    return result
+}
+
+const cleanArray = a => {
+    const result = []
+        a.filter(element => {
+        if (Array.isArray(element)) {
+            const filteredElement = cleanArray(element)
+            if (filteredElement.length) {
+                result.push(filteredElement)
+            }
+        } else if (isObj(element)) {
+            const filteredElement = cleanObject(element)
+            if (Object.values(filteredElement).length) {
+                result.push(filteredElement)
+            }
+        } else if (element != null) { // primitive, accepts 0
+            result.push(element)
+        }
+    })
+
+    return result
+}
 
 const findAndUpdateMany = (model, filter, updateOptions) => {
     return model.aggregate([
@@ -15,7 +58,14 @@ const findAndUpdateMany = (model, filter, updateOptions) => {
         })
 }
 
+const getAdminFolder = async () => {
+    return await ConfigModel.findOne(
+            { key: 'adminFolder'}
+    );
+}
+
 module.exports = {
+    cleanAndMapObject,
     findAndUpdateMany,
-    cleanObject
+    getAdminFolder,
 }

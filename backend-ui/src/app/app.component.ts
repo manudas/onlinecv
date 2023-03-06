@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TranslationService } from './services/translation/translation.service';
-import debounce from 'lodash/debounce';
+import debounce from 'lodash-es/debounce';
 import { useMemo } from '@utils/index'
 import { LocaleStore, ModuleTagPairType, TranslationStore, MessageType } from './types';
 import { select, Store } from '@ngrx/store';
 import { FETCH_TRANSLATIONS } from '@store_actions/Translation';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TRANSLATION_DOMAIN } from './utils/constants'
-
 import * as COMMON_ACTIONS from '@store_actions/Common'
+import { Authentication } from './types/Authentication';
+import { checkToken } from './store/actions/Authentication';
 
 type StoreType = {
     locale: LocaleStore
@@ -17,6 +18,8 @@ type StoreType = {
     translations: TranslationStore
 } & {
     message: MessageType
+} & {
+    authentication: Authentication & { adminUserExists: boolean }
 }
 
 @Component({
@@ -34,9 +37,17 @@ export class AppComponent implements OnInit { // added OnInit to make a regular 
 
     appMessage$: Observable < MessageType >
 
+    userLoggedIn$: Observable<boolean>
+    userLoggedIn: boolean = false
+
+    adminUserExists$: Observable<boolean>
+    adminUserExists: boolean = true
+
     constructor(private store: Store < StoreType > , private translationService: TranslationService, private snackBar: MatSnackBar) {
-        this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
+        this.adminUserExists$ = this.store.pipe(select(state => state?.authentication?.adminUserExists))
         this.appMessage$ = this.store.pipe(select(state => state?.message))
+        this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
+        this.userLoggedIn$ = this.store.pipe(select(state => state?.authentication?.authenticated))
     }
 
     /*
@@ -79,6 +90,10 @@ export class AppComponent implements OnInit { // added OnInit to make a regular 
                 this.openSnackBar(data.message, data.timeout || 1000, data.type)
             }
         })
+        this.userLoggedIn$.subscribe(data => this.userLoggedIn = data)
+        this.adminUserExists$.subscribe(data => data !=  null && (this.adminUserExists = data))
+
+        this.store.dispatch(checkToken())
     }
 
     openSnackBar(message: string | string[], duration: number, type: string = null) {
@@ -86,7 +101,7 @@ export class AppComponent implements OnInit { // added OnInit to make a regular 
         const className = type === COMMON_ACTIONS.FAIL.type ? 'SnackFailed' : 'SnackSuccess'
         msg_arr.forEach( (message, index) => {
             setTimeout(() => {
-                this.snackBar.open( message, null, { duration, panelClass: className} )
+                this.snackBar.open( message, null, { duration, panelClass: ['Snack', className]} )
             }, index * (duration + 500)) // 500 => timeout between two messages
         })
     }

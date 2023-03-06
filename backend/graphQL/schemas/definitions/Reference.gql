@@ -1,0 +1,36 @@
+type Reference {
+  _id: ID!
+  name: String!
+  role: String
+  description: String
+  company: String
+  company_url: String
+  keywords: [String]
+  language: String!
+  phone: String
+  email: String
+  order: Int!
+}
+
+input ReferenceInput {
+  id: ID
+  name: String!
+  role: String
+  description: String
+  company: String
+  company_url: String
+  keywords: [String]
+  language: String!
+  phone: String
+  email: String
+  order: Int!
+}
+
+extend type Query {
+  references(language: String!): [Reference]!
+}
+
+extend type Mutation {
+  putReferences(references: [ReferenceInput]!): [Reference]!
+  removeReference(id: ID!): Boolean!
+}

@@ -1,10 +1,13 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@app/*": [
         "src/app/*"
+      ],
+      "@environments/*": [
+        "src/environments/*"
       ],
       "@utils/*": [
         "src/app/utils/*"
@@ -41,7 +44,7 @@
     "importHelpers": true,
     "target": "ES2022",
     "lib": [
-      "es2018",
+      "es2019",
       "dom"
     ],
     "useDefineForClassFields": false

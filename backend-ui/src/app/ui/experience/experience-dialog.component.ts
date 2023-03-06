@@ -2,14 +2,14 @@ import { DateAdapter } from '@angular/material/core';
 import { select, Store } from '@ngrx/store'
 
 import { Component, Inject } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormArray, FormControl, FormGroup, Validators } from "@angular/forms";
 import {
     MatDialogRef,
     MAT_DIALOG_DATA,
 } from "@angular/material/dialog"
 import { EditExperienceStructure, ExperienceInterface, ExperienceType } from "@app/types/Experience";
 import { LocaleStore } from '@app/types';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 
 type StoreType = { locale: LocaleStore }
 @Component({
@@ -21,7 +21,7 @@ export class ExperienceDialogComponent {
     /*
      * GraphQL Schema:
 
-        type WorkExperience {
+        type Experience {
             id: ID!
             description: String,
             type: String!,
@@ -47,11 +47,18 @@ export class ExperienceDialogComponent {
         company: new FormControl(null),
         company_url: new FormControl(null),
         keywords: new FormControl(null),
+        details: new FormArray([
+            new FormControl(null)
+        ])
     })
 
     editingIndex: number = null
 
     selectedLocale$: Observable<string>
+
+    isFormArray = (form: AbstractControl): form is FormArray => {
+        return 'controls' in form && Array.isArray((form as FormArray).controls) 
+    }
 
     constructor( public dialogRef: MatDialogRef<ExperienceDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: EditExperienceStructure | string, private dateAdapter: DateAdapter<any>, private store: Store<StoreType>) {
 
@@ -71,7 +78,17 @@ export class ExperienceDialogComponent {
                     this.experienceFormGroup.get(control).setValue(new Date(Number(experience[control])))
                 }
                 else {
-                    this.experienceFormGroup.get(control).setValue(experience[control])
+                    const _control = this.experienceFormGroup.get(control)
+                    if (this.isFormArray(_control)) {
+                        // we reset the default array as we are loading data from BE
+                        if (experience?.[control]?.length) this.experienceFormGroup.controls[control] = new FormArray([])
+
+                        experience?.[control]?.forEach(element => {
+                            (this.experienceFormGroup.controls[control] as FormArray).controls.push(new FormControl(element))
+                        })
+                    } else {
+                        _control.setValue(experience?.[control])
+                    }
                 }
             }
         } else { // is TrainingType enum
@@ -80,6 +97,8 @@ export class ExperienceDialogComponent {
     }
 
     submitHandler($event): void {
+        this.experienceFormGroup.get('details').updateValueAndValidity()
+        this.experienceFormGroup.updateValueAndValidity()
         if (this.experienceFormGroup.valid /* && this.socialNetworksFormGroup.valid*/) {
             const experience = this.experienceFormGroup.value
             let result
@@ -93,7 +112,6 @@ export class ExperienceDialogComponent {
             }
             this.close(result);
         } else {
-          //this.detailsFormGroup.markAllAsTouched()
           this.experienceFormGroup.markAllAsTouched()
         }
       }
@@ -113,5 +131,15 @@ export class ExperienceDialogComponent {
 
     get ExperienceType() {
         return ExperienceType
+    }
+
+    addDetails() {
+        (this.experienceFormGroup.get('details') as FormArray).push(new FormControl())
+    }
+
+    deleteDetail(index: number) {
+        const control = this.experienceFormGroup.get('details') as FormArray
+        control.removeAt(index)
+        if (control.length === 0) control.push(new FormControl())
     }
 }

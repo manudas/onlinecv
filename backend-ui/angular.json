@@ -24,17 +24,12 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              {
-                "glob": "**/*",
-                "input": "./node_modules/svg-country-flags/svg",
-                "output": "assets/svg-country-flags/svg"
-              }
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss",
               {
-                "input": "./node_modules/bootstrap/dist/css/bootstrap.css"
+                "input": "node_modules/bootstrap/scss/bootstrap.scss"
               }
             ],
             "scripts": [],
@@ -42,6 +37,7 @@
             "extractLicenses": false,
             "buildOptimizer": false,
             "sourceMap": true,
+            "baseHref": ".",
             "optimization": false,
             "namedChunks": true
           },
@@ -69,7 +65,15 @@
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumError": "23kb"
+                }
+              ]
+            },
+            "notOptimizedProduction": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
                 }
               ]
             }

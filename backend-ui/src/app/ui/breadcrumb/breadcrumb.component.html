@@ -1,14 +1,20 @@
 <ul class="breadcrumb"
     id="breadcrumb">
-    <li class="title breadcrumb_element">
-        Dashboard
-    </li>
-    <li class="breadcrumb_element">
-        <a class="breadcrumb_link"
-            href="#">Lorem</a>
-    </li>
-    <li class="active breadcrumb_element">
-        <a class="breadcrumb_link"
-            href="#">ipsum</a>
+    <li
+        *ngFor="let breadcrumb of breadcrumbs; let i = index"
+        [ngClass]="{
+            breadcrumb_element: true,
+            active: i === breadcrumbs.length - 1
+        }"
+    >
+        <a
+            [ngClass]="{
+                breadcrumb_link: true,
+                title: i === 0
+            }"
+            [routerLink]="getRouterUrl(i)"
+        >
+            {{ breadcrumb.label | noSpecialChars | translate | async }}
+        </a>
     </li>
 </ul>

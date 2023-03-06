@@ -17,6 +17,8 @@ import { SettingsFetched, SettingsType } from '@app/types/Settings'
 import { TranslationService } from '@app/services/translation/translation.service'
 import { logEasy } from '@app/services/logging/logging.service'
 
+import { LoginService } from '@app/ui/login/login-service/login.service'
+
 @Injectable()
 export class SettingsEffects {
 
@@ -25,6 +27,7 @@ export class SettingsEffects {
     constructor(
         private actions$: Actions,
         private dataService: DataService,
+        private loginService: LoginService,
         private translate: TranslationService,
     ) {
         this.translate.prefetch(this.translationsToRequest, this)
@@ -34,11 +37,12 @@ export class SettingsEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public fetchSettingsEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof SETTINGS.FETCH_SETTINGS>>(SETTINGS.FETCH_SETTINGS),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 language,
             } = action
@@ -48,11 +52,10 @@ export class SettingsEffects {
                 variables,
             } = QuerySettings(language)
 
-            return this.dataService.readData(query, variables).pipe(
+            return this.dataService.readData(query, variables, headers).pipe(
                 map((settings: SettingsFetched) => {
                     return SETTINGS.SETTINGS_FETCHED({...settings})
                 }),
-                // handle failure in todoListService.fetchTodoList()
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}
                     return of({
@@ -68,11 +71,12 @@ export class SettingsEffects {
      * Effect provides new actions as
      * a result of the operation performed
      */
-    
     public mutateSettingsEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType<ReturnType<typeof SETTINGS.SAVE_SETTINGS>>(SETTINGS.SAVE_SETTINGS),
         tap((action) => logEasy({messages: [`Action caught in ${this.constructor.name}:`, action]})),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+
             const {
                 settings,
             } = action
@@ -82,14 +86,13 @@ export class SettingsEffects {
                 variables,
             } = MutateSettings(settings)
 
-            return this.dataService.setData(query, variables).pipe(
-                map((settings: SettingsType) => {
+            return this.dataService.setData(query, variables, headers).pipe(
+                map((_settings: SettingsType) => {
                     return {
                         type: COMMON_ACTIONS.SUCCESS.type,
                         message: `${this.translate.getResolvedTranslation('Settings saved successfully', this)}`
                     }
                 }),
-                // handle failure in todoListService.fetchTodoList()
                 catchError(({
                     error: {
                         errors = []

@@ -1,0 +1,113 @@
+<section class='login'>
+    <div class='wrapper'>
+      <div class='row'>
+        <div class='col-lg-12'>
+          <div class='brand text-center'>
+            <h1>
+              <div class='logo-icon'>
+                <fa-icon
+                    [icon]="icon"
+                ></fa-icon>
+                <i class='icon-beer'></i>
+              </div>
+              Online CV
+            </h1>
+          </div>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-lg-12'>
+          <form [formGroup]="formGroup">
+            <fieldset class='text-center'>
+              <legend
+                *ngIf="adminUserExists"
+              >
+                {{ 'Login to your account' | translate | async }}
+              </legend>
+              <legend
+                *ngIf="!adminUserExists"
+              >
+                {{ 'Register your account' | translate | async }}
+              </legend>
+              <div class='form-group'>
+                <input
+                  formControlName="user"
+                  class='form-control'
+                  [placeholder]="'Email address' | translate | async"
+                  type='text'
+                />
+                <small
+                    *ngIf="formGroup.get('user').touched && formGroup.get('user').errors"
+                    [className]="'text-danger text-left d-block ml-1'"
+                >
+                    {{ 'Please introduce a valid email address' | translate | async }}
+                </small>
+              </div>
+              <div class='form-group'>
+                <input
+                  formControlName="password"
+                  class='form-control'
+                  [placeholder]="'Password' | translate | async"
+                  type='password'
+                />
+                <small
+                    *ngIf="formGroup.get('password').touched && formGroup.get('password').errors"
+                    [className]="'text-danger text-left d-block ml-1'"
+                >
+                    {{ 'Password field is required' | translate | async }}
+                </small>
+              </div>
+              <div
+                *ngIf="!adminUserExists"
+                class='form-group'>
+                <input
+                  formControlName="confirmPassword"
+                  class='form-control'
+                  [placeholder]="'Retype your password' | translate | async"
+                  type='password'
+                />
+                <small
+                    *ngIf="formGroup.get('confirmPassword').touched && formGroup.get('confirmPassword').errors"
+                    [className]="'text-danger text-left d-block ml-1'"
+                >
+                    {{ 'Passwords do not match each other' | translate | async }}
+                </small>
+              </div>
+              <div class='text-center'>
+                <div class='checkbox'>
+                  <label>
+                    <input
+                      formControlName="rememberMe"
+                      type='checkbox'
+                    />
+                    {{ 'Remember me on this computer' | translate | async }}
+                  </label>
+                </div>
+                <a
+                  class="btn btn-default"
+                  *ngIf="adminUserExists"
+                  (click)="login()"
+                >
+                  {{ 'Sign in' | translate | async }}
+                </a>
+                <a
+                  class="btn btn-default"
+                  *ngIf="!adminUserExists"
+                  (click)="singUp()"
+                >
+                  {{ 'Sign up' | translate | async }}
+                </a>
+                <br>
+                <a
+                  *ngIf="adminUserExists"
+                  class="forgot-password" href="forgot_password.html"
+                >
+                  {{ 'Forgot password?' | translate | async }}
+                </a>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+</section>

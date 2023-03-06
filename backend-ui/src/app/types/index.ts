@@ -10,12 +10,20 @@ export * from './Memo'
 
 export * from './Message'
 
+export * from './Others'
+
+export * from './Quote'
+
+export * from './References'
+
+export * from './Resume'
+
 export * from './SocialNetworks'
-
-export * from './Training'
-
-export * from './Translations'
 
 export * from './Settings'
 
 export * from './Skills'
+
+export * from './Training'
+
+export * from './Translations'
