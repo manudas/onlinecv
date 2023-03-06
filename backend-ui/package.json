@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve --poll=2000 --proxy-config proxy.conf.json --host 0.0.0.0",
     "build": "ng build",
-    "build:prod": "ng build --configuration \"production\"",
+    "build:prod": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build --configuration \"production\"",
     "build:prod:notOptimized": "ng build --configuration \"notOptimizedProduction\"",
     "test": "ng test",
     "lint": "ng lint",
@@ -15,6 +15,8 @@
   "dependencies": {
     "@angular/animations": "^15.0.4",
     "@angular/cdk": "^15.0.3",
+    "@angular-devkit/build-angular": "^15.0.4",
+    "@angular/cli": "^15.0.4",
     "@angular/common": "^15.0.4",
     "@angular/compiler": "^15.0.4",
     "@angular/core": "^15.0.4",
@@ -43,8 +45,6 @@
     "zone.js": "~0.12.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^15.0.4",
-    "@angular/cli": "^15.0.4",
     "@angular/compiler-cli": "^15.0.4",
     "@angular/language-service": "^15.0.4",
     "@types/jasmine": "~4.3.1",
