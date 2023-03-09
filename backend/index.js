@@ -13,22 +13,16 @@ const path = require("path");
 
 const { adminMiddleware, graphql, loggingMidleware, notFoundMiddleware } = require("./api");
 
-let certs = null;
-let privateKey = null;
-let certificate = null;
 let credentials = null;
 
-if (fs.existsSync('@config/certs')) {
-    const certs = require('@config/certs');
-    if ( certs && fs.existsSync(certs?.key ?? '') && fs.existsSync(certs?.crt ?? '') ) {
-        privateKey = fs.readFileSync(certs.key, 'utf8');
-        certificate = fs.readFileSync(certs.crt, 'utf8');
-        credentials = {
-            key: privateKey,
-            cert: certificate
-        };
-    }
-}
+if (fs.existsSync(`@certs/${process.env.domain}`)) {
+    const privateKey = fs.readFileSync(`@certs/${process.env.domain}/privkey.pem`, 'utf8');
+    const certificate = fs.readFileSync(`@certs/${process.env.domain}/fullchain.pem`, 'utf8');
+    credentials = {
+        key: privateKey,
+        cert: certificate
+    };
+};
 
 // We set our enviroment. Either production or development
 const env = process.env.NODE_ENV || 'development';
@@ -59,7 +53,7 @@ app.use(loggingMidleware);
 app.use(/(\/.+)*\/graphql/, graphql);
 
 //  "acme challenge for letsencrypt certbot" static folder files
-app.use('/.well-known', express.static(path.join(__dirname, '..', 'certbot-acme-challenge', '.well-known')));
+app.use('/.well-known', express.static(path.join(__dirname, '..', 'certbot', 'acme-challenge', '.well-known')));
 //  "frontend/build" static folder files
 app.use(express.static(path.join(__dirname, '..', 'webroot', 'frontend')));
 // "backend/build" static folder files
@@ -79,7 +73,7 @@ httpServer.listen(port_to_use, () => console.log(`Online resume BACKEND app list
 
 // if the server is in production mode, let's enable the secure port
 if (env !== 'development') { // production, add secure port
-    const httpsServer = https.createServer(app);
+    const httpsServer = https.createServer(credentials, app);
     httpsServer.listen(secure_port, () => console.log(`Online resume BACKEND app listening on port ${secure_port}!`));
 }
 

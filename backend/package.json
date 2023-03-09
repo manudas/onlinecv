@@ -33,6 +33,7 @@
         "@views": "./views",
         "@data": "../data",
         "@helpers": "./helpers",
+        "@certs": "../certbot/certs",
         "@config": "../config"
     },
     "devDependencies": {

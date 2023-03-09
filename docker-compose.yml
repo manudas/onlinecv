@@ -13,7 +13,8 @@ x-server:
     - db
   volumes:
     - ./backend:/app/backend                                                      # backend volume
-    - ./data/certbot-webroot:/app/certbot-acme-challenge                               # backend volume
+    - ./data/certbot/webroot:/app/certbot/acme-challenge                          # certbot volume
+    - ./data/certbot/certs:/app/certboot/certs                                    # TLS certificates
     - ./config:/app/config                                                        # backend config volume
     - ./notfound:/app/webroot/notfound                                            # notfound volume
     - ./backend-ui/dist/backend-ui:/app/webroot/backend-ui                        # backend-ui volume
@@ -24,6 +25,7 @@ x-server:
   command: /app/backend/index
   env_file:
    - "docker/node/.env"
+   - "docker/certbot/.env"
 services:
   db:
     build:
@@ -60,31 +62,15 @@ services:
       context: docker/certbot
       dockerfile: Dockerfile
     container_name: certbot
-    #ports:
-    #  - "443:443"
     volumes:
-      - ./data/certbot-webroot:/webroot
-    #   - ./data/certs:/certs
-    #   - ./data/letsencrypt:/etc/letsencrypt
-    #   - ./data/var_log_letsencrypt:/var/log/letsencrypt
-    #   - ./data/backend_static:/webroot
+      - ./data/certbot/webroot:/webroot
+      - ./data/certbot/certs:/etc/letsencrypt/live
     restart: always
     command: tail -F anything
     depends_on:
       - server
-  #   environment:
-  #     - WEBROOT=/webroot
-  #     - LOGFILE=/var/log/letsencrypt/certrenewal.log
-  #     - DEBUG=false
-  #     - STAGING=false
-  #     - DOMAINS=manu.app
-  #     - EMAIL=dev@manu.app
-  #     - CONCAT=false
-  #     - HEALTH_CHECK_URL=web:80
-  #     - PREFERRED_CHALLENGES=http-01
-
-#docker run -d --name mongo -p 27017:27017 -v /data/mongo/:/data/mongo mvertes/alpine-mongo
-#docker run -d -p 80:80 -v /data:/data --name onlinecv onlinecv
+    env_file:
+      - "docker/certbot/.env"
 secrets:
   app_mongo_password:
     file: ./config/mongodb/app_mongo_password.txt
