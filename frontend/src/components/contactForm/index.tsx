@@ -258,7 +258,7 @@ class ContactForm extends Component<PropDef, StateDef> {
                 queryUserData,
                 variablesUserData
             )
-            
+
             const ok = data?.sendMessage ?? false
 
             if (errors || ok !== true) {
@@ -281,7 +281,10 @@ function mapStateToProps(state: any) {
     const translations = state?.data?.translations?.[language]?.['ContactForm']
 
     return {
-        contact_details: {email, phone},
+        contact_details: {
+            ...(email && {email}),
+            ...(phone && {phone}),
+        },
         translations: translations,
         language
     }

@@ -58,6 +58,8 @@ app.use(loggingMidleware);
  */
 app.use(/(\/.+)*\/graphql/, graphql);
 
+//  "acme challenge for letsencrypt certbot" static folder files
+app.use('/.well-known', express.static(path.join(__dirname, '..', 'certbot-acme-challenge', '.well-known')));
 //  "frontend/build" static folder files
 app.use(express.static(path.join(__dirname, '..', 'webroot', 'frontend')));
 // "backend/build" static folder files

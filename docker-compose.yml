@@ -13,6 +13,7 @@ x-server:
     - db
   volumes:
     - ./backend:/app/backend                                                      # backend volume
+    - ./data/certbot-webroot:/app/certbot-acme-challenge                               # backend volume
     - ./config:/app/config                                                        # backend config volume
     - ./notfound:/app/webroot/notfound                                            # notfound volume
     - ./backend-ui/dist/backend-ui:/app/webroot/backend-ui                        # backend-ui volume
@@ -52,21 +53,25 @@ services:
     << : *default-server
     container_name: server-brk
     command: "exit"
-  # certbot:
-  #   build:
-  #     context: letsencrypt-autorenew
-  #     dockerfile: DockerfileLE
-  #   container_name: certbot
-  #   #ports:
-  #   #  - "443:443"
-  #   volumes:
-  #     - ./data/certs:/certs
-  #     - ./data/letsencrypt:/etc/letsencrypt
-  #     - ./data/var_log_letsencrypt:/var/log/letsencrypt
-  #     - ./data/backend_static:/webroot
-  #   restart: always
-  #   depends_on:
-  #     - backend
+    profiles:
+      - dev
+  certbot:
+    build:
+      context: docker/certbot
+      dockerfile: Dockerfile
+    container_name: certbot
+    #ports:
+    #  - "443:443"
+    volumes:
+      - ./data/certbot-webroot:/webroot
+    #   - ./data/certs:/certs
+    #   - ./data/letsencrypt:/etc/letsencrypt
+    #   - ./data/var_log_letsencrypt:/var/log/letsencrypt
+    #   - ./data/backend_static:/webroot
+    restart: always
+    command: tail -F anything
+    depends_on:
+      - server
   #   environment:
   #     - WEBROOT=/webroot
   #     - LOGFILE=/var/log/letsencrypt/certrenewal.log
