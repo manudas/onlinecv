@@ -8,9 +8,9 @@ if [ "${1}" == 'certbot' ]; then
   else
     ## DEBUGGING COMMAND:
     if [ "${debug}"  == 'true' ]; then
-        certbot certonly --verbose --noninteractive --webroot -w /webroot --agree-tos --email="${email}" -d "${domain}" --test-cert --debug-challenges
+        certbot certonly --verbose --noninteractive --webroot -w /webroot --agree-tos --email="${email}" -d "${domain}" --cert-name "${domain}" --test-cert --debug-challenges
     else
-        certbot certonly --verbose --noninteractive --webroot -w /webroot --agree-tos --email="${email}" -d "${domain}"
+        certbot certonly --verbose --noninteractive --webroot -w /webroot --agree-tos --email="${email}" -d "${domain}" --cert-name "${domain}"
     fi
     exec crond -f -l 2
   fi
