@@ -14,8 +14,8 @@ x-server:
   volumes:
     - ./backend:/app/backend                                                      # backend volume
     - ./data/certbot/webroot:/app/certbot/acme-challenge                          # certbot volume
-    - ./data/certbot/certs:/app/certboot/certs                                    # TLS certificates
-    - ./config:/app/config                                                        # backend config volume
+    - ./data/certbot/certs:/app/backend/certs                                     # TLS certificates
+    - ./config:/app/backend/config                                                # backend config volume
     - ./notfound:/app/webroot/notfound                                            # notfound volume
     - ./backend-ui/dist/backend-ui:/app/webroot/backend-ui                        # backend-ui volume
     - ./frontend/build:/app/webroot/frontend                                      # frontend volume
@@ -23,6 +23,7 @@ x-server:
     - ./backend-ui:/app/dev/webroot/backend-ui                                    # DEV backend-ui volume
     - ./frontend/:/app/dev/webroot/frontend                                       # DEV frontend volume
   command: /app/backend/index
+  init: true
   env_file:
    - "docker/node/.env"
    - "docker/certbot/.env"
@@ -66,6 +67,7 @@ services:
       - ./data/certbot/webroot:/webroot
       - ./data/certbot/certs:/etc/letsencrypt/archive
     restart: unless-stopped
+    init: true
     depends_on:
       - server
     env_file:

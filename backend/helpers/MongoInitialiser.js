@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const mongodb_settings = require('@config/backend/mongo_settings');
+const mongodb_settings = require('app/config/backend/mongo_settings');
 
 const { user, password, host, port, database } = mongodb_settings;
 

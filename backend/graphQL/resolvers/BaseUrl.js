@@ -1,4 +1,4 @@
-const { getAdminFolder } = require('@helpers/utils');
+const { getAdminFolder } = require('app/helpers/utils');
 
 module.exports = {
     Query: {

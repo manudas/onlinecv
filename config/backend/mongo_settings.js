@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const passFile = process.env.MONGO_PASSWORD_FILE ?? '/app/config/mongodb/app_mongo_password.txt';
+const passFile = process.env.MONGO_PASSWORD_FILE ?? '/app/backend/config/mongodb/app_mongo_password.txt';
 
 const user = 'dbUser';
 const password = fs.readFileSync(passFile).toString() ?? '';

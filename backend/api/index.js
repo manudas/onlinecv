@@ -1,9 +1,9 @@
 const fs = require('fs')
 const path = require('path');
 
-const { Init: MongoInitialiser } = require('@helpers/MongoInitialiser');
+const { Init: MongoInitialiser } = require('app/helpers/MongoInitialiser');
 const graphql = require('./graphql');
-const { getAdminFolder } = require('@helpers/utils');
+const { getAdminFolder } = require('app/helpers/utils');
 
 MongoInitialiser();
 

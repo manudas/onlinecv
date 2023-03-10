@@ -1,24 +1,24 @@
 
 // Require and construct the schema
-const rootSchema = require('@app/graphQL/schemas');
+const rootSchema = require('app/graphQL/schemas');
 
-const resolvers = require('@app/graphQL/resolvers');
+const resolvers = require('app/graphQL/resolvers');
 
-const { protectResolver } = require('@app/graphQL/config/resolvers');
+const { protectResolver } = require('app/graphQL/config/resolvers');
 
-const models = require('@models');
+const models = require('app/models');
 const { makeExecutableSchema } = require('@graphql-tools/schema');
 
 // Merge all resolvers
-const mergedResolvers = Object.values(resolvers).reduce((previeousValue, currentValue) => {
+const mergedResolvers = Object.values(resolvers).reduce((previousValue, currentValue) => {
     const keys = Object.keys(currentValue);
     keys.forEach((type) => {
         Object.keys(currentValue[type]).forEach(resolverName => {
-            previeousValue[type] = {...previeousValue[type], [resolverName]: protectResolver(type, resolverName, currentValue[type][resolverName])};
+            previousValue[type] = {...previousValue[type], [resolverName]: protectResolver(type, resolverName, currentValue[type][resolverName])};
         })
-        // previeousValue[key] = {...previeousValue[key], ...currentValue[key]};
+        // previousValue[key] = {...previousValue[key], ...currentValue[key]};
     })
-    return previeousValue;
+    return previousValue;
 }, {});
 
 const schema = makeExecutableSchema({

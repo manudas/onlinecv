@@ -1,6 +1,5 @@
-const findAndUpdateMany =
-    require('@helpers/utils').findAndUpdateMany;
-const cleanAndMapObject = require('@helpers/utils').cleanAndMapObject;
+const findAndUpdateMany = require('app/helpers/utils').findAndUpdateMany;
+const cleanAndMapObject = require('app/helpers/utils').cleanAndMapObject;
 const ObjectId = require('mongodb').ObjectId;
 
 module.exports = {

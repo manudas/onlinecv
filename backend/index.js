@@ -1,7 +1,3 @@
-require('module-alias/register');
-
-const { port, development_port, secure_port } = require('@config/backend/app');
-
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
@@ -11,13 +7,14 @@ const zlib = require('zlib');
 const cookieParser = require('cookie-parser')
 const path = require("path");
 
-const { adminMiddleware, graphql, loggingMidleware, notFoundMiddleware } = require("./api");
+const { port, development_port, secure_port } = require('app/config/backend/app');
+const { adminMiddleware, graphql, loggingMidleware, notFoundMiddleware } = require("app/api");
 
 let credentials = null;
 
-if (fs.existsSync(`@certs/${process.env.domain}`)) {
-    const privateKey = fs.readFileSync(`@certs/${process.env.domain}/privkey.pem`, 'utf8');
-    const certificate = fs.readFileSync(`@certs/${process.env.domain}/fullchain.pem`, 'utf8');
+if (process.env.domain && fs.existsSync(path.join(__dirname, 'certs', process.env.domain))) {
+    const privateKey = fs.readFileSync(path.join(__dirname, 'certs', process.env.domain, 'privkey.pem'), 'utf8');
+    const certificate = fs.readFileSync(path.join(__dirname, 'certs', process.env.domain, 'fullchain.pem'), 'utf8');
     credentials = {
         key: privateKey,
         cert: certificate
@@ -72,7 +69,7 @@ const port_to_use = env === 'development' ? development_port : port;
 httpServer.listen(port_to_use, () => console.log(`Online resume BACKEND app listening on port ${port_to_use}!`));
 
 // if the server is in production mode, let's enable the secure port
-if (env !== 'development') { // production, add secure port
+if (credentials?.key && credentials?.cert) { // production, add secure port
     const httpsServer = https.createServer(credentials, app);
     httpsServer.listen(secure_port, () => console.log(`Online resume BACKEND app listening on port ${secure_port}!`));
 }

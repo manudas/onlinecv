@@ -1,4 +1,4 @@
-const { tokenGuard } = require('@helpers/auth');
+const { tokenGuard } = require('app/helpers/auth');
 
 const protectedResolvers = {
     Query: {

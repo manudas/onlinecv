@@ -12,12 +12,10 @@ services:
     env_file:
       - "docker/node/.env_dev"
     command:
-      - npx
-      - --prefix
-      - /app/backend
-      - nodemon                                                 # restart on every change
+      - node
+      - --watch                                                 # restart on every change
       - --inspect=0.0.0.0:9229                                  # debug node option to listen for a connection in all ips
-      - /app/backend
+      - /app/backend                                            # application: index.js in this folder
       - -w                                                      # watch next folder
       - /app/backend/*
   server-brk:
@@ -25,12 +23,10 @@ services:
     env_file:
       - "docker/node/.env_dev"
     command:
-      - npx
-      - --prefix
-      - /app/backend
-      - nodemon                                                 # restart on every change
+      - node
+      - --watch                                                 # restart on every change
       - --inspect-brk=0.0.0.0:9229                              # debug node option to listen for a connection in all ips
-      - /app/backend
+      - /app/backend                                            # application: index.js in this folder
       - -w                                                      # watch next folder
       - /app/backend/*
   certbot:

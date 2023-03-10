@@ -1,4 +1,4 @@
-const cleanAndMapObject = require('@helpers/utils').cleanAndMapObject;
+const cleanAndMapObject = require('app/helpers/utils').cleanAndMapObject;
 
 module.exports = {
     Query: {

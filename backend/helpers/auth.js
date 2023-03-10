@@ -3,7 +3,7 @@ const jsonwebtoken = require("jsonwebtoken");
 const { randomBytes } = require('crypto');
 
 const bcrypt = require('bcrypt');
-const { ConfigModel } = require('@models/Config');
+const { ConfigModel } = require('app/models/Config');
 const { GraphQLError } = require('graphql');
 
 const getUser = async (username = null) => {

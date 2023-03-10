@@ -1,5 +1,5 @@
 var bcrypt = require('bcrypt');
-const { authGuard, checkUserExists, generateToken, getToken, getUser, userExistsGuard, tokenGuard } = require('@helpers/auth');
+const { authGuard, checkUserExists, generateToken, getToken, getUser, userExistsGuard, tokenGuard } = require('app/helpers/auth');
 
 module.exports = {
     Query: {

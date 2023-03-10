@@ -1,4 +1,4 @@
-const { ConfigModel } = require('@models/Config');
+const { ConfigModel } = require('app/models/Config');
 
 const cleanAndMapObject = (object, keyMapping) => Object.fromEntries(Object.entries(cleanObject(object)).map(([key, value]) => [keyMapping[key] ?? key, value] ))
 
