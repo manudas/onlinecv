@@ -12,7 +12,7 @@ if [ "${1}" == 'certbot' ]; then
     else
         certbot certonly --verbose --noninteractive --quiet --webroot -w /webroot --agree-tos --email="${email}" -d "${domain}"
     fi
-    crond -f
+    exec crond -f -l 2
   fi
 elif [ "${1}" == 'certbot-renew' ]; then
    exec certbot renew
