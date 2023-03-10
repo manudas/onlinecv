@@ -13,8 +13,12 @@ const { adminMiddleware, graphql, loggingMidleware, notFoundMiddleware } = requi
 let credentials = null;
 
 if (process.env.domain && fs.existsSync(path.join(__dirname, 'certs', process.env.domain))) {
-    const privateKey = fs.readFileSync(path.join(__dirname, 'certs', process.env.domain, 'privkey.pem'), 'utf8');
-    const certificate = fs.readFileSync(path.join(__dirname, 'certs', process.env.domain, 'fullchain.pem'), 'utf8');
+    const privateKey = fs.existsSync(path.join(__dirname, 'certs', process.env.domain, 'privkey.pem'))
+        ? fs.readFileSync(path.join(__dirname, 'certs', process.env.domain, 'privkey.pem'), 'utf8')
+        : null;
+    const certificate = fs.existsSync(path.join(__dirname, 'certs', process.env.domain, 'fullchain.pem'))
+        ? fs.readFileSync(path.join(__dirname, 'certs', process.env.domain, 'fullchain.pem'), 'utf8')
+        : null;
     credentials = {
         key: privateKey,
         cert: certificate
