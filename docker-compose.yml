@@ -65,7 +65,7 @@ services:
     container_name: certbot
     volumes:
       - ./data/certbot/webroot:/webroot
-      - ./data/certbot/certs:/etc/letsencrypt/archive
+      - ./data/certbot/certs:/etc/letsencrypt
     restart: unless-stopped
     init: true
     depends_on:

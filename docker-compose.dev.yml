@@ -31,4 +31,4 @@ services:
       - /app/backend/*
   certbot:
     env_file:
-      - "docker/certbot/.env"
+      - "docker/certbot/.env_dev"
