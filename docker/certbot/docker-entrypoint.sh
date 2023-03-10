@@ -9,10 +9,10 @@ if [ "${1}" == 'certbot' ]; then
     ## DEBUGGING COMMAND:
     if [ "${debug}"  == 'true' ]; then
         certbot certonly --verbose --noninteractive --webroot -w /webroot --agree-tos --email="${email}" -d "${domain}" --test-cert --debug-challenges
-    #else
-        #certbot certonly --verbose --noninteractive --quiet --webroot -w /webroot --agree-tos --email="${email}" -d "${domain}"
+    else
+        certbot certonly --verbose --noninteractive --quiet --webroot -w /webroot --agree-tos --email="${email}" -d "${domain}"
     fi
-    exec crond -f
+    crond -f
   fi
 elif [ "${1}" == 'certbot-renew' ]; then
    exec certbot renew
