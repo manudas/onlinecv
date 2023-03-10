@@ -68,9 +68,12 @@ app.use(adminMiddleware);
 app.use(notFoundMiddleware);
 
 // let's create the server
-const httpServer = http.createServer(app);
-const port_to_use = env === 'development' ? development_port : port;
-httpServer.listen(port_to_use, () => console.log(`Online resume BACKEND app listening on port ${port_to_use}!`));
+const port_to_use = env === 'development' ? [development_port, port] : [port];
+
+port_to_use.forEach(port => {
+    const httpServer = http.createServer(app);
+    httpServer.listen(port, () => console.log(`Online resume BACKEND app listening on port ${port}!`))
+});
 
 // if the server is in production mode, let's enable the secure port
 if (credentials?.key && credentials?.cert) { // production, add secure port
