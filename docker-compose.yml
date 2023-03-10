@@ -65,8 +65,7 @@ services:
     volumes:
       - ./data/certbot/webroot:/webroot
       - ./data/certbot/certs:/etc/letsencrypt/live
-    restart: always
-    command: tail -F anything
+    restart: unless-stopped
     depends_on:
       - server
     env_file:

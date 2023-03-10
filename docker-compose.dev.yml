@@ -34,4 +34,5 @@ services:
       - -w                                                      # watch next folder
       - /app/backend/*
   certbot:
-    command: tail -F anything                                   # keeps waiting indefinetly for anything file, so we can debug certbot docker service
+    env_file:
+      - "docker/certbot/.env"
