@@ -1,29 +1,14 @@
-const fs = require('fs');
 const http = require('http');
-const https = require('https');
 const express = require("express");
 const compression = require('compression');
 const zlib = require('zlib');
 const cookieParser = require('cookie-parser')
 const path = require("path");
 
-const { port, development_port, secure_port } = require('app/config/backend/app');
+const { port, development_port } = require('app/config/backend/app');
 const { adminMiddleware, graphql, loggingMidleware, notFoundMiddleware } = require("app/api");
 
-let credentials = null;
-
-if (process.env.domain && fs.existsSync(path.join(__dirname, 'certs', 'live', process.env.domain))) {
-    const privateKey = fs.existsSync(path.join(__dirname, 'certs', 'live', process.env.domain, 'privkey.pem'))
-        ? fs.readFileSync(path.join(__dirname, 'certs', 'live', process.env.domain, 'privkey.pem'), 'utf8')
-        : null;
-    const certificate = fs.existsSync(path.join(__dirname, 'certs', 'live', process.env.domain, 'fullchain.pem'))
-        ? fs.readFileSync(path.join(__dirname, 'certs', 'live', process.env.domain, 'fullchain.pem'), 'utf8')
-        : null;
-    credentials = {
-        key: privateKey,
-        cert: certificate
-    };
-};
+const { createSecureServer } = require("app/helpers/secureServer");
 
 // We set our enviroment. Either production or development
 const env = process.env.NODE_ENV || 'development';
@@ -74,12 +59,7 @@ port_to_use.forEach(port => {
     const httpServer = http.createServer(app);
     httpServer.listen(port, () => console.log(`Online resume BACKEND app listening on port ${port}!`))
 });
-
-// if the server is in production mode, let's enable the secure port
-if (credentials?.key && credentials?.cert) { // production, add secure port
-    const httpsServer = https.createServer(credentials, app);
-    httpsServer.listen(secure_port, () => console.log(`Online resume BACKEND app listening on port ${secure_port}!`));
-}
+createSecureServer(app);
 
 // in case some uncontrolled exception is caught, don't exit
 process.on('uncaughtException', function(err) {
