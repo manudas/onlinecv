@@ -8,7 +8,7 @@ x-server:
   ports:
     - "80:80"
     - "443:443"
-  restart: on-failure
+  restart: unless-stopped
   depends_on:
     - db
   volumes:
@@ -46,7 +46,7 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-    restart: on-failure
+    restart: unless-stopped
     secrets:
       - app_mongo_password
       - app_mongo_root_password
