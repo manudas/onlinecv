@@ -1,6 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const mongodb_settings = require('app/config/backend/mongo_settings');
+import mongodb_settings from 'app/config/backend/mongo_settings.js';
+import niceLog from './logs.js';
 
 const { user, password, host, port, database } = mongodb_settings;
 
@@ -9,7 +10,7 @@ const credentials_str = (user && password) ? `${user}:${password}@` : '';
 const connetion_string = `mongodb://${credentials_str}${host}:${port}/${database}`;
 
 const Init = () => {
-    console.log("Connection string to MongoDB", connetion_string);
+    niceLog({ data: { text: `Connection string to MongoDB :: ${connetion_string}`, style: 'blue' }, attachTimeStamp: true });
     mongoose.set('strictQuery',false);
     mongoose.connect(connetion_string, {
         useNewUrlParser: true,
@@ -17,6 +18,6 @@ const Init = () => {
     });
 }
 
-module.exports = {
+export {
     Init,
 };

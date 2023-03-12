@@ -3,6 +3,7 @@
     "version": "0.5.0",
     "description": "",
     "main": "index.js",
+    "type": "module",
     "scripts": {
         "start": "node index",
         "debug": "node --nolazy --inspect=9229 index",
@@ -17,6 +18,7 @@
         "@graphql-tools/schema": "^9.0.12",
         "app": "file:./",
         "bcrypt": "^5.1.0",
+        "chalk": "^5.2.0",
         "chokidar": "^3.5.3",
         "compression": "^1.7.4",
         "cookie-parser": "^1.4.6",

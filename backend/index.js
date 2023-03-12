@@ -1,14 +1,16 @@
-const http = require('http');
-const express = require("express");
-const compression = require('compression');
-const zlib = require('zlib');
-const cookieParser = require('cookie-parser')
-const path = require("path");
+import http from 'http';
+import express from "express";
+import compression from 'compression';
+import zlib from 'zlib';
+import cookieParser from 'cookie-parser';
+import path from "path";
 
-const { port, development_port } = require('app/config/backend/app');
-const { adminMiddleware, graphql, loggingMidleware, notFoundMiddleware } = require("app/api");
+import { port, development_port } from 'app/config/backend/app.js';
+import { adminMiddleware, graphql, loggingMidleware, notFoundMiddleware } from "app/api/index.js";
 
-const { createSecureServer } = require("app/helpers/secureServer");
+import { createSecureServer } from "app/helpers/secureServer.js";
+import { fileDirName } from 'app/helpers/utils.js';
+import niceLog from './helpers/logs.js';
 
 // We set our enviroment. Either production or development
 const env = process.env.NODE_ENV || 'development';
@@ -39,9 +41,9 @@ app.use(loggingMidleware);
 app.use(/(\/.+)*\/graphql/, graphql);
 
 //  "acme challenge for letsencrypt certbot" static folder files
-app.use('/.well-known', express.static(path.join(__dirname, '..', 'certbot', 'acme-challenge', '.well-known')));
+app.use('/.well-known', express.static(path.join(fileDirName(import.meta).__dirname, '..', 'certbot', 'acme-challenge', '.well-known')));
 //  "frontend/build" static folder files
-app.use(express.static(path.join(__dirname, '..', 'webroot', 'frontend')));
+app.use(express.static(path.join(fileDirName(import.meta).__dirname, '..', 'webroot', 'frontend')));
 // "backend/build" static folder files
 app.use(adminMiddleware);
 
@@ -57,12 +59,19 @@ const port_to_use = env === 'development' ? [development_port, port] : [port];
 
 port_to_use.forEach(port => {
     const httpServer = http.createServer(app);
-    httpServer.listen(port, () => console.log(`Online resume BACKEND app listening on port ${port}!`))
+    httpServer.listen(port, () => {
+        niceLog({ data: { text: '----------------------------------------------------------------------------------', style: 'yellow' }});
+        niceLog({ data: { text: `Online resume BACKEND app listening on port ${port}!`, style: 'yellow' }, attachTimeStamp: true });
+        niceLog({ data: { text: '----------------------------------------------------------------------------------', style: 'yellow' }});
+    })
 });
 createSecureServer(app);
 
 // in case some uncontrolled exception is caught, don't exit
 process.on('uncaughtException', function(err) {
-    console.error(err);
-    console.log("Node NOT Exiting...");
+    niceLog({ data: { text: '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', style: 'red', logLevel: 'error' }});
+    niceLog({ data: { text: 'UNCONTROLLED EXCEPTION', style: 'red' }, attachTimeStamp: true, logLevel: 'error' });
+    niceLog({ data: { text: error, style: 'red' }, attachTimeStamp: true, logLevel: 'error' });
+    niceLog({ data: { text: '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', style: 'red', logLevel: 'error' }});
+    niceLog({ data: { text: 'Node NOT Exiting...', style: 'blue', logLevel: 'log' }});
 });

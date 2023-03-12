@@ -1,10 +1,12 @@
-const fs = require('fs');
-const https = require('https');
-const path = require("path");
-const chokidar = require('chokidar');
-const debounce = require("just-debounce-it");
+import fs from 'fs';
+import https from 'https';
+import path from "path";
+import chokidar from 'chokidar';
+import debounce from "just-debounce-it";
 
-const { secure_port } = require('app/config/backend/app');
+import { secure_port } from 'app/config/backend/app.js';
+import { fileDirName } from 'app/helpers/utils.js';
+import niceLog from './logs.js';
 
 const certFiles = [
     {
@@ -19,11 +21,11 @@ const certFiles = [
 
 const loadCredentials = () => {
     let credentials = null;
-    if (process.env.domain && fs.existsSync(path.join(__dirname, '..', 'certs', 'live', process.env.domain))) {
+    if (process.env.domain && fs.existsSync(path.join(fileDirName(import.meta).__dirname, '..', 'certs', 'live', process.env.domain))) {
         credentials = certFiles.reduce((previousCredentialObject, { name: currentName, file: currentFile }) => {
             const result = { ...previousCredentialObject,
-                [currentName]: fs.existsSync(path.join(__dirname, '..', 'certs', 'live', process.env.domain, currentFile))
-                    ? fs.readFileSync(path.join(__dirname, '..', 'certs', 'live', process.env.domain, currentFile), 'utf8')
+                [currentName]: fs.existsSync(path.join(fileDirName(import.meta).__dirname, '..', 'certs', 'live', process.env.domain, currentFile))
+                    ? fs.readFileSync(path.join(fileDirName(import.meta).__dirname, '..', 'certs', 'live', process.env.domain, currentFile), 'utf8')
                     : null
             };
             return result;
@@ -36,27 +38,27 @@ const loadCredentials = () => {
 const createSecureServer = (app) => {
     let credentials = null;
     let secureServer = null;
-    const checkedFiles = certFiles.map(({ file }) => path.join(__dirname, '..', 'certs', 'live', process.env.domain, file));
+    const checkedFiles = certFiles.map(({ file }) => path.join(fileDirName(import.meta).__dirname, '..', 'certs', 'live', process.env.domain, file));
 
     const initServer = () => {
         // if we have key and certificate, let's enable the secure port
         if (credentials?.key && credentials?.cert) {
             secureServer = https.createServer(credentials, app);
             secureServer.listen(secure_port, () => {
-                console.log('----------------------------------------------------------------------------------');
-                console.log(`Online resume BACKEND app listening on port ${secure_port}!`);
-                console.log('----------------------------------------------------------------------------------');
+                niceLog({ data: { text: '----------------------------------------------------------------------------------', style: 'yellow' }});
+                niceLog({ data: { text: `Secure Online resume BACKEND app listening on port ${secure_port}!`, style: 'yellow' }, attachTimeStamp: true });
+                niceLog({ data: { text: '----------------------------------------------------------------------------------', style: 'yellow' }});
             });
         }
     }
 
     const shutdownServer = (onCloseCallback = undefined) => {
         if (secureServer) {
-            console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
-            console.log('Secure server is is shuting down');
+            niceLog({ data: { text: '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', style: 'red' }});
+            niceLog({ data: { text: 'Secure server is is shuting down', style: 'red' }, attachTimeStamp: true });
+            niceLog({ data: { text: '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', style: 'red' }});
             secureServer.close(onCloseCallback);
             secureServer.closeAllConnections();
-            console.log('++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++');
         }
     }
     const debouncedShutDown = debounce(() => shutdownServer(), 500);
@@ -71,9 +73,9 @@ const createSecureServer = (app) => {
     }
     const debouncedRestart = debounce(() => restartServer(), 500);
 
-    if (process.env.domain && fs.existsSync(path.join(__dirname, '..', 'certs'))) {
+    if (process.env.domain && fs.existsSync(path.join(fileDirName(import.meta).__dirname, '..', 'certs'))) {
         credentials = loadCredentials();
-        chokidar.watch(path.join(__dirname, '..', 'certs')).on('all', (event, fullFileName) => {
+        chokidar.watch(path.join(fileDirName(import.meta).__dirname, '..', 'certs')).on('all', (event, fullFileName) => {
             /*
                server  | addDir /app/backend/certs/live/manu.app
                server  | add /app/backend/certs/live/manu.app/fullchain.pem
@@ -85,10 +87,10 @@ const createSecureServer = (app) => {
                server  | change /app/backend/certs/live/manu.app/fullchain.pem
             */
 
-            if ( event === 'addDir' && fullFileName === path.join(__dirname, '..', 'certs', 'live', process.env.domain)
+            if ( event === 'addDir' && fullFileName === path.join(fileDirName(import.meta).__dirname, '..', 'certs', 'live', process.env.domain)
                 || (event === 'add' || event === 'change') && checkedFiles.includes(fullFileName) ) {
                 debouncedRestart();
-            } else if ( event === 'unlinkDir' && fullFileName === path.join(__dirname, '..', 'certs', 'live', process.env.domain)
+            } else if ( event === 'unlinkDir' && fullFileName === path.join(fileDirName(import.meta).__dirname, '..', 'certs', 'live', process.env.domain)
                 || event === 'unlink' && checkedFiles.includes(fullFileName) ) {
                 debouncedShutDown();
             }
@@ -99,6 +101,6 @@ const createSecureServer = (app) => {
     return secureServer;
 }
 
-module.exports = {
+export {
     createSecureServer,
 }

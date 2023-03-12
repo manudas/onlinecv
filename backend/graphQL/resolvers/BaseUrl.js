@@ -1,6 +1,6 @@
-const { getAdminFolder } = require('app/helpers/utils');
+import { getAdminFolder } from 'app/helpers/utils.js';
 
-module.exports = {
+export default {
     Query: {
         baseUrl: async () => {
             const adminFolder = await getAdminFolder();

@@ -1,16 +1,17 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileDirName } from 'app/helpers/utils.js';
 
-module.exports = {};
-
-fs.readdirSync(__dirname).forEach(function(file) {
+const resolvers = {};
+const __dirname = fileDirName(import.meta).__dirname;
+await Promise.all(fs.readdirSync(__dirname).map(async function(file) {
     // let's not include this same file
-    if (file !== path.parse(__filename).base) {
+    if (file !== path.parse(fileDirName(import.meta).__filename).base) {
         const filename = path.parse(file).name;
-        const fileContent = require(`./${filename}`);
-        // Let's export individual resolvers by name
-        module[`${filename}Resolver`] = fileContent;
+        const fileContent = (await import(`./${file}`)).default;
         // Lets include it in the list of all resolvers (default export)
-        module.exports[`${filename}Resolver`] = fileContent;
+        resolvers[`${filename}Resolver`] = fileContent;
     }
-});
+}));
+
+export default resolvers;

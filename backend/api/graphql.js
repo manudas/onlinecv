@@ -1,7 +1,7 @@
-const { createHandler } = require('graphql-http/lib/use/express');
-const { context, onOperation, schema } = require('app/graphQL/config')
+import { createHandler } from 'graphql-http/lib/use/express';
+import { context, onOperation, schema } from 'app/graphQL/config/index.js';
 
-module.exports = createHandler({
+export default createHandler({
     onOperation,
     schema: schema,
     context

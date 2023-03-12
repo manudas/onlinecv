@@ -1,7 +1,7 @@
-var bcrypt = require('bcrypt');
-const { authGuard, checkUserExists, generateToken, getToken, getUser, userExistsGuard, tokenGuard } = require('app/helpers/auth');
+import bcrypt from 'bcrypt';
+import { authGuard, checkUserExists, generateToken, getToken, getUser, userExistsGuard, tokenGuard } from 'app/helpers/auth.js';
 
-module.exports = {
+export default {
     Query: {
         checkToken: async (
             _parent,
@@ -79,4 +79,4 @@ module.exports = {
             };
         }
     }
-}
+};

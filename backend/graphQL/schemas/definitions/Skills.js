@@ -8,7 +8,7 @@
     keywords: [],
     language: String
 */
-module.exports =
+export default
     `
   enum RelatedKnowledge {
     """

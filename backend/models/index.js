@@ -1,15 +1,16 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileDirName } from 'app/helpers/utils.js';
 
-module.exports = {};
-
-fs.readdirSync(__dirname).forEach(function(file) {
+const models = {};
+const __dirname = fileDirName(import.meta).__dirname;
+await Promise.all(fs.readdirSync(__dirname).map(async function(file) {
     // let's not include this same file
-    if (file !== path.parse(__filename).base) {
-        const filename = path.parse(file).name;
-        const fileContent = require(`./${filename}`);
-
+    if (file !== path.parse(fileDirName(import.meta).__filename).base) {
+        const fileContent = await import(`./${file}`);
         // To end up, let's export the content
-        Object.assign(module.exports, fileContent);
+        Object.assign(models, fileContent);
     }
-});
+}));
+
+export default models;

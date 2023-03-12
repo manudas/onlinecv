@@ -6,7 +6,7 @@
     url: String,
     picture: Buffer
 */
-module.exports =
+export default
     `
   type Portfolio {
     id: ID!

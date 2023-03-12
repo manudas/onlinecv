@@ -1,7 +1,7 @@
-const {
+import {
     Schema,
     model,
-} = require('mongoose');
+} from 'mongoose';
 
 const collection = 'social_networks';
 
@@ -18,7 +18,7 @@ const SocialNetworksSchema = new Schema({
 
 const SocialNetworksModel = model(collection, SocialNetworksSchema);
 
-module.exports = {
+export {
     SocialNetworksSchema,
     SocialNetworksModel,
 };

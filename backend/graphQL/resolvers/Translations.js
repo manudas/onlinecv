@@ -1,8 +1,7 @@
-const findAndUpdateMany = require('app/helpers/utils').findAndUpdateMany;
-const cleanAndMapObject = require('app/helpers/utils').cleanAndMapObject;
-const ObjectId = require('mongodb').ObjectId;
+import { cleanAndMapObject, findAndUpdateMany } from 'app/helpers/utils.js';
+import ObjectId from 'mongodb';
 
-module.exports = {
+export default {
     Query: {
         translations: async (
             _parent,

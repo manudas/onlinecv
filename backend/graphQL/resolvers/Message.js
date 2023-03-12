@@ -1,6 +1,6 @@
-const nodemailer = require("nodemailer")
+import nodemailer from "nodemailer";
 
-module.exports = {
+export default {
     Mutation: {
         sendMessage: async (
             _parent,
@@ -51,4 +51,4 @@ module.exports = {
             return true
         }
     }
-}
+};

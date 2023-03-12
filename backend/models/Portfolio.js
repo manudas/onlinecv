@@ -1,7 +1,7 @@
-const {
+import {
     Schema,
     model,
-} = require('mongoose');
+} from 'mongoose';
 
 const collection = 'portfolio';
 
@@ -21,7 +21,7 @@ const PortfolioSchema = new Schema({
 
 const PortfolioModel = model(collection, PortfolioSchema);
 
-module.exports = {
+export {
     PortfolioSchema,
     PortfolioModel,
 };

@@ -4,7 +4,7 @@
     tag: String,
     text: String
 */
-module.exports =
+export default
     `
       type Translation {
         _id: ID!

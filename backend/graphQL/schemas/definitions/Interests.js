@@ -4,7 +4,7 @@
     keywords: [],
     language: String
 */
-module.exports =
+export default
     `
   type Interest {
     id: ID!

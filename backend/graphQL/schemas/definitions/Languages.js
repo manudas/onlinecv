@@ -10,7 +10,7 @@
     language: String
 */
 
-module.exports =
+export default
 `
   type Language {
     _id: ID!

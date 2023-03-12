@@ -3,11 +3,12 @@ const rootSchema = `
     type Query
 `;
 
-const { join } = require('path')
-const { loadFilesSync } = require('@graphql-tools/load-files')
-const { mergeSchemas } = require('@graphql-tools/schema')
+import { join } from 'path';
+import { loadFiles } from '@graphql-tools/load-files';
+import { mergeSchemas } from '@graphql-tools/schema';
+import { fileDirName } from 'app/helpers/utils.js';
 
-const typeDefFiles = loadFilesSync(join(__dirname, 'definitions/*'))
-typeDefFiles.push(rootSchema)
+const typeDefFiles = await loadFiles(join(fileDirName(import.meta).__dirname, 'definitions'));
+typeDefFiles.push(rootSchema);
 
-module.exports = mergeSchemas({typeDefs: typeDefFiles})
+export default mergeSchemas({typeDefs: typeDefFiles});

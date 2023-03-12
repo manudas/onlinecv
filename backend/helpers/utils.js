@@ -1,4 +1,6 @@
-const { ConfigModel } = require('app/models/Config');
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { ConfigModel } from 'app/models/Config.js';
 
 const cleanAndMapObject = (object, keyMapping) => Object.fromEntries(Object.entries(cleanObject(object)).map(([key, value]) => [keyMapping[key] ?? key, value] ))
 
@@ -64,8 +66,15 @@ const getAdminFolder = async () => {
     );
 }
 
-module.exports = {
+const fileDirName = (meta) => {
+    const __filename = fileURLToPath(meta.url);
+    const __dirname = path.dirname(__filename);
+    return { __dirname, __filename };
+}
+
+export {
+    fileDirName,
     cleanAndMapObject,
     findAndUpdateMany,
     getAdminFolder,
-}
+};

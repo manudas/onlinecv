@@ -1,13 +1,12 @@
-
 // Require and construct the schema
-const rootSchema = require('app/graphQL/schemas');
+import rootSchema from 'app/graphQL/schemas/index.js';
 
-const resolvers = require('app/graphQL/resolvers');
+import resolvers from 'app/graphQL/resolvers/index.js';
 
-const { protectResolver } = require('app/graphQL/config/resolvers');
+import { protectResolver } from 'app/graphQL/config/resolvers.js';
 
-const models = require('app/models');
-const { makeExecutableSchema } = require('@graphql-tools/schema');
+import models from 'app/models/index.js';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 
 // Merge all resolvers
 const mergedResolvers = Object.values(resolvers).reduce((previousValue, currentValue) => {
@@ -16,7 +15,6 @@ const mergedResolvers = Object.values(resolvers).reduce((previousValue, currentV
         Object.keys(currentValue[type]).forEach(resolverName => {
             previousValue[type] = {...previousValue[type], [resolverName]: protectResolver(type, resolverName, currentValue[type][resolverName])};
         })
-        // previousValue[key] = {...previousValue[key], ...currentValue[key]};
     })
     return previousValue;
 }, {});
@@ -60,8 +58,8 @@ const context = (request) => {
     }
 }
 
-module.exports = {
+export {
     onOperation,
     schema,
     context,
-}
+};

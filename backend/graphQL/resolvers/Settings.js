@@ -1,6 +1,6 @@
-const cleanAndMapObject = require('app/helpers/utils').cleanAndMapObject;
+import { cleanAndMapObject } from 'app/helpers/utils.js';
 
-module.exports = {
+export default {
     Query: {
         settings: async (
             _parent,
@@ -50,4 +50,4 @@ module.exports = {
             return SettingsWriteResult ? true : false;
         }
     }
-}
+};

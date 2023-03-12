@@ -1,4 +1,4 @@
-const { tokenGuard } = require('app/helpers/auth');
+import { tokenGuard } from 'app/helpers/auth.js';
 
 const protectedResolvers = {
     Query: {
@@ -50,6 +50,6 @@ const protectResolver = (type, name, resolverFn) => {
     return resolverFn;
 }
 
-module.exports = {
+export {
     protectResolver
 }

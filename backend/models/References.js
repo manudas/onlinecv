@@ -1,7 +1,7 @@
-const {
+import {
     Schema,
     model,
-} = require('mongoose');
+} from 'mongoose';
 
 const collection = 'references';
 
@@ -26,7 +26,7 @@ const ReferenceSchema = new Schema({
 
 const ReferenceModel = model(collection, ReferenceSchema);
 
-module.exports = {
+export {
     ReferenceSchema,
     ReferenceModel,
 };

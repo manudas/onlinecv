@@ -3,10 +3,10 @@
  * DB FROM THE GraphQL LIBRARY
  */
 
-const {
+import {
     Schema,
     model,
-} = require('mongoose');
+} from 'mongoose';
 
 const collection = 'locale';
 
@@ -22,7 +22,7 @@ const LocaleSchema = new Schema({
 
 const LocaleModel = model(collection, LocaleSchema);
 
-module.exports = {
+export {
     LocaleSchema,
     LocaleModel,
 };

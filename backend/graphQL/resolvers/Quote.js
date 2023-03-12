@@ -1,6 +1,6 @@
-const cleanAndMapObject = require('app/helpers/utils').cleanAndMapObject;
+import { cleanAndMapObject } from 'app/helpers/utils.js';
 
-module.exports = {
+export default {
     Query: {
         quote: async (
             _parent,
@@ -63,4 +63,4 @@ module.exports = {
             return WriteResult.deletedCount === 1;
         }
     }
-}
+};

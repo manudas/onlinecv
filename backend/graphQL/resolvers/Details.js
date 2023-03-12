@@ -1,6 +1,6 @@
-const cleanAndMapObject = require('app/helpers/utils').cleanAndMapObject;
+import { cleanAndMapObject } from 'app/helpers/utils.js';
 
-module.exports = {
+export default {
     Query: {
         details: async (
             _parent,

@@ -1,7 +1,7 @@
-const ObjectId = require('mongodb').ObjectId;
-const cleanAndMapObject = require('app/helpers/utils').cleanAndMapObject;
+import ObjectId from 'mongodb';
+import { cleanAndMapObject } from 'app/helpers/utils.js';
 
-module.exports = {
+export default {
     Query: {
         trainings: async (
             _parent,

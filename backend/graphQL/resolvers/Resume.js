@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     Query: {
         resume: async (
             _parent,

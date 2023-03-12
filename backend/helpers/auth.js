@@ -1,10 +1,10 @@
 
-const jsonwebtoken = require("jsonwebtoken");
-const { randomBytes } = require('crypto');
+import jsonwebtoken from "jsonwebtoken";
+import { randomBytes } from 'crypto';
 
-const bcrypt = require('bcrypt');
-const { ConfigModel } = require('app/models/Config');
-const { GraphQLError } = require('graphql');
+import bcrypt from 'bcrypt';
+import { ConfigModel } from 'app/models/Config.js';
+import { GraphQLError } from 'graphql';
 
 const getUser = async (username = null) => {
     return await ConfigModel.findOne(
@@ -132,7 +132,7 @@ const generateToken = async (username, rememberMe = false) => {
     return jsonwebtoken.sign({ username }, jwtSecret, {...(rememberMe ? {} : { expiresIn: '20 minutes' }) })
 }
 
-module.exports = {
+export {
     authGuard,
     badCredentialsGraphQL_Error,
     badUserGraphQL_Error,

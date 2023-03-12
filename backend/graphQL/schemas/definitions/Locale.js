@@ -8,7 +8,7 @@
     tag: String,
     text: String
 */
-module.exports =
+export default
     `
       type Locale {
         _id: ID!

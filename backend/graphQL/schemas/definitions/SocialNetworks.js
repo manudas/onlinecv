@@ -4,7 +4,7 @@
     text: String,
     order: Number
 */
-module.exports =
+export default
     `
   type SocialNetwork {
     _id: ID!

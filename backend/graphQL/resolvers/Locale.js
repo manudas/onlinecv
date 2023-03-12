@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     Query: {
         locales: async (
             _parent,
