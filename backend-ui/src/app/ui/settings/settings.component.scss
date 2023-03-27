@@ -49,6 +49,11 @@
             &:disabled {
                 background-color: $disabledGreyInputColor;
             }
+
+            /* For labels inside mat-checkbox components */
+            ::ng-deep label {
+                margin-bottom: 0;
+            }
         }
         .help-block {
             display: block;

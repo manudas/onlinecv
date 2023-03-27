@@ -5,6 +5,9 @@ input Message {
   message: String!
 }
 
+extend type Query {
+  getMessageTypes: [String]!
+}
 extend type Mutation {
-  sendMessage(message: Message!): Boolean!
+  receiveMessage(message: Message!, language: String!): Boolean!
 }

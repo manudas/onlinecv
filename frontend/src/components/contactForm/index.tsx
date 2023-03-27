@@ -10,7 +10,7 @@ import { PropDef, StateDef } from './types'
 import ControlledPopup from 'components/popup'
 
 import { translateString } from 'helpers/translations'
-import { sendMessage } from 'queries/sendMessage'
+import { receiveMessage } from 'queries/sendMessage'
 import { DataService } from 'queries/data.service'
 import { isValidEmail, isEmpty } from 'helpers/validators'
 
@@ -156,7 +156,7 @@ class ContactForm extends Component<PropDef, StateDef> {
                 {
                     Object.entries(this.props.contact_details).map(
                         ([index, contact_detail]) => {
-                            return contact_detail 
+                            return contact_detail
                                 ? (
                                     <Fragment key={index}>
                                         <h4 className="contact-subtitle-1">
@@ -249,7 +249,8 @@ class ContactForm extends Component<PropDef, StateDef> {
             const {
                 query: queryUserData,
                 variables: variablesUserData
-            } = sendMessage(name, from, subject, message);
+            // sending a message from visitors perspective is receiving a message from our perspective
+            } = receiveMessage(name, from, subject, message, this.props.language);
             const dataService = DataService.factory();
             const {
                 data,
@@ -259,7 +260,7 @@ class ContactForm extends Component<PropDef, StateDef> {
                 variablesUserData
             )
 
-            const ok = data?.sendMessage ?? false
+            const ok = data?.receiveMessage ?? false
 
             if (errors || ok !== true) {
                 this.setState({ popupMessage: this.messageError })

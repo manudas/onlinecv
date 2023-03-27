@@ -21,26 +21,6 @@ const mutationFields = [
     'id: _id',
 ]
 
-// export const QueryDetails =
-//     `
-//     query Details($language: String!) {
-//         details(language: $language) {
-//             id: _id
-//             profileImage
-//             name
-//             surname
-//             address
-//             phone
-//             birthInfo
-//             email
-//             keywords
-//             language
-//             primaryRole
-//             secondaryRole
-//             nickname
-//         }
-//     }
-// `;
 export const QueryDetails = (
     lang: string,
 ) => {

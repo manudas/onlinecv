@@ -18,6 +18,7 @@ const LocaleSchema = new Schema({
     default: Boolean,
 }, {
     collection,
+    versionKey: false,
 });
 
 const LocaleModel = model(collection, LocaleSchema);

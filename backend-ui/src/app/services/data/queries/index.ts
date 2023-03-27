@@ -10,6 +10,8 @@ export * from './Languages'
 
 export * from './Locale'
 
+export * from './Messaging'
+
 export * from './Quote'
 
 export * from './References'

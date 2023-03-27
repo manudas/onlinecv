@@ -1,6 +1,7 @@
 input SettingsInput {
   backgroundImage: String
   sendToEmail: Boolean!
+  enabledMessaging: Boolean!
   smtpServer: String
   smtpPort: Int
   smtpUsername: String
@@ -12,6 +13,7 @@ input SettingsInput {
 type Settings {
   _id: ID!
   backgroundImage: String
+  enabledMessaging: Boolean!
   sendToEmail: Boolean!
   smtpServer: String
   smtpPort: Int

@@ -42,6 +42,7 @@ export class SettingsComponent implements OnInit {
   @Input() title: string = 'APP Settings'
 
   public settingsFormGroup: FormGroup = new FormGroup({
+    enabledMessaging: new FormControl(true),
     backgroundImage: new FormControl(null),
     sendToEmail: new FormControl(false),
     smtpServer: new FormControl(null, this.ValidateRequiredIfMessagingToEmailEnabled),
@@ -95,7 +96,7 @@ export class SettingsComponent implements OnInit {
       if (data) {
         this.settings = data
         for (const control in this.settingsFormGroup.controls) {
-          this.settingsFormGroup.get(control).setValue(this.settings[control])
+          this.settings[control] && this.settingsFormGroup.get(control).setValue(this.settings[control])
         }
       }
     })

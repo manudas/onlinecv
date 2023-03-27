@@ -1,0 +1,14 @@
+<section class="messaging-section">
+    <div class="row">
+        <div class="col-6">
+            <mat-form-field appearance="fill">
+                <mat-label>{{ 'Filter by' | translate | async }}:</mat-label>
+                <mat-select>
+                    <mat-option *ngFor="let type of messageTypes" [value]="type">
+                        {{ type | translate | async }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+</section>
