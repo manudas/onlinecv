@@ -1,5 +1,5 @@
 import { cleanAndMapObject, findAndUpdateMany } from 'app/helpers/utils.js';
-import ObjectId from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 export default {
     Query: {

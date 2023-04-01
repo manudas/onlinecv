@@ -1,6 +1,6 @@
 export enum OthersType {
     all,
-    'professional-references',
+    'references',
     'quote',
     'upload-resume'
 }

@@ -20,9 +20,9 @@
             <mat-header-cell
                 *matHeaderCellDef
             >
-            {{ col === 'id' ? '#' : col | noSpecialChars | translate | async | titlecase }}
+                {{ col === 'id' ? '#' : col | noSpecialChars | translate | async | titlecase }}
             </mat-header-cell>
-            <mat-cell *matCellDef="let element; let row; let rowIndex = index">
+            <mat-cell *matCellDef="let row; let rowIndex = index">
 
                 <ng-container *ngIf="col === 'edit'"
                     [ngTemplateOutlet]="editTemplate"
@@ -39,7 +39,7 @@
                 <ng-container *ngIf="col === 'order'"
                     [ngTemplateOutlet]="dragHandle"
                 ></ng-container>
-                <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> {{ element[col] }} </ng-container>
+                <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> {{ transformFn.get(col) ? transformFn.get(col)(row[col]) : row[col] }} </ng-container>
 
             </mat-cell>
         </ng-container>

@@ -1,99 +1,40 @@
-<ng-container *ngFor="let typeInFor of TranslationTypes">
-    <app-card
-        *ngIf="TranslationTypeStrings[typeInFor] !== 'all' && isType(TranslationTypeStrings[typeInFor])"
-        [icon]="faTable"
-        [iconClass]="'mr-1'"
-        [panelBody]="panel"
-        [panelParameters]="{type: typeInFor}"
-        [cardTitle]="TranslationTypeStrings[typeInFor] | translate | async | titlecase">
-    </app-card>
-    <ng-container *ngIf="TranslationTypeStrings[typeInFor] !== 'all' && isType('all'); then separator"></ng-container>
-</ng-container>
+<ng-container *ngIf="isActive('missing');" [ngTemplateOutlet]="tableTemplate" [ngTemplateOutletContext]="{
+    type: 'missing'
+}"></ng-container>
+<ng-container *ngIf="isActive('all'); then separator"></ng-container>
+<ng-container *ngIf="isActive('translated');" [ngTemplateOutlet]="tableTemplate" [ngTemplateOutletContext]="{
+    type: 'translated'
+}"></ng-container>
 
-<ng-template #panel
+<ng-template #tableTemplate
     let-type="type"
 >
-    <mat-table
-        *ngIf="getSource(type).length"
-        [dataSource]="getSource(type)"
+    <app-table-card
+        [cardIcon]="cardIcon"
+        [title]="type | titlecase | translate | async"
+        [columns]="inputData.colsToRender.get($any(TranslationEnum[type]))"
+        [rows]="data[TranslationEnum[type]]"
+        [isDraggable]="true"
+        [editCallBack]="edit(type)"
+        [deleteCallBack]="openRemovalDialog(type)"
+        [transformFn]="inputData.transformFn"
     >
-    <ng-container *ngFor="let col of getColumns(type); let colIndex = index" matColumnDef="{{col}}">
-        <mat-header-cell
-            *matHeaderCellDef
+        <div
+            *ngIf="hasActions(type)"
+            [className]="'text-right pt-3'"
         >
-        {{ col === 'id' ? '#' : (col | noSpecialChars | translate | async | titlecase) }}
-        </mat-header-cell>
-        <mat-cell *matCellDef="let element; let row; let rowIndex = index">
-            <ng-container *ngIf="col === 'edit'"
-                [ngTemplateOutlet]="editTemplate"
-                [ngTemplateOutletContext]="{
-                    rowIndex: rowIndex,
-                    type: type
-                }"
-            ></ng-container>
-            <ng-container *ngIf="col === 'delete'"
-                [ngTemplateOutlet]="deleteTemplate"
-                [ngTemplateOutletContext]="{
-                    rowIndex: rowIndex,
-                    type: type
-                }"
-            ></ng-container>
-            <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'lastTimeFetched'"> {{ element[col] }} </ng-container>
-            <ng-container *ngIf="col === 'lastTimeFetched'"> {{ getLocaleDateFromTimestamp(element[col]) }} </ng-container>
-
-        </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="getColumns(type)"></mat-header-row>
-    <mat-row
-        *matRowDef="let row; columns: getColumns(type)"
-    ></mat-row>
-    </mat-table>
-
-    <div
-        *ngIf="hasActions(type)"
-        [className]="'text-right pt-3'"
-        >
-        <button
-            (click)="openEditDialog()"
-            [className]="'btn btn-outline-info'"
-            type='button'
-            ngbButton
-        >
-            {{ 'Add Translation' | translate | async }}
-        </button>
-    </div>
-
+            <button
+                (click)="openDialog(type)"
+                [className]="'btn btn-outline-info'"
+                type='button'
+                ngbButton
+            >
+                {{ 'Add' | translate | async }}
+            </button>
+        </div>
+    </app-table-card>
 </ng-template>
 
 <ng-template #separator>
     <div [className]="'separator'"></div>
-</ng-template>
-
-<ng-template #editTemplate
-    let-index="rowIndex"
-    let-type="type"
->
-    <button [className]="'btn btn-info'"
-        ngbButton
-        (click)="edit(index, TranslationTypeStrings[type])"
-    >
-        <fa-icon
-            [icon]="faEdit"
-        ></fa-icon>
-    </button>
-</ng-template>
-
-<ng-template #deleteTemplate
-    let-index="rowIndex"
-    let-type="type"
->
-    <button [className]="'btn btn-danger'"
-        ngbButton
-        (click)="openRemovalDialog(index, TranslationTypeStrings[type])"
-        >
-        <fa-icon
-            [icon]="faTrash"
-        ></fa-icon>
-    </button>
 </ng-template>

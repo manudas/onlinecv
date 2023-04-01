@@ -1,122 +1,27 @@
 
-<ng-container [ngTemplateOutlet]="languagesTemplate"></ng-container>
+<ng-container [ngTemplateOutlet]="tableTemplate"></ng-container>
 
-
-<ng-template #languagesTemplate>
-    <app-card [icon]="cardIcon"
-        [iconClass]="'mr-1'"
-        [panelBody]="panel"
-        [cardTitle]="'Languages' | translate | async">
-    </app-card>
-</ng-template>
-
-<ng-template #panel
->
-    <mat-table
-        *ngIf="languageData.length"
-        [dataSource]="languageData"
-
-        cdkDropList
-        [cdkDropListData]="languageData"
-        (cdkDropListDropped)="onDrop($event)"
-        [cdkDropListDisabled]="dragDisabled"
-
+<ng-template #tableTemplate>
+    <app-table-card
+        [cardIcon]="cardIcon"
+        [title]="type | titlecase | translate | async"
+        [columns]="inputData.colsToRender"
+        [rows]="data"
+        [isDraggable]="true"
+        [editCallBack]="edit"
+        [deleteCallBack]="openRemovalConfirmDialog"
     >
-        <ng-container *ngFor="let col of languageColsToRender; let colIndex = index" matColumnDef="{{col}}">
-            <mat-header-cell
-                *matHeaderCellDef
+        <div
+            [className]="'text-right pt-3'"
+        >
+            <button
+                (click)="openDialog()"
+                [className]="'btn btn-outline-info'"
+                type='button'
+                ngbButton
             >
-            {{ col === 'id' ? '#' : col | noSpecialChars | translate | async | titlecase }}
-            </mat-header-cell>
-            <mat-cell *matCellDef="let element; let row; let rowIndex = index">
-
-                <ng-container *ngIf="col === 'edit'"
-                    [ngTemplateOutlet]="editTemplate"
-                    [ngTemplateOutletContext]="{
-                        rowIndex: rowIndex
-                    }"
-                ></ng-container>
-                <ng-container *ngIf="col === 'delete'"
-                    [ngTemplateOutlet]="deleteTemplate"
-                    [ngTemplateOutletContext]="{
-                        rowIndex: rowIndex
-                    }"
-                ></ng-container>
-                <ng-container *ngIf="col === 'order'"
-                    [ngTemplateOutlet]="dragHandle"
-                ></ng-container>
-                <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> {{ element[col] }} </ng-container>
-
-            </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="languageColsToRender"></mat-header-row>
-        <mat-row
-            (cdkDragStarted)="onDragStart($event)"
-            cdkDrag
-            [cdkDragData]="row"
-            *matRowDef="let row; columns: languageColsToRender"
-        ></mat-row>
-    </mat-table>
-
-    <div
-        [className]="'text-right pt-3'"
-    >
-        <button
-            (click)="openLanguageDialog()"
-            [className]="'btn btn-outline-info'"
-            type='button'
-            ngbButton
-        >
-            {{ 'Add Language' | translate | async }}
-        </button>
-    </div>
-
-</ng-template>
-
-
-<ng-template #editTemplate
-    let-index="rowIndex"
->
-    <button [className]="'btn btn-info btn-training-row'"
-        ngbButton
-        (click)="editLanguage(index)"
-    >
-        <fa-icon
-            [icon]="faEdit"
-        ></fa-icon>
-    </button>
-</ng-template>
-
-
-
-<ng-template #deleteTemplate
-    let-index="rowIndex"
->
-    <button [className]="'btn btn-danger'"
-        ngbButton
-        (click)="openRemovalConfirmDialog(index)"
-        >
-        <fa-icon
-            [icon]="faTrash"
-        ></fa-icon>
-    </button>
-</ng-template>
-
-
-<ng-template #dragHandle>
-
-    <fa-icon
-        [ngStyle]="{
-            color: '#737373',
-            marginRight: 'auto',
-            marginLeft: 'auto'
-        }"
-        [icon]="faArrowsAlt"
-        (mousedown)="dragDisabled = false;"
-        (mouseup)="dragDisabled = true;"
-        (touchstart)="dragDisabled = false;"
-        (touchend)="dragDisabled = true;"
-    ></fa-icon>
-
+                {{ 'Add' | translate | async }}
+            </button>
+        </div>
+    </app-table-card>
 </ng-template>

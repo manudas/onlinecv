@@ -45,8 +45,8 @@ export class OthersEffects {
      * a result of the operation performed
      */
     public fetchReferencesEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
-        ofType(OTHERS_ACTIONS.FETCH(OthersType['professional-references'])),
-        // ofType<ReturnType<typeof OTHERS_ACTIONS.FETCH(OthersType['professional-references'])>>(OTHERS_ACTIONS.FETCH(OthersType['professional-references'])),
+        ofType(OTHERS_ACTIONS.FETCH(OthersType['references'])),
+        // ofType<ReturnType<typeof OTHERS_ACTIONS.FETCH(OthersType['references'])>>(OTHERS_ACTIONS.FETCH(OthersType['references'])),
         tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
         switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
             const {
@@ -99,7 +99,7 @@ export class OthersEffects {
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('References saved successfully', this)}`
                     }),
-                    OTHERS_ACTIONS.FETCH(OthersType['professional-references'])({
+                    OTHERS_ACTIONS.FETCH(OthersType['references'])({
                         language: this.selectedLocale,
                     })
                 ]),
@@ -137,7 +137,7 @@ export class OthersEffects {
                     COMMON_ACTIONS.SUCCESS({
                         message: `${this.translate.getResolvedTranslation('Reference removed successfully', this)}`
                     }),
-                    OTHERS_ACTIONS.FETCH(OthersType['professional-references'])({
+                    OTHERS_ACTIONS.FETCH(OthersType['references'])({
                         language: this.selectedLocale,
                     })
                 ]),

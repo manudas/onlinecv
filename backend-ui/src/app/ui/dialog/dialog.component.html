@@ -76,9 +76,9 @@
     let-helpBlock="helpBlock"
 >
     <div
-        *ngIf="types && !types.includes('hidden') || !types"
+        *ngIf="!types?.includes('hidden')"
         [ngClass]="{
-            'col-md-6': types && !types.includes('fullsize') || !types,
+            'col-md-6': !types?.includes('fullsize'),
             'col-sm-12': true
         }"
     >
@@ -145,7 +145,7 @@
         }"
     ></ng-container>
     <ng-container
-        *ngIf="!isFormArray(control) && types && types.includes('date')"
+        *ngIf="!isFormArray(control) && types?.includes('date')"
         [ngTemplateOutlet]="inputDateTemplate"
         [ngTemplateOutletContext]="{
             name: name,
@@ -155,7 +155,7 @@
         }"
     ></ng-container>
     <ng-container
-        *ngIf="!isFormArray(control) && types && !types.includes('date') || !isFormArray(control) && !types"
+        *ngIf="!isFormArray(control) && !types?.includes('date')"
         [ngTemplateOutlet]="inputTemplate"
         [ngTemplateOutletContext]="{
             name: name,
@@ -201,7 +201,7 @@
         class='d-flex align-items-center mb-2'
     >
         <ng-container
-            *ngIf="types && types.includes('date')"
+            *ngIf="types?.includes('date')"
             [ngTemplateOutlet]="inputDateTemplate"
             [ngTemplateOutletContext]="{
                 name: name,
@@ -211,7 +211,7 @@
             }"
         ></ng-container>
         <ng-container
-            *ngIf="types && !types.includes('date') || !types"
+            *ngIf="!types?.includes('date')"
             [ngTemplateOutlet]="inputTemplate"
             [ngTemplateOutletContext]="{
                 name: name,
@@ -239,13 +239,21 @@
     let-datePickerRef="datePickerRef"
 >
     <input
+        *ngIf="!types?.includes('date')"
         class='form-control'
         placeholder="{{ placeholder ? (placeholder | translate | async) : null }}"
         placement="top"
         [formControl]="control"
-
-        matInput
-        [matDatepicker]="types && types.includes('date') ? datePickerRef : null"
-        [readOnly]="types && types.includes('readonly')"
+        [readOnly]="types?.includes('readonly')"
+        [type]="types?.includes('number') ? 'number' : 'text'"
+    >
+    <input
+        *ngIf="types?.includes('date')"
+        class='form-control'
+        placeholder="{{ placeholder ? (placeholder | translate | async) : null }}"
+        placement="top"
+        [formControl]="control"
+        [matDatepicker]="datePickerRef"
+        [readOnly]="types?.includes('readonly')"
     >
 </ng-template>

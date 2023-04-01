@@ -1,0 +1,36 @@
+@use '../../globals/styles' as *;
+
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/buttons';
+@import 'bootstrap/scss/utilities/background';
+
+:host {
+    .separator {
+        width: 100%;
+        height: 20px;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+    .form-actions {
+        background-color: $grey;
+        margin: 15px -15px -15px;
+        padding: 15px;
+        button {
+            &:not(:last-child) {
+                margin-right: 15px;
+            }
+            &.submitButton {
+                @extend .btn-outline-secondary;
+                @extend .bg-white;
+                &:hover {
+                    @extend .btn-outline-secondary;
+                    @extend .bg-secondary
+                }
+            }
+        }
+    }
+}

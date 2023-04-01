@@ -48,17 +48,16 @@ export class ExperienceComponent implements OnInit {
   }
 
   private prepareDataSubscriptions(storeKey: string) {
-    for (let type in ExperienceType) { // type here is string, ExpertienceType[type] will be a number in common enums
-      if (type === ExperienceType[ExperienceType.all]) continue
-      this.data$[ExperienceType[type]] = this.store.pipe(select(state => state?.[storeKey]?.[type]))
-      this.data$[ExperienceType[type]].subscribe((data: ExperienceInterface[]) => data ? this.data[ExperienceType[type]] = data : null)
+    for (let type of Object.values(ExperienceType)) { // type here is string, ExpertienceType[type] will be a number in common enums
+      if (typeof type === 'string' || type === ExperienceType.all) continue
+      this.data$[type] = this.store.pipe(select(state => state?.[storeKey]?.[ExperienceType[type]]))
+      this.data$[type].subscribe((data: ExperienceInterface[]) => data ? this.data[type] = data : null)
     }
   }
 
   dispatchSave = ( data, type ) => this.store.dispatch(EXPERIENCE_ACTIONS.SAVE_EXPERIENCES({ experiences: data, experienceType: type }))
-  add = ( data: ExperienceInterface )  => this.editValues(this.data[data.type].length, { ...data, language: this.selectedLocale, order: this.data[data.type].length })
+  add = ( data: ExperienceInterface )  => this.editValues(this.data[ExperienceType[data.type]].length, { ...data, language: this.selectedLocale, order: this.data[ExperienceType[data.type]].length })
   isEdit = ( data: ExperienceInterface | EditExperienceStructure | Object = {} ): data is EditExperienceStructure => (data as EditExperienceStructure).index !== undefined
-  getTypeName = ( type: ExperienceType ) => ExperienceType[type]
   isActive = (experience: string) => this.type === ExperienceType.all || this.type === ExperienceType[experience]
   edit = ( type: string ) => (index) => this.openDialog(type, index)
   editValues = ( index: number, experienceData: ExperienceInterface ) => this.dispatchSave([ ...this.data[ExperienceType[experienceData.type]].slice(0, index), { ...experienceData}, ...this.data[ExperienceType[experienceData.type]].slice(index + 1) ], experienceData.type)
@@ -68,10 +67,11 @@ export class ExperienceComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(() => this.fetchData())
   }
 
-  openDialog( type: string, index: number = 0 ): void {
+  openDialog( type: string, index: number = null ): void {
     const data = buildDataMap(this.data[ExperienceType[type]], index, INPUT_HELPERS, this.title, type)
+    const dataType = data.get('type')
+    data.set('type', {...dataType, value: type})
     const dialogRef = this.matDialog.open(DialogComponent, { height: '80%', maxHeight: '100%', width: '80%', data })
-
     dialogRef.afterClosed().subscribe(result => {
       logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '')
       if (result) {

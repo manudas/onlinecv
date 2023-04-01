@@ -8,11 +8,12 @@ import { Observable } from 'rxjs'
 import { logEasy } from '@app/services/logging'
 
 type StoreType = { locale: LocaleStore }
-export type AcceptedTypes = 'hidden' | 'readonly' | 'date' | 'readonly' | 'fullsize' | undefined | null
+export type AcceptedTypes = 'hidden' | 'readonly' | 'date' | 'readonly' | 'fullsize' | 'number' | undefined | null
 export type MetadataDialog = {
     isEdit?: boolean
     elementName?: string
     elementType?: string
+    formValidator?: ValidatorFn | ValidatorFn[] | undefined | null
 }
 export type DataDialogDef = {
     types?: AcceptedTypes[]
@@ -31,13 +32,13 @@ export type DataDialogMap = Map<'metadata', MetadataDialog> & Map<'dataInputs', 
 })
 export class DialogComponent {
 
-    dataFormGroup: FormGroup = new FormGroup({ })
-    types: Map<string, string[]> = new Map<string, string[]>()
-    errors: Map<string, string> = new Map<string, string>()
-    placeholders: Map<string, string> = new Map<string, string>()
-    labels: Map<string, string> = new Map<string, string>()
-    helpBlock: Map<string, string> = new Map<string, string>()
-    isEdit: boolean = false
+    dataFormGroup: FormGroup            = new FormGroup({ })
+    types: Map<string, string[]>        = new Map<string, string[]>()
+    errors: Map<string, string>         = new Map<string, string>()
+    placeholders: Map<string, string>   = new Map<string, string>()
+    labels: Map<string, string>         = new Map<string, string>()
+    helpBlock: Map<string, string>      = new Map<string, string>()
+    isEdit: boolean                     = false
     elementName: string
     elementType: string
 
@@ -75,6 +76,7 @@ export class DialogComponent {
             inputHelpBlock && this.addHelpBlock(control, inputHelpBlock)
         }
         const meta = dataMap.get('metadata') as MetadataDialog
+        if(meta?.formValidator) this.dataFormGroup.addValidators(meta.formValidator)
         this.isEdit = meta?.isEdit ?? false
         this.elementName = meta?.elementName ?? null
         this.elementType = meta?.elementType ?? null

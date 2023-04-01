@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { ActivatedRoute } from '@angular/router'
 import { EditSkillsStructure, SkillInterface, SkillsType } from '@app/types/Skills'
@@ -9,10 +9,11 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 
 import * as SKILLS_ACTIONS from '@store_actions/Skills'
 import { logEasy } from '@app/services/logging'
-// import { DialogComponent } from '@app/ui/dialog/dialog.component'
+import { DialogComponent } from '@app/ui/dialog/dialog.component'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { LocaleStore } from '@app/types/Locale'
 import * as INPUT_HELPERS from './inputHelpers'
+import { buildDataMap } from '@app/ui/dialog/helpers'
 
 type StoreType = { locale: LocaleStore } & {skills: { general: SkillInterface[] } & { computer: SkillInterface[] } }
 @Component({
@@ -27,6 +28,7 @@ export class SkillsComponent implements OnInit {
   inputData                                                         = INPUT_HELPERS
   data$: Partial<Record<SkillsType, Observable<SkillInterface[]>>>  = {}
   data: Partial<Record<SkillsType, SkillInterface[]>>               = {}
+  @Input() title: string                                            = 'Skill'
 
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
@@ -46,10 +48,10 @@ export class SkillsComponent implements OnInit {
   }
 
   private prepareDataSubscriptions(storeKey: string) {
-    for (let type in SkillsType) { // type here is string, ExpertienceType[type] will be a number in common enums
-      if (type === SkillsType[SkillsType.all]) continue
-      this.data$[SkillsType[type]] = this.store.pipe(select(state => state?.[storeKey]?.[type]))
-      this.data$[SkillsType[type]].subscribe((data: SkillInterface[]) => data ? this.data[SkillsType[type]] = data : null)
+    for (let type of Object.values(SkillsType)) { // type here is string, ExpertienceType[type] will be a number in common enums
+      if (typeof type === 'string' || type === SkillsType.all) continue
+      this.data$[type] = this.store.pipe(select(state => state?.[storeKey]?.[SkillsType[type]]))
+      this.data$[type].subscribe((data: SkillInterface[]) => data ? this.data[type] = data : null)
     }
   }
 
@@ -68,30 +70,27 @@ export class SkillsComponent implements OnInit {
     }
   }
 
-  openDialog( type: string, index: number = 0 ): void {
-    /*
+  openDialog( type: string, index: number = null ): void {
+    const data = buildDataMap(this.data[SkillsType[type]], index, INPUT_HELPERS, this.title, type)
+    const dataType = data.get('type')
+    data.set('type', {...dataType, value: type})
     const dialogRef = this.matDialog.open(DialogComponent, { width: '80%', data })
-
-    dialogRef.afterClosed().subscribe((result: SkillInterface | EditSkillsStructure) => {
+    dialogRef.afterClosed().subscribe(result => {
       logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '')
       if (result) {
         if (this.isEdit(result)) {
           const { index, skill } = result
           this.editValues(index, { ...skill, language: this.selectedLocale, order: index })
-        } else {
-          this.add(result)
-        }
+        } else this.add(result)
       }
     })
-    */
   }
 
   isActive = ( skillType: string ) => this.type === SkillsType.all || this.type === SkillsType[skillType]
   isEdit = ( data: SkillInterface | EditSkillsStructure | Object = {} ): data is EditSkillsStructure => (data as EditSkillsStructure).index !== undefined
   editValues = ( index: number, data: SkillInterface ) => this.dispatchSave([ ...this.data[SkillsType[data.type]].slice(0, index), { ...data}, ...this.data[SkillsType[data.type]].slice(index + 1) ], data.type)
   edit = ( type: string ) => ( index: number ) => this.openDialog( type, index )
-  add = ( data: SkillInterface ) => this.editValues(this.data[data.type].length, {...data, language: this.selectedLocale, order: this.data[data.type].length })
-  getTypeName = ( type: SkillsType ) => SkillsType[type]
+  add = ( data: SkillInterface ) => this.editValues(this.data[SkillsType[data.type]].length, {...data, language: this.selectedLocale, order: this.data[SkillsType[data.type]].length })
 
   dispatchSave( data, type ) {
     const curatedData = data.map(skill => {
@@ -100,7 +99,7 @@ export class SkillsComponent implements OnInit {
     this.store.dispatch(SKILLS_ACTIONS.SAVE_SKILLS({ skills: curatedData, skillType: type }))
   }
 
-  openRemovalConfirmDialog( index: number, type: SkillsType ): void {
+  openRemovalConfirmDialog = ( type: string) => ( index: number ): void => {
     const skill = this.data[SkillsType[type]][index]
     const dialogRef = this.matDialog.open(ConfirmComponent, { width: '80%', data: { index, element: skill, nameKey: 'tag', superType: 'skill', action: 'delete' } })
 
@@ -113,9 +112,9 @@ export class SkillsComponent implements OnInit {
     })
   }
 
-  delete = ( type: SkillsType ) => ( index: number ) => {
+  delete = ( type: string ) => ( index: number ) => {
     const skills = this.data[SkillsType[type]][index]
-    this.store.dispatch(SKILLS_ACTIONS.REMOVE_SKILL( { id: skills.id, skillType: SkillsType[type] }) )
+    this.store.dispatch(SKILLS_ACTIONS.REMOVE_SKILL( { id: skills.id, skillType: type }) )
   }
 
   onDrop( event: CdkDragDrop<SkillInterface[]> ) {

@@ -26,6 +26,8 @@ export class TableCardComponent {
   @Input()
   isDraggable: boolean                                    = false
   @Input()
+  transformFn: Map<string, Function>                      = new Map()
+  @Input()
   onDrop: (...params: unknown[]) => any                   = () => null
 
   @Input()

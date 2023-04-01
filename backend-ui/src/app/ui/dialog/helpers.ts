@@ -1,19 +1,19 @@
 import { DataDialogMap, MetadataDialog } from "./dialog.component"
 
-export const buildDataMap = (dataSource, index, fromDefinition, title, type) => {
+export const buildDataMap = (dataSource, index, formDefinition, title, type) => {
     const data = dataSource?.[index]
-    const metadata: MetadataDialog = { isEdit: !!data, elementName: title, elementType: type }
-    const result: DataDialogMap = (new Map()).set('dataInputs', fromDefinition.dataInputs).set('metadata', metadata)
-    for (const inputName of fromDefinition.dataInputs) {
-      const types = fromDefinition.dataDefaultInputTypes.get(inputName)
+    const metadata: MetadataDialog = { isEdit: !!data, elementName: title, elementType: type, ...(formDefinition.formValidator && { formValidator: formDefinition.formValidator }) }
+    const result: DataDialogMap = (new Map()).set('dataInputs', formDefinition.dataInputs).set('metadata', metadata)
+    for (const inputName of formDefinition.dataInputs) {
+      const types = formDefinition.dataDefaultInputTypes.get(inputName)
       result.set(inputName, {
-        value: data?.[inputName] ?? fromDefinition.dataDefaultInputValues.get(inputName),
+        value: data?.[inputName] ?? formDefinition.dataDefaultInputValues.get(inputName),
         types: types ? (Array.isArray(types) ? types : [types]) : null,
-        validators: fromDefinition.dataInputValidators.get(inputName),
-        inputError: fromDefinition.dataInputErrors.get(inputName),
-        inputPlaceholders: fromDefinition.dataInputPlaceholders.get(inputName),
-        inputLabel: fromDefinition.dataInputLabels.get(inputName),
-        inputHelpBlock: fromDefinition.dataInputHelpBlocks.get(inputName),
+        validators: formDefinition.dataInputValidators.get(inputName),
+        inputError: formDefinition.dataInputErrors.get(inputName),
+        inputPlaceholders: formDefinition.dataInputPlaceholders.get(inputName),
+        inputLabel: formDefinition.dataInputLabels.get(inputName),
+        inputHelpBlock: formDefinition.dataInputHelpBlocks.get(inputName),
       })
     }
     return result

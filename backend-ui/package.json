@@ -13,9 +13,9 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-devkit/build-angular": "^15.0.4",
     "@angular/animations": "^15.0.4",
     "@angular/cdk": "^15.0.3",
-    "@angular-devkit/build-angular": "^15.0.4",
     "@angular/cli": "^15.0.4",
     "@angular/common": "^15.0.4",
     "@angular/compiler": "^15.0.4",
@@ -39,6 +39,7 @@
     "chart.js": "^3.9.1",
     "gql-query-builder": "^3.8.0",
     "lodash-es": "^4.17.21",
+    "ngx-build-plus": "^15.0.0",
     "ngx-cookie-service": "^15.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.4.1",

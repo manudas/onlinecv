@@ -1,0 +1,13 @@
+:host {
+    .mat-column-edit, .mat-column-delete, .mat-column-order  {
+        flex-basis: auto;
+        flex-grow: 0;
+        padding-right: 0;
+        width: 42px;
+        box-sizing: content-box;
+        justify-content: center;
+    }
+    mat-header-row>:first-child, mat-row>:first-child {
+        padding-left: 0;
+    }
+}

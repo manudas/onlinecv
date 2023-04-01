@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { MatDatepickerModule } from '@angular/material/datepicker'
-// import { MatNativeDateModule } from '@angular/material/core'
-
+import { MatNativeDateModule } from '@angular/material/core'
 import { ConfirmModule } from '@app/ui/confirm/confirm.module'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 import { MatIconModule } from '@angular/material/icon'
@@ -21,7 +20,7 @@ import { DialogComponent } from './dialog.component'
         CommonModule,
         FontAwesomeModule,
         MatDatepickerModule,
-//         MatNativeDateModule,
+        MatNativeDateModule,
         MatIconModule,
         ReactiveFormsModule,
         TableCardModule,

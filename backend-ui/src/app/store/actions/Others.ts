@@ -12,7 +12,7 @@ export const SAVE_REFERENCES =  createAction(
 
 export const FETCH = (type: OthersType) => {
     switch (type) {
-        case OthersType['professional-references']:
+        case OthersType['references']:
             return createAction(
                 '[Others Component] FetchReferences',
                 props<{
