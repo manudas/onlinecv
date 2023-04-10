@@ -5,5 +5,5 @@ export type MessageDef = {
     message: string
     date: number
     hasBeenRead: boolean
-    type: 'sent' | 'received'
+    type: string
 }

@@ -1,26 +1,44 @@
 import nodemailer from "nodemailer";
 
+const messageTypesMap = new Map([
+    ['received', 'received'],
+    ['sent', 'sent'],
+    ['new', 'new'],
+])
+
 export default {
     Query: {
         getMessageTypes: () => {
-            return [
-                'received',
-                'sent',
-                'new'
-            ]
+            return messageTypesMap.values()
+        },
+        messages: async (
+            _parent,
+            { type },
+            { models: { MessagesModel } },
+            _info
+        ) => {
+            const messageList = await MessagesModel.find({ type })
+                .sort({
+                    date: 1
+                })
+                .exec();
+
+           return messageList;
         }
     },
     Mutation: {
-        receiveMessage: async (
+        sendMessage: async (
             _parent,
             // 1st arg: arguments
             {
                 message: {
                   from,
+                  to,
                   name,
                   subject,
                   message
                 },
+                receiving = false,
                 language
               },
             // 2nd arg: context
@@ -42,24 +60,25 @@ export default {
 
                 const document = new MessagesModel(
                     {
-                        from,
+                        from: !receiving ? appSettings.messagingEmail : from,
+                        to: receiving ? appSettings.messagingEmail : to,
                         name,
                         subject,
                         message,
                         date: Date.now(),
                         hasBeenRead: false,
-                        type: 'received'
+                        type: receiving ? messageTypesMap.get('received') : messageTypesMap.get('sent')
                     }
                 );
-                document.save(); // makes it sense to await here?
+                document.save();
 
                 if (sendToEmail) {
                     const transporter = nodemailer.createTransport({
                         host: appSettings.smtpServer,
                         port: appSettings.smtpPort,
                         auth: {
-                        user: appSettings.smtpUsername, // generated ethereal user
-                        pass: appSettings.smtpPassword, // generated ethereal password
+                        user: appSettings.smtpUsername,                                             // generated ethereal user
+                        pass: appSettings.smtpPassword,                                             // generated ethereal password
                         },
                         tls: {
                             rejectUnauthorized: false
@@ -67,12 +86,12 @@ export default {
                     })
 
                     // send mail with defined transport object
-                    transporter.sendMail({  // makes it sense to await here?
-                        from: `"Online CV App 👻" <${appSettings.messagingEmail}>`, // sender address
-                        replyTo: `${name} <${from}>`, // to avoid "this email is not authorized" message
-                        to: appSettings.messagingEmail, // list of receivers string separated by comma
-                        subject: `${subject} ✔`, // Subject line
-                        text: message, // plain text body
+                    transporter.sendMail({
+                        from: `"Online CV App 👻" <${appSettings.messagingEmail}>`,                 // sender address
+                        replyTo: `${name} <${!receiving ? appSettings.messagingEmail : from}>`,     // to avoid "this email is not authorized" message
+                        to: receiving ? appSettings.messagingEmail : to,                            // list of receivers string separated by comma
+                        subject: `${subject} ✔`,                                                    // Subject line
+                        text: message,                                                              // plain text body
                     });
                 }
                 return true;

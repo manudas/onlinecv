@@ -21,13 +21,8 @@ export class ConfirmComponent {
 
     close(message: FileOptions) {
         /*
-         * this is to get the message in the caller:
-
-            this.dialogRef.afterClosed().subscribe(value => {
-                console.log(`Dialog sent: ${value}`);
-            });
-
-        */
-        this.dialogRef.close(message);
+         * this is to send the message to the caller
+         */
+        this.dialogRef.close(message)
     }
 }

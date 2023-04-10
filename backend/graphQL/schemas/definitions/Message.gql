@@ -1,13 +1,25 @@
-input Message {
-  from: String!
+input MessageInput {
+  from: String
+  to: String
   name: String!
   subject: String!
   message: String!
 }
+type Message {
+  _id: ID!
+  from: String!
+  name: String!
+  subject: String!
+  message: String!
+  date: String!
+  type: String!
+  hasBeenRead: Boolean!
+}
 
 extend type Query {
   getMessageTypes: [String]!
+  messages(type: String!): [Message]!
 }
 extend type Mutation {
-  receiveMessage(message: Message!, language: String!): Boolean!
+  sendMessage(message: MessageInput!, language: String!, receiving: Boolean): Boolean!
 }

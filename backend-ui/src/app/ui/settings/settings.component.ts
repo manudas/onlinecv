@@ -18,11 +18,10 @@ type StoreType = { locale: LocaleStore } & { settings: {data: SettingsType } }
   styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit {
-
-  cardIcon: IconDefinition = faCog
-
+  @Input() title: string                                              = 'APP Settings'
+  cardIcon: IconDefinition                                            = faCog
+  settings: SettingsType                                              = null
   settings$: Observable<SettingsType>
-  settings: SettingsType
 
   _backgroundImage: Blob
   get backgroundImage() {
@@ -39,8 +38,6 @@ export class SettingsComponent implements OnInit {
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
 
-  @Input() title: string = 'APP Settings'
-
   public settingsFormGroup: FormGroup = new FormGroup({
     enabledMessaging: new FormControl(true),
     backgroundImage: new FormControl(null),
@@ -55,11 +52,7 @@ export class SettingsComponent implements OnInit {
   acceptedPhotoFileType = definedFileTypes.image
 
   constructor(private store: Store<StoreType>) {
-    this.settings$ = this.store.pipe(
-      select(
-        state => state?.settings?.data
-      )
-    )
+    this.settings$ = this.store.pipe( select( state => state?.settings?.data ))
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
     this.settingsFormGroup.controls.backgroundImage.valueChanges.subscribe((newImage: Blob) => {this.backgroundImageFromSubscription = newImage})
     this.settingsFormGroup.controls.sendToEmail.valueChanges.subscribe((isMailSystemEnabled: boolean) => {

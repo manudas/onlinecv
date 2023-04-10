@@ -6,9 +6,10 @@
         [className]="'paddedContent'"
     >
         {{
+            title ? title :
             isEdit === false
-                ? ('Add new' + elementName ? ' ' + elementName + ': ' : ': ' | translate | async) + (elementType ? (elementType | translate | async | titlecase) : '')
-                : ('Editing' + elementName ? ' ' + elementName + ': ' : ': ' | translate | async) + (elementType ? (elementType | translate | async | titlecase) : '')
+                ? ('Add new' + (elementName ? ' ' + elementName + ': ' : ': ') | translate | async) + (elementType ? (elementType | translate | async | titlecase) : '')
+                : ('Editing' + (elementName ? ' ' + elementName + ': ' : ': ') | translate | async) + (elementType ? (elementType | translate | async | titlecase) : '')
         }}
     </div>
 </h2>
@@ -24,22 +25,28 @@
     <div
         [className]="'paddedContent'"
     >
-        <button
-            [className]="'btn btn-outline-info'"
-            type='button'
-            ngbButton
-            (click)="close()"
-        >
-            {{ 'Cancel' | translate | async }}
-        </button>
-        <button
-            [className]="'btn submitButton'"
-            type="submit"
-            ngbButton
-            (click)="submitHandler($event)"
-        >
-            {{ isEdit === false ? ('Add' | translate | async) : ('Edit' | translate | async) }}
-        </button>
+        <ng-container
+            *ngFor="let button of buttons || [
+                {
+                    class: 'btn-outline-info',
+                    action: 'close',
+                    text: 'Cancel'
+                },
+                {
+                    class: 'submitButton',
+                    action: 'submit',
+                    position: 'right',
+                    text: isEdit === false ? ('Add' | translate | async) : ('Edit' | translate | async)
+                }
+            ]"
+            [ngTemplateOutlet]="buttonTemplate"
+            [ngTemplateOutletContext]="{
+                class: button.class,
+                action: button.action,
+                position: button.position,
+                text: button.text
+            }"
+        ></ng-container>
     </div>
 </div>
 
@@ -238,8 +245,16 @@
     let-placeholder="placeholder"
     let-datePickerRef="datePickerRef"
 >
+    <textarea
+        *ngIf="types?.includes('textarea')"
+        class='form-control'
+        placeholder="{{ placeholder ? (placeholder | translate | async) : null }}"
+        placement="top"
+        [formControl]="control"
+        [readOnly]="types?.includes('readonly')"
+    ></textarea>
     <input
-        *ngIf="!types?.includes('date')"
+        *ngIf="!types?.includes('textarea') && !types?.includes('date')"
         class='form-control'
         placeholder="{{ placeholder ? (placeholder | translate | async) : null }}"
         placement="top"
@@ -248,7 +263,7 @@
         [type]="types?.includes('number') ? 'number' : 'text'"
     >
     <input
-        *ngIf="types?.includes('date')"
+        *ngIf="!types?.includes('textarea') && types?.includes('date')"
         class='form-control'
         placeholder="{{ placeholder ? (placeholder | translate | async) : null }}"
         placement="top"
@@ -256,4 +271,23 @@
         [matDatepicker]="datePickerRef"
         [readOnly]="types?.includes('readonly')"
     >
+</ng-template>
+
+<ng-template #buttonTemplate
+    let-action="action"
+    let-text="text"
+    let-position="position"
+    let-class="class"
+>
+    <button
+        [ngClass]="{
+            btn: true,
+            right: position === 'right'
+        }"
+        [className]="class"
+        ngbButton
+        (click)="action === 'close' ? close() : submitHandler($event)"
+    >
+        {{ text | translate | async }}
+    </button>
 </ng-template>

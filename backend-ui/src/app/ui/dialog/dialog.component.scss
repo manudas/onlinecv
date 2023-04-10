@@ -19,8 +19,20 @@
         flex: 0 0 auto;
     }
 
+    .right {
+        float: right;
+    }
+
     .paddedContent {
         padding: 20px;
+
+        &> * {
+            margin-left: 1rem;
+        }
+
+        &> *:first-child {
+            margin-left: 0px;
+        }
     }
 
     label {
@@ -65,7 +77,7 @@
                 @extend .bg-secondary
             }
 
-            float: right;
+            @extend .right;
         }
     }
 

@@ -1,16 +1,16 @@
 import { Validators } from '@angular/forms'
-import { AcceptedTypes } from '@app/ui/dialog/dialog.component'
+import { AcceptedTypes, assertValidAcceptedTypes } from '@app/ui/dialog/helpers'
 import { assessmentFromOneToTen } from '@utils/commonFormValidators'
 
 export const colsToRender            = [ 'tag', 'description', 'school', 'average_grade', 'edit', 'delete', 'order' ]
 export const dataInputs              = [ 'id', 'tag', 'type', 'finish_date', 'description', 'final_project', 'school', 'school_url', 'start_date', 'average_grade' ]
 export const dataDefaultInputValues  = new Map()
 export const dataDefaultInputTypes   = new Map<string, AcceptedTypes | AcceptedTypes[]>([
-    ['id', ['hidden']],
-    ['type', ['hidden']],
-    ['start_date', ['date', 'readonly']],
-    ['finish_date', ['date', 'readonly']],
-    ['average_grade', ['number']],
+    ['id', assertValidAcceptedTypes<['hidden']>(['hidden'])],
+    ['type', assertValidAcceptedTypes<['hidden']>(['hidden'])],
+    ['start_date', assertValidAcceptedTypes<['date', 'readonly']>(['date', 'readonly'])],
+    ['finish_date', assertValidAcceptedTypes<['date', 'readonly']>(['date', 'readonly'])],
+    ['average_grade', assertValidAcceptedTypes<['number']>(['number'])],
 ])
 export const dataInputValidators     = new Map([ ['tag', [Validators.required]], ['type', [Validators.required]], ['average_grade', [assessmentFromOneToTen]] ])
 export const dataInputErrors         = new Map([ ['tag', 'You should provide a valid tag for your training'], ['average_grade', 'Out of range, should be between 1 and 10 or empty'] ])

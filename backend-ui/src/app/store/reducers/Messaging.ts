@@ -10,5 +10,9 @@ export function reducer(state: object, action) {
       // do some more logic here if needed
       return { ...state, messageTypes }
     }),
+    on(MESSAGING.GET_MESSAGES_FETCHED, (state, { messages }) => {
+      // do some more logic here if needed
+      return { ...state, messages }
+    }),
   )(state, action)
 }

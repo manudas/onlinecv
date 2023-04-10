@@ -1,12 +1,11 @@
 import { ValidationErrors, Validators } from '@angular/forms'
-import { AcceptedTypes } from '@app/ui/dialog/dialog.component'
-import { assessmentFromOneToTen } from '@utils/commonFormValidators'
+import { AcceptedTypes, assertValidAcceptedTypes, ValidAcceptedTypes } from '../dialog/helpers'
 
 export const colsToRender            = [ 'name', 'company', 'edit', 'delete', 'order' ]
 export const dataInputs              = [ 'id', 'name', 'role', 'description', 'company', 'company_url', 'phone', 'email' ]
 export const dataDefaultInputValues  = new Map()
-export const dataDefaultInputTypes   = new Map<string, AcceptedTypes | AcceptedTypes[]>([
-    ['id', ['hidden']],
+export const dataDefaultInputTypes   = new Map<string, ValidAcceptedTypes<AcceptedTypes[]>>([
+    ['id', assertValidAcceptedTypes<['hidden']>(['hidden'])],
 ])
 export const dataInputValidators     = new Map([ ['name', [Validators.required]] ])
 export const dataInputErrors         = new Map([

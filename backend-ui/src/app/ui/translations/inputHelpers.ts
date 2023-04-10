@@ -1,6 +1,6 @@
 import { Validators } from '@angular/forms'
 import { TranslationEnum } from '@app/types'
-import { AcceptedTypes } from '@app/ui/dialog/dialog.component'
+import { AcceptedTypes, assertValidAcceptedTypes } from '@app/ui/dialog/helpers'
 
 export const colsToRender            = new Map<TranslationEnum, string[]>([
     [TranslationEnum.missing, [ 'module', 'domain', 'tag', 'lastTimeFetched', 'accessCounter', 'edit', 'delete' ]],
@@ -9,10 +9,10 @@ export const colsToRender            = new Map<TranslationEnum, string[]>([
 export const dataInputs              = [ 'id', 'domain', 'tag', 'module', 'text' ]
 export const dataDefaultInputValues  = new Map()
 export const dataDefaultInputTypes_missing   = new Map<string, AcceptedTypes | AcceptedTypes[]>([
-    ['id', ['hidden']],
-    ['domain', ['readonly']],
-    ['tag', ['readonly']],
-    ['module', ['readonly']],
+    ['id', assertValidAcceptedTypes<['hidden']>(['hidden'])],
+    ['domain', assertValidAcceptedTypes<['readonly']>(['readonly'])],
+    ['tag', assertValidAcceptedTypes<['readonly']>(['readonly'])],
+    ['module', assertValidAcceptedTypes<['readonly']>(['readonly'])],
 ])
 export const dataDefaultInputTypes_translated   = new Map<string, AcceptedTypes | AcceptedTypes[]>([
     ['id', ['hidden']],

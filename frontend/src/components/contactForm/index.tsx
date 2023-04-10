@@ -10,7 +10,7 @@ import { PropDef, StateDef } from './types'
 import ControlledPopup from 'components/popup'
 
 import { translateString } from 'helpers/translations'
-import { receiveMessage } from 'queries/sendMessage'
+import { sendMessage } from 'queries/sendMessage'
 import { DataService } from 'queries/data.service'
 import { isValidEmail, isEmpty } from 'helpers/validators'
 
@@ -250,7 +250,7 @@ class ContactForm extends Component<PropDef, StateDef> {
                 query: queryUserData,
                 variables: variablesUserData
             // sending a message from visitors perspective is receiving a message from our perspective
-            } = receiveMessage(name, from, subject, message, this.props.language);
+            } = sendMessage(name, from, subject, message, this.props.language);
             const dataService = DataService.factory();
             const {
                 data,
@@ -260,7 +260,7 @@ class ContactForm extends Component<PropDef, StateDef> {
                 variablesUserData
             )
 
-            const ok = data?.receiveMessage ?? false
+            const ok = data?.sendMessage ?? false
 
             if (errors || ok !== true) {
                 this.setState({ popupMessage: this.messageError })

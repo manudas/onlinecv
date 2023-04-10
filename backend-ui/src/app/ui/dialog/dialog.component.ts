@@ -6,32 +6,14 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog"
 import { LocaleStore } from '@app/types'
 import { Observable } from 'rxjs'
 import { logEasy } from '@app/services/logging'
+import { AcceptedTypes, DataDialogDef, DataDialogMap, DialogButtonDef, MetadataDialog } from './helpers'
 
 type StoreType = { locale: LocaleStore }
-export type AcceptedTypes = 'hidden' | 'readonly' | 'date' | 'readonly' | 'fullsize' | 'number' | undefined | null
-export type MetadataDialog = {
-    isEdit?: boolean
-    elementName?: string
-    elementType?: string
-    formValidator?: ValidatorFn | ValidatorFn[] | undefined | null
-}
-export type DataDialogDef = {
-    types?: AcceptedTypes[]
-    value?: string | number | (string | number)[] | undefined | null
-    validators?: ValidatorFn | ValidatorFn[] | undefined | null
-    inputError?: string | undefined | null
-    inputPlaceholders?: string | undefined | null
-    inputLabel?: string | undefined | null
-    inputHelpBlock?: string | undefined | null
-}
-export type DataDialogMap = Map<'metadata', MetadataDialog> & Map<'dataInputs', string []> & Map<string, DataDialogDef>
-
 @Component({
     templateUrl: './dialog.component.html',
     styleUrls: ['./dialog.component.scss']
 })
 export class DialogComponent {
-
     dataFormGroup: FormGroup            = new FormGroup({ })
     types: Map<string, string[]>        = new Map<string, string[]>()
     errors: Map<string, string>         = new Map<string, string>()
@@ -41,7 +23,8 @@ export class DialogComponent {
     isEdit: boolean                     = false
     elementName: string
     elementType: string
-
+    buttons: DialogButtonDef[]
+    title: string
     selectedLocale$: Observable<string>
     isFormArray = (form: AbstractControl): form is FormArray => 'controls' in form && Array.isArray((form as FormArray).controls)
     addControl(control, value, validators) {
@@ -69,6 +52,7 @@ export class DialogComponent {
             if (typeof val === "undefined" || control === "metadata") continue;
             const { types, value, validators, inputError, inputPlaceholders, inputLabel, inputHelpBlock } = val as DataDialogDef
             types?.includes('date') ? this.addControl(control, value ? new Date(Number(value)) : null, validators) : this.addControl(control, value, validators)
+            types?.includes('disabled') && this.dataFormGroup.controls[control].disable()
             types && this.addType(control, types)
             inputError && this.addError(control, inputError)
             inputPlaceholders && this.addPlaceholder(control, inputPlaceholders)
@@ -80,6 +64,8 @@ export class DialogComponent {
         this.isEdit = meta?.isEdit ?? false
         this.elementName = meta?.elementName ?? null
         this.elementType = meta?.elementType ?? null
+        this.buttons = meta?.buttons ?? null
+        this.title = meta?.title ?? null
     }
 
     submitHandler(_$event): void {

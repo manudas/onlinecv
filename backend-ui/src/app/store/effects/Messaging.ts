@@ -11,6 +11,7 @@ import { DataService } from '@services/data/data.service'
 
 import {
     QueryMessageTypes,
+    QueryMessagesByTypes,
 } from '@services/data/queries'
 import { MessageDef } from '@app/types/MessagingSystem'
 import { TranslationService } from '@app/services/translation/translation.service'
@@ -49,6 +50,36 @@ export class MessagingSystemEffects {
             return this.dataService.readData(query, null, headers).pipe(
                 map(({ getMessageTypes }) => {
                     return MESSAGING.MESSAGING_TYPES_FETCHED({ messageTypes: [...getMessageTypes] })
+                }),
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
+                    return of({
+                        type: COMMON_ACTIONS.FAIL.type,
+                        message: errors.map(error => error.message)
+                    })
+                })
+            )
+        })
+    ))
+
+    /**
+     * Effect provides new actions as
+     * a result of the operation performed
+     */
+    public fetchMessagesEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
+        ofType<ReturnType<typeof MESSAGING.GET_MESSAGES>>(MESSAGING.GET_MESSAGES),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
+        switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+            const { messageType } = action
+            const {
+                query,
+                variables
+            } = QueryMessagesByTypes(messageType)
+
+            return this.dataService.readData(query, variables, headers).pipe(
+                map(({ messages}) => {
+                    return MESSAGING.GET_MESSAGES_FETCHED({ messages })
                 }),
                 catchError((response) => {
                     const { error: {errors = []} = {} } = response || {}

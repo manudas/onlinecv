@@ -1,6 +1,6 @@
 import  { mutation } from 'gql-query-builder'
 
-export const receiveMessage = (
+export const sendMessage = (
     name: string,
     from: string,
     subject: string,
@@ -11,7 +11,7 @@ export const receiveMessage = (
         query: queryWithoutVars,
         variables
     } = mutation({
-        operation: 'receiveMessage',
+        operation: 'sendMessage',
         variables: {
             message: {
                 value: {

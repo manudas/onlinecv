@@ -1,19 +1,19 @@
 import { Validators } from '@angular/forms'
-import { AcceptedTypes } from '@app/ui/dialog/dialog.component'
+import { AcceptedTypes, assertValidAcceptedTypes } from '@app/ui/dialog/helpers'
 import { assessmentFromOneToTen } from '@utils/commonFormValidators'
 
 export const colsToRender            = [ 'name', 'certification', 'school', 'edit', 'delete', 'order' ]
 export const dataInputs              = [ 'id', 'name', 'language', 'certification', 'school', 'school_url', 'spoken_level', 'written_level' ]
 export const dataDefaultInputValues  = new Map()
 export const dataDefaultInputTypes   = new Map<string, AcceptedTypes | AcceptedTypes[]>([
-    ['id', ['hidden']],
-    ['name', ['fullsize']],
-    ['language', ['hidden']],
-    ['certification', ['fullsize']],
-    ['school', ['fullsize']],
-    ['school_url', ['fullsize']],
-    ['spoken_level', ['fullsize', 'number']],
-    ['written_level', ['fullsize', 'number']],
+    ['id', assertValidAcceptedTypes<['hidden']>(['hidden'])],
+    ['name', assertValidAcceptedTypes<['fullsize']>(['fullsize'])],
+    ['language', assertValidAcceptedTypes<['hidden']>(['hidden'])],
+    ['certification', assertValidAcceptedTypes<['fullsize']>(['fullsize'])],
+    ['school', assertValidAcceptedTypes<['fullsize']>(['fullsize'])],
+    ['school_url', assertValidAcceptedTypes<['fullsize']>(['fullsize'])],
+    ['spoken_level', assertValidAcceptedTypes<['fullsize', 'number']>(['fullsize', 'number'])],
+    ['written_level', assertValidAcceptedTypes<['fullsize', 'number']>(['fullsize', 'number'])],
 ])
 export const dataInputValidators     = new Map([ ['name', [Validators.required]], ['language', [Validators.required]], ['spoken_level', [assessmentFromOneToTen]], ['written_level', [assessmentFromOneToTen]] ])
 export const dataInputErrors         = new Map([

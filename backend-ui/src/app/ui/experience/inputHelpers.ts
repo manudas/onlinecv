@@ -1,15 +1,15 @@
 import { Validators } from '@angular/forms'
-import { AcceptedTypes } from '@app/ui/dialog/dialog.component'
+import { AcceptedTypes, assertValidAcceptedTypes } from '@app/ui/dialog/helpers'
 
 export const colsToRender            = ['role', 'company', 'edit', 'delete', 'order']
 export const dataInputs              = ['id', 'type', 'role', 'description', 'start_date', 'finish_date', 'company', 'company_url', 'details']
 export const dataDefaultInputValues  = new Map([ ['details', []] ])
 export const dataDefaultInputTypes   = new Map<string, AcceptedTypes | AcceptedTypes[]>([
-    ['id', ['hidden']],
-    ['type', ['hidden']],
-    ['start_date', ['date', 'readonly']],
-    ['finish_date', ['date', 'readonly']],
-    ['details', ['fullsize']]
+    ['id', assertValidAcceptedTypes<['hidden']>(['hidden'])],
+    ['type', assertValidAcceptedTypes<['hidden']>(['hidden'])],
+    ['start_date', assertValidAcceptedTypes<['date', 'readonly']>(['date', 'readonly'])],
+    ['finish_date', assertValidAcceptedTypes<['date', 'readonly']>(['date', 'readonly'])],
+    ['details', assertValidAcceptedTypes<['fullsize']>(['fullsize'])]
 ])
 export const dataInputValidators     = new Map([ ['type', [Validators.required]], ['role', [Validators.required]] ])
 export const dataInputErrors         = new Map([ ['role', 'You should provide a valid role for your experience'] ])
