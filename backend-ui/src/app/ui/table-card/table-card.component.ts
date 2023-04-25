@@ -28,6 +28,8 @@ export class TableCardComponent {
   @Input()
   transformFn: Map<string, Function>                      = new Map()
   @Input()
+  transformHeaderFn: Map<string, Function>                = new Map()
+  @Input()
   onDrop: (...params: unknown[]) => any                   = () => null
 
   @Input()
@@ -46,6 +48,6 @@ export class TableCardComponent {
     }
   }
 
-  edit = (indexToEdit: number) => this.editCallBack(indexToEdit)
-  delete = (indexToEdit: number) => this.deleteCallBack(indexToEdit)
+  edit = (index: number) => this.editCallBack(index)
+  delete = (index: number) => this.deleteCallBack(index)
 }

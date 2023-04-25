@@ -12,7 +12,7 @@ import { Observable } from 'rxjs'
 import * as EXPERIENCE_ACTIONS from '@store_actions/Experience'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { DialogComponent } from '@app/ui/dialog/dialog.component'
-import { buildDataMap } from '@app/ui/dialog/helpers'
+import { buildDataMap, MetadataDialog } from '@app/ui/dialog/helpers'
 import * as INPUT_HELPERS from './inputHelpers'
 
 type StoreType = { locale: LocaleStore } & {experience: { professional: ExperienceInterface[] } & { ong: ExperienceInterface[] } & { other: ExperienceInterface[] } }
@@ -101,7 +101,10 @@ export class ExperienceComponent implements OnInit {
 
   openRemovalConfirmDialog( index: number, type: ExperienceType ): void {
     const experience = this.data[type][index]
-    const dialogRef = this.matDialog.open(ConfirmComponent, { width: '80%', data: { index, element: experience, nameKey: 'role', superType: 'experience', action: 'delete' } })
+    const dialogRef = this.matDialog.open(ConfirmComponent, {
+      width: '80%',
+      data: new Map<string, ExperienceInterface | MetadataDialog>([ ['element', experience], ['metadata', { index, nameKey: 'role', superType: 'experience', action: 'delete' }] ])
+    })
 
     dialogRef.afterClosed().subscribe(({
       index = null,

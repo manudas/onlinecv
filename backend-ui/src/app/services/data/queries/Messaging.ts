@@ -1,22 +1,19 @@
-import { query } from 'gql-query-builder'
+import { mutation, query } from 'gql-query-builder'
 
 const queryFields = [
     'id: _id',
     'from',
+    'to',
     'name',
     'subject',
-    'message'
+    'message',
+    'date'
 ]
 
 export const QueryMessageTypes = () => {
-    const { query: queryWithoutVars, variables } = query({
-        operation: 'getMessageTypes',
-    })
+    const { query: queryWithoutVars, variables } = query({ operation: 'getMessageTypes' })
 
-    return {
-        query: queryWithoutVars,
-        variables
-    }
+    return { query: queryWithoutVars, variables }
 }
 export const QueryMessagesByTypes = (type: string) => {
     const { query: queryWithoutVars, variables } = query({
@@ -30,8 +27,58 @@ export const QueryMessagesByTypes = (type: string) => {
         fields: queryFields
     })
 
-    return {
+    return { query: queryWithoutVars, variables }
+}
+export const sendMessage = (
+    name: string,
+    from: string,
+    to: string,
+    subject: string,
+    message: string,
+    language: string,
+) => {
+    const {
         query: queryWithoutVars,
         variables
-    }
+    } = mutation({
+        operation: 'sendMessage',
+        variables: {
+            message: {
+                value: {
+                    name,
+                    from,
+                    to,
+                    subject,
+                    message
+                },
+                required: true,
+                type: "MessageInput"
+            },
+            language: {
+                required: true,
+                value: language
+            }
+        },
+    })
+
+    return { query: queryWithoutVars, variables }
+}
+export const deleteMessages = (
+    id: string[]
+) => {
+    const {
+        query: queryWithoutVars,
+        variables
+    } = mutation({
+        operation: 'deleteMessages',
+        variables: {
+            id: {
+                value: id,
+                required: true,
+                type: '[String!]'
+            },
+        },
+    })
+
+    return { query: queryWithoutVars, variables }
 }

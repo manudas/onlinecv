@@ -1,9 +1,10 @@
 import nodemailer from "nodemailer";
+import { GraphQLError } from 'graphql';
 
 const messageTypesMap = new Map([
-    ['received', 'received'],
-    ['sent', 'sent'],
-    ['new', 'new'],
+    ['received', 'inbox'],
+    ['sent', 'outbox'],
+    ['new', 'unread'],
 ])
 
 export default {
@@ -60,7 +61,7 @@ export default {
 
                 const document = new MessagesModel(
                     {
-                        from: !receiving ? appSettings.messagingEmail : from,
+                        from,
                         to: receiving ? appSettings.messagingEmail : to,
                         name,
                         subject,
@@ -85,18 +86,31 @@ export default {
                         },
                     })
 
-                    // send mail with defined transport object
-                    transporter.sendMail({
-                        from: `"Online CV App 👻" <${appSettings.messagingEmail}>`,                 // sender address
-                        replyTo: `${name} <${!receiving ? appSettings.messagingEmail : from}>`,     // to avoid "this email is not authorized" message
-                        to: receiving ? appSettings.messagingEmail : to,                            // list of receivers string separated by comma
-                        subject: `${subject} ✔`,                                                    // Subject line
-                        text: message,                                                              // plain text body
-                    });
+                    try {
+                        // send mail with defined transport object
+                        await transporter.sendMail({
+                            from: `"Online CV App 👻" <${appSettings.messagingEmail}>`,                 // sender address
+                            replyTo: `${name} <${!receiving ? appSettings.messagingEmail : from}>`,     // to avoid "this email is not authorized" message
+                            to: receiving ? appSettings.messagingEmail : to,                            // list of receivers string separated by comma
+                            subject: `${subject} ✔`,                                                    // Subject line
+                            text: message,                                                              // plain text body
+                        });
+                    } catch (error) {
+                        throw new GraphQLError(`Could not send external email: ${error}`);
+                    }
                 }
                 return true;
             }
             return false;
         },
+        deleteMessages: async (
+            _parent,
+            { id },
+            { models: { MessagesModel } },
+            _info
+        ) => {
+            const WriteResult = await MessagesModel.deleteMany({ _id: { $in: id } });
+            return WriteResult.deletedCount > 1;
+        }
     }
 };

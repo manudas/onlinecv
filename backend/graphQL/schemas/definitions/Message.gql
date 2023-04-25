@@ -8,6 +8,7 @@ input MessageInput {
 type Message {
   _id: ID!
   from: String!
+  to: String!
   name: String!
   subject: String!
   message: String!
@@ -22,4 +23,5 @@ extend type Query {
 }
 extend type Mutation {
   sendMessage(message: MessageInput!, language: String!, receiving: Boolean): Boolean!
+  deleteMessages(id: [String!]!): Boolean!
 }

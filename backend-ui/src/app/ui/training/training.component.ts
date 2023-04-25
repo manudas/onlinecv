@@ -15,7 +15,7 @@ import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { LocaleStore } from '@app/types/Locale'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import * as INPUT_HELPERS from './inputHelpers'
-import { buildDataMap } from '@app/ui/dialog/helpers'
+import { buildDataMap, MetadataDialog } from '@app/ui/dialog/helpers'
 
 type StoreType = { locale: LocaleStore } & { trainings: { official: TrainingInterface[] } & { computer: TrainingInterface[] } & { other: TrainingInterface[] }}
 @Component({
@@ -96,7 +96,10 @@ export class TrainingComponent implements OnInit {
 
     openRemovalConfirmDialog = ( type: TrainingType ) => (index: number): void => {
         const training = this.data[TrainingType[type]][index];
-        const dialogRef = this.matDialog.open(ConfirmComponent, { width: '80%', data: { index, element: training, action: 'delete', nameKey: 'tag', superType: 'training' }})
+        const dialogRef = this.matDialog.open(ConfirmComponent, {
+            width: '80%',
+            data: new Map<string, TrainingInterface | MetadataDialog>([ ['element', training], ['metadata', { index, nameKey: 'tag', superType: 'training', action: 'delete' }] ])
+        })
 
         dialogRef.afterClosed().subscribe((data) => {
             const { _index } = data ?? {}

@@ -6,8 +6,8 @@ import {
     HttpEvent,
     HttpInterceptor
 } from '@angular/common/http'
-import { Observable } from 'rxjs'
-import { finalize } from 'rxjs/operators'
+import { Observable, throwError } from 'rxjs'
+import { catchError, finalize } from 'rxjs/operators'
 import { SpinnerOverlayService } from '../spinner-service/spinner-overlay.service'
 
 @Injectable()
@@ -27,6 +27,10 @@ export class LoadingInterceptor implements HttpInterceptor {
                 if (this.totalRequests == 0) {
                     this.loadingService.hide()
                 }
+            }),
+            catchError((response) => {
+                // We let another handler to handle the error, throwing an observable with the error
+                return throwError(() => response)
             })
         )
     }

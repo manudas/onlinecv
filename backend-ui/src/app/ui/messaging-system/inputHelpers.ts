@@ -1,7 +1,7 @@
 import { Validators } from "@angular/forms"
 import { AcceptedTypes, assertValidAcceptedTypes, DialogButtonDef } from "@app/ui/dialog/helpers"
 
-export const colsToRender            = [ 'from', 'name', 'subject', 'message' ]
+export const colsToRender            = [ 'from', 'name', 'subject', 'message', 'edit', 'delete' ]
 export const dataInputs              = [ 'id', 'from', 'name', 'to', 'date', 'subject', 'message', 'hasBeenRead', 'type' ]
 export const dataDefaultInputValues  = new Map()
 export const dataDefaultInputTypes   = new Map<string, AcceptedTypes | AcceptedTypes[]>([
@@ -55,3 +55,7 @@ export const buttonMetaData = new Map<string, DialogButtonDef>([
     ['Send', { action: 'submit', text: 'Send', position: 'right', class: 'submitButton' }]
 ])
 export const title = 'Send a message'
+
+export const transformHeaderFn = new Map([
+    ['edit', function () { return 'open' }],
+])

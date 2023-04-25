@@ -21,8 +21,9 @@ export const sendMessage = (
                     message
                 },
                 required: true,
-                type: "Message"
+                type: "MessageInput"
             },
+            receiving: true,
             language: {
                 required: true,
                 value: language

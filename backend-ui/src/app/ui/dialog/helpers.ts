@@ -8,8 +8,15 @@ export type MetadataDialog = {
     elementName?: string
     elementType?: string
     formValidator?: ValidatorFn | ValidatorFn[] | undefined | null
+    // shared in between dialog and confirmation dialog
     buttons?: DialogButtonDef[]
+    // for confirmation dialog
     title?: string
+    message?: string
+    superType?: string
+    nameKey?: string
+    action?: string
+    index?: number
 }
 export type AcceptedTypes = (InternalAcceptedTypes | InputType)
 type IsUnion<T, U extends T = T> =

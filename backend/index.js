@@ -71,7 +71,7 @@ createSecureServer(app);
 process.on('uncaughtException', function(err) {
     niceLog({ data: { text: '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', style: 'red', logLevel: 'error' }});
     niceLog({ data: { text: 'UNCONTROLLED EXCEPTION', style: 'red' }, attachTimeStamp: true, logLevel: 'error' });
-    niceLog({ data: { text: error, style: 'red' }, attachTimeStamp: true, logLevel: 'error' });
+    niceLog({ data: { text: err, style: 'red' }, attachTimeStamp: true, logLevel: 'error' });
     niceLog({ data: { text: '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', style: 'red', logLevel: 'error' }});
     niceLog({ data: { text: 'Node NOT Exiting...', style: 'blue', logLevel: 'log' }});
 });

@@ -31,9 +31,11 @@
 <app-table-card
     [cardIcon]="cardIcon"
     [title]="type | titlecase | translate | async"
-
+    [transformHeaderFn]="inputData.transformHeaderFn"
     [rows]="data"
     [columns]="inputData.colsToRender"
+    [editCallBack]="openDialog"
+    [deleteCallBack]="openRemovalConfirmDialog"
 >
 
 </app-table-card>

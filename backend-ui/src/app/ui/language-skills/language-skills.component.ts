@@ -11,7 +11,7 @@ import { LocaleStore } from '@app/types/Locale'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import { EditLanguageStructure, LanguageInterface } from '@app/types/Languages'
 import { DialogComponent } from '@app/ui/dialog/dialog.component'
-import { buildDataMap } from '@app/ui/dialog/helpers'
+import { buildDataMap, MetadataDialog } from '@app/ui/dialog/helpers'
 import * as INPUT_HELPERS from './inputHelpers'
 
 type StoreType = { locale: LocaleStore } & { languages: { list: LanguageInterface[] } }
@@ -87,7 +87,10 @@ export class LanguageSkillsComponent implements OnInit {
 
   openRemovalConfirmDialog = ( index: number ): void => {
     const language = this.data[index]
-    const dialogRef = this.matDialog.open(ConfirmComponent, { width: '80%', data: { index, element: language, nameKey: 'name', superType: 'language', action: 'delete' } })
+    const dialogRef = this.matDialog.open(ConfirmComponent, {
+      width: '80%',
+      data: new Map<string, LanguageInterface | MetadataDialog>([ ['element', language], ['metadata', { index, nameKey: 'name', superType: 'language', action: 'delete' }] ])
+    })
 
     dialogRef.afterClosed().subscribe(({
       index = null,

@@ -20,7 +20,7 @@
             <mat-header-cell
                 *matHeaderCellDef
             >
-                {{ col === 'id' ? '#' : col | noSpecialChars | translate | async | titlecase }}
+                {{ col === 'id' ? '#' : (transformHeaderFn.get(col) ? transformHeaderFn.get(col)(col) : col) | noSpecialChars | translate | async | titlecase }}
             </mat-header-cell>
             <mat-cell *matCellDef="let row; let rowIndex = index">
 
@@ -39,7 +39,7 @@
                 <ng-container *ngIf="col === 'order'"
                     [ngTemplateOutlet]="dragHandle"
                 ></ng-container>
-                <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> {{ transformFn.get(col) ? transformFn.get(col)(row[col]) : row[col] }} </ng-container>
+                <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> <div class="ellipsis"> {{ transformFn.get(col) ? transformFn.get(col)(row[col]) : row[col] }} </div> </ng-container>
 
             </mat-cell>
         </ng-container>

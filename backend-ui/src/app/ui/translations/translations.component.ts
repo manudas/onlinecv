@@ -11,7 +11,7 @@ import * as TRANSLATION_ACTIONS from '@store_actions/Translation'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { DialogComponent } from '@app/ui/dialog/dialog.component'
 import * as INPUT_HELPERS from './inputHelpers'
-import { buildDataMap } from '@app/ui/dialog/helpers'
+import { buildDataMap, MetadataDialog } from '@app/ui/dialog/helpers'
 
 type StoreType = { locale: LocaleStore } & { translation: { translationManager: { missing: TranslationInterface[] } & { translated: TranslationInterface[] } } }
 const translationTypeActionMap = new Map<TranslationEnum, ActionCreator>([
@@ -98,7 +98,10 @@ export class TranslationComponent implements OnInit {
 
     openRemovalDialog = ( type: string ) => (index: number): void => {
         const translation = this.data[TranslationEnum[type]][index]
-        const dialogRef = this.matDialog.open(ConfirmComponent, { width: '80%', data: { index, element: translation, nameKey: 'tag', superType: 'translation', action: 'delete' } })
+        const dialogRef = this.matDialog.open(ConfirmComponent, {
+            width: '80%',
+            data: new Map<string, TranslationInterface | MetadataDialog>([ ['element', translation], ['metadata', { index, nameKey: 'tag', superType: 'translation', action: 'delete' }] ])
+        })
 
         dialogRef.afterClosed().subscribe(
             ({ element: { id = null } = {} } = {}) => {

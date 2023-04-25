@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { Observable, of } from 'rxjs'
 
-import { switchMap, map, tap, catchError } from 'rxjs/operators'
+import { mergeMap, switchMap, map, tap, catchError, filter } from 'rxjs/operators'
 
 import * as MESSAGING from '@store_actions/Messaging'
 import * as COMMON_ACTIONS from '@store_actions/Common'
@@ -12,8 +12,9 @@ import { DataService } from '@services/data/data.service'
 import {
     QueryMessageTypes,
     QueryMessagesByTypes,
+    sendMessage,
+    deleteMessages,
 } from '@services/data/queries'
-import { MessageDef } from '@app/types/MessagingSystem'
 import { TranslationService } from '@app/services/translation/translation.service'
 import { logEasy } from '@app/services/logging/logging.service'
 
@@ -21,17 +22,12 @@ import { LoginService } from '@app/ui/login/login-service/login.service'
 
 @Injectable()
 export class MessagingSystemEffects {
-
-    translationsToRequest = ['Settings saved successfully']
-
     constructor(
         private actions$: Actions,
         private dataService: DataService,
         private loginService: LoginService,
         private translate: TranslationService,
-    ) {
-        this.translate.prefetch(this.translationsToRequest, this)
-    }
+    ) { }
 
     /**
      * Effect provides new actions as
@@ -87,6 +83,70 @@ export class MessagingSystemEffects {
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)
                     })
+                })
+            )
+        })
+    ))
+    /**
+     * Effect provides new actions as
+     * a result of the operation performed
+     */
+    public sendMessageEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
+        ofType<ReturnType<typeof MESSAGING.SEND_MESSAGE>>(MESSAGING.SEND_MESSAGE),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
+        switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+            const { message: {
+                name,
+                from,
+                to,
+                subject,
+                message,
+            }, language, currentMessageType } = action
+            const {
+                query,
+                variables
+            } = sendMessage(name, from, to, subject, message, language)
+
+            return this.dataService.setData(query, variables, headers).pipe(
+                filter((result: boolean) => result),
+                mergeMap(() => [
+                    MESSAGING.GET_MESSAGES({ messageType: currentMessageType }),
+                    COMMON_ACTIONS.SUCCESS({message: `${this.translate.getResolvedTranslation('Message sent', this)}`}),
+                ]),
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
+                    return of(COMMON_ACTIONS.FAIL({ message: errors.map(error => error.message), timeout: 2000}))
+                })
+            )
+        })
+    ))
+
+    /**
+     * Effect provides new actions as
+     * a result of the operation performed
+     */
+    public deleteMessageEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
+        ofType<ReturnType<typeof MESSAGING.DELETE_MESSAGE>>(MESSAGING.DELETE_MESSAGE),
+        tap((action) => logEasy(`Action caught in ${this.constructor.name}:`, action)),
+        switchMap((action) => { // if a new Actions arrives, the old Observable will be canceled
+            const headers = this.loginService.processHeader()
+            const {id, currentMessageType } = action
+            const idArr = Array.isArray(id) ? id : [id]
+            const {
+                query,
+                variables
+            } = deleteMessages(idArr)
+
+            return this.dataService.setData(query, variables, headers).pipe(
+                filter((result: boolean) => result),
+                mergeMap(() => [
+                    MESSAGING.GET_MESSAGES({ messageType: currentMessageType }),
+                    COMMON_ACTIONS.SUCCESS({message: `${this.translate.getResolvedTranslation('Message removed', this)}`}),
+                ]),
+                catchError((response) => {
+                    const { error: {errors = []} = {} } = response || {}
+                    return of(COMMON_ACTIONS.FAIL({ message: errors.map(error => error.message), timeout: 2000}))
                 })
             )
         })

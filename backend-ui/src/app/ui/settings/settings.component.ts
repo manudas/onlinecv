@@ -39,14 +39,14 @@ export class SettingsComponent implements OnInit {
   selectedLocale$: Observable<string>
 
   public settingsFormGroup: FormGroup = new FormGroup({
-    enabledMessaging: new FormControl(true),
-    backgroundImage: new FormControl(null),
-    sendToEmail: new FormControl(false),
-    smtpServer: new FormControl(null, this.ValidateRequiredIfMessagingToEmailEnabled),
-    smtpPort: new FormControl(25, this.ValidateRequiredIfMessagingToEmailEnabled),
-    smtpUsername: new FormControl(null, this.ValidateRequiredIfMessagingToEmailEnabled),
-    smtpPassword: new FormControl(null, this.ValidateRequiredIfMessagingToEmailEnabled),
-    messagingEmail: new FormControl(null, [Validators.email, this.ValidateRequiredIfMessagingToEmailEnabled]),
+    enabledMessaging: new FormControl(false, { nonNullable: true }),
+    backgroundImage: new FormControl(null, { nonNullable: true }),
+    sendToEmail: new FormControl(false, { nonNullable: true }),
+    smtpServer: new FormControl(null, { nonNullable: true, validators: this.ValidateRequiredIfMessagingToEmailEnabled }),
+    smtpPort: new FormControl(25, { nonNullable: true, validators: this.ValidateRequiredIfMessagingToEmailEnabled }),
+    smtpUsername: new FormControl(null, { nonNullable: true, validators: this.ValidateRequiredIfMessagingToEmailEnabled }),
+    smtpPassword: new FormControl(null, { nonNullable: true, validators: this.ValidateRequiredIfMessagingToEmailEnabled }),
+    messagingEmail: new FormControl(null, { nonNullable: true , validators: [Validators.email, this.ValidateRequiredIfMessagingToEmailEnabled] }),
   })
 
   acceptedPhotoFileType = definedFileTypes.image
@@ -78,13 +78,14 @@ export class SettingsComponent implements OnInit {
     this.settingsFormGroup.controls.messagingEmail.enable()
   }
 
+  fetchData() {
+    this.settingsFormGroup.reset()
+    this.store.dispatch(ACTION_SETTINGS.FETCH_SETTINGS({ language: this.selectedLocale }))
+  }
+
   ngOnInit(): void {
-    this.selectedLocale$.subscribe((data: string) => {
-      this.selectedLocale = data
-    })
-    this.store.dispatch(ACTION_SETTINGS.FETCH_SETTINGS({
-      language: this.selectedLocale
-    }))
+    this.selectedLocale$.subscribe((data: string) => { this.selectedLocale = data; this.fetchData() })
+    this.fetchData()
     this.settings$.subscribe((data: SettingsType) => {
       if (data) {
         this.settings = data

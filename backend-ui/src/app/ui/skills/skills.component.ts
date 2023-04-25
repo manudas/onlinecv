@@ -13,7 +13,7 @@ import { DialogComponent } from '@app/ui/dialog/dialog.component'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { LocaleStore } from '@app/types/Locale'
 import * as INPUT_HELPERS from './inputHelpers'
-import { buildDataMap } from '@app/ui/dialog/helpers'
+import { buildDataMap, MetadataDialog } from '@app/ui/dialog/helpers'
 
 type StoreType = { locale: LocaleStore } & {skills: { general: SkillInterface[] } & { computer: SkillInterface[] } }
 @Component({
@@ -101,7 +101,10 @@ export class SkillsComponent implements OnInit {
 
   openRemovalConfirmDialog = ( type: string) => ( index: number ): void => {
     const skill = this.data[SkillsType[type]][index]
-    const dialogRef = this.matDialog.open(ConfirmComponent, { width: '80%', data: { index, element: skill, nameKey: 'tag', superType: 'skill', action: 'delete' } })
+    const dialogRef = this.matDialog.open(ConfirmComponent, {
+      width: '80%',
+      data: new Map<string, SkillInterface | MetadataDialog>([ ['element', skill], ['metadata', { index, nameKey: 'tag', superType: 'skill', action: 'delete' }] ])
+    })
 
     dialogRef.afterClosed().subscribe(({
       index = null,

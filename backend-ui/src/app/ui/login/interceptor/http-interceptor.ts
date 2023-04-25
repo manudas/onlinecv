@@ -7,7 +7,7 @@ import {
     HttpInterceptor,
     HttpErrorResponse
 } from '@angular/common/http'
-import { Observable, of } from 'rxjs'
+import { Observable, of, throwError } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 
 import { LoginService } from '@ui/login/login-service/login.service'
@@ -30,7 +30,9 @@ export class LoginInterceptor implements HttpInterceptor {
                 }
 
                 // we are not interested in retry, so we do return an empty Observable
-                return of()
+                // return of()
+                // We let another handler to handle the error, throwing an observable with the error
+                return throwError(() => err)
             }),
         )
     }

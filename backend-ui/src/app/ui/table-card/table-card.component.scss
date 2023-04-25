@@ -10,4 +10,12 @@
     mat-header-row>:first-child, mat-row>:first-child {
         padding-left: 0;
     }
+
+    mat-cell>{
+        .ellipsis {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    }
 }

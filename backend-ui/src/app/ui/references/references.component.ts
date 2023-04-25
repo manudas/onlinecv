@@ -12,7 +12,7 @@ import * as OTHERS_ACTIONS from '@store_actions/Others'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { DialogComponent } from '@app/ui/dialog/dialog.component'
 import * as INPUT_HELPERS from './inputHelpers'
-import { buildDataMap } from '@app/ui/dialog/helpers'
+import { buildDataMap, MetadataDialog } from '@app/ui/dialog/helpers'
 
 type StoreType = { locale: LocaleStore } & { references: ReferenceDef[] }
 @Component({
@@ -73,7 +73,10 @@ export class ReferencesComponent implements OnInit {
 
   openRemovalConfirmDialog( index: number ): void {
     const ref = this.data[index]
-    const dialogRef = this.matDialog.open(ConfirmComponent, { width: '80%', data: { index, element: ref, nameKey: 'role', superType: 'reference', action: 'delete' } })
+    const dialogRef = this.matDialog.open(ConfirmComponent, {
+      width: '80%',
+      data: new Map<string, ReferenceDef | MetadataDialog>([ ['element', ref], ['metadata', { index, nameKey: 'role', superType: 'reference', action: 'delete' }] ])
+    })
 
     dialogRef.afterClosed().subscribe(({
       index = null,

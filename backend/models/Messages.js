@@ -8,6 +8,7 @@ const collection = 'messages';
 const MessagesSchema = new Schema({
     name: String,
     from: String,
+    to: String,
     subject: String,
     message: String,
     date: Schema.Types.Date,

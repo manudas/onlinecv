@@ -23,6 +23,15 @@ export const GET_MESSAGES_FETCHED = createAction(
 export const DELETE_MESSAGE = createAction(
     '[Messaging Action] Remove message',
     props<{
-        id: string
+        id: string | string[]
+        currentMessageType: string
+    }>()
+)
+export const SEND_MESSAGE = createAction(
+    '[Messaging Action] Send message',
+    props<{
+        message: MessageDef,
+        language: string,
+        currentMessageType: string
     }>()
 )
