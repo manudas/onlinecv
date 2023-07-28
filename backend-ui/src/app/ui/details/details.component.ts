@@ -20,6 +20,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { logEasy } from '@app/services/logging'
 import { definedFileTypes } from '@utils/Files'
+import { MetadataDialog } from '../dialog/helpers'
 
 type StoreType = { locale: LocaleStore } & { details: {data: DetailsType } } & { socialNetworks: {list: SocialNetwork[] } }
 @Component({
@@ -199,17 +200,11 @@ console.log('would it be good to accompany alt and title in the image in the fro
     })
   }
 
-  openNetworkRemovalConfirmDialog(networkIndex: number): void {
-    const network = this.socialNetworks[networkIndex]
+  openNetworkRemovalConfirmDialog(index: number): void {
+    const network = this.socialNetworks[index]
     const dialogRef = this.matDialog.open(ConfirmComponent, {
       width: '80%',
-      data: {
-        index: networkIndex,
-        element: network,
-        keyName: 'label',
-        superType: 'network',
-        action: 'delete'
-      }
+      data: new Map<string, SocialNetwork | MetadataDialog>([ ['element', network], ['metadata', { index, nameKey: 'label', superType: 'network', action: 'delete' }] ])
     })
 
     dialogRef.afterClosed().subscribe(({index = null}) => {

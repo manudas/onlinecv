@@ -1,15 +1,13 @@
-<ng-container *ngIf="isElementActive('professional-references'); then professionalReferencesTemplate"></ng-container>
-<ng-container *ngIf="isElementActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isElementActive('upload-resume'); then uploadResumeFileTemplate"></ng-container>
-<ng-container *ngIf="isElementActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isElementActive('quote'); then quoteTemplate"></ng-container>
+<ng-container *ngIf="isActive('references'); then references"></ng-container>
+<ng-container *ngIf="isActive('all'); then separator"></ng-container>
+<ng-container *ngIf="isActive('upload-resume'); then uploadResumeFileTemplate"></ng-container>
+<ng-container *ngIf="isActive('all'); then separator"></ng-container>
+<ng-container *ngIf="isActive('quote'); then quoteTemplate"></ng-container>
 
-<ng-template #professionalReferencesTemplate>
-    <app-card [icon]="cardIcon"
-        [iconClass]="'mr-1'"
-        [panelBody]="panel"
-        [cardTitle]="'References' | translate | async">
-    </app-card>
+<ng-template #references><app-references></app-references></ng-template>
+
+<ng-template #separator>
+    <div [className]="'separator'"></div>
 </ng-template>
 
 <ng-template #uploadResumeFileTemplate>
@@ -45,121 +43,6 @@
             type='reset'
             ngbButton>Cancel</button>
     </div>
-</ng-template>
-
-<ng-template #panel>
-    <mat-table
-        *ngIf="referencesData.length"
-        [dataSource]="referencesData"
-
-        cdkDropList
-        [cdkDropListData]="referencesData"
-        (cdkDropListDropped)="onDrop($event)"
-        [cdkDropListDisabled]="dragDisabled"
-
-    >
-        <ng-container *ngFor="let col of colsToRender; let colIndex = index" matColumnDef="{{col}}">
-            <mat-header-cell
-                *matHeaderCellDef
-            >
-            {{ col === 'id' ? '#' : col | noSpecialChars | translate | async | titlecase }}
-            </mat-header-cell>
-            <mat-cell *matCellDef="let element; let row; let rowIndex = index">
-
-                <ng-container *ngIf="col === 'edit'"
-                    [ngTemplateOutlet]="editTemplate"
-                    [ngTemplateOutletContext]="{
-                        rowIndex: rowIndex,
-                        type: type
-                    }"
-                ></ng-container>
-                <ng-container *ngIf="col === 'delete'"
-                    [ngTemplateOutlet]="deleteTemplate"
-                    [ngTemplateOutletContext]="{
-                        rowIndex: rowIndex,
-                        type: type
-                    }"
-                ></ng-container>
-                <ng-container *ngIf="col === 'order'"
-                    [ngTemplateOutlet]="dragHandle"
-                ></ng-container>
-                <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> {{ element[col] }} </ng-container>
-
-            </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="colsToRender"></mat-header-row>
-        <mat-row
-            (cdkDragStarted)="onDragStart($event)"
-            cdkDrag
-            [cdkDragData]="row"
-            *matRowDef="let row; columns: colsToRender"
-        ></mat-row>
-    </mat-table>
-
-    <div
-        [className]="'text-right pt-3'"
-    >
-        <button
-            (click)="openAddEditDialog()"
-            [className]="'btn btn-outline-info'"
-            type='button'
-            ngbButton
-        >
-            {{ 'Add' | translate | async }}
-        </button>
-    </div>
-
-</ng-template>
-
-<ng-template #separator>
-    <div [className]="'separator'"></div>
-</ng-template>
-
-<ng-template #editTemplate
-    let-index="rowIndex"
->
-    <button [className]="'btn btn-info'"
-        ngbButton
-        (click)="editData(index)"
-    >
-        <fa-icon
-            [icon]="faEdit"
-        ></fa-icon>
-    </button>
-</ng-template>
-
-
-
-<ng-template #deleteTemplate
-    let-index="rowIndex"
->
-    <button [className]="'btn btn-danger'"
-        ngbButton
-        (click)="openDataRemovalConfirmDialog(index)"
-        >
-        <fa-icon
-            [icon]="faTrash"
-        ></fa-icon>
-    </button>
-</ng-template>
-
-
-<ng-template #dragHandle>
-
-    <fa-icon
-        [ngStyle]="{
-            color: '#737373',
-            marginRight: 'auto',
-            marginLeft: 'auto'
-        }"
-        [icon]="faArrowsAlt"
-        (mousedown)="dragDisabled = false;"
-        (mouseup)="dragDisabled = true;"
-        (touchstart)="dragDisabled = false;"
-        (touchend)="dragDisabled = true;"
-    ></fa-icon>
-
 </ng-template>
 
 <ng-template #quoteTemplate>
@@ -218,7 +101,7 @@ aparece mas grande de la cuenta, mirar estilos de details
             [className]="'btn btn-outline-info'"
             type='button'
             ngbButton
-            (click)="deleteQuoteHandler($event)"
+            (click)="deleteQuoteHandler()"
         >
             {{ 'Delete' | translate | async }}
         </button>

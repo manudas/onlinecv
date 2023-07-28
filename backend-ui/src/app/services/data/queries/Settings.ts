@@ -3,6 +3,7 @@ import { query, mutation } from 'gql-query-builder';
 const settingsFields = [
     'id: _id',
     'backgroundImage',
+    'enabledMessaging',
     'sendToEmail',
     'smtpServer',
     'smtpPort',

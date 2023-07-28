@@ -2,35 +2,22 @@ import { faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
 import { DropDownPosition, MenuOptionType, MenuSelector } from "../menu/types";
 
 
-export const messageMenu: MenuSelector = {
-    handlerInline: true,
-    icon: faEnvelope,
-    position: DropDownPosition.down,
-    title: 'Messages',
-    zIndex: 2,
-    urlSegments: ['mail'],
-    options: [
-        {
-            title: 'New message',
-            urlSegments: ['new-message'],
-            type: MenuOptionType.option,
-        },
-        {
-            title: 'Inbox',
-            urlSegments: ['inbox'],
-            type: MenuOptionType.option,
-        },
-        {
-            title: 'Outbox',
-            urlSegments: ['outbox'],
-            type: MenuOptionType.option,
-        },
-        {
-            title: 'Trash',
-            urlSegments: ['trash'],
-            type: MenuOptionType.option,
-        }
-    ]
+export const messageMenu = (elements: string[]): MenuSelector  => {
+    return {
+        handlerInline: true,
+        icon: faEnvelope,
+        position: DropDownPosition.down,
+        title: 'Messages',
+        zIndex: 2,
+        urlSegments: ['messaging'],
+        options: elements?.map(messageType => {
+            return {
+                title: messageType[0].toUpperCase() + messageType.slice(1),
+                urlSegments: [messageType],
+                type: MenuOptionType.option,
+            }
+        })
+    }
 }
 
 export const userMenu = (userName: string, logOut: Function): MenuSelector => {

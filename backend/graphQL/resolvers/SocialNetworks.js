@@ -1,4 +1,4 @@
-import ObjectId from 'mongodb';
+import { ObjectId } from 'mongodb';
 import { cleanAndMapObject } from 'app/helpers/utils.js';
 
 export default {

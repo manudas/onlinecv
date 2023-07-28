@@ -181,6 +181,16 @@ export const getUserFullResumeQuery = (lang: string) => {
                 'data',
                 'language',
             ]
+        },
+        {
+            operation: 'unprotectedSettings',
+            variables: {
+                language: { value: lang, required: true }
+            },
+            fields: [
+                'backgroundImage',
+                'enabledMessaging',
+            ]
         }
     ])
 

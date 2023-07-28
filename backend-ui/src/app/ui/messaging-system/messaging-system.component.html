@@ -1,0 +1,41 @@
+<section class="messaging-section">
+    <div class="row">
+        <div class="col-6">
+            <mat-form-field appearance="fill">
+                <mat-label>{{ 'Filter by' | translate | async }}:</mat-label>
+                <mat-select
+                    (selectionChange)="typeSelected($event)"
+                    [value]="type"
+                >
+                    <mat-option *ngFor="let type of messageTypes" [value]="type">
+                        {{ type | translate | async }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div
+            [className]="'text-right col-6'"
+        >
+        <button
+            (click)="openDialog()"
+            [className]="'btn btn-outline-info'"
+            type='button'
+            ngbButton
+        >
+            {{ 'New' | translate | async }}
+        </button>
+    </div>
+    </div>
+</section>
+
+<app-table-card
+    [cardIcon]="cardIcon"
+    [title]="type | titlecase | translate | async"
+    [transformHeaderFn]="inputData.transformHeaderFn"
+    [rows]="data"
+    [columns]="inputData.colsToRender"
+    [editCallBack]="openDialog"
+    [deleteCallBack]="openRemovalConfirmDialog"
+>
+
+</app-table-card>

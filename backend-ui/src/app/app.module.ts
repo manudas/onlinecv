@@ -22,6 +22,7 @@ import { DetailsEffects } from '@store_effects/Details'
 import { ExperienceEffects } from './store/effects/Experience'
 import { LanguageEffects } from '@store_effects/Languages'
 import { LocaleEffects } from '@store_effects/Locale'
+import { MessagingSystemEffects } from '@store_effects/Messaging'
 import { OthersEffects } from '@store_effects/Others'
 import { SkillEffects } from '@store_effects/Skills'
 import { SocialNetworksEffects } from '@store_effects/SocialNetworks'
@@ -36,6 +37,7 @@ import { reducer as experienceReducer } from '@store_reducers/Experience'
 import { reducer as languageReducer } from '@store_reducers/Languages'
 import { reducer as localeReducer } from '@store_reducers/Locale'
 import { reducer as messageReducer } from '@store_reducers/Message'
+import { reducer as messagingReducer } from '@store_reducers/Messaging'
 import { reducer as quoteReducer } from '@store_reducers/Quote'
 import { reducer as resumeReducer } from '@store_reducers/Resume'
 import { reducer as referencesReducer } from '@store_reducers/References'
@@ -75,6 +77,7 @@ if (environment.production) {
             ExperienceEffects,
             LanguageEffects,
             LocaleEffects,
+            MessagingSystemEffects,
             OthersEffects,
             SettingsEffects,
             SkillEffects,
@@ -95,6 +98,7 @@ if (environment.production) {
             languages: languageReducer,
             locale: localeReducer,
             message: messageReducer,
+            messaging: messagingReducer,
             quote: quoteReducer,
             resume: resumeReducer,
             references: referencesReducer,

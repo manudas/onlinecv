@@ -6,6 +6,8 @@ export * from './Languages'
 
 export * from './Locale'
 
+export * from './Messaging'
+
 export * from './Others'
 
 export * from './Training'

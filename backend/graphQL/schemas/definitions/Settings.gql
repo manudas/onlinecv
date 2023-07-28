@@ -1,6 +1,7 @@
 input SettingsInput {
   backgroundImage: String
   sendToEmail: Boolean!
+  enabledMessaging: Boolean!
   smtpServer: String
   smtpPort: Int
   smtpUsername: String
@@ -9,9 +10,16 @@ input SettingsInput {
   language: String!
 }
 
+type UnprotectedSettingsInput {
+  backgroundImage: String
+  enabledMessaging: Boolean!
+  language: String!
+}
+
 type Settings {
   _id: ID!
   backgroundImage: String
+  enabledMessaging: Boolean!
   sendToEmail: Boolean!
   smtpServer: String
   smtpPort: Int
@@ -23,6 +31,7 @@ type Settings {
 
 extend type Query {
   settings(language: String!): Settings
+  unprotectedSettings(language: String!): UnprotectedSettingsInput!
 }
 
 extend type Mutation {

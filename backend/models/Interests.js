@@ -15,6 +15,7 @@ const InterestsSchema = new Schema({
     language: String
 }, {
     collection,
+    versionKey: false,
 });
 
 const InterestsModel = model(collection, InterestsSchema);

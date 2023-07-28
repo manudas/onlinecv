@@ -4,7 +4,8 @@ export const sendMessage = (
     name: string,
     from: string,
     subject: string,
-    message: string
+    message: string,
+    language: string,
 ) => {
     const {
         query: queryWithoutVars,
@@ -20,8 +21,13 @@ export const sendMessage = (
                     message
                 },
                 required: true,
-                type: "Message"
+                type: "MessageInput"
             },
+            receiving: true,
+            language: {
+                required: true,
+                value: language
+            }
         },
     })
 

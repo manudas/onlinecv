@@ -125,7 +125,7 @@ export const MenuListItems: Array<MenuSelector> = [
 			},
 			{
 				title: 'Professional references',
-				urlSegments: [OthersType[OthersType['professional-references']]],
+				urlSegments: [OthersType[OthersType['references']]],
 				type: MenuOptionType.option,
 			},
 			{

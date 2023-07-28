@@ -1,20 +1,19 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { ActivatedRoute } from '@angular/router'
-import { logEasy } from '@app/services/logging'
 import { EditSkillsStructure, SkillInterface, SkillsType } from '@app/types/Skills'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-
-import * as SKILLS_ACTIONS from '@store_actions/Skills'
-
-import { faArrowsAlt, faEdit, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faTable, IconDefinition } from '@fortawesome/free-solid-svg-icons'
 import { select, Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
-import { SkillsDialogComponent } from './skills-dialog.component'
-import { TranslationService } from '@app/services/translation/translation.service'
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
+
+import * as SKILLS_ACTIONS from '@store_actions/Skills'
+import { logEasy } from '@app/services/logging'
+import { DialogComponent } from '@app/ui/dialog/dialog.component'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { LocaleStore } from '@app/types/Locale'
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
+import * as INPUT_HELPERS from './inputHelpers'
+import { buildDataMap, MetadataDialog } from '@app/ui/dialog/helpers'
 
 type StoreType = { locale: LocaleStore } & {skills: { general: SkillInterface[] } & { computer: SkillInterface[] } }
 @Component({
@@ -23,29 +22,18 @@ type StoreType = { locale: LocaleStore } & {skills: { general: SkillInterface[] 
   styleUrls: ['./skills.component.scss']
 })
 export class SkillsComponent implements OnInit {
+  SkillsType                                                        = SkillsType
+  cardIcon: IconDefinition                                          = faTable
+  type: SkillsType                                                  = null
+  inputData                                                         = INPUT_HELPERS
+  data$: Partial<Record<SkillsType, Observable<SkillInterface[]>>>  = {}
+  data: Partial<Record<SkillsType, SkillInterface[]>>               = {}
+  @Input() title: string                                            = 'Skill'
 
-  faArrowsAlt: IconDefinition                         = faArrowsAlt
-  faEdit: IconDefinition                              = faEdit
-  cardIcon: IconDefinition                            = faTable
-  faTrash: IconDefinition                             = faTrash
-
-  type: SkillsType                                    = null
-
-  colsToRender                                        = [ 'tag', 'description', 'skill_level', 'edit', 'delete', 'order' ]
-
-  generalData$: Observable<SkillInterface[]>
-  generalData: SkillInterface[]                       = []
-  computerData$: Observable<SkillInterface[]>
-  computerData: SkillInterface[]                      = []
-
-  // initial state of dragging for reordering skills
-  dragDisabled: boolean = true
-
-  translationsToRequest                               = ['Skills deleted successfully']
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
 
-  constructor( private activatedRoute: ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog, private translate: TranslationService ) {
+  constructor( private activatedRoute: ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog ) {
     this.activatedRoute.paramMap.subscribe(params => {
       const passedType: string = params.get('type')
       if (!(passedType in SkillsType)) {
@@ -56,20 +44,19 @@ export class SkillsComponent implements OnInit {
     })
 
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
-    this.generalData$ = this.store.pipe(select(state => state?.skills?.general))
-    this.computerData$ = this.store.pipe(select(state => state?.skills?.computer))
-    this.translate.prefetch(this.translationsToRequest, this)
+    this.prepareDataSubscriptions('skills')
   }
 
-  public isSkillsActive = ( skillType: string ) => this.type === SkillsType.all || this.type === SkillsType[skillType]
+  private prepareDataSubscriptions(storeKey: string) {
+    for (let type of Object.values(SkillsType)) { // type here is string, ExpertienceType[type] will be a number in common enums
+      if (typeof type === 'string' || type === SkillsType.all) continue
+      this.data$[type] = this.store.pipe(select(state => state?.[storeKey]?.[SkillsType[type]]))
+      this.data$[type].subscribe((data: SkillInterface[]) => data ? this.data[type] = data : null)
+    }
+  }
 
   ngOnInit(): void {
-    this.selectedLocale$.subscribe((data: string) => {
-      this.selectedLocale = data
-      this.fetchData()
-    })
-    this.generalData$.subscribe((data: SkillInterface[]) => data ? this.generalData = data : null)
-    this.computerData$.subscribe((data: SkillInterface[]) => data ? this.computerData = data : null)
+    this.selectedLocale$.subscribe((data: string) => { this.selectedLocale = data; this.fetchData() })
     this.activatedRoute.paramMap.subscribe(() => this.fetchData())
   }
 
@@ -83,89 +70,40 @@ export class SkillsComponent implements OnInit {
     }
   }
 
-  openSkillDialog( data: EditSkillsStructure | string ): void {
-    const dialogRef = this.matDialog.open(SkillsDialogComponent, {
-      width: '80%',
-      data
-    })
-
-    dialogRef.afterClosed().subscribe((result: SkillInterface | EditSkillsStructure) => {
+  openDialog( type: string, index: number = null ): void {
+    const data = buildDataMap(this.data[SkillsType[type]], index, INPUT_HELPERS, this.title, type)
+    const dataType = data.get('type')
+    data.set('type', {...dataType, value: type})
+    const dialogRef = this.matDialog.open(DialogComponent, { width: '80%', data })
+    dialogRef.afterClosed().subscribe(result => {
       logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '')
       if (result) {
-        if (this.isSkillsEdit(result)) {
-          const {
-            index,
-            skill
-          } = result
-          this.editSkillsValues(index, {
-            ...skill,
-            language: this.selectedLocale,
-            order: index
-          })
-        } else {
-          this.addSkills(result)
-        }
+        if (this.isEdit(result)) {
+          const { index, skill } = result
+          this.editValues(index, { ...skill, language: this.selectedLocale, order: index })
+        } else this.add(result)
       }
     })
   }
 
-  isSkillsEdit = ( data: SkillInterface | EditSkillsStructure | Object = {} ): data is EditSkillsStructure => (data as EditSkillsStructure).index !== undefined
-
-  editSkillsValues( index: number, skillsData: SkillInterface ) {
-    const dataIndex = `${skillsData.type}Data`
-    const newSkills = [
-      ...this[dataIndex].slice(0, index),
-      { ...skillsData},
-      ...this[dataIndex].slice(index + 1)
-    ]
-    this.dispatchSave(newSkills, skillsData.type)
-  }
+  isActive = ( skillType: string ) => this.type === SkillsType.all || this.type === SkillsType[skillType]
+  isEdit = ( data: SkillInterface | EditSkillsStructure | Object = {} ): data is EditSkillsStructure => (data as EditSkillsStructure).index !== undefined
+  editValues = ( index: number, data: SkillInterface ) => this.dispatchSave([ ...this.data[SkillsType[data.type]].slice(0, index), { ...data}, ...this.data[SkillsType[data.type]].slice(index + 1) ], data.type)
+  edit = ( type: string ) => ( index: number ) => this.openDialog( type, index )
+  add = ( data: SkillInterface ) => this.editValues(this.data[SkillsType[data.type]].length, {...data, language: this.selectedLocale, order: this.data[SkillsType[data.type]].length })
 
   dispatchSave( data, type ) {
     const curatedData = data.map(skill => {
       return {...skill, ...(skill.skill_level ? {skill_level: Number(skill.skill_level)} : {})}
     })
-    this.store.dispatch(SKILLS_ACTIONS.SAVE_SKILLS({
-      skills: curatedData,
-      skillType: type
-    }))
+    this.store.dispatch(SKILLS_ACTIONS.SAVE_SKILLS({ skills: curatedData, skillType: type }))
   }
 
-  editSkill( index: number, type: string ) {
-    const skill = this[`${type}Data`][index]
-    this.openSkillDialog({
-      skill,
-      index
-    })
-  }
-
-  addSkills( skillsData: SkillInterface ) {
-    this.editSkillsValues(this[`${skillsData.type}Data`].length, {
-      ...skillsData,
-      language: this.selectedLocale,
-      order: this[`${skillsData.type}Data`].length
-    })
-  }
-
-  get SkillsType() {
-    return SkillsType
-  }
-
-  getSkillTypeName = ( type: SkillsType ) => SkillsType[type]
-
-  getSkillsSource = ( type: SkillsType ) => this[`${SkillsType[type]}Data`]
-
-  openSkillsRemovalConfirmDialog( skillsIndex: number, type: SkillsType ): void {
-    const skill = this[`${SkillsType[type]}Data`][skillsIndex]
+  openRemovalConfirmDialog = ( type: string) => ( index: number ): void => {
+    const skill = this.data[SkillsType[type]][index]
     const dialogRef = this.matDialog.open(ConfirmComponent, {
       width: '80%',
-      data: {
-        index: skillsIndex,
-        element: skill,
-        nameKey: 'tag',
-        superType: 'skill',
-        action: 'delete'
-      }
+      data: new Map<string, SkillInterface | MetadataDialog>([ ['element', skill], ['metadata', { index, nameKey: 'tag', superType: 'skill', action: 'delete' }] ])
     })
 
     dialogRef.afterClosed().subscribe(({
@@ -173,33 +111,19 @@ export class SkillsComponent implements OnInit {
       element = null,
     } = {}) => {
       logEasy(`The dialog was closed.`, index !== null ? `The following message was received: ${JSON.stringify(element)}` : '');
-
-      if (index !== null) {
-        this.deleteSkills(index, type)
-      }
+      if (index !== null) this.delete(type)(index)
     })
   }
 
-  deleteSkills( skillsIndex: number, type: SkillsType ) {
-    const skills = this[`${SkillsType[type]}Data`][skillsIndex]
-    this.store.dispatch(SKILLS_ACTIONS.REMOVE_SKILL( { id: skills.id, skillType: SkillsType[type] }) )
-  }
-
-  onDragStart( _$event ) {
-    const draggingElement: HTMLElement = document.querySelector('mat-row.cdk-drag-preview')
-    if (draggingElement) {
-      draggingElement.style['box-shadow'] =
-        `0 5px 5px -3px rgba(0, 0, 0, 0.2),
-        0 8px 10px 1px rgba(0, 0, 0, 0.14),
-        0 3px 14px 2px rgba(0, 0, 0, 0.12)`
-    }
+  delete = ( type: string ) => ( index: number ) => {
+    const skills = this.data[SkillsType[type]][index]
+    this.store.dispatch(SKILLS_ACTIONS.REMOVE_SKILL( { id: skills.id, skillType: type }) )
   }
 
   onDrop( event: CdkDragDrop<SkillInterface[]> ) {
-    this.dragDisabled = true
     const type = event.item.data.type
     if (event.previousIndex !== event.currentIndex) {
-      const currentArr = [...this[`${type}Data`]]
+      const currentArr = [...this.data[SkillsType[type]]]
       moveItemInArray(currentArr, event.previousIndex, event.currentIndex)
       // let's assign the new order properties inside the reordered list of objects
       const newArr = currentArr.map((currentSkills, indexInArr): SkillInterface  => {

@@ -19,11 +19,19 @@
         <form
             [formGroup]="settingsFormGroup"
         >
-            <div class='form-group'>
-                <label class='control-label'>{{'Enable email messaging system' | translate | async}}</label>
-                <mat-checkbox class='form-control checkbox' [aria-label]="'isMessagingToEmailEnabled'" formControlName="sendToEmail">
-                    {{'Check to introduce your email server details' | translate | async}}
-                </mat-checkbox>
+            <div class="row">
+                <div class='form-group col-sm-6 col-xs-12'>
+                    <label class='control-label'>{{'Enable' | translate | async}}</label>
+                    <mat-checkbox class='form-control checkbox' [aria-label]="'isMessagingEnabled'" formControlName="enabledMessaging">
+                        {{'Enable messaging system' | translate | async}}
+                    </mat-checkbox>
+                </div>
+                <div class='form-group col-sm-6 col-xs-12'>
+                    <label class='control-label'>{{'Enable email messaging system' | translate | async}}</label>
+                    <mat-checkbox class='form-control checkbox' [aria-label]="'isMessagingToEmailEnabled'" formControlName="sendToEmail">
+                        {{'Check to introduce your email server details' | translate | async}}
+                    </mat-checkbox>
+                </div>
             </div>
             <div class='form-group'>
                 <label class='control-label'>{{'SMTP Server' | translate | async}}</label>

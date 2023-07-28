@@ -1,24 +1,27 @@
 import { cleanAndMapObject } from 'app/helpers/utils.js';
 
+const settingsFn = async (
+    _parent,
+    // 1st arg: arguments
+    {
+        language,
+      },
+    // 2nd arg: context
+    {
+        models: { SettingsModel }
+    },
+    _info
+) => {
+    const settings = await SettingsModel.findOne({
+        language: language
+    })
+    return settings
+}
+
 export default {
     Query: {
-        settings: async (
-            _parent,
-            // 1st arg: arguments
-            {
-                language,
-              },
-            // 2nd arg: context
-            {
-                models: { SettingsModel }
-            },
-            _info
-        ) => {
-            const settings = await SettingsModel.findOne({
-                language: language
-            })
-            return settings
-        }
+        settings: settingsFn,
+        unprotectedSettings: settingsFn,
     },
     Mutation: {
         putSettings: async (

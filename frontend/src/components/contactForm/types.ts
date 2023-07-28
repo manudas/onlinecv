@@ -1,7 +1,9 @@
 export type PropDef = {
     name: string
     contact_details: Record<string, string>
-    reference: React.Ref<any>
+    enabledMessaging: boolean,
+    reference: React.Ref<any>,
+    language: string,
 }
 
 export type StateDef = {

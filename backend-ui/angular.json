@@ -15,11 +15,12 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "ngx-build-plus:browser",
           "options": {
             "outputPath": "dist/backend-ui",
             "index": "src/index.html",
             "main": "src/main.ts",
+            "plugin": "~build-plugin.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -37,7 +38,7 @@
             "extractLicenses": false,
             "buildOptimizer": false,
             "sourceMap": true,
-            "baseHref": ".",
+            "baseHref": "/",
             "optimization": false,
             "namedChunks": true
           },
@@ -49,6 +50,7 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+              "baseHref": ".",
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,

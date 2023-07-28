@@ -6,12 +6,14 @@ import { logEasy } from '@app/services/logging'
 import { EditExperienceStructure, ExperienceInterface, ExperienceType } from '@app/types/Experience'
 import { LocaleStore } from '@app/types/Locale'
 
-import { faArrowsAlt, faEdit, faTable, faTrash, IconDefinition } from '@fortawesome/free-solid-svg-icons'
+import { faTable, IconDefinition } from '@fortawesome/free-solid-svg-icons'
 import { select, Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
 import * as EXPERIENCE_ACTIONS from '@store_actions/Experience'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
-import { ExperienceDialogComponent } from './experience-dialog.component'
+import { DialogComponent } from '@app/ui/dialog/dialog.component'
+import { buildDataMap, MetadataDialog } from '@app/ui/dialog/helpers'
+import * as INPUT_HELPERS from './inputHelpers'
 
 type StoreType = { locale: LocaleStore } & {experience: { professional: ExperienceInterface[] } & { ong: ExperienceInterface[] } & { other: ExperienceInterface[] } }
 @Component({
@@ -20,30 +22,16 @@ type StoreType = { locale: LocaleStore } & {experience: { professional: Experien
   styleUrls: ['./experience.component.scss']
 })
 export class ExperienceComponent implements OnInit {
-
-  faArrowsAlt: IconDefinition                             = faArrowsAlt
-  faEdit: IconDefinition                                  = faEdit
-  cardIcon: IconDefinition                                = faTable
-  faTrash: IconDefinition                                 = faTrash
-
-  type: ExperienceType                                    = null
-
-  colsToRender                                            = ['role', 'company', 'edit', 'delete', 'order']
-
-  // initial state of dragging for reordering working experience
-  dragDisabled: boolean                                   = true
-
-  professionalData: ExperienceInterface[]                 = []
-  professionalData$: Observable<ExperienceInterface[]>
-  ongData: ExperienceInterface[]                          = []
-  ongData$: Observable<ExperienceInterface[]>
-  otherData: ExperienceInterface[]                        = []
-  otherData$: Observable<ExperienceInterface[]>
+  ExperienceType                                                            = ExperienceType
+  cardIcon: IconDefinition                                                  = faTable
+  type: ExperienceType                                                      = null
+  inputData                                                                 = INPUT_HELPERS
+  data$: Partial<Record<ExperienceType, Observable<ExperienceInterface[]>>> = {}
+  data: Partial<Record<ExperienceType, ExperienceInterface[]>>              = {}
+  @Input() title: string                                                    = 'Experience'
 
   selectedLocale: string // iso code
   selectedLocale$: Observable<string>
-
-  @Input() title: string                                  = 'Experience'
 
   constructor( private activatedRoute: ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog ) {
     this.activatedRoute.paramMap.subscribe(params => {
@@ -56,77 +44,51 @@ export class ExperienceComponent implements OnInit {
     })
 
     this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
-
-    this.professionalData$ = this.store.pipe(select(state => state?.experience?.professional))
-    this.ongData$ = this.store.pipe(select(state => state?.experience?.ong))
-    this.otherData$ = this.store.pipe(select(state => state?.experience?.other))
+    this.prepareDataSubscriptions('experience')
   }
 
-  public isExperienceActive(experience: string) {
-    return this.type === ExperienceType.all
-            || this.type === ExperienceType[experience]
+  private prepareDataSubscriptions(storeKey: string) {
+    for (let type of Object.values(ExperienceType)) { // type here is string, ExpertienceType[type] will be a number in common enums
+      if (typeof type === 'string' || type === ExperienceType.all) continue
+      this.data$[type] = this.store.pipe(select(state => state?.[storeKey]?.[ExperienceType[type]]))
+      this.data$[type].subscribe((data: ExperienceInterface[]) => data ? this.data[type] = data : null)
+    }
   }
+
+  dispatchSave = ( data, type ) => this.store.dispatch(EXPERIENCE_ACTIONS.SAVE_EXPERIENCES({ experiences: data, experienceType: type }))
+  add = ( data: ExperienceInterface )  => this.editValues(this.data[ExperienceType[data.type]].length, { ...data, language: this.selectedLocale, order: this.data[ExperienceType[data.type]].length })
+  isEdit = ( data: ExperienceInterface | EditExperienceStructure | Object = {} ): data is EditExperienceStructure => (data as EditExperienceStructure).index !== undefined
+  isActive = (experience: string) => this.type === ExperienceType.all || this.type === ExperienceType[experience]
+  edit = ( type: string ) => (index) => this.openDialog(type, index)
+  editValues = ( index: number, experienceData: ExperienceInterface ) => this.dispatchSave([ ...this.data[ExperienceType[experienceData.type]].slice(0, index), { ...experienceData}, ...this.data[ExperienceType[experienceData.type]].slice(index + 1) ], experienceData.type)
 
   ngOnInit(): void {
-    this.selectedLocale$.subscribe((data: string) => {
-      this.selectedLocale = data
-      this.fetchData()
-    })
-
-    this.professionalData$.subscribe((data: ExperienceInterface[]) => data ? this.professionalData = data : null)
-    this.ongData$.subscribe((data: ExperienceInterface[]) => data ? this.ongData = data : null)
-    this.otherData$.subscribe((data: ExperienceInterface[]) => data ? this.otherData = data : null)
-
+    this.selectedLocale$.subscribe((data: string) => { this.selectedLocale = data; this.fetchData() })
     this.activatedRoute.paramMap.subscribe(() => this.fetchData())
   }
 
-  getExperienceTypeName( type: ExperienceType ) {
-    return ExperienceType[type]
-  }
-
-  openExperienceDialog( data: EditExperienceStructure | string ): void {
-    const dialogRef = this.matDialog.open(ExperienceDialogComponent, {
-      height: '80%',
-      maxHeight: '100%',
-      width: '80%',
-      data
-    })
-
+  openDialog( type: string, index: number = null ): void {
+    const data = buildDataMap(this.data[ExperienceType[type]], index, INPUT_HELPERS, this.title, type)
+    const dataType = data.get('type')
+    data.set('type', {...dataType, value: type})
+    const dialogRef = this.matDialog.open(DialogComponent, { height: '80%', maxHeight: '100%', width: '80%', data })
     dialogRef.afterClosed().subscribe(result => {
-      logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '');
+      logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '')
       if (result) {
-        if (this.isExperienceEdit(result)) {
-          const {
-            index,
-            experience
-          } = result
-          this.editExperienceValues(index, {
-            ...experience,
-            language: this.selectedLocale,
-            order: index
-          })
+        if (this.isEdit(result)) {
+          const { index, experience } = result
+          this.editValues(index, { ...experience, language: this.selectedLocale, order: index })
         } else {
-          this.addExperience(result)
+          this.add(result)
         }
       }
     })
   }
 
-  onDragStart( _$event ) {
-    const draggingElement: HTMLElement = document.querySelector('mat-row.cdk-drag-preview')
-    if (draggingElement) {
-      draggingElement.style['box-shadow'] =
-        `0 5px 5px -3px rgba(0, 0, 0, 0.2),
-        0 8px 10px 1px rgba(0, 0, 0, 0.14),
-        0 3px 14px 2px rgba(0, 0, 0, 0.12)`
-    }
-  }
-
   onDrop( event: CdkDragDrop<ExperienceInterface[]> ) {
-    this.dragDisabled = true
     const type = event.item.data.type
     if (event.previousIndex !== event.currentIndex) {
-      const currentArr = [...this[`${type}Data`]]
+      const currentArr = [...this.data[ExperienceType[type]]]
       moveItemInArray(currentArr, event.previousIndex, event.currentIndex)
       // let's assign the new order properties inside the reordered list of objects
       const newArr = currentArr.map((currentExperience, indexInArr): ExperienceInterface  => {
@@ -137,23 +99,11 @@ export class ExperienceComponent implements OnInit {
     }
   }
 
-  getExperienceSource = (type: ExperienceType) => this[`${ExperienceType[type]}Data`]
-
-  get ExperienceType() {
-    return ExperienceType
-  }
-
-  openExperienceRemovalConfirmDialog( experienceIndex: number, type: ExperienceType ): void {
-    const experience = this[`${ExperienceType[type]}Data`][experienceIndex]
+  openRemovalConfirmDialog( index: number, type: ExperienceType ): void {
+    const experience = this.data[type][index]
     const dialogRef = this.matDialog.open(ConfirmComponent, {
       width: '80%',
-      data: {
-        index: experienceIndex,
-        element: experience,
-        nameKey: 'role',
-        superType: 'experience',
-        action: 'delete'
-      }
+      data: new Map<string, ExperienceInterface | MetadataDialog>([ ['element', experience], ['metadata', { index, nameKey: 'role', superType: 'experience', action: 'delete' }] ])
     })
 
     dialogRef.afterClosed().subscribe(({
@@ -161,72 +111,21 @@ export class ExperienceComponent implements OnInit {
       element: {type = null} = {},
     } = {}) => {
       logEasy(`The dialog was closed.`, index !== null ? `The following message was received: ${JSON.stringify(index)}` : '');
-
-      if (index !== null && type !== null) {
-        this.deleteExperience(index, type)
-      }
+      if (index !== null && type !== null) this.delete(type)(index)
     })
   }
 
-  editExperience( index: number, type: string ) {
-    const experience = this[`${type}Data`][index]
-    this.openExperienceDialog({
-      experience,
-      index
-    })
-  }
-
-  deleteExperience( index: number, type: ExperienceType ) {
-    const experience = this[`${type}Data`][index]
-    this.store.dispatch(EXPERIENCE_ACTIONS.REMOVE_EXPERIENCE({
-      id: experience.id,
-      experienceType: type.toString()
-    }))
-  }
-
-  isExperienceEdit( data: ExperienceInterface | EditExperienceStructure | Object = {} ): data is EditExperienceStructure {
-    return (data as EditExperienceStructure).index !== undefined
-  }
-
-  editExperienceValues( index: number, experienceData: ExperienceInterface ) {
-    const dataIndex = `${experienceData.type}Data`
-    const newExperiences = [
-      ...this[dataIndex].slice(0, index),
-      { ...experienceData},
-      ...this[dataIndex].slice(index + 1)
-    ];
-    this.dispatchSave(newExperiences, experienceData.type)
-  }
-
-  addExperience( experienceData: ExperienceInterface ) {
-    this.editExperienceValues(this[`${experienceData.type}Data`].length, {
-      ...experienceData,
-      language: this.selectedLocale,
-      order: this[`${experienceData.type}Data`].length
-    })
-  }
-
-  dispatchSave( data, type ) {
-    this.store.dispatch(EXPERIENCE_ACTIONS.SAVE_EXPERIENCES({
-      experiences: data,
-      experienceType: type
-    }))
+  delete = (type: ExperienceType ) => ( index: number ) => {
+    const experience = this.data[ExperienceType[type]][index]
+    this.store.dispatch(EXPERIENCE_ACTIONS.REMOVE_EXPERIENCE({ id: experience.id, experienceType: type.toString() }))
   }
 
   fetchData() {
     if (this.type !== ExperienceType.all) {
-      this.store.dispatch(EXPERIENCE_ACTIONS.FETCH_EXPERIENCE({
-        language: this.selectedLocale,
-        experienceType: ExperienceType[this.type]
-      }))
+      this.store.dispatch(EXPERIENCE_ACTIONS.FETCH_EXPERIENCE({ language: this.selectedLocale, experienceType: ExperienceType[this.type] }))
     } else {
       Object.values(ExperienceType).filter((type) => typeof type === 'string' ).forEach((type: string) => {
-        type !== ExperienceType[ExperienceType.all] && this.store.dispatch(
-          EXPERIENCE_ACTIONS.FETCH_EXPERIENCE({
-            language: this.selectedLocale,
-            experienceType: type
-          })
-        )
+        type !== ExperienceType[ExperienceType.all] && this.store.dispatch(EXPERIENCE_ACTIONS.FETCH_EXPERIENCE({ language: this.selectedLocale, experienceType: type }))
       })
     }
   }

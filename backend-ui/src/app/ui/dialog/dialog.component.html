@@ -1,0 +1,293 @@
+<h2
+    mat-dialog-title
+    [className]="'dialog-title'"
+>
+    <div
+        [className]="'paddedContent'"
+    >
+        {{
+            title ? title :
+            isEdit === false
+                ? ('Add new' + (elementName ? ' ' + elementName + ': ' : ': ') | translate | async) + (elementType ? (elementType | translate | async | titlecase) : '')
+                : ('Editing' + (elementName ? ' ' + elementName + ': ' : ': ') | translate | async) + (elementType ? (elementType | translate | async | titlecase) : '')
+        }}
+    </div>
+</h2>
+
+<div mat-dialog-content>
+    <div
+        [className]="'paddedContent'"
+    >
+        <ng-container *ngTemplateOutlet="dialogTemplate"></ng-container>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <div
+        [className]="'paddedContent'"
+    >
+        <ng-container
+            *ngFor="let button of buttons || [
+                {
+                    class: 'btn-outline-info',
+                    action: 'close',
+                    text: 'Cancel'
+                },
+                {
+                    class: 'submitButton',
+                    action: 'submit',
+                    position: 'right',
+                    text: isEdit === false ? ('Add' | translate | async) : ('Edit' | translate | async)
+                }
+            ]"
+            [ngTemplateOutlet]="buttonTemplate"
+            [ngTemplateOutletContext]="{
+                class: button.class,
+                action: button.action,
+                position: button.position,
+                text: button.text
+            }"
+        ></ng-container>
+    </div>
+</div>
+
+<ng-template #dialogTemplate>
+    <form
+        [formGroup]="dataFormGroup"
+    >
+        <div [className]="'row'">
+            <ng-container
+                *ngFor="let control of dataMap.get('dataInputs')"
+                [ngTemplateOutlet]="controlInputTemplate"
+                [ngTemplateOutletContext]="{
+                    name: control,
+                    control: dataFormGroup.get(control),
+                    types: types.get(control),
+                    errors: errors.get(control),
+                    placeholder: placeholders.get(control),
+                    label: labels.get(control),
+                    helpBlock: helpBlock.get(control)
+                }"
+            ></ng-container>
+        </div>
+    </form>
+</ng-template>
+
+
+<ng-template #controlInputTemplate
+    let-name="name"
+    let-control="control"
+    let-types="types"
+    let-errors="errors"
+    let-placeholder="placeholder"
+    let-label="label"
+    let-helpBlock="helpBlock"
+>
+    <div
+        *ngIf="!types?.includes('hidden')"
+        [ngClass]="{
+            'col-md-6': !types?.includes('fullsize'),
+            'col-sm-12': true
+        }"
+    >
+        <div
+            class='form-group'
+        >
+            <label
+                *ngIf="label"
+                class='control-label'
+            >
+                {{ label | translate | async }}
+            </label>
+            <ng-container
+                [ngTemplateOutlet]="generalInputTemplate"
+                [ngTemplateOutletContext]="{
+                    name: name,
+                    control: control,
+                    types: types,
+                    placeholder: placeholder
+                }"
+            ></ng-container>
+            <p
+                *ngIf="helpBlock"
+                class='help-block'
+                [ngStyle]="{
+                    'margin-bottom': control.touched && control.errors ? 0 : 'initial'
+                }"
+            >
+                {{ helpBlock | translate | async }}
+            </p>
+            <small
+                *ngIf="errors && control.touched && control.errors"
+                [className]="'text-danger'"
+            >
+                {{ errors | translate | async }}
+            </small>
+            <button
+                *ngIf="isFormArray(control)"
+                [className]="'btn btn-outline-info more-button float-right'"
+                type='button'
+                ngbButton
+                (click)="addArrayControl(control)"
+            >
+                {{ 'More' | translate | async }}
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #generalInputTemplate
+    let-name="name"
+    let-control="control"
+    let-types="types"
+    let-placeholder="placeholder"
+>
+    <ng-container
+        *ngIf="isFormArray(control)"
+        [ngTemplateOutlet]="inputMultiTemplate"
+        [ngTemplateOutletContext]="{
+            name: name,
+            control: control,
+            types: types,
+            placeholder: placeholder
+        }"
+    ></ng-container>
+    <ng-container
+        *ngIf="!isFormArray(control) && types?.includes('date')"
+        [ngTemplateOutlet]="inputDateTemplate"
+        [ngTemplateOutletContext]="{
+            name: name,
+            control: control,
+            types: types,
+            placeholder: placeholder
+        }"
+    ></ng-container>
+    <ng-container
+        *ngIf="!isFormArray(control) && !types?.includes('date')"
+        [ngTemplateOutlet]="inputTemplate"
+        [ngTemplateOutletContext]="{
+            name: name,
+            control: control,
+            types: types,
+            placeholder: placeholder
+        }"
+    ></ng-container>
+</ng-template>
+
+<ng-template #inputDateTemplate
+    let-name="name"
+    let-control="control"
+    let-types="types"
+    let-placeholder="placeholder"
+>
+    <div
+        class='d-flex align-items-center'
+    >
+        <ng-container
+            [ngTemplateOutlet]="inputTemplate"
+            [ngTemplateOutletContext]="{
+                name: name,
+                control: control,
+                types: types,
+                placeholder: placeholder,
+                datePickerRef: datePickerRef
+            }"
+        ></ng-container>
+        <mat-datepicker-toggle matSuffix [for]="datePickerRef"></mat-datepicker-toggle>
+        <mat-datepicker #datePickerRef></mat-datepicker>
+    </div>
+</ng-template>
+
+<ng-template #inputMultiTemplate
+    let-name="name"
+    let-control="control"
+    let-types="types"
+    let-placeholder="placeholder"
+>
+    <div
+        *ngFor="let singleControl of control.controls; let i = index"
+        class='d-flex align-items-center mb-2'
+    >
+        <ng-container
+            *ngIf="types?.includes('date')"
+            [ngTemplateOutlet]="inputDateTemplate"
+            [ngTemplateOutletContext]="{
+                name: name,
+                control: singleControl,
+                types: types,
+                placeholder: placeholder
+            }"
+        ></ng-container>
+        <ng-container
+            *ngIf="!types?.includes('date')"
+            [ngTemplateOutlet]="inputTemplate"
+            [ngTemplateOutletContext]="{
+                name: name,
+                control: singleControl,
+                types: types,
+                placeholder: placeholder
+            }"
+        ></ng-container>
+        <mat-icon
+            (click)="deleteArrayControl(control, i)"
+            [className]="'cancel-icon'"
+        >
+            cancel
+        </mat-icon>
+    </div>
+</ng-template>
+
+
+<ng-template #inputTemplate
+    let-name="name"
+    let-control="control"
+    let-types="types"
+    let-errors="errors"
+    let-placeholder="placeholder"
+    let-datePickerRef="datePickerRef"
+>
+    <textarea
+        *ngIf="types?.includes('textarea')"
+        class='form-control'
+        placeholder="{{ placeholder ? (placeholder | translate | async) : null }}"
+        placement="top"
+        [formControl]="control"
+        [readOnly]="types?.includes('readonly')"
+    ></textarea>
+    <input
+        *ngIf="!types?.includes('textarea') && !types?.includes('date')"
+        class='form-control'
+        placeholder="{{ placeholder ? (placeholder | translate | async) : null }}"
+        placement="top"
+        [formControl]="control"
+        [readOnly]="types?.includes('readonly')"
+        [type]="types?.includes('number') ? 'number' : 'text'"
+    >
+    <input
+        *ngIf="!types?.includes('textarea') && types?.includes('date')"
+        class='form-control'
+        placeholder="{{ placeholder ? (placeholder | translate | async) : null }}"
+        placement="top"
+        [formControl]="control"
+        [matDatepicker]="datePickerRef"
+        [readOnly]="types?.includes('readonly')"
+    >
+</ng-template>
+
+<ng-template #buttonTemplate
+    let-action="action"
+    let-text="text"
+    let-position="position"
+    let-class="class"
+>
+    <button
+        [ngClass]="{
+            btn: true,
+            right: position === 'right'
+        }"
+        [className]="class"
+        ngbButton
+        (click)="action === 'close' ? close() : submitHandler($event)"
+    >
+        {{ text | translate | async }}
+    </button>
+</ng-template>

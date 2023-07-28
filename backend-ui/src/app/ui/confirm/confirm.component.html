@@ -5,7 +5,7 @@
     <div
         [className]="'paddedContent'"
     >
-        {{ 'Are you sure?' | translate | async }}
+        {{ title ? (title | translate | async) : ('Are you sure?' | translate | async) }}
     </div>
 </h2>
 
@@ -14,17 +14,19 @@
         [className]="'paddedContent'"
     >
         {{
-            ('Your' | translate | async)
-            + ' '
-            + ( superType | translate | async )
-            + ' '
-            + element[nameKey]
-            + ' '
-            + ('will be' | translate | async)
-            + ' '
-            + (acctionMap[action] | translate | async)
-            + ' '
-            + ('permanently' | translate | async)
+            message
+                ? (message | translate | async)
+                : ('Your' | translate | async)
+                + ' '
+                + ( superType | translate | async )
+                + ' '
+                + element[nameKey]
+                + ' '
+                + ('will be' | translate | async)
+                + ' '
+                + (acctionMap[action] | translate | async)
+                + ' '
+                + ('permanently' | translate | async)
         }}
     </div>
 </div>
@@ -32,21 +34,46 @@
     <div
         [className]="'paddedContent'"
     >
-        <button
-            [className]="'btn btn-outline-info'"
-            type='button'
-            ngbButton
-            (click)="close()"
-        >
-            {{ 'Cancel' | translate | async }}
-        </button>
-        <button
-            [className]="'btn submitButton'"
-            type="submit"
-            ngbButton
-            (click)="close(index, element)"
-        >
-            {{ 'Continue' | translate | async }}
-        </button>
+        <ng-container
+            *ngFor="let button of buttons || [
+                {
+                    class: 'btn-outline-info',
+                    action: 'close',
+                    text: 'Cancel'
+                },
+                {
+                    class: 'submitButton',
+                    action: 'submit',
+                    position: 'right',
+                    text: 'Continue'
+                }
+            ]"
+            [ngTemplateOutlet]="buttonTemplate"
+            [ngTemplateOutletContext]="{
+                class: button.class,
+                action: button.action,
+                position: button.position,
+                text: button.text
+            }"
+        ></ng-container>
     </div>
 </div>
+
+<ng-template #buttonTemplate
+    let-action="action"
+    let-text="text"
+    let-position="position"
+    let-class="class"
+>
+    <button
+        [ngClass]="{
+            btn: true,
+            right: position === 'right'
+        }"
+        [className]="class"
+        ngbButton
+        (click)="action === 'close' ? close() : close(index, element)"
+    >
+        {{ text | translate | async }}
+    </button>
+</ng-template>

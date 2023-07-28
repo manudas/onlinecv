@@ -1,0 +1,104 @@
+<app-card [icon]="cardIcon"
+    [iconClass]="'mr-1'"
+    [panelBody]="panelBody"
+    [cardTitle]="title | translate | async">
+</app-card>
+
+<ng-template #panelBody>
+    <mat-table
+        *ngIf="rows?.length"
+        [dataSource]="rows"
+
+        cdkDropList
+        [cdkDropListData]="rows"
+        (cdkDropListDropped)="isDraggable ? onDrop($event) : null"
+        [cdkDropListDisabled]="!isDraggable"
+
+    >
+        <!-- COLUMNS definition -->
+        <ng-container *ngFor="let col of columns; let colIndex = index" matColumnDef="{{col}}">
+            <mat-header-cell
+                *matHeaderCellDef
+            >
+                {{ col === 'id' ? '#' : (transformHeaderFn.get(col) ? transformHeaderFn.get(col)(col) : col) | noSpecialChars | translate | async | titlecase }}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row; let rowIndex = index">
+
+                <ng-container *ngIf="col === 'edit'"
+                    [ngTemplateOutlet]="editTemplate"
+                    [ngTemplateOutletContext]="{
+                        rowIndex: rowIndex
+                    }"
+                ></ng-container>
+                <ng-container *ngIf="col === 'delete'"
+                    [ngTemplateOutlet]="deleteTemplate"
+                    [ngTemplateOutletContext]="{
+                        rowIndex: rowIndex
+                    }"
+                ></ng-container>
+                <ng-container *ngIf="col === 'order'"
+                    [ngTemplateOutlet]="dragHandle"
+                ></ng-container>
+                <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> <div class="ellipsis"> {{ transformFn.get(col) ? transformFn.get(col)(row[col]) : row[col] }} </div> </ng-container>
+
+            </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
+        <!-- END of COLUMNS definition -->
+
+        <!-- ROW definition -->
+        <mat-row
+            (cdkDragStarted)="onDragStart($event)"
+            cdkDrag
+            [cdkDragData]="row"
+            *matRowDef="let row; columns: columns"
+        ></mat-row>
+        <!-- END of ROW definition -->
+    </mat-table>
+    <ng-content></ng-content>
+</ng-template>
+
+
+<ng-template #editTemplate
+    let-index="rowIndex"
+>
+    <button [className]="'btn btn-info btn-experience-row'"
+        ngbButton
+        (click)="edit(index)"
+    >
+        <fa-icon
+            [icon]="faEdit"
+        ></fa-icon>
+    </button>
+</ng-template>
+
+<ng-template #deleteTemplate
+    let-index="rowIndex"
+>
+    <button [className]="'btn btn-danger'"
+        ngbButton
+        (click)="delete(index)"
+        >
+        <fa-icon
+            [icon]="faTrash"
+        ></fa-icon>
+    </button>
+</ng-template>
+
+
+<ng-template #dragHandle>
+
+    <fa-icon
+        [ngStyle]="{
+            color: '#737373',
+            marginRight: 'auto',
+            marginLeft: 'auto'
+        }"
+        [icon]="faArrowsAlt"
+        (mousedown)="dragDisabled = false;"
+        (mouseup)="dragDisabled = true;"
+        (touchstart)="dragDisabled = false;"
+        (touchend)="dragDisabled = true;"
+    ></fa-icon>
+
+</ng-template>

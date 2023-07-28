@@ -7,17 +7,42 @@
 @import 'bootstrap/scss/utilities/background';
 
 :host {
-    display: block;
-    margin: 5px;
+    padding: 5px;
+
+    // to resize with scroll if added many details
+    flex-direction: column;
+    height: 100%;
+    display: flex;
+
+    // to resize with scroll if added many details
+    .dialog-title {
+        flex: 0 0 auto;
+    }
+
+    .right {
+        float: right;
+    }
 
     .paddedContent {
         padding: 20px;
+
+        &> * {
+            margin-left: 1rem;
+        }
+
+        &> *:first-child {
+            margin-left: 0px;
+        }
     }
 
     label {
         display: inline-block;
         margin-bottom: 5px;
         font-weight: bold;
+    }
+
+    .label-details {
+        padding: 0 15px;
     }
 
     .help-block {
@@ -30,6 +55,10 @@
     }
 
     [mat-dialog-content] {
+        // to resize with scroll if added many details
+        flex: 1 1 auto;
+        overflow-y: auto;
+
         .paddedContent {
             padding-top: 0;
             padding-bottom: 0;
@@ -37,6 +66,9 @@
     }
 
     [mat-dialog-actions] {
+        // to resize with scroll if added many details
+        flex: 0 0 auto;
+
         background-color: $grey;
         .submitButton {
             @extend .btn-outline-secondary;
@@ -45,8 +77,18 @@
                 @extend .bg-secondary
             }
 
-            float: right;
+            @extend .right;
         }
+    }
+
+    .more-button {
+        margin: auto 15px 15px auto;
+    }
+
+    .cancel-icon {
+        align-self: center;
+        margin: 5px;
+        cursor: pointer;
     }
 
 }

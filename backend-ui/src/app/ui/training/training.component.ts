@@ -7,14 +7,15 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 import * as TRAINING_ACTIONS from '@store_actions/Training'
 
-import { faArrowsAlt, faEdit, faTable, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faTable } from '@fortawesome/free-solid-svg-icons'
 import { select, Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
-import { TrainingDialogComponent } from './training-dialog.component'
-import { TranslationService } from '@app/services/translation/translation.service'
+import { DialogComponent } from '@app/ui/dialog/dialog.component'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { LocaleStore } from '@app/types/Locale'
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'
+import * as INPUT_HELPERS from './inputHelpers'
+import { buildDataMap, MetadataDialog } from '@app/ui/dialog/helpers'
 
 type StoreType = { locale: LocaleStore } & { trainings: { official: TrainingInterface[] } & { computer: TrainingInterface[] } & { other: TrainingInterface[] }}
 @Component({
@@ -23,34 +24,18 @@ type StoreType = { locale: LocaleStore } & { trainings: { official: TrainingInte
     styleUrls: ['./training.component.scss']
 })
 export class TrainingComponent implements OnInit {
-    faArrowsAlt: IconDefinition                             = faArrowsAlt
-    faEdit: IconDefinition                                  = faEdit
-    cardIcon: IconDefinition                                = faTable
-    faTrash: IconDefinition                                 = faTrash
+    TrainingType                                                            = TrainingType
+    cardIcon: IconDefinition                                                = faTable
+    type: TrainingType                                                      = null
+    inputData                                                               = INPUT_HELPERS
+    data$: Partial<Record<TrainingType, Observable<TrainingInterface[]>>>   = {}
+    data: Partial<Record<TrainingType, TrainingInterface[]>>                = {}
+    title: string                                                           = 'Training'
 
-    type: TrainingType                                      = null
-
-    colsToRender                                            = [ 'tag', 'description', 'school', 'average_grade', 'edit', 'delete', 'order' ]
-
-    officialData$: Observable<TrainingInterface[]>
-    officialData: TrainingInterface[]                       = []
-    computerData$: Observable<TrainingInterface[]>
-    computerData: TrainingInterface[]                       = []
-    otherData$: Observable<TrainingInterface[]>
-    otherData: TrainingInterface[]                          = []
-
-    title: string                                           = 'Training'
-
-    // initial state of dragging for reordering trainings
-    dragDisabled: boolean = true;
-
-    translationsToRequest = [
-        'Training deleted successfully'
-    ];
     selectedLocale: string; // iso code
-    selectedLocale$: Observable<string>;
+    selectedLocale$: Observable<string>
 
-    constructor( private activatedRoute: ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog, private translate: TranslationService ) {
+    constructor( private activatedRoute: ActivatedRoute, private store: Store<StoreType>, private matDialog: MatDialog ) {
         this.activatedRoute.paramMap.subscribe((params) => {
             const passedType: string = params.get('type')
             if (!(passedType in TrainingType)) {
@@ -61,216 +46,82 @@ export class TrainingComponent implements OnInit {
         })
 
         this.selectedLocale$ = this.store.pipe( select((state) => state?.locale?.selectedLocale) )
-
-        this.officialData$ = this.store.pipe( select((state) => state?.trainings?.official) )
-        this.computerData$ = this.store.pipe( select((state) => state?.trainings?.computer) )
-        this.otherData$ = this.store.pipe( select((state) => state?.trainings?.other) )
-
-        this.translate.prefetch( this.translationsToRequest, this )
+        this.prepareDataSubscriptions('trainings')
     }
 
-    public isTrainingActive = (trainingType: string) => this.type === TrainingType.all || this.type === TrainingType[trainingType]
+    add = (data: TrainingInterface) => this.editValues( this.data[TrainingType[data.type]].length, { ...data, language: this.selectedLocale, order: this.data[TrainingType[data.type]].length })
+    dispatchSave = (data, type) => this.store.dispatch( TRAINING_ACTIONS.SAVE_TRAININGS( { trainings: data, trainingType: type }) )
+    edit = (type: string) => (index: number) => this.openDialog( type, index )
+    editValues = ( index: number, data: TrainingInterface ) => this.dispatchSave([ ...this.data[TrainingType[data.type]].slice(0, index), { ...data }, ...this.data[TrainingType[data.type]].slice(index + 1) ], data.type)
+    isEdit = ( data: TrainingInterface | EditTrainingStructure | Object = {} ): data is EditTrainingStructure => ( (data as EditTrainingStructure).index !== undefined )
+    isActive = (trainingType: string) => this.type === TrainingType.all || this.type === TrainingType[trainingType]
 
+    private prepareDataSubscriptions(storeKey: string) {
+        for (let type of Object.values(TrainingType)) { // type here is string, ExpertienceType[type] will be a number in common enums
+          if (typeof type === 'string' || type === TrainingType.all) continue
+          this.data$[type] = this.store.pipe(select(state => state?.[storeKey]?.[TrainingType[type]]))
+          this.data$[type].subscribe((data: TrainingInterface[]) => data ? this.data[type] = data : null)
+        }
+    }
     ngOnInit(): void {
-        this.selectedLocale$.subscribe((data: string) => {
-                this.selectedLocale = data
-                this.fetchData()
-        })
-        this.officialData$.subscribe( (data: TrainingInterface[]) => data ? (this.officialData = data) : null )
-        this.computerData$.subscribe( (data: TrainingInterface[]) => data ? (this.computerData = data) : null )
-        this.otherData$.subscribe( (data: TrainingInterface[]) => data ? (this.otherData = data) : null )
+        this.selectedLocale$.subscribe((data: string) => { this.selectedLocale = data; this.fetchData() })
         this.activatedRoute.paramMap.subscribe(() => this.fetchData() )
     }
 
     fetchData() {
         if (this.type !== TrainingType.all) {
-            this.store.dispatch(TRAINING_ACTIONS.FETCH_TRAINING({
-                    language: this.selectedLocale,
-                    trainingType: TrainingType[this.type]
-                })
-            )
+            this.store.dispatch(TRAINING_ACTIONS.FETCH_TRAINING( { language: this.selectedLocale, trainingType: TrainingType[this.type] }) )
         } else {
-            Object.values(TrainingType)
-                .filter((type) => typeof type === 'string')
-                .forEach((type: string) => {
-                    type !==
-                        TrainingType[TrainingType.all] &&
-                        this.store.dispatch(
-                            TRAINING_ACTIONS.FETCH_TRAINING({
-                                    language: this.selectedLocale,
-                                    trainingType: type
-                            })
-                        )
-                })
+            Object.values(TrainingType).filter((type) => typeof type === 'string' ).forEach((type: string) => {
+                type !== TrainingType[TrainingType.all] && this.store.dispatch( TRAINING_ACTIONS.FETCH_TRAINING({ language: this.selectedLocale, trainingType: type }) )
+            })
         }
     }
 
-    openTrainingDialog( data: EditTrainingStructure | string ): void {
-        const dialogRef = this.matDialog.open(
-            TrainingDialogComponent,
-            {
-                width: '80%',
-                data
-            }
-        )
-
+    openDialog( type: string, index: number = null ): void {
+        const data = buildDataMap(this.data[TrainingType[type]], index, INPUT_HELPERS, this.title, type)
+        const dataType = data.get('type')
+        data.set('type', {...dataType, value: type})
+        const dialogRef = this.matDialog.open( DialogComponent, { width: '80%', data })
         dialogRef.afterClosed().subscribe((result) => {
-            logEasy(
-                `The dialog was closed.`,
-                result
-                    ? `The following message was received: ${JSON.stringify(
-                          result
-                      )}`
-                    : ''
-            )
+            logEasy( `The dialog was closed.`, result ? `The following message was received: ${JSON.stringify( result )}` : '')
             if (result) {
-                if (this.isTrainingEdit(result)) {
+                if (this.isEdit(result)) {
                     const { index, training } = result;
-                    this.editTrainingValues(index, {
-                        ...training,
-                        language: this.selectedLocale,
-                        order: index
-                    });
-                } else {
-                    this.addTraining(result);
-                }
+                    this.editValues(index, { ...training, language: this.selectedLocale, order: index })
+                } else this.add(result)
             }
         })
     }
 
-    isTrainingEdit( data: TrainingInterface | EditTrainingStructure | Object = {} ): data is EditTrainingStructure {
-        return ( (data as EditTrainingStructure).index !== undefined )
+    openRemovalConfirmDialog = ( type: TrainingType ) => (index: number): void => {
+        const training = this.data[TrainingType[type]][index];
+        const dialogRef = this.matDialog.open(ConfirmComponent, {
+            width: '80%',
+            data: new Map<string, TrainingInterface | MetadataDialog>([ ['element', training], ['metadata', { index, nameKey: 'tag', superType: 'training', action: 'delete' }] ])
+        })
+
+        dialogRef.afterClosed().subscribe((data) => {
+            const { _index } = data ?? {}
+            logEasy(`The dialog was closed.`, index !== null ? `The following message was received: ${JSON.stringify(data)}` : '' )
+            if ( _index !== null && type !== null ) this.delete(type)(_index)
+        })
     }
 
-    editTrainingValues( index: number, trainingData: TrainingInterface ) {
-        const dataIndex = `${trainingData.type}Data`;
-        const newTrainings = [
-            ...this[dataIndex].slice(0, index),
-            { ...trainingData },
-            ...this[dataIndex].slice(index + 1)
-        ];
-        this.dispatchSave(newTrainings, trainingData.type);
-    }
-
-    dispatchSave(data, type) {
-        this.store.dispatch(
-            TRAINING_ACTIONS.SAVE_TRAININGS({
-                trainings: data,
-                trainingType: type
-            })
-        );
-    }
-
-    editTraining(index: number, type: string) {
-        const training = this[`${type}Data`][index];
-        this.openTrainingDialog({
-            training,
-            index
-        });
-    }
-
-    addTraining(trainingData: TrainingInterface) {
-        this.editTrainingValues(
-            this[`${trainingData.type}Data`].length,
-            {
-                ...trainingData,
-                language: this.selectedLocale,
-                order: this[`${trainingData.type}Data`]
-                    .length
-            }
-        );
-    }
-
-    get TrainingType() {
-        return TrainingType;
-    }
-
-    getTrainingTypeName(type: TrainingType) {
-        return TrainingType[type];
-    }
-
-    getTrainingSource(type: TrainingType) {
-        return this[`${TrainingType[type]}Data`];
-    }
-
-    openTrainingRemovalConfirmDialog( trainingIndex: number, type: TrainingType ): void {
-        const training =
-            this[`${TrainingType[type]}Data`][
-                trainingIndex
-            ];
-        const dialogRef = this.matDialog.open(
-            ConfirmComponent,
-            {
-                width: '80%',
-                data: {
-                    index: trainingIndex,
-                    element: training,
-                    action: 'delete',
-                    nameKey: 'tag',
-                    superType: 'training'
-                }
-            }
-        );
-
-        dialogRef.afterClosed().subscribe(
-                (data) => {
-                    const { index } = data ?? {}
-                    logEasy(`The dialog was closed.`,
-                        index !== null
-                            ? `The following message was received: ${JSON.stringify(
-                                data
-                              )}`
-                            : ''
-                    )
-
-                    if ( index !== null && type !== null ) {
-                        this.deleteTraining( index, type )
-                    }
-                }
-            )
-    }
-
-    deleteTraining( trainingIndex: number, type: TrainingType ) {
-        const training = this[`${TrainingType[type]}Data`][trainingIndex];
-        this.store.dispatch(
-            TRAINING_ACTIONS.REMOVE_TRAINING({
-                id: training.id,
-                trainingType: TrainingType[type]
-            })
-        );
-    }
-
-    onDragStart(_$event) {
-        const draggingElement: HTMLElement = document.querySelector( 'mat-row.cdk-drag-preview' );
-        if (draggingElement) {
-            draggingElement.style[
-                'box-shadow'
-            ] =
-              `0 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12)`;
-        }
+    delete = ( type: TrainingType ) => (index: number) => {
+        const training = this.data[TrainingType[type]][index]
+        this.store.dispatch( TRAINING_ACTIONS.REMOVE_TRAINING({ id: training.id, trainingType: TrainingType[type] }))
     }
 
     onDrop( event: CdkDragDrop<TrainingInterface[]> ) {
-        this.dragDisabled = true;
-        const type = event.item.data.type;
+        const type = event.item.data.type
         if (event.previousIndex !== event.currentIndex) {
-            const currentArr = [...this[`${type}Data`]];
-            moveItemInArray(
-                currentArr,
-                event.previousIndex,
-                event.currentIndex
-            );
+            const currentArr = [...this.data[type]]
+            moveItemInArray( currentArr, event.previousIndex, event.currentIndex )
             // let's assign the new order properties inside the reordered list of objects
-            const newArr = currentArr.map(
-                ( currentTraining, indexInArr ): TrainingInterface => {
-                    return {
-                        ...currentTraining,
-                        order: indexInArr
-                    };
-                }
-            );
+            const newArr = currentArr.map(( currentTraining, indexInArr ): TrainingInterface => {
+                return { ...currentTraining, order: indexInArr }
+            })
             this.dispatchSave(newArr, type);
         }
     }

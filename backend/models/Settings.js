@@ -6,6 +6,7 @@ import {
 const collection = 'settings';
 
 const SettingsSchema = new Schema({
+    enabledMessaging: Boolean,
     backgroundImage: Schema.Types.Buffer,
     sendToEmail: Boolean,
     smtpServer: String,

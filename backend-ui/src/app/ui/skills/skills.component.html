@@ -1,144 +1,40 @@
-<ng-container *ngIf="isSkillsActive('general'); then skillsTemplate"></ng-container>
-<ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
-<ng-container *ngIf="isSkillsActive('computer'); then computerTemplate"></ng-container>
-<ng-container *ngIf="isSkillsActive('all'); then separator"></ng-container>
-<app-language-skills *ngIf="isSkillsActive('language')"></app-language-skills>
+<ng-container *ngIf="isActive('general');" [ngTemplateOutlet]="tableTemplate" [ngTemplateOutletContext]="{
+    type: 'general'
+}"></ng-container>
+<ng-container *ngIf="isActive('all'); then separator"></ng-container>
+<ng-container *ngIf="isActive('computer');" [ngTemplateOutlet]="tableTemplate" [ngTemplateOutletContext]="{
+    type: 'computer'
+}"></ng-container>
+<ng-container *ngIf="isActive('all'); then separator"></ng-container>
+<app-language-skills *ngIf="isActive('language')"></app-language-skills>
 
-
-<ng-template #skillsTemplate>
-    <app-card [icon]="cardIcon"
-        [iconClass]="'mr-1'"
-        [panelBody]="panel"
-        [panelParameters]="{type: SkillsType.general, cols: colsToRender}"
-        [cardTitle]="'General Skills' | translate | async">
-    </app-card>
-</ng-template>
-
-<ng-template #computerTemplate>
-    <app-card [icon]="cardIcon"
-        [iconClass]="'mr-1'"
-        [panelBody]="panel"
-        [panelParameters]="{type: SkillsType.computer, cols: colsToRender}"
-        [cardTitle]="'Computer' | translate | async">
-    </app-card>
-</ng-template>
-
-<ng-template #panel
+<ng-template #tableTemplate
     let-type="type"
-    let-cols="cols"
 >
-    <mat-table
-        *ngIf="getSkillsSource(type).length"
-        [dataSource]="getSkillsSource(type)"
-
-        cdkDropList
-        [cdkDropListData]="getSkillsSource(type)"
-        (cdkDropListDropped)="onDrop($event)"
-        [cdkDropListDisabled]="dragDisabled"
-
+    <app-table-card
+        [cardIcon]="cardIcon"
+        [title]="type | titlecase | translate | async"
+        [columns]="inputData.colsToRender"
+        [rows]="data[SkillsType[type]]"
+        [isDraggable]="true"
+        [editCallBack]="edit(type)"
+        [deleteCallBack]="openRemovalConfirmDialog(type)"
     >
-        <ng-container *ngFor="let col of cols; let colIndex = index" matColumnDef="{{col}}">
-            <mat-header-cell
-                *matHeaderCellDef
-            >
-            {{ col === 'id' ? '#' : col | noSpecialChars | translate | async | titlecase }}
-            </mat-header-cell>
-            <mat-cell *matCellDef="let element; let row; let rowIndex = index">
-
-                <ng-container *ngIf="col === 'edit'"
-                    [ngTemplateOutlet]="editSkillTemplate"
-                    [ngTemplateOutletContext]="{
-                        rowIndex: rowIndex,
-                        type: type
-                    }"
-                ></ng-container>
-                <ng-container *ngIf="col === 'delete'"
-                    [ngTemplateOutlet]="deleteTrainingTemplate"
-                    [ngTemplateOutletContext]="{
-                        rowIndex: rowIndex,
-                        type: type
-                    }"
-                ></ng-container>
-                <ng-container *ngIf="col === 'order'"
-                    [ngTemplateOutlet]="dragHandle"
-                ></ng-container>
-                <ng-container *ngIf="col !== 'delete' && col !== 'edit' && col !== 'order'"> {{ element[col] }} </ng-container>
-
-            </mat-cell>
-        </ng-container>
-
-        <mat-header-row *matHeaderRowDef="cols"></mat-header-row>
-        <mat-row
-            (cdkDragStarted)="onDragStart($event)"
-            cdkDrag
-            [cdkDragData]="row"
-            *matRowDef="let row; columns: cols"
-        ></mat-row>
-    </mat-table>
-
-    <div
-        [className]="'text-right pt-3'"
-    >
-        <button
-            (click)="openSkillDialog(getSkillTypeName(type))"
-            [className]="'btn btn-outline-info'"
-            type='button'
-            ngbButton
+        <div
+            [className]="'text-right pt-3'"
         >
-            {{ 'Add Skills' | translate | async }}
-        </button>
-    </div>
-
+            <button
+                (click)="openDialog(type)"
+                [className]="'btn btn-outline-info'"
+                type='button'
+                ngbButton
+            >
+                {{ 'Add' | translate | async }}
+            </button>
+        </div>
+    </app-table-card>
 </ng-template>
 
 <ng-template #separator>
     <div [className]="'separator'"></div>
-</ng-template>
-
-<ng-template #editSkillTemplate
-    let-index="rowIndex"
-    let-type="type"
->
-    <button [className]="'btn btn-info btn-training-row'"
-        ngbButton
-        (click)="editSkill(index, getSkillTypeName(type))"
-    >
-        <fa-icon
-            [icon]="faEdit"
-        ></fa-icon>
-    </button>
-</ng-template>
-
-
-
-<ng-template #deleteTrainingTemplate
-    let-index="rowIndex"
-    let-type="type"
->
-    <button [className]="'btn btn-danger'"
-        ngbButton
-        (click)="openSkillsRemovalConfirmDialog(index, type)"
-        >
-        <fa-icon
-            [icon]="faTrash"
-        ></fa-icon>
-    </button>
-</ng-template>
-
-
-<ng-template #dragHandle>
-
-    <fa-icon
-        [ngStyle]="{
-            color: '#737373',
-            marginRight: 'auto',
-            marginLeft: 'auto'
-        }"
-        [icon]="faArrowsAlt"
-        (mousedown)="dragDisabled = false;"
-        (mouseup)="dragDisabled = true;"
-        (touchstart)="dragDisabled = false;"
-        (touchend)="dragDisabled = true;"
-    ></fa-icon>
-
 </ng-template>
