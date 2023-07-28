@@ -27,7 +27,7 @@
         "graphql-http": "^1.13.0",
         "jsonwebtoken": "^9.0.0",
         "just-debounce-it": "^3.2.0",
-        "mongoose": "^6.8.0",
+        "mongoose": "^6.11.3",
         "node-datetime": "^2.1.2",
         "nodemailer": "^6.8.0"
     }
