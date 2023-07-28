@@ -38,11 +38,12 @@ export function requestUserDataLoad(lang) {
             query: queryUserDetails,
             variables: variablesUserDetails
         } = getUserFullResumeQuery(lang);
-        const { data: fullDetails } = await dataService.readData(
+        const { data: {unprotectedSettings, ...fullDetails} } = await dataService.readData(
             queryUserDetails,
             variablesUserDetails
         );
 
+        dispatch(settingsLoadAction( unprotectedSettings ));
         dispatch(fullResumeDetailsLoadAction({ resume: fullDetails }));
     };
 }
@@ -79,6 +80,14 @@ export const fullResumeDetailsLoad = 'fullResumeDetailsLoad';
 export function fullResumeDetailsLoadAction(data) {
     return {
         type: fullResumeDetailsLoad,
+        payload: data
+    };
+}
+
+export const settingsLoad = 'settingsLoad';
+export function settingsLoadAction(data) {
+    return {
+        type: settingsLoad,
         payload: data
     };
 }

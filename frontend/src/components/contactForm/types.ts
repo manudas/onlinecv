@@ -1,6 +1,7 @@
 export type PropDef = {
     name: string
     contact_details: Record<string, string>
+    enabledMessaging: boolean,
     reference: React.Ref<any>,
     language: string,
 }

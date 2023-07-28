@@ -188,8 +188,8 @@ class ContactForm extends Component<PropDef, StateDef> {
                         {/* /Subtitle */}
                         {/* content */}
                         <div className="row">
-                            {this.renderForm()}
-                            {this.renderContactInfo()}
+                            { this.props.enabledMessaging && this.renderForm() }
+                            { this.renderContactInfo() }
                         </div>
                         {/* /Content */}
                     </div>
@@ -209,12 +209,15 @@ class ContactForm extends Component<PropDef, StateDef> {
             >
                 { this.renderTitle() }
                 { this.renderSection() }
-                <ControlledPopup
-                    openFlag={this.state.popupMessage !== null}
-                    title={ translateString('Thank you so much for your message', this) }
-                    message={this.state.popupMessage}
-                    onClose={() => this.setState({ popupMessage: null}) }
-                />
+                {
+                    this.props.enabledMessaging
+                        && <ControlledPopup
+                            openFlag={this.state.popupMessage !== null}
+                            title={ translateString('Thank you so much for your message', this) }
+                            message={this.state.popupMessage}
+                            onClose={() => this.setState({ popupMessage: null}) }
+                        />
+                }
             </section>
         )
         /* ==>> /SECTION: CONTACT */
@@ -277,7 +280,8 @@ class ContactForm extends Component<PropDef, StateDef> {
 
 function mapStateToProps(state: any) {
     const data = state?.data?.resume?.details
-    const { email, phone } = data ?? {}
+    const { enabledMessaging = false } = state?.settings ?? { }
+    const { email, phone } = data ?? { }
     const language = state?.language
     const translations = state?.data?.translations?.[language]?.['ContactForm']
 
@@ -286,6 +290,7 @@ function mapStateToProps(state: any) {
             ...(email && {email}),
             ...(phone && {phone}),
         },
+        enabledMessaging,
         translations: translations,
         language
     }

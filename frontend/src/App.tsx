@@ -39,7 +39,7 @@ class App extends Component<propDef, stateDef> {
          * We are going to use useMemo here in order to not refetch the data from
          * the backend if  the input (requested translations array), hasn't changed
          */
-        console.warn('review this, memo may not be working properly')
+        console.warn('review this memo, is it updating only when translation array changes?')
         this.debouncedHandler = Memoization<void>(
             debounce(
                 ([params, iso]) => {
@@ -75,7 +75,6 @@ class App extends Component<propDef, stateDef> {
     componentDidUpdate(_prevProps: propDef) {
         if (_prevProps.language !== this.props.language) {
             this.showLoader()
-            this.requestTranslations()
             this.props.requestUserDataLoad(this.props.language)
         }
         if (this.props.resume !== _prevProps.resume) {
@@ -85,6 +84,7 @@ class App extends Component<propDef, stateDef> {
                 LOADER_UNMOUNT_TIMEOUT
             ); // hide loader in 2 seconds time
         }
+        this.requestTranslations()
     }
 
     requestTranslations() {

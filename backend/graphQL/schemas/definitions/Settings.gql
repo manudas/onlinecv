@@ -10,6 +10,12 @@ input SettingsInput {
   language: String!
 }
 
+type UnprotectedSettingsInput {
+  backgroundImage: String
+  enabledMessaging: Boolean!
+  language: String!
+}
+
 type Settings {
   _id: ID!
   backgroundImage: String
@@ -25,6 +31,7 @@ type Settings {
 
 extend type Query {
   settings(language: String!): Settings
+  unprotectedSettings(language: String!): UnprotectedSettingsInput!
 }
 
 extend type Mutation {
