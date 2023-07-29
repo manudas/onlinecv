@@ -1,12 +1,16 @@
 import fs from 'fs';
-import https from 'https';
+import http2 from 'http2';
+import http from 'http';
 import path from "path";
 import chokidar from 'chokidar';
 import debounce from "just-debounce-it";
 
-import { secure_port } from 'app/config/backend/app.js';
+import { development_port, port, secure_port } from 'app/config/backend/app.js';
 import { fileDirName } from 'app/helpers/utils.js';
 import niceLog from './logs.js';
+
+// We set our enviroment. Either production or development
+const env = process.env.NODE_ENV || 'development';
 
 const certFiles = [
     {
@@ -43,7 +47,10 @@ const createSecureServer = (app) => {
     const initServer = () => {
         // if we have key and certificate, let's enable the secure port
         if (credentials?.key && credentials?.cert) {
-            secureServer = https.createServer(credentials, app);
+            secureServer = http2.createSecureServer({ // http2.createSecureServer(options, app), options include encryption certs and allowHTTP1 flag set to true
+                allowHTTP1: true,
+                ...credentials
+            }, app);
             secureServer.listen(secure_port, () => {
                 niceLog({ data: { text: '----------------------------------------------------------------------------------', style: 'yellow' }});
                 niceLog({ data: { text: `Secure Online resume BACKEND app listening on port ${secure_port}!`, style: 'yellow' }, attachTimeStamp: true });
@@ -58,7 +65,7 @@ const createSecureServer = (app) => {
             niceLog({ data: { text: 'Secure server is is shuting down', style: 'red' }, attachTimeStamp: true });
             niceLog({ data: { text: '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', style: 'red' }});
             secureServer.close(onCloseCallback);
-            secureServer.closeAllConnections();
+            // secureServer.closeAllConnections(); // not working in node http2 module servers
         }
     }
     const debouncedShutDown = debounce(() => shutdownServer(), 500);
@@ -101,6 +108,21 @@ const createSecureServer = (app) => {
     return secureServer;
 }
 
+const createServer = (app) => {
+    // let's create the server
+    const port_to_use = env === 'development' ? [development_port, port] : [port];
+
+    port_to_use.forEach(port => {
+        const httpServer = http.createServer(app);
+        httpServer.listen(port, () => {
+            niceLog({ data: { text: '----------------------------------------------------------------------------------', style: 'yellow' }});
+            niceLog({ data: { text: `Online resume BACKEND app listening on port ${port}!`, style: 'yellow' }, attachTimeStamp: true });
+            niceLog({ data: { text: '----------------------------------------------------------------------------------', style: 'yellow' }});
+        })
+    });
+}
+
 export {
     createSecureServer,
+    createServer,
 }

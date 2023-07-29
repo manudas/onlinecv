@@ -19,6 +19,33 @@ const loggingMidleware = (req, _res, next) => {
     next();
 };
 
+
+
+
+
+
+
+
+
+
+/*
+import express from "express";
+const feMiddleWare = url => {
+    const result = express.static(url);
+    return (req, _res, next) => {
+        const secondResult = result(req, _res, next);
+        console.log(result);
+    }
+};
+*/
+
+
+
+
+
+
+
+
 const adminMiddleware = async (req, res, next) => {
     const adminVirtualFolder =
         (await getAdminFolder())?.value ?? 'admin';

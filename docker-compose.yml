@@ -13,6 +13,7 @@ x-server:
     - db
   volumes:
     - ./backend:/app/backend                                                      # backend volume
+    - ./backend-libs:/app/backend/backend-libs                                    # backend libraries volume
     - ./data/certbot/webroot:/app/certbot/acme-challenge                          # certbot volume
     - ./data/certbot/certs:/app/backend/certs                                     # TLS certificates
     - ./config:/app/backend/config                                                # backend config volume
