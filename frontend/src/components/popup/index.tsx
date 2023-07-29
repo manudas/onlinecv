@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { memo, useState, useEffect, useCallback } from 'react'
 
 import { translateString } from 'helpers/translations'
 
@@ -18,19 +18,19 @@ const ControlledPopup = ({
     onOpen?: Function,
 }) => {
     const [open, setOpen] = useState(openFlag)
-    const closeModal = () => {
+    const closeModal = useCallback(() => {
         onClose?.()
         setOpen(false)
-    }
-    const openModal = () => {
+    }, [onClose])
+    const openModal = useCallback(() => {
         onOpen?.()
         setOpen(true)
-    }
+    }, [onOpen])
 
     useEffect(() => {
         if (openFlag) openModal()
         else closeModal()
-    }, [openFlag])
+    }, [openFlag, closeModal, openModal])
 
     const avoidEventCapturing = (e: React.MouseEvent) => {
         e.stopPropagation()
@@ -70,4 +70,4 @@ const ControlledPopup = ({
     )
 }
 
-export default ControlledPopup
+export default memo(ControlledPopup)

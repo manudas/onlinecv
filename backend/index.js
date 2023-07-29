@@ -1,22 +1,20 @@
-import http from 'http';
+import autopush from 'http2-express-autopush';
 import express from "express";
+import http2Express from "http2-express-bridge";
 import compression from 'compression';
 import zlib from 'zlib';
 import cookieParser from 'cookie-parser';
 import path from "path";
 
-import { port, development_port } from 'app/config/backend/app.js';
 import { adminMiddleware, graphql, loggingMidleware, notFoundMiddleware } from "app/api/index.js";
 
-import { createSecureServer } from "app/helpers/secureServer.js";
+import { createSecureServer, createServer } from "app/helpers/server.js";
 import { fileDirName } from 'app/helpers/utils.js';
 import niceLog from './helpers/logs.js';
 
-// We set our enviroment. Either production or development
-const env = process.env.NODE_ENV || 'development';
-
 // let's create the express app
-const app = express();
+// const app = express(); // no http2-bridged version
+const app = http2Express(express); // bridged version for http2
 
 // let's setup gzip compression with the middleware compression
 app.use(compression({ level: zlib.constants.Z_BEST_COMPRESSION }));
@@ -42,8 +40,8 @@ app.use(/(\/.+)*\/graphql/, graphql);
 
 //  "acme challenge for letsencrypt certbot" static folder files
 app.use('/.well-known', express.static(path.join(fileDirName(import.meta).__dirname, '..', 'certbot', 'acme-challenge', '.well-known')));
-//  "frontend/build" static folder files
-app.use(express.static(path.join(fileDirName(import.meta).__dirname, '..', 'webroot', 'frontend')));
+//  "frontend/build" static folder files. We serve the static files with autopush whenever available
+app.use(autopush(path.join(fileDirName(import.meta).__dirname, '..', 'webroot', 'frontend')));
 // "backend/build" static folder files
 app.use(adminMiddleware);
 
@@ -54,17 +52,8 @@ app.use(adminMiddleware);
  */
 app.use(notFoundMiddleware);
 
-// let's create the server
-const port_to_use = env === 'development' ? [development_port, port] : [port];
-
-port_to_use.forEach(port => {
-    const httpServer = http.createServer(app);
-    httpServer.listen(port, () => {
-        niceLog({ data: { text: '----------------------------------------------------------------------------------', style: 'yellow' }});
-        niceLog({ data: { text: `Online resume BACKEND app listening on port ${port}!`, style: 'yellow' }, attachTimeStamp: true });
-        niceLog({ data: { text: '----------------------------------------------------------------------------------', style: 'yellow' }});
-    })
-});
+// lets create the servers
+createServer(app);
 createSecureServer(app);
 
 // in case some uncontrolled exception is caught, don't exit
