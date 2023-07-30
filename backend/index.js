@@ -8,16 +8,15 @@ import path from "path";
 
 import { adminMiddleware, graphql, loggingMidleware, notFoundMiddleware } from "app/api/index.js";
 
-import { createSecureServer, createServer } from "app/helpers/server.js";
+import { catchUncontrolledException, createSecureServer, createServer } from "app/helpers/server.js";
 import { fileDirName } from 'app/helpers/utils.js';
-import niceLog from './helpers/logs.js';
 
 // let's create the express app
 // const app = express(); // no http2-bridged version
 const app = http2Express(express); // bridged version for http2
 
 // let's setup gzip compression with the middleware compression
-app.use(compression({ level: zlib.constants.Z_BEST_COMPRESSION }));
+app.use(compression({ level: zlib.constants.Z_BEST_COMPRESSION, params: { [zlib.constants.BROTLI_PARAM_QUALITY]: zlib.constants.BROTLI_MAX_QUALITY } }));
 
 // Add this before the GraphQL middleware
 // Needed to upload files through GraphQL
@@ -57,10 +56,4 @@ createServer(app);
 createSecureServer(app);
 
 // in case some uncontrolled exception is caught, don't exit
-process.on('uncaughtException', function(err) {
-    niceLog({ data: { text: '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', style: 'red', logLevel: 'error' }});
-    niceLog({ data: { text: 'UNCONTROLLED EXCEPTION', style: 'red' }, attachTimeStamp: true, logLevel: 'error' });
-    niceLog({ data: { text: err, style: 'red' }, attachTimeStamp: true, logLevel: 'error' });
-    niceLog({ data: { text: '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', style: 'red', logLevel: 'error' }});
-    niceLog({ data: { text: 'Node NOT Exiting...', style: 'blue', logLevel: 'log' }});
-});
+catchUncontrolledException();
