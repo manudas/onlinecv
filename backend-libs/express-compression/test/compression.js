@@ -1,3 +1,4 @@
+var after = require('after')
 var assert = require('assert')
 var Buffer = require('safe-buffer').Buffer
 var bytes = require('bytes')
@@ -8,6 +9,12 @@ var zlib = require('zlib')
 
 var compression = require('..')
 
+/**
+ * @const
+ * whether current node version has brotli support
+ */
+var hasBrotliSupport = 'createBrotliCompress' in zlib
+
 describe('compression()', function () {
   it('should skip HEAD', function (done) {
     var server = createServer({ threshold: 0 }, function (req, res) {
@@ -16,10 +23,10 @@ describe('compression()', function () {
     })
 
     request(server)
-    .head('/')
-    .set('Accept-Encoding', 'gzip')
-    .expect(shouldNotHaveHeader('Content-Encoding'))
-    .expect(200, done)
+      .head('/')
+      .set('Accept-Encoding', 'gzip')
+      .expect(shouldNotHaveHeader('Content-Encoding'))
+      .expect(200, done)
   })
 
   it('should skip unknown accept-encoding', function (done) {
@@ -29,10 +36,10 @@ describe('compression()', function () {
     })
 
     request(server)
-    .get('/')
-    .set('Accept-Encoding', 'bogus')
-    .expect(shouldNotHaveHeader('Content-Encoding'))
-    .expect(200, done)
+      .get('/')
+      .set('Accept-Encoding', 'bogus')
+      .expect(shouldNotHaveHeader('Content-Encoding'))
+      .expect(200, done)
   })
 
   it('should skip if content-encoding already set', function (done) {
@@ -43,10 +50,10 @@ describe('compression()', function () {
     })
 
     request(server)
-    .get('/')
-    .set('Accept-Encoding', 'gzip')
-    .expect('Content-Encoding', 'x-custom')
-    .expect(200, 'hello, world', done)
+      .get('/')
+      .set('Accept-Encoding', 'gzip')
+      .expect('Content-Encoding', 'x-custom')
+      .expect(200, 'hello, world', done)
   })
 
   it('should set Vary', function (done) {
@@ -56,10 +63,10 @@ describe('compression()', function () {
     })
 
     request(server)
-    .get('/')
-    .set('Accept-Encoding', 'gzip')
-    .expect('Content-Encoding', 'gzip')
-    .expect('Vary', 'Accept-Encoding', done)
+      .get('/')
+      .set('Accept-Encoding', 'gzip')
+      .expect('Content-Encoding', 'gzip')
+      .expect('Vary', 'Accept-Encoding', done)
   })
 
   it('should set Vary even if Accept-Encoding is not set', function (done) {
@@ -69,10 +76,10 @@ describe('compression()', function () {
     })
 
     request(server)
-    .get('/')
-    .expect('Vary', 'Accept-Encoding')
-    .expect(shouldNotHaveHeader('Content-Encoding'))
-    .expect(200, done)
+      .get('/')
+      .expect('Vary', 'Accept-Encoding')
+      .expect(shouldNotHaveHeader('Content-Encoding'))
+      .expect(200, done)
   })
 
   it('should not set Vary if Content-Type does not pass filter', function (done) {
@@ -82,9 +89,9 @@ describe('compression()', function () {
     })
 
     request(server)
-    .get('/')
-    .expect(shouldNotHaveHeader('Vary'))
-    .expect(200, done)
+      .get('/')
+      .expect(shouldNotHaveHeader('Vary'))
+      .expect(200, done)
   })
 
   it('should set Vary for HEAD request', function (done) {
@@ -94,9 +101,9 @@ describe('compression()', function () {
     })
 
     request(server)
-    .head('/')
-    .set('Accept-Encoding', 'gzip')
-    .expect('Vary', 'Accept-Encoding', done)
+      .head('/')
+      .set('Accept-Encoding', 'gzip')
+      .expect('Vary', 'Accept-Encoding', done)
   })
 
   it('should transfer chunked', function (done) {
@@ -106,9 +113,9 @@ describe('compression()', function () {
     })
 
     request(server)
-    .get('/')
-    .set('Accept-Encoding', 'gzip')
-    .expect('Transfer-Encoding', 'chunked', done)
+      .get('/')
+      .set('Accept-Encoding', 'gzip')
+      .expect('Transfer-Encoding', 'chunked', done)
   })
 
   it('should remove Content-Length for chunked', function (done) {
@@ -118,10 +125,10 @@ describe('compression()', function () {
     })
 
     request(server)
-    .get('/')
-    .expect('Content-Encoding', 'gzip')
-    .expect(shouldNotHaveHeader('Content-Length'))
-    .expect(200, done)
+      .get('/')
+      .expect('Content-Encoding', 'gzip')
+      .expect(shouldNotHaveHeader('Content-Length'))
+      .expect(200, done)
   })
 
   it('should work with encoding arguments', function (done) {
@@ -132,10 +139,10 @@ describe('compression()', function () {
     })
 
     request(server)
-    .get('/')
-    .set('Accept-Encoding', 'gzip')
-    .expect('Transfer-Encoding', 'chunked')
-    .expect(200, 'hello, world', done)
+      .get('/')
+      .set('Accept-Encoding', 'gzip')
+      .expect('Transfer-Encoding', 'chunked')
+      .expect(200, 'hello, world', done)
   })
 
   it('should allow writing after close', function (done) {
@@ -151,93 +158,90 @@ describe('compression()', function () {
     })
 
     request(server)
-    .get('/')
-    .end(function () {})
+      .get('/')
+      .end(function () {})
   })
 
   it('should back-pressure when compressed', function (done) {
     var buf
+    var cb = after(2, done)
     var client
     var drained = false
     var resp
     var server = createServer({ threshold: 0 }, function (req, res) {
       resp = res
+
       res.on('drain', function () {
         drained = true
       })
+
       res.setHeader('Content-Type', 'text/plain')
       res.write('start')
       pressure()
     })
-    var wait = 2
 
-    crypto.pseudoRandomBytes(1024 * 128, function (err, chunk) {
+    crypto.randomBytes(1024 * 128, function (err, chunk) {
       if (err) return done(err)
       buf = chunk
       pressure()
     })
 
-    function complete () {
-      if (--wait !== 0) return
-      assert.ok(drained)
-      done()
-    }
-
     function pressure () {
       if (!buf || !resp || !client) return
+
+      assert.ok(!drained)
 
       while (resp.write(buf) !== false) {
         resp.flush()
       }
 
       resp.on('drain', function () {
-        resp.write('end')
+        assert.ok(resp.write('end'))
         resp.end()
       })
-      resp.on('finish', complete)
+
+      resp.on('finish', cb)
       client.resume()
     }
 
     request(server)
-    .get('/')
-    .request()
-    .on('response', function (res) {
-      client = res
-      assert.equal(res.headers['content-encoding'], 'gzip')
-      res.pause()
-      res.on('end', complete)
-      pressure()
-    })
-    .end()
+      .get('/')
+      .request()
+      .on('response', function (res) {
+        client = res
+        assert.strictEqual(res.headers['content-encoding'], 'gzip')
+        res.pause()
+        res.on('end', function () {
+          server.close(cb)
+        })
+        pressure()
+      })
+      .end()
   })
 
   it('should back-pressure when uncompressed', function (done) {
     var buf
+    var cb = after(2, done)
     var client
     var drained = false
     var resp
     var server = createServer({ filter: function () { return false } }, function (req, res) {
       resp = res
+
       res.on('drain', function () {
         drained = true
       })
+
       res.setHeader('Content-Type', 'text/plain')
       res.write('start')
       pressure()
     })
-    var wait = 2
 
-    crypto.pseudoRandomBytes(1024 * 128, function (err, chunk) {
+    crypto.randomBytes(1024 * 128, function (err, chunk) {
       if (err) return done(err)
       buf = chunk
       pressure()
     })
-
-    function complete () {
-      if (--wait !== 0) return
-      assert.ok(drained)
-      done()
-    }
 
     function pressure () {
       if (!buf || !resp || !client) return
@@ -247,24 +251,27 @@ describe('compression()', function () {
       }
 
       resp.on('drain', function () {
-        resp.write('end')
+        assert.ok(drained)
+        assert.ok(resp.write('end'))
         resp.end()
       })
-      resp.on('finish', complete)
+      resp.on('finish', cb)
       client.resume()
     }
 
     request(server)
-    .get('/')
-    .request()
-    .on('response', function (res) {
-      client = res
-      shouldNotHaveHeader('Content-Encoding')(res)
-      res.pause()
-      res.on('end', complete)
-      pressure()
-    })
-    .end()
+      .get('/')
+      .request()
+      .on('response', function (res) {
+        client = res
+        shouldNotHaveHeader('Content-Encoding')(res)
+        res.pause()
+        res.on('end', function () {
+          server.close(cb)
+        })
+        pressure()
+      })
+      .end()
   })
 
   it('should transfer large bodies', function (done) {
@@ -276,12 +283,12 @@ describe('compression()', function () {
     })
 
     request(server)
-    .get('/')
-    .set('Accept-Encoding', 'gzip')
-    .expect('Transfer-Encoding', 'chunked')
-    .expect('Content-Encoding', 'gzip')
-    .expect(shouldHaveBodyLength(len))
-    .expect(200, buf.toString(), done)
+      .get('/')
+      .set('Accept-Encoding', 'gzip')
+      .expect('Transfer-Encoding', 'chunked')
+      .expect('Content-Encoding', 'gzip')
+      .expect(shouldHaveBodyLength(len))
+      .expect(200, buf.toString(), done)
   })
 
   it('should transfer large bodies with multiple writes', function (done) {
@@ -296,12 +303,12 @@ describe('compression()', function () {
     })
 
     request(server)
-    .get('/')
-    .set('Accept-Encoding', 'gzip')
-    .expect('Transfer-Encoding', 'chunked')
-    .expect('Content-Encoding', 'gzip')
-    .expect(shouldHaveBodyLength(len * 4))
-    .expect(200, done)
+      .get('/')
+      .set('Accept-Encoding', 'gzip')
+      .expect('Transfer-Encoding', 'chunked')
+      .expect('Content-Encoding', 'gzip')
+      .expect(shouldHaveBodyLength(len * 4))
+      .expect(200, done)
   })
 
   describe('threshold', function () {
@@ -313,10 +320,10 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .expect(shouldNotHaveHeader('Content-Encoding'))
-      .expect(200, done)
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .expect(shouldNotHaveHeader('Content-Encoding'))
+        .expect(200, done)
     })
 
     it('should compress responses above the threshold size', function (done) {
@@ -327,9 +334,9 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .expect('Content-Encoding', 'gzip', done)
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .expect('Content-Encoding', 'gzip', done)
     })
 
     it('should compress when streaming without a content-length', function (done) {
@@ -342,9 +349,9 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .expect('Content-Encoding', 'gzip', done)
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .expect('Content-Encoding', 'gzip', done)
     })
 
     it('should not compress when streaming and content-length is lower than threshold', function (done) {
@@ -358,10 +365,10 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .expect(shouldNotHaveHeader('Content-Encoding'))
-      .expect(200, done)
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .expect(shouldNotHaveHeader('Content-Encoding'))
+        .expect(200, done)
     })
 
     it('should compress when streaming and content-length is larger than threshold', function (done) {
@@ -375,9 +382,9 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .expect('Content-Encoding', 'gzip', done)
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .expect('Content-Encoding', 'gzip', done)
     })
 
     // res.end(str, encoding) broken in node.js 0.8
@@ -389,10 +396,10 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .expect(shouldNotHaveHeader('Content-Encoding'))
-      .expect(200, '....', done)
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .expect(shouldNotHaveHeader('Content-Encoding'))
+        .expect(200, '....', done)
     })
 
     it('should consider res.end() as 0 length', function (done) {
@@ -402,10 +409,10 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .expect(shouldNotHaveHeader('Content-Encoding'))
-      .expect(200, '', done)
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .expect(shouldNotHaveHeader('Content-Encoding'))
+        .expect(200, '', done)
     })
 
     it('should work with res.end(null)', function (done) {
@@ -415,10 +422,10 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .expect(shouldNotHaveHeader('Content-Encoding'))
-      .expect(200, '', done)
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .expect(shouldNotHaveHeader('Content-Encoding'))
+        .expect(200, '', done)
     })
   })
 
@@ -430,9 +437,9 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .expect('Content-Encoding', 'gzip', done)
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .expect('Content-Encoding', 'gzip', done)
     })
 
     it('should return false writing after end', function (done) {
@@ -444,9 +451,9 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .expect('Content-Encoding', 'gzip', done)
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .expect('Content-Encoding', 'gzip', done)
     })
   })
 
@@ -458,9 +465,42 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'deflate')
-      .expect('Content-Encoding', 'deflate', done)
+        .get('/')
+        .set('Accept-Encoding', 'deflate')
+        .expect('Content-Encoding', 'deflate', done)
+    })
+  })
+
+  describe('when "Accept-Encoding: br"', function () {
+    var brotlit = hasBrotliSupport ? it : it.skip
+    brotlit('should respond with br', function (done) {
+      var server = createServer({ threshold: 0 }, function (req, res) {
+        res.setHeader('Content-Type', 'text/plain')
+        res.end('hello, world')
+      })
+
+      request(server)
+        .get('/')
+        .set('Accept-Encoding', 'br')
+        .expect('Content-Encoding', 'br', done)
+    })
+  })
+
+  describe('when "Accept-Encoding: br" and passing compression level', function () {
+    var brotlit = hasBrotliSupport ? it : it.skip
+    brotlit('should respond with br', function (done) {
+      var params = {}
+      params[zlib.constants.BROTLI_PARAM_QUALITY] = 11
+
+      var server = createServer({ threshold: 0, params: params }, function (req, res) {
+        res.setHeader('Content-Type', 'text/plain')
+        res.end('hello, world')
+      })
+
+      request(server)
+        .get('/')
+        .set('Accept-Encoding', 'br')
+        .expect('Content-Encoding', 'br', done)
     })
   })
 
@@ -472,9 +512,9 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip, deflate')
-      .expect('Content-Encoding', 'gzip', done)
+        .get('/')
+        .set('Accept-Encoding', 'gzip, deflate')
+        .expect('Content-Encoding', 'gzip', done)
     })
   })
 
@@ -486,9 +526,99 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'deflate, gzip')
-      .expect('Content-Encoding', 'gzip', done)
+        .get('/')
+        .set('Accept-Encoding', 'deflate, gzip')
+        .expect('Content-Encoding', 'gzip', done)
+    })
+  })
+
+  describe('when "Accept-Encoding: gzip, br"', function () {
+    var brotlit = hasBrotliSupport ? it : it.skip
+    brotlit('should respond with br', function (done) {
+      var server = createServer({ threshold: 0 }, function (req, res) {
+        res.setHeader('Content-Type', 'text/plain')
+        res.end('hello, world')
+      })
+
+      request(server)
+        .get('/')
+        .set('Accept-Encoding', 'gzip, br')
+        .expect('Content-Encoding', 'br', done)
+    })
+  })
+
+  describe('when "Accept-Encoding: deflate, gzip, br"', function () {
+    var brotlit = hasBrotliSupport ? it : it.skip
+    brotlit('should respond with br', function (done) {
+      var server = createServer({ threshold: 0 }, function (req, res) {
+        res.setHeader('Content-Type', 'text/plain')
+        res.end('hello, world')
+      })
+
+      request(server)
+        .get('/')
+        .set('Accept-Encoding', 'deflate, gzip, br')
+        .expect('Content-Encoding', 'br', done)
+    })
+  })
+
+  describe('when "Accept-Encoding: gzip;q=1, br;q=0.3"', function () {
+    var brotlit = hasBrotliSupport ? it : it.skip
+    brotlit('should respond with gzip', function (done) {
+      var server = createServer({ threshold: 0 }, function (req, res) {
+        res.setHeader('Content-Type', 'text/plain')
+        res.end('hello, world')
+      })
+
+      request(server)
+        .get('/')
+        .set('Accept-Encoding', 'gzip;q=1, br;q=0.3')
+        .expect('Content-Encoding', 'gzip', done)
+    })
+  })
+
+  describe('when "Accept-Encoding: gzip, br;q=0.8"', function () {
+    var brotlit = hasBrotliSupport ? it : it.skip
+    brotlit('should respond with gzip', function (done) {
+      var server = createServer({ threshold: 0 }, function (req, res) {
+        res.setHeader('Content-Type', 'text/plain')
+        res.end('hello, world')
+      })
+
+      request(server)
+        .get('/')
+        .set('Accept-Encoding', 'gzip, br;q=0.8')
+        .expect('Content-Encoding', 'gzip', done)
+    })
+  })
+
+  describe('when "Accept-Encoding: gzip;q=0.001"', function () {
+    var brotlit = hasBrotliSupport ? it : it.skip
+    brotlit('should respond with gzip', function (done) {
+      var server = createServer({ threshold: 0 }, function (req, res) {
+        res.setHeader('Content-Type', 'text/plain')
+        res.end('hello, world')
+      })
+
+      request(server)
+        .get('/')
+        .set('Accept-Encoding', 'gzip;q=0.001')
+        .expect('Content-Encoding', 'gzip', done)
+    })
+  })
+
+  describe('when "Accept-Encoding: deflate, br"', function () {
+    var brotlit = hasBrotliSupport ? it : it.skip
+    brotlit('should respond with br', function (done) {
+      var server = createServer({ threshold: 0 }, function (req, res) {
+        res.setHeader('Content-Type', 'text/plain')
+        res.end('hello, world')
+      })
+
+      request(server)
+        .get('/')
+        .set('Accept-Encoding', 'deflate, br')
+        .expect('Content-Encoding', 'br', done)
     })
   })
 
@@ -501,11 +631,11 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .expect('Cache-Control', 'no-transform')
-      .expect(shouldNotHaveHeader('Content-Encoding'))
-      .expect(200, 'hello, world', done)
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .expect('Cache-Control', 'no-transform')
+        .expect(shouldNotHaveHeader('Content-Encoding'))
+        .expect(200, 'hello, world', done)
     })
 
     it('should not set Vary headerh', function (done) {
@@ -516,17 +646,17 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .expect('Cache-Control', 'no-transform')
-      .expect(shouldNotHaveHeader('Vary'))
-      .expect(200, done)
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .expect('Cache-Control', 'no-transform')
+        .expect(shouldNotHaveHeader('Vary'))
+        .expect(200, done)
     })
   })
 
   describe('.filter', function () {
     it('should be a function', function () {
-      assert.equal(typeof compression.filter, 'function')
+      assert.strictEqual(typeof compression.filter, 'function')
     })
 
     it('should return false on empty response', function (done) {
@@ -535,8 +665,8 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .expect(200, 'false', done)
+        .get('/')
+        .expect(200, 'false', done)
     })
 
     it('should return true for "text/plain"', function (done) {
@@ -546,8 +676,8 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .expect(200, 'true', done)
+        .get('/')
+        .expect(200, 'true', done)
     })
 
     it('should return false for "application/x-bogus"', function (done) {
@@ -557,8 +687,8 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .expect(200, 'false', done)
+        .get('/')
+        .expect(200, 'false', done)
     })
   })
 
@@ -573,8 +703,8 @@ describe('compression()', function () {
       })
 
       request(server)
-      .get('/')
-      .expect(200, done)
+        .get('/')
+        .expect(200, done)
     })
 
     it('should flush the response', function (done) {
@@ -589,16 +719,19 @@ describe('compression()', function () {
 
       function onchunk (chunk) {
         assert.ok(chunks++ < 2)
-        assert.equal(chunk.length, 1024)
+        assert.strictEqual(chunk.length, 1024)
         next()
       }
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .request()
-      .on('response', unchunk('gzip', onchunk, done))
-      .end()
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .request()
+        .on('response', unchunk('gzip', onchunk, function (err) {
+          if (err) return done(err)
+          server.close(done)
+        }))
+        .end()
     })
 
     it('should flush small chunks for gzip', function (done) {
@@ -612,16 +745,46 @@ describe('compression()', function () {
 
       function onchunk (chunk) {
         assert.ok(chunks++ < 20)
-        assert.equal(chunk.toString(), '..')
+        assert.strictEqual(chunk.toString(), '..')
         next()
       }
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'gzip')
-      .request()
-      .on('response', unchunk('gzip', onchunk, done))
-      .end()
+        .get('/')
+        .set('Accept-Encoding', 'gzip')
+        .request()
+        .on('response', unchunk('gzip', onchunk, function (err) {
+          if (err) return done(err)
+          server.close(done)
+        }))
+        .end()
+    })
+
+    var brotlit = hasBrotliSupport ? it : it.skip
+    brotlit('should flush small chunks for brotli', function (done) {
+      var chunks = 0
+      var next
+      var server = createServer({ threshold: 0 }, function (req, res) {
+        next = writeAndFlush(res, 2, Buffer.from('..'))
+        res.setHeader('Content-Type', 'text/plain')
+        next()
+      })
+
+      function onchunk (chunk) {
+        assert.ok(chunks++ < 20)
+        assert.strictEqual(chunk.toString(), '..')
+        next()
+      }
+
+      request(server)
+        .get('/')
+        .set('Accept-Encoding', 'br')
+        .request()
+        .on('response', unchunk('br', onchunk, function (err) {
+          if (err) return done(err)
+          server.close(done)
+        }))
+        .end()
     })
 
     it('should flush small chunks for deflate', function (done) {
@@ -635,16 +798,19 @@ describe('compression()', function () {
 
       function onchunk (chunk) {
         assert.ok(chunks++ < 20)
-        assert.equal(chunk.toString(), '..')
+        assert.strictEqual(chunk.toString(), '..')
         next()
       }
 
       request(server)
-      .get('/')
-      .set('Accept-Encoding', 'deflate')
-      .request()
-      .on('response', unchunk('deflate', onchunk, done))
-      .end()
+        .get('/')
+        .set('Accept-Encoding', 'deflate')
+        .request()
+        .on('response', unchunk('deflate', onchunk, function (err) {
+          if (err) return done(err)
+          server.close(done)
+        }))
+        .end()
     })
   })
 })
@@ -666,7 +832,7 @@ function createServer (opts, fn) {
 
 function shouldHaveBodyLength (length) {
   return function (res) {
-    assert.equal(res.text.length, length, 'should have body length of ' + length)
+    assert.strictEqual(res.text.length, length, 'should have body length of ' + length)
   }
 }
 
@@ -691,7 +857,7 @@ function unchunk (encoding, onchunk, onend) {
   return function (res) {
     var stream
 
-    assert.equal(res.headers['content-encoding'], encoding)
+    assert.strictEqual(res.headers['content-encoding'], encoding)
 
     switch (encoding) {
       case 'deflate':
@@ -699,6 +865,9 @@ function unchunk (encoding, onchunk, onend) {
         break
       case 'gzip':
         stream = res.pipe(zlib.createGunzip())
+        break
+      case 'br':
+        stream = res.pipe(zlib.createBrotliDecompress())
         break
     }
 
