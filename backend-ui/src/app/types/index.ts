@@ -10,6 +10,8 @@ export * from './Memo'
 
 export * from './Message'
 
+export * from './Portfolio'
+
 export * from './Others'
 
 export * from './Quote'

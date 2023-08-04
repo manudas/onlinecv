@@ -12,6 +12,14 @@ export const SAVE_REFERENCES =  createAction(
 
 export const FETCH = (type: OthersType) => {
     switch (type) {
+        case OthersType['portfolio']:
+            console.error('tobeimplemented')
+            return createAction(
+                '[Others Component] FetchPortfolio',
+                props<{
+                    language: string
+                }>()
+            )
         case OthersType['references']:
             return createAction(
                 '[Others Component] FetchReferences',
@@ -89,3 +97,11 @@ export const REMOVE_QUOTE = createAction(
         id: string
     }>()
 )
+
+export function REMOVE_PORTFOLIO(arg0: { id: any }): any {
+  throw new Error('Function not implemented.')
+}
+export function SAVE_PORTFOLIO(arg0: { portfolio: any }): any {
+  throw new Error('Function not implemented.')
+}
+

@@ -1,9 +1,12 @@
+<ng-container *ngIf="isActive('portfolio'); then portfolio"></ng-container>
+<ng-container *ngIf="isActive('all'); then separator"></ng-container>
 <ng-container *ngIf="isActive('references'); then references"></ng-container>
 <ng-container *ngIf="isActive('all'); then separator"></ng-container>
 <ng-container *ngIf="isActive('upload-resume'); then uploadResumeFileTemplate"></ng-container>
 <ng-container *ngIf="isActive('all'); then separator"></ng-container>
 <ng-container *ngIf="isActive('quote'); then quoteTemplate"></ng-container>
 
+<ng-template #portfolio><app-portfolio></app-portfolio></ng-template>
 <ng-template #references><app-references></app-references></ng-template>
 
 <ng-template #separator>
@@ -56,13 +59,11 @@
 <ng-template #quotePanel>
     <fieldset>
         <legend>{{ 'Optional insightful quote' | translate | async }}</legend>
-aparece mas grande de la cuenta, mirar estilos de details
         <form
             [formGroup]="quoteFormGroup"
         >
             <div class='form-group'>
                 <label class='control-label'>{{ 'Author name' | translate | async }}</label>
-                estilos no en negrita, mirar en estilos de details
                 <input class='form-control'
                     formControlName="author"
                     [placeholder]="'Enter your author\'s quote name' | translate | async">

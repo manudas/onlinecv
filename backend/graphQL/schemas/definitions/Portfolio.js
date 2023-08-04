@@ -18,7 +18,7 @@ export default
     """
     picture is String in GraphQL but Buffer in JS
     """
-    picture: String
+    picture: [String]
   }
 
   input PortfolioInput {
@@ -31,7 +31,7 @@ export default
     """
     picture is String in GraphQL but Buffer in JS
     """
-    picture: String
+    picture: [String]
   }
 
   extend type Query {

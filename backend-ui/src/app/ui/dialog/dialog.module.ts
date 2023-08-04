@@ -1,6 +1,44 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
+import { MatChipsModule } from '@angular/material/chips'
 import { MatDatepickerModule } from '@angular/material/datepicker'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import { MatNativeDateModule } from '@angular/material/core'
 import { ConfirmModule } from '@app/ui/confirm/confirm.module'
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
@@ -19,7 +57,48 @@ import { DialogComponent } from './dialog.component'
         ConfirmModule,
         CommonModule,
         FontAwesomeModule,
+        MatChipsModule,
         MatDatepickerModule,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        MatFormFieldModule,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         MatNativeDateModule,
         MatIconModule,
         ReactiveFormsModule,

@@ -1,7 +1,7 @@
 import { ValidatorFn } from "@angular/forms"
 
 /* Strong typing helpers for Data Dialog Inputs */
-type InputType = 'date' | 'number' | 'textarea'
+type InputType = 'date' | 'number' | 'textarea' | 'taglist' | 'array'
 type InternalAcceptedTypes = 'hidden' | 'readonly' | 'fullsize' | 'disabled'
 export type MetadataDialog = {
     isEdit?: boolean
