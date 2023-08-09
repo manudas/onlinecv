@@ -6,9 +6,10 @@ import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/for
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog"
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 import { LocaleStore } from '@app/types'
+import * as FILE_UTILS from '@app/utils/Files'
 import { Observable } from 'rxjs'
 import { logEasy } from '@app/services/logging'
-import { AcceptedTypes, DataDialogDef, DataDialogMap, DialogButtonDef, MetadataDialog } from './helpers'
+import { AcceptedTypes, DataDialogDef, DataDialogMap, DialogButtonDef, InputType, InputTypeArr, MetadataDialog } from './helpers'
 
 type StoreType = { locale: LocaleStore }
 @Component({
@@ -46,6 +47,8 @@ export class DialogComponent {
     close = (message: unknown = null) => this.dialogRef.close(message)
     debug = (message: any) => logEasy(message)
     getControlsOfFormArrayOrEmptyControl = (control: FormArray) => { !control.length && this.addArrayControl(control); return control.controls }
+    // Type text: either no type at all, or type text or anytype that is not included in InputTypeArr
+    isTextInput = (types: Array<InputType>) => !types || types.includes('text') || !types.some(e => InputTypeArr.includes(e))
     constructor( public dialogRef: MatDialogRef<DialogComponent>, @Inject(MAT_DIALOG_DATA) public dataMap: DataDialogMap, private dateAdapter: DateAdapter<any>, private store: Store<StoreType> ) {
         this.selectedLocale$ = this.store.pipe(select(state => state?.locale?.selectedLocale))
         this.selectedLocale$.subscribe((data: string) => data && this.dateAdapter.setLocale(data))
@@ -57,7 +60,7 @@ export class DialogComponent {
               this.addControl(control, value ? new Date(Number(value)) : null, validators)
             } else {
               // if its taglist or array and the provided value exist but is not an array, put it in an array before passing it down
-              this.addControl(control, (types?.includes('array') || types?.includes('taglist')) && !Array.isArray(value) ? (value ? [value] : [] ) : value, validators)
+              this.addControl(control, (types?.includes('array') || types?.includes('taglist') || types?.includes('carousel')) && !Array.isArray(value) ? (value ? [value] : [] ) : value, validators)
             }
             types?.includes('disabled') && this.dataFormGroup.controls[control].disable()
             types && this.addType(control, types)
@@ -131,4 +134,22 @@ export class DialogComponent {
       }
     }
     /* END of elements for chip/tag list input */
+
+    /* Carousel supporting methods */
+    acceptedDocumentFileType                                            = FILE_UTILS.definedFileTypes.image
+    addImageToCarouselCacheFunc: Record<string, (arg: string) => void>  = {}
+    addImageToCarouselFunc = (control: FormArray, name: string) => {
+        if (!this.addImageToCarouselCacheFunc[name]) {
+            this.addImageToCarouselCacheFunc[name] = (value: string) => {
+                !!value && control.push(new FormControl(value))
+            }
+        }
+        return this.addImageToCarouselCacheFunc[name]
+    }
+    structuredImageData(control: FormArray) {
+        return control.value.map(data => { return {
+            thumbImage: FILE_UTILS.attachUrlDataTypeToBase64(data),
+        } })
+    }
+    /* END of Carousel support methods */
 }

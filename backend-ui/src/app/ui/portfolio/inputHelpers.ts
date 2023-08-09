@@ -14,7 +14,7 @@ export const dataDefaultInputTypes   = new Map<string, ValidAcceptedTypes<Accept
     ['description', assertValidAcceptedTypes<['fullsize', 'textarea']>(['fullsize', 'textarea'])],
     // ['url', assertValidAcceptedTypes<['fullsize']>(['fullsize'])],
     ['keywords', assertValidAcceptedTypes<['fullsize', 'taglist']>(['fullsize', 'taglist'])],
-    // ['images', assertValidAcceptedTypes<['fullsize', 'image']>(['fullsize', 'image'])],
+    ['images', assertValidAcceptedTypes<['carousel']>(['carousel'])],
 ])
 export const dataInputValidators     = new Map([
     ['name', [Validators.required]],

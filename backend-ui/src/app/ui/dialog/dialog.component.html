@@ -85,7 +85,7 @@
     <div
         *ngIf="!types?.includes('hidden')"
         [ngClass]="{
-            'col-md-6': !types?.includes('fullsize'),
+            'col-md-6': !types?.includes('fullsize') && !types?.includes('carousel'),
             'col-sm-12': true
         }"
     >
@@ -123,7 +123,7 @@
                 {{ errors | translate | async }}
             </small>
             <button
-                *ngIf="isFormArray(control) && !types?.includes('taglist')"
+                *ngIf="isFormArray(control) && !types?.includes('taglist') && !types?.includes('carousel')"
                 [className]="'btn btn-outline-info more-button float-right'"
                 type='button'
                 ngbButton
@@ -142,7 +142,7 @@
     let-placeholder="placeholder"
 >
     <ng-container
-        *ngIf="isFormArray(control) && !types?.includes('taglist')"
+        *ngIf="isFormArray(control) && !types?.includes('taglist') && !types?.includes('carousel')"
         [ngTemplateOutlet]="inputMultiTemplate"
         [ngTemplateOutletContext]="{
             name: name,
@@ -161,8 +161,12 @@
             placeholder: placeholder
         }"
     ></ng-container>
+    <!--
+        previous ngIf condition of the following ng-container:
+        (types?.includes('taglist') || types?.includes('carousel') || !isFormArray(control)) && !types?.includes('date')
+    -->
     <ng-container
-        *ngIf="(types?.includes('taglist') || !isFormArray(control)) && !types?.includes('date')"
+        *ngIf="!types?.includes('date')"
         [ngTemplateOutlet]="inputTemplate"
         [ngTemplateOutletContext]="{
             name: name,
@@ -254,7 +258,7 @@
         [readOnly]="types?.includes('readonly')"
     ></textarea>
     <input
-        *ngIf="!types?.includes('textarea') && !types?.includes('date') && !types?.includes('taglist')"
+        *ngIf="isTextInput(types)"
         class='form-control'
         placeholder="{{ placeholder ? (placeholder | translate | async) : null }}"
         placement="top"
@@ -263,7 +267,7 @@
         [type]="types?.includes('number') ? 'number' : 'text'"
     >
     <input
-        *ngIf="!types?.includes('textarea') && !types?.includes('taglist') && types?.includes('date')"
+        *ngIf="types?.includes('date')"
         class='form-control'
         placeholder="{{ placeholder ? (placeholder | translate | async) : null }}"
         placement="top"
@@ -272,7 +276,7 @@
         [readOnly]="types?.includes('readonly')"
     >
     <mat-form-field
-        *ngIf="!types?.includes('textarea') && !types?.includes('date') && types?.includes('taglist')"
+        *ngIf="types?.includes('taglist')"
         class='w-100'
         [formGroup]="dataFormGroup"
     >
@@ -298,7 +302,17 @@
                 [readOnly]="types?.includes('readonly')"
             />
         </mat-chip-grid>
-        </mat-form-field>
+    </mat-form-field>
+    <div
+        *ngIf="types?.includes('carousel')"
+        class="w-100"
+    >
+        <app-fileupload
+            (dataChange)="addImageToCarouselFunc(control, name)($event)"
+            [accept]="acceptedDocumentFileType"
+        ></app-fileupload>
+        <ng-image-slider [images]="structuredImageData(control)"></ng-image-slider>
+    </div>
 </ng-template>
 
 <ng-template #buttonTemplate
