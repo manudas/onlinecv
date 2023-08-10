@@ -8,7 +8,7 @@ import { LocaleStore } from '@app/types/Locale'
 import { faBookOpen, IconDefinition } from '@fortawesome/free-solid-svg-icons'
 import { select, Store } from '@ngrx/store'
 import { Observable } from 'rxjs'
-import * as OTHERS_ACTIONS from '@store_actions/Others'
+import * as PORTFOLIO_ACTIONS from '@store_actions/Portfolio'
 import { ConfirmComponent } from '@app/ui/confirm/confirm.component'
 import { DialogComponent } from '@app/ui/dialog/dialog.component'
 import * as INPUT_HELPERS from './inputHelpers'
@@ -42,6 +42,7 @@ export class PortfolioComponent implements OnInit {
   ngOnInit(): void {
     this.selectedLocale$.subscribe((data: string) => { this.selectedLocale = data; this.fetchData() })
     this.data$.subscribe((data: PortfolioDef[]) => { this.data = data ?? this.data })
+    this.fetchData()
   }
 
   openDialog( index: number = null ): void {
@@ -87,11 +88,11 @@ export class PortfolioComponent implements OnInit {
   }
 
   edit = ( index: number ) => this.openDialog( index )
-  delete = ( index: number ) => this.store.dispatch(OTHERS_ACTIONS.REMOVE_PORTFOLIO({ id: this.data?.[index]?.id }))
+  delete = ( index: number ) => this.store.dispatch(PORTFOLIO_ACTIONS.REMOVE_PORTFOLIO({ id: this.data?.[index]?.id }))
   editDataValues = ( index: number, refData: PortfolioDef ) => this.dispatchSave([ ...this.data.slice(0, index), { ...refData}, ...this.data.slice(index + 1) ])
   add = ( data: PortfolioDef ) => this.editDataValues(this.data.length, { ...data, language: this.selectedLocale, order: this.data.length })
   isEdit = ( data: EditPortfolioStructure | Object = {} ): data is EditPortfolioStructure => (data as EditPortfolioStructure).index !== undefined
-  dispatchSave = ( portfolio ) => this.store.dispatch(OTHERS_ACTIONS.SAVE_PORTFOLIO({ portfolio }))
-  fetchData = () => this.store.dispatch(OTHERS_ACTIONS.FETCH(OthersType[this.type])({ language: this.selectedLocale }))
+  dispatchSave = ( portfolio ) => this.store.dispatch(PORTFOLIO_ACTIONS.SAVE_PORTFOLIO({ portfolio }))
+  fetchData = () => this.store.dispatch(PORTFOLIO_ACTIONS.FETCH_PORTFOLIO ({ language: this.selectedLocale }) )
   debug = (message: string) => console.log(message)
 }

@@ -12,6 +12,8 @@ export * from './Locale'
 
 export * from './Messaging'
 
+export * from './Portfolio'
+
 export * from './Quote'
 
 export * from './References'

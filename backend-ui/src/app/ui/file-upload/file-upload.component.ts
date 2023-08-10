@@ -28,27 +28,56 @@ export class FileuploadComponent implements OnInit, OnDestroy {
   accept?: keyof typeof definedFileTypes
   acceptedExtensions?: string[]
 
+  @Input()
+  resetOnDataChange?: boolean = false
+  @Input()
+  retainOnMetadata?: boolean = true
+
   // error handling
   incorrectFileType = false
   documentPreviewError = false
 
+  // used for emitting event about the deleted or the added image
+  metadata: unknown
+
+  @Input()
+  allowDeselection: boolean = false
+  @Input()
+  allowChange: boolean = true
+
   _data: Blob
   @Input()
-  set data(data: Blob) {
-    this._data = data
-    if (data && FILE_UTILS.isBase64Image(data)) {
+  set data(data: Blob | { data: Blob, metadata: unknown } )  {
+    const passedData: Blob = data && typeof data === 'object' && 'data' in data ? data.data: data as Blob
+    const metadata: unknown = data && typeof data === 'object' && 'metadata' in data ? data.metadata : undefined
+    if (metadata != null) {
+      this.metadata = metadata
+    }
+    this._data = passedData
+    if (this._data && FILE_UTILS.isBase64Image(this._data)) {
       this.hasImage = true
     } else {
       this.hasImage = false
     }
-    this.dataChange.emit(this._data)
+    this.dataChange.emit(this.metadata != null ? { data: this._data, metadata: this.metadata } : this._data)
+    if ( this.resetOnDataChange && this._data ) {
+      // reset if !this.retainOnMetadata || (this.retainOnMetadata && !!this.metadata)
+      if (!this.retainOnMetadata || (this.retainOnMetadata && this.metadata == null)) {
+        this.reset()
+      }
+    }
   }
   get data() {
     return this._data
   }
 
+  // Accepted events
   @Output()
-  dataChange: EventEmitter<Blob> = new EventEmitter<Blob>()
+  dataChange: EventEmitter<Blob | { data: Blob, metadata: unknown }> = new EventEmitter<Blob | { data: Blob, metadata: unknown }>()
+  @Output()
+  onDeselect: EventEmitter<unknown | undefined> = new EventEmitter<unknown | undefined>()
+  @Output()
+  onDelete: EventEmitter<unknown | undefined> = new EventEmitter<unknown | undefined>()
 
   dragging: boolean = false
   hasImage: boolean = false
@@ -138,19 +167,28 @@ export class FileuploadComponent implements OnInit, OnDestroy {
       this.documentInitialised = false
       this.incorrectFileType = false
       this.data = null
+      this.metadata = null
     }
   }
 
   openActionDialog(): void {
     const dialogRef = this.matDialog.open(ConfirmComponent, {
       width: '80%',
-      data: null
+      data: {
+        allowDeselection: this.allowDeselection,
+        allowChange: this.allowChange
+      }
     })
 
     dialogRef.afterClosed().subscribe(result => {
       logEasy(`The dialog was closed.`, result ? `The following message was received: ${JSON.stringify(result)}` : '')
       switch (result) {
+        case FileOptions.deselect:
+          this.onDeselect.emit(this.metadata != null ? this.metadata : undefined)
+          this.reset()
+          break
         case FileOptions.delete:
+          this.onDelete.emit(this.metadata != null ? this.metadata : undefined)
           this.reset()
           break
         case FileOptions.download:

@@ -10,6 +10,8 @@ export * from './Messaging'
 
 export * from './Others'
 
+export * from './Portfolio'
+
 export * from './Training'
 
 export * from './Translation'

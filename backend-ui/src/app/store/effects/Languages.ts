@@ -70,7 +70,7 @@ export class LanguageEffects {
                     )
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of(COMMON_ACTIONS.FAIL(
                         {
                             message: errors.map(error => error.message)
@@ -109,7 +109,7 @@ export class LanguageEffects {
                     })
                 ]),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of(COMMON_ACTIONS.FAIL({
                         message: errors.map(error => error.message),
                         timeout: 2000
@@ -147,7 +147,7 @@ export class LanguageEffects {
                     })
                 ]),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of(COMMON_ACTIONS.FAIL({
                         message: errors.map(error => error.message),
                         timeout: 2000

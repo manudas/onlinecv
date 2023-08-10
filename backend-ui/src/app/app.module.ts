@@ -24,6 +24,7 @@ import { LanguageEffects } from '@store_effects/Languages'
 import { LocaleEffects } from '@store_effects/Locale'
 import { MessagingSystemEffects } from '@store_effects/Messaging'
 import { OthersEffects } from '@store_effects/Others'
+import { PortfolioEffects } from '@store_effects/Portfolio'
 import { SkillEffects } from '@store_effects/Skills'
 import { SocialNetworksEffects } from '@store_effects/SocialNetworks'
 import { TrainingEffects } from '@store_effects/Training'
@@ -79,6 +80,7 @@ if (environment.production) {
             LocaleEffects,
             MessagingSystemEffects,
             OthersEffects,
+            PortfolioEffects,
             SettingsEffects,
             SkillEffects,
             SocialNetworksEffects,

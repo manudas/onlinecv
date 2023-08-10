@@ -4,7 +4,7 @@ export type PortfolioDef = {
     description: string
     keywords: string[]
     language: string
-    picture: string[]
+    pictures: string[]
     url: string
     order: number
 }
@@ -14,6 +14,6 @@ export type EditPortfolioStructure = {
     portfolio: PortfolioDef
 }
 
-export type PortfolioFetched = {
+export type PortfolioRequest = {
     portfolio: PortfolioDef[]
 }

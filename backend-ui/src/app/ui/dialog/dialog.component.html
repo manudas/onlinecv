@@ -309,9 +309,20 @@
     >
         <app-fileupload
             (dataChange)="addImageToCarouselFunc(control, name)($event)"
+            (onDeselect)="deselectCarouselImage(name)($event)"
+            (onDelete)="deleteCarouselImage(control, name)($event)"
+            [allowDeselection]=true
+            [allowChange]=false
             [accept]="acceptedDocumentFileType"
+            [resetOnDataChange]=true
+            [data]="getSelectedImage(control, name)"
         ></app-fileupload>
-        <ng-image-slider [images]="structuredImageData(control)"></ng-image-slider>
+        <ng-image-slider
+            *ngIf="control.value.length > 0"
+            [imagePopup]=false
+            [images]="imageToCarouselCache[name]"
+            (imageClick)="loadCarouselImage(name)($event)"
+        ></ng-image-slider>
     </div>
 </ng-template>
 

@@ -138,18 +138,41 @@ export class DialogComponent {
     /* Carousel supporting methods */
     acceptedDocumentFileType                                            = FILE_UTILS.definedFileTypes.image
     addImageToCarouselCacheFunc: Record<string, (arg: string) => void>  = {}
+    imageToCarouselCache: Record<string, Array<{thumbImage: string}>> = {}
     addImageToCarouselFunc = (control: FormArray, name: string) => {
         if (!this.addImageToCarouselCacheFunc[name]) {
-            this.addImageToCarouselCacheFunc[name] = (value: string) => {
-                !!value && control.push(new FormControl(value))
+            this.addImageToCarouselCacheFunc[name] = (value: string | { data: string, metadata: unknown }) => {
+                const metadata: unknown = value && typeof value === 'object' && 'metadata' in value ? value.metadata : undefined
+                if (value && metadata == null) {
+                    control.push(new FormControl(value))
+                    this.imageToCarouselCache[name] = [...this.imageToCarouselCache[name] ?? [], {
+                        thumbImage: FILE_UTILS.attachUrlDataTypeToBase64(value),
+                    }]
+                }
             }
         }
         return this.addImageToCarouselCacheFunc[name]
     }
-    structuredImageData(control: FormArray) {
-        return control.value.map(data => { return {
-            thumbImage: FILE_UTILS.attachUrlDataTypeToBase64(data),
-        } })
+    selectedImage: Record<string, number>  = {}
+    loadCarouselImage = (name: string) => (carouselIndex: number) => {
+        this.selectedImage[name] = carouselIndex
+        return this.selectedImage[name]
+    }
+    deselectCarouselImage = (name: string) => (_carouselIndex: number) => {
+        delete this.selectedImage[name]
+    }
+    deleteCarouselImage = (control: FormArray, name: string) => (carouselIndex: number) => {
+        control.removeAt(carouselIndex)
+        this.imageToCarouselCache[name] = [...this.imageToCarouselCache[name].slice(0, carouselIndex), ...this.imageToCarouselCache[name].slice(carouselIndex + 1)]
+    }
+    getSelectedImage = (control:FormArray, name: string) => {
+        if (this.selectedImage[name] != null) {
+            return {
+                data: control.value[this.selectedImage[name]],
+                metadata: this.selectedImage[name]
+            }
+        }
+        return undefined
     }
     /* END of Carousel support methods */
 }

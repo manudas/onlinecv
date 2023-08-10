@@ -18,7 +18,7 @@ export default
     """
     picture is String in GraphQL but Buffer in JS
     """
-    picture: [String]
+    pictures: [String]
   }
 
   input PortfolioInput {
@@ -31,7 +31,7 @@ export default
     """
     picture is String in GraphQL but Buffer in JS
     """
-    picture: [String]
+    pictures: [String]
   }
 
   extend type Query {
@@ -39,7 +39,7 @@ export default
   }
 
   extend type Mutation {
-    putPortfolio(portfolio: PortfolioInput!): Portfolio!
+    putPortfolio(portfolio: [PortfolioInput]!): [Portfolio]!
     removePortfolio(id: ID!): Boolean!
   }
 `;
