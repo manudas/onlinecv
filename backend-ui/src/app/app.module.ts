@@ -39,6 +39,7 @@ import { reducer as languageReducer } from '@store_reducers/Languages'
 import { reducer as localeReducer } from '@store_reducers/Locale'
 import { reducer as messageReducer } from '@store_reducers/Message'
 import { reducer as messagingReducer } from '@store_reducers/Messaging'
+import { reducer as portfolioReducer } from '@store_reducers/Portfolio'
 import { reducer as quoteReducer } from '@store_reducers/Quote'
 import { reducer as resumeReducer } from '@store_reducers/Resume'
 import { reducer as referencesReducer } from '@store_reducers/References'
@@ -101,6 +102,7 @@ if (environment.production) {
             locale: localeReducer,
             message: messageReducer,
             messaging: messagingReducer,
+            portfolio: portfolioReducer,
             quote: quoteReducer,
             resume: resumeReducer,
             references: referencesReducer,

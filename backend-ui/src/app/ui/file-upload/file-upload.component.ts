@@ -78,6 +78,8 @@ export class FileuploadComponent implements OnInit, OnDestroy {
   onDeselect: EventEmitter<unknown | undefined> = new EventEmitter<unknown | undefined>()
   @Output()
   onDelete: EventEmitter<unknown | undefined> = new EventEmitter<unknown | undefined>()
+  @Output()
+  onOpenFileSelector: EventEmitter<void> = new EventEmitter<void>()
 
   dragging: boolean = false
   hasImage: boolean = false
@@ -116,6 +118,8 @@ export class FileuploadComponent implements OnInit, OnDestroy {
     } else {
       this.openActionDialog()
     }
+
+    this.onOpenFileSelector.emit()
   }
 
   onDragOver($event) {

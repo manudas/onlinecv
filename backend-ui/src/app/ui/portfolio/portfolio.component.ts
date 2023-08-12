@@ -72,11 +72,11 @@ export class PortfolioComponent implements OnInit {
     }
   }
 
-  openRemovalConfirmDialog( index: number ): void {
+  openRemovalConfirmDialog = ( index: number ): void => {
     const ref = this.data[index]
     const dialogRef = this.matDialog.open(ConfirmComponent, {
       width: '80%',
-      data: new Map<string, PortfolioDef | MetadataDialog>([ ['element', ref], ['metadata', { index, nameKey: 'role', superType: 'portfolio', action: 'delete' }] ])
+      data: new Map<string, PortfolioDef | MetadataDialog>([ ['element', ref], ['metadata', { index, nameKey: 'name', superType: 'portfolio', action: 'delete' }] ])
     })
 
     dialogRef.afterClosed().subscribe(({

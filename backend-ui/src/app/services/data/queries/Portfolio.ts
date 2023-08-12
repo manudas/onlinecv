@@ -39,7 +39,7 @@ export const MutatePortfolio = (data) => {
                 portfolio: {
                     value: data,
                     required: true,
-                    type: '[portfolioInput]'
+                    type: '[PortfolioInput]'
                 }
             },
             fields: queryFields // we will refetch QueryPortfolio

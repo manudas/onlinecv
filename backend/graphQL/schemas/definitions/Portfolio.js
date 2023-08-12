@@ -1,37 +1,31 @@
-/*
-    name: String,
-    description: String,
-    keywords: [],
-    language: String,
-    url: String,
-    picture: Buffer
-*/
 export default
     `
   type Portfolio {
-    id: ID!
-    name: String!,
-    description: String,
-    keywords: [String]!,
-    language: String!,
-    url: String,
+    _id: ID!
+    name: String!
+    description: String!
+    keywords: [String]
+    language: String!
+    order: Int!
     """
     picture is String in GraphQL but Buffer in JS
     """
-    pictures: [String]
+    pictures: [String]!
+    url: String
   }
 
   input PortfolioInput {
     id: ID
-    name: String!,
-    description: String,
-    keywords: [String]!,
-    language: String!,
-    url: String,
+    name: String!
+    description: String!
+    keywords: [String]
+    language: String!
+    order: Int!
     """
     picture is String in GraphQL but Buffer in JS
     """
-    pictures: [String]
+    pictures: [String]!
+    url: String
   }
 
   extend type Query {

@@ -15,5 +15,6 @@ export type EditPortfolioStructure = {
 }
 
 export type PortfolioRequest = {
-    portfolio: PortfolioDef[]
+    portfolio?: PortfolioDef[]
+    putPortfolio?: PortfolioDef[]
 }

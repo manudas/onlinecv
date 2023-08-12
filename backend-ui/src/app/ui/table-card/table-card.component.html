@@ -11,7 +11,7 @@
 
         cdkDropList
         [cdkDropListData]="rows"
-        (cdkDropListDropped)="isDraggable ? onDrop($event) : null"
+        (cdkDropListDropped)="isDraggable ? onDropEvent($event) : null"
         [cdkDropListDisabled]="!isDraggable"
 
     >

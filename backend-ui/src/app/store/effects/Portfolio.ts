@@ -112,11 +112,11 @@ export class PortfolioEffects {
             } = MutatePortfolio(portfolio)
 
             return this.dataService.setData(query, variables, headers).pipe(
-                mergeMap(({ portfolio }: PortfolioRequest) => [
+                mergeMap(({ putPortfolio }: PortfolioRequest) => [
                     COMMON_ACTIONS.SUCCESS({
-                        message: `${this.translate.getResolvedTranslation('Skill removed successfully', this)}`
+                        message: `${this.translate.getResolvedTranslation('Portfolio saved successfully', this)}`
                     }),
-                    PORTFOLIO_ACTIONS.PORTFOLIO_FETCHED({ payload: [...portfolio] })
+                    PORTFOLIO_ACTIONS.PORTFOLIO_FETCHED({ payload: [...putPortfolio] })
                 ]),
                 catchError((response) => {
                     const { errors = [] } = response || {}
@@ -144,7 +144,7 @@ export class PortfolioEffects {
             return this.dataService.setData(query, variables, headers).pipe(
                 mergeMap(() => [
                     COMMON_ACTIONS.SUCCESS({
-                        message: `${this.translate.getResolvedTranslation('Skill removed successfully', this)}`
+                        message: `${this.translate.getResolvedTranslation('Portfolio removed successfully', this)}`
                     }),
                     PORTFOLIO_ACTIONS.FETCH_PORTFOLIO({ language: this.selectedLocale })
                 ]),

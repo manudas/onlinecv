@@ -32,8 +32,8 @@ export class DialogComponent {
     isFormArray = (form: AbstractControl): form is FormArray => 'controls' in form && Array.isArray((form as FormArray).controls)
     addControl(control, value, validators) {
         if (Array.isArray(value)) {
-            this.dataFormGroup.addControl(control, new FormArray([]));
-            (value.length > 0 ? value : []).forEach((singleValue, index) => (this.dataFormGroup.controls[control] as FormArray).controls.push(new FormControl(singleValue, validators?.[index] ?? validators )))
+            this.dataFormGroup.addControl(control, new FormArray([], validators));
+            (value.length > 0 ? value : []).forEach(singleValue => (this.dataFormGroup.controls[control] as FormArray).controls.push(new FormControl(singleValue)))
         } else {
             this.dataFormGroup.addControl(control, new FormControl(value, validators))
         }
@@ -61,6 +61,9 @@ export class DialogComponent {
             } else {
               // if its taglist or array and the provided value exist but is not an array, put it in an array before passing it down
               this.addControl(control, (types?.includes('array') || types?.includes('taglist') || types?.includes('carousel')) && !Array.isArray(value) ? (value ? [value] : [] ) : value, validators)
+              if (types?.includes('carousel')) {
+                (this.dataFormGroup.get(control) as FormArray).controls.forEach(({value}) => this.buildImageCache(control, value))
+              }
             }
             types?.includes('disabled') && this.dataFormGroup.controls[control].disable()
             types && this.addType(control, types)
@@ -77,6 +80,7 @@ export class DialogComponent {
         this.buttons = meta?.buttons ?? null
         this.title = meta?.title ?? null
     }
+    checkErrors = (errors, control) => errors && control.touched && control.errors
 
     submitHandler(_$event): void {
         Object.values(this.dataFormGroup.controls).forEach(control => this.isFormArray(control) && control.updateValueAndValidity())
@@ -145,13 +149,16 @@ export class DialogComponent {
                 const metadata: unknown = value && typeof value === 'object' && 'metadata' in value ? value.metadata : undefined
                 if (value && metadata == null) {
                     control.push(new FormControl(value))
-                    this.imageToCarouselCache[name] = [...this.imageToCarouselCache[name] ?? [], {
-                        thumbImage: FILE_UTILS.attachUrlDataTypeToBase64(value),
-                    }]
+                    this.buildImageCache(name, value)
                 }
             }
         }
         return this.addImageToCarouselCacheFunc[name]
+    }
+    buildImageCache = (name, value) => {
+        this.imageToCarouselCache[name] = [...this.imageToCarouselCache[name] ?? [], {
+            thumbImage: FILE_UTILS.attachUrlDataTypeToBase64(value),
+        }]
     }
     selectedImage: Record<string, number>  = {}
     loadCarouselImage = (name: string) => (carouselIndex: number) => {
@@ -164,6 +171,7 @@ export class DialogComponent {
     deleteCarouselImage = (control: FormArray, name: string) => (carouselIndex: number) => {
         control.removeAt(carouselIndex)
         this.imageToCarouselCache[name] = [...this.imageToCarouselCache[name].slice(0, carouselIndex), ...this.imageToCarouselCache[name].slice(carouselIndex + 1)]
+        this.deselectCarouselImage(name)(undefined)
     }
     getSelectedImage = (control:FormArray, name: string) => {
         if (this.selectedImage[name] != null) {
@@ -174,5 +182,6 @@ export class DialogComponent {
         }
         return undefined
     }
+    setCarouselControlTouched = (control: FormArray) => control.markAsTouched()
     /* END of Carousel support methods */
 }

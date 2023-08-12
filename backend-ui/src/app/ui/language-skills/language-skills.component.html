@@ -8,6 +8,7 @@
         [columns]="inputData.colsToRender"
         [rows]="data"
         [isDraggable]="true"
+        (onDrop)="onDrop($event)"
         [editCallBack]="edit"
         [deleteCallBack]="openRemovalConfirmDialog"
     >

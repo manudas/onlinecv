@@ -117,7 +117,7 @@
                 {{ helpBlock | translate | async }}
             </p>
             <small
-                *ngIf="errors && control.touched && control.errors"
+                *ngIf="checkErrors(errors, control)"
                 [className]="'text-danger'"
             >
                 {{ errors | translate | async }}
@@ -311,6 +311,7 @@
             (dataChange)="addImageToCarouselFunc(control, name)($event)"
             (onDeselect)="deselectCarouselImage(name)($event)"
             (onDelete)="deleteCarouselImage(control, name)($event)"
+            (onOpenFileSelector)="setCarouselControlTouched(control)"
             [allowDeselection]=true
             [allowChange]=false
             [accept]="acceptedDocumentFileType"

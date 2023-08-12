@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core'
+import { CdkDragDrop } from '@angular/cdk/drag-drop'
+import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { faArrowsAlt, faEdit, faTrash, IconDefinition } from '@fortawesome/free-solid-svg-icons'
 @Component({
   selector: 'app-table-card',
@@ -29,8 +30,8 @@ export class TableCardComponent {
   transformFn: Map<string, Function>                      = new Map()
   @Input()
   transformHeaderFn: Map<string, Function>                = new Map()
-  @Input()
-  onDrop: (...params: unknown[]) => any                   = () => null
+  @Output()
+  onDrop: EventEmitter<CdkDragDrop<unknown[]>> = new EventEmitter<CdkDragDrop<unknown[]>>()
 
   @Input()
   editCallBack: (...params: unknown[]) => any             = () => null
@@ -38,6 +39,7 @@ export class TableCardComponent {
   @Input()
   deleteCallBack: (...params: unknown[]) => any           = () => null
 
+  onDropEvent: (arg: CdkDragDrop<unknown[]>) => void = (event: CdkDragDrop<unknown[]>) => this.onDrop.emit(event)
   onDragStart( _$event ) {
     const draggingElement: HTMLElement = document.querySelector('mat-row.cdk-drag-preview')
     if (draggingElement) {
