@@ -1,48 +1,23 @@
 import React, { Component } from 'react';
-
+import Lightbox from 'react-image-lightbox';
 import { connect } from 'react-redux';
-
 import Slider from 'react-slick';
+import { attachUrlDataTypeToBase64, bufferToBase64 } from '../../helpers/files';
+import { translateString } from '../../helpers/translations';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-
-import Lightbox from 'react-image-lightbox';
-
-import { translateString } from '../../helpers/translations';
-
 import 'react-image-lightbox/style.css';
-
-import {
-    getBase64MimeType,
-    bufferToBase64
-} from '../../helpers/files';
 
 import './portfolio.css';
 
 class PortFolio extends Component {
-    constructor(props) {
-        super(props);
+    state = {photoIndex: 0, isOpen: false}
+    imgRefList = []
 
-        this.state = {
-            photoIndex: 0,
-            isOpen: false
-        };
-
-        this.imgRefList = [];
-        this.addImgRef = this._addImgRef.bind(this);
-        this.clearImgRefs = this._clearImgRefs.bind(this);
-
-        this.openGallery = this._openGallery.bind(this);
-    }
-
-    _addImgRef(index, imgRef) {
-        this.imgRefList[index] = imgRef;
-    }
-
-    _clearImgRefs() {
-        this.imgRefList = [];
-    }
+    addImgRef = (index, imgRef) => this.imgRefList[index] = imgRef
+    clearImgRefs = () => this.imgRefList = []
+    openGallery = (index) => this.setState({ isOpen: true, photoIndex: index })
 
     renderPortFolioItem(portfolio_item, index) {
         /*
@@ -58,19 +33,14 @@ class PortFolio extends Component {
             ''
         ); // striping out html
 
-        const image_data = portfolio_item.picture
-            ? bufferToBase64(portfolio_item.picture)
+        const image_data = portfolio_item
+            ? attachUrlDataTypeToBase64(bufferToBase64(portfolio_item))
             : null;
-        const mimetype = image_data
-            ? getBase64MimeType(image_data)
-            : null;
-
-        // `url(data:${getBase64ImageMimeType(this.props.background)};base64,${this.props.background})`
 
         const image = image_data ? (
             <img
                 ref={(ref) => this.addImgRef(index, ref)}
-                src={`data:${mimetype};base64, ${image_data}`}
+                src={image_data}
                 alt={name_without_html}
             />
         ) : (
@@ -119,14 +89,7 @@ class PortFolio extends Component {
         /* /Portfolio item */
     }
 
-    _openGallery(index) {
-        this.setState({
-            isOpen: true,
-            photoIndex: index
-        });
-    }
-
-    renderPortFolioItems() {
+    renderPortFolioItems(portforlioElement) {
         const settings = {
             dots: true,
             infinite: true,
@@ -139,19 +102,38 @@ class PortFolio extends Component {
 
         return (
             <Slider {...settings}>
-                {this.props.portfolio.map(
-                    (portfolio_item, index) => {
-                        return this.renderPortFolioItem(
-                            portfolio_item,
-                            index
-                        );
-                    }
+                {portforlioElement?.pictures.map(
+                    (image, index) => this.renderPortFolioItem(image, index)
                 )}
             </Slider>
         );
     }
 
     renderTitle() {
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         return [
             /* VERTICAL MARGIN (necessary for the timeline effect) */
             <div
@@ -186,7 +168,7 @@ class PortFolio extends Component {
         ];
     }
 
-    renderSection() {
+    renderSection(portfolioElement) {
         // this.clearImgRefs(); to place in component will update or component will receive props when filtering by keyword or someting
         // idem with the other refs
 
@@ -210,7 +192,7 @@ class PortFolio extends Component {
                         {/* /Subtitle */}
                         {/* content */}
                         <div className="portfolio-itens clearfix">
-                            {this.renderPortFolioItems()}
+                            {this.renderPortFolioItems(portfolioElement)}
                         </div>
                         {/* /Content */}
                     </div>
@@ -226,9 +208,7 @@ class PortFolio extends Component {
 
     renderGallerySlider() {
         const { photoIndex, isOpen } = this.state;
-        if (!this.imgRefList[photoIndex]) {
-            return null;
-        }
+        if (!this.imgRefList[photoIndex]) return null
         return (
             isOpen && (
                 <Lightbox
@@ -324,8 +304,19 @@ class PortFolio extends Component {
                 id="portfolio"
             >
                 {this.renderTitle()}
-                {this.renderSection()}
-                {this.renderGallerySlider()}
+                {
+                    this.props.portfolio.map(
+                        portfolioElement => {
+                            return <React.Fragment
+                                key={portfolioElement.id}
+                            >
+                                { this.renderSection(portfolioElement) }
+                                { this.renderGallerySlider(portfolioElement) }
+                            </React.Fragment>
+                        }
+                    )
+                }
+
             </section>
         );
         /* ==>> /SECTION: PORTFOLIO */
@@ -333,19 +324,9 @@ class PortFolio extends Component {
 }
 
 function mapStateToProps(state) {
-    const data = state && state.data ? state.data : null;
-    const portfolio =
-        data && data.portfolio ? data.portfolio : null;
-    const language =
-        state && state.language ? state.language : null;
-    const translations =
-        data &&
-        data.translations &&
-        data.translations[language] &&
-        data.translations[language][this.className]
-            ? data.translations[language][this.className]
-            : null;
-
+    const portfolio = state?.data?.resume?.portfolio
+    const language = state?.language
+    const translations = state?.translations?.[language]?.['Portfolio']
     return {
         portfolio: portfolio,
         translations: translations,

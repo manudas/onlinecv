@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import {
-    getBase64MimeType,
+    attachUrlDataTypeToBase64,
     bufferToBase64
 } from './../../helpers/files';
 
@@ -18,9 +18,7 @@ class ProfileResume extends Component {
         }
 
         const _profilePicture = this.props.profilePicture
-            ? `data:${getBase64MimeType(
-                  this.props.profilePicture
-              )};base64,${this.props.profilePicture}`
+            ? attachUrlDataTypeToBase64(this.props.profilePicture)
             : null;
 
         let name = this.props?.details?.name ?? 'Name ex.';
@@ -93,8 +91,7 @@ function mapStateToProps(state) {
     const language = state?.language
     const details = data?.resume?.details
     const profileImage = details?.profileImage
-    const translations = state?.[language]?.ProfileResume
-
+    const translations = state?.translations?.[language]?.['ProfileResume']
     return {
         profilePicture: profileImage
             ? bufferToBase64(profileImage)

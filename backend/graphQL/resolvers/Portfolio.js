@@ -3,7 +3,12 @@ import { cleanAndMapObject } from 'app/helpers/utils.js';
 
 const portfolioListAsStringPicture = (portfolioList) => {
     let result = portfolioList;
-    if (portfolioList) result = portfolioList.map(element => { return {...element, pictures: [...element.pictures.map(picture => picture.toString())] }});
+    if (portfolioList) result = portfolioList.map(
+        element => {
+            return {...element, pictures: [...element.pictures.map(picture => {
+                return {...picture, data: picture?.data.toString()}
+        })]
+    }});
     return result;
 }
 

@@ -19,13 +19,17 @@ const ControlledPopup = ({
 }) => {
     const [open, setOpen] = useState(openFlag)
     const closeModal = useCallback(() => {
-        onClose?.()
-        setOpen(false)
-    }, [onClose])
+        if (open === true) {
+            onClose?.()
+            setOpen(false)
+        }
+    }, [onClose, open])
     const openModal = useCallback(() => {
-        onOpen?.()
-        setOpen(true)
-    }, [onOpen])
+        if (open === false) {
+            onOpen?.()
+            setOpen(true)
+        }
+    }, [onOpen, open])
 
     useEffect(() => {
         if (openFlag) openModal()

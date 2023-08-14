@@ -7,6 +7,7 @@ import { ConfirmComponent } from './confirm.component'
 import { acceptedFileType, definedFileTypes } from '@utils/Files'
 
 declare var ResizeObserver
+export type dataType = string | { data: string, name: string, description: string}
 @Component({
   selector: 'app-fileupload',
   templateUrl: './file-upload.component.html',
@@ -18,7 +19,14 @@ export class FileuploadComponent implements OnInit, OnDestroy {
   @ViewChild('imageContainer') imageContainer
 
   @Input()
-  name?: string
+  addEditButton?: boolean = false
+
+  @Input()
+  name?: string = null
+  @Input()
+  enableDescription?: boolean = false
+  // description is not an input, but will be used to be outputed all together with data and name on dataChange
+  description?: string = null
 
   @Input()
   isLargeDocument?: boolean = false
@@ -45,10 +53,16 @@ export class FileuploadComponent implements OnInit, OnDestroy {
   @Input()
   allowChange: boolean = true
 
-  _data: Blob
+  _data: string
   @Input()
-  set data(data: Blob | { data: Blob, metadata: unknown } )  {
-    const passedData: Blob = data && typeof data === 'object' && 'data' in data ? data.data: data as Blob
+  set data(data: dataType | { data: dataType, metadata: unknown } )  {
+    const passedDataObj: string | dataType = data && typeof data === 'object' && 'data' in data ? data.data: data as string
+    const passedData: string = passedDataObj && typeof passedDataObj === 'object' && 'data' in passedDataObj ? passedDataObj.data : passedDataObj as string
+    if (this.enableDescription && passedDataObj && typeof passedDataObj === 'object') {
+      const { name = null, description = null } = passedDataObj
+      if ( name ) this.name = name
+      if ( description ) this.description = description
+    }
     const metadata: unknown = data && typeof data === 'object' && 'metadata' in data ? data.metadata : undefined
     if (metadata != null) {
       this.metadata = metadata
@@ -59,21 +73,39 @@ export class FileuploadComponent implements OnInit, OnDestroy {
     } else {
       this.hasImage = false
     }
-    this.dataChange.emit(this.metadata != null ? { data: this._data, metadata: this.metadata } : this._data)
-    if ( this.resetOnDataChange && this._data ) {
-      // reset if !this.retainOnMetadata || (this.retainOnMetadata && !!this.metadata)
+
+    if (!this.addEditButton) this.emitData()
+
+    if ( !this.addEditButton && this.resetOnDataChange && this._data ) {
+      // when we have metadata, we are editing, so we don't want to reset the
       if (!this.retainOnMetadata || (this.retainOnMetadata && this.metadata == null)) {
         this.reset()
       }
     }
   }
+
+  emitData = () => {
+    const emittingData = this.enableDescription
+      ? {
+          name: this.name,
+          description: this.description,
+          data: this._data
+      }
+      : this._data
+
+    this.dataChange.emit(this.metadata != null ? { data: emittingData, metadata: this.metadata } : emittingData)
+    if ( this.resetOnDataChange && this._data ) {
+      this.reset()
+    }
+  }
+
   get data() {
     return this._data
   }
 
   // Accepted events
   @Output()
-  dataChange: EventEmitter<Blob | { data: Blob, metadata: unknown }> = new EventEmitter<Blob | { data: Blob, metadata: unknown }>()
+  dataChange = new EventEmitter<dataType | { data: dataType, metadata: unknown }>()
   @Output()
   onDeselect: EventEmitter<unknown | undefined> = new EventEmitter<unknown | undefined>()
   @Output()
@@ -94,7 +126,7 @@ export class FileuploadComponent implements OnInit, OnDestroy {
     if(this.isLargeDocument) {
       this.resizeObserverInstance = new ResizeObserver(
           (entries) => {
-              entries.forEach((entry) => {
+              entries.forEach((_entry) => {
                 const { clientWidth } = this?.imageContainer?.nativeElement ?? {clientWidth: 0}
                 this.largeDocumentHeight = clientWidth
                 this.changeDetector.detectChanges()
@@ -112,7 +144,7 @@ export class FileuploadComponent implements OnInit, OnDestroy {
     this.resizeObserverInstance && this.resizeObserverInstance.unobserve(document.documentElement)
   }
 
-  onClickHandler($event) {
+  onClickHandler(_$event) {
     if (!this.data) {
       this.fileReference.nativeElement.click()
     } else {
@@ -127,10 +159,7 @@ export class FileuploadComponent implements OnInit, OnDestroy {
     $event.preventDefault()
   }
 
-  onDragLeave($event) {
-    this.dragging = false
-  }
-
+  onDragLeave = (_$event) => this.dragging = false
   getBase64Data = () => FILE_UTILS.attachUrlDataTypeToBase64(this._data)
 
   onReceiveFile($event) {
@@ -167,11 +196,14 @@ export class FileuploadComponent implements OnInit, OnDestroy {
   reset(preserveData = false) {
     this.fileReference.nativeElement.value = '';
     if (!preserveData) {
+      this.onDeselect.emit(this.metadata != null ? this.metadata : undefined)
       this.documentPreviewError = false
       this.documentInitialised = false
       this.incorrectFileType = false
       this.data = null
       this.metadata = null
+      this.name = null
+      this.description = null
     }
   }
 
@@ -234,8 +266,6 @@ export class FileuploadComponent implements OnInit, OnDestroy {
     downloadLink.download = `${fileName}${extension ? '.' + extension : ''}`
     downloadLink.click();
   }
-
-
 
   documentInitialised = false
   // error handling

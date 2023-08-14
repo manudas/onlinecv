@@ -1,0 +1,11 @@
+type Picture {
+    data: String!
+    name: String
+    description: String
+}
+
+input PictureInput {
+    data: String!
+    name: String
+    description: String
+}

@@ -42,6 +42,7 @@ export type DataDialogMap = Map<'metadata', MetadataDialog> & Map<'dataInputs', 
 export const buildDataMap = (dataSource, index, formDefinition, title, type) => {
     const data = dataSource?.[index]
     const metadata: MetadataDialog = {
+      index,
       isEdit: !!data,
       elementName: title,
       elementType: type,

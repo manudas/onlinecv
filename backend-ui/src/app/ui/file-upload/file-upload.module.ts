@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
+import { FormsModule } from '@angular/forms'
 
 import { TranslationServiceModule } from '@services/translation'
 
@@ -13,6 +14,7 @@ import { ConfirmComponent } from './confirm.component'
     ],
     imports: [
         CommonModule,
+        FormsModule,
         TranslationServiceModule
     ],
     exports: [FileuploadComponent]

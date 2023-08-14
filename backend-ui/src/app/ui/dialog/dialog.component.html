@@ -8,8 +8,8 @@
         {{
             title ? title :
             isEdit === false
-                ? ('Add new' + (elementName ? ' ' + elementName + ': ' : ': ') | translate | async) + (elementType ? (elementType | translate | async | titlecase) : '')
-                : ('Editing' + (elementName ? ' ' + elementName + ': ' : ': ') | translate | async) + (elementType ? (elementType | translate | async | titlecase) : '')
+                ? ('Add new' + (elementName ? ' ' + elementName : ': ') | translate | async) + (elementType ? ': ' + (elementType | translate | async | titlecase) : '')
+                : ('Editing' + (elementName ? ' ' + elementName : ': ') | translate | async) + (elementType ? ': ' + (elementType | translate | async | titlecase) : '')
         }}
     </div>
 </h2>
@@ -312,9 +312,11 @@
             (onDeselect)="deselectCarouselImage(name)($event)"
             (onDelete)="deleteCarouselImage(control, name)($event)"
             (onOpenFileSelector)="setCarouselControlTouched(control)"
+            [addEditButton]=true
             [allowDeselection]=true
             [allowChange]=false
             [accept]="acceptedDocumentFileType"
+            [enableDescription]=true
             [resetOnDataChange]=true
             [data]="getSelectedImage(control, name)"
         ></app-fileupload>

@@ -88,46 +88,6 @@ export const getUserFullResumeQuery = (lang: string) => {
             operation: 'experienceTypes',
         },
         {
-            operation: 'trainings',
-            variables: {
-                language: { value: lang, required: true },
-            },
-            fields: [
-                'tag',
-                'description',
-                'type',
-                'school',
-                'start_date',
-                'finish_date',
-                'final_project',
-                'school_url',
-                'average_grade',
-                'keywords',
-                'language',
-                'order'
-            ]
-        },
-        {
-            operation: 'trainingTypes',
-        },
-        {
-            operation: 'skills',
-            variables: {
-                language: { value: lang, required: true }
-            },
-            fields: [
-                'tag',
-                'description',
-                'skill_level',
-                'related_knowledge',
-                'type',
-                'developed_projects',
-                'keywords',
-                'language',
-                'order'
-            ]
-        },
-        {
             operation: 'languages',
             variables: {
                 language: { value: lang, required: true }
@@ -142,6 +102,22 @@ export const getUserFullResumeQuery = (lang: string) => {
                 'keywords',
                 'language',
                 'order'
+            ]
+        },
+        {
+            operation: 'portfolio',
+            variables: {
+                language: { value: lang, required: true }
+            },
+            fields: [
+                'id: _id',
+                'name',
+                'description',
+                'keywords',
+                'language',
+                'order',
+                'pictures',
+                'url'
             ]
         },
         {
@@ -183,6 +159,23 @@ export const getUserFullResumeQuery = (lang: string) => {
             ]
         },
         {
+            operation: 'skills',
+            variables: {
+                language: { value: lang, required: true }
+            },
+            fields: [
+                'tag',
+                'description',
+                'skill_level',
+                'related_knowledge',
+                'type',
+                'developed_projects',
+                'keywords',
+                'language',
+                'order'
+            ]
+        },
+        {
             operation: 'unprotectedSettings',
             variables: {
                 language: { value: lang, required: true }
@@ -191,6 +184,29 @@ export const getUserFullResumeQuery = (lang: string) => {
                 'backgroundImage',
                 'enabledMessaging',
             ]
+        },
+        {
+            operation: 'trainings',
+            variables: {
+                language: { value: lang, required: true },
+            },
+            fields: [
+                'tag',
+                'description',
+                'type',
+                'school',
+                'start_date',
+                'finish_date',
+                'final_project',
+                'school_url',
+                'average_grade',
+                'keywords',
+                'language',
+                'order'
+            ]
+        },
+        {
+            operation: 'trainingTypes',
         }
     ])
 

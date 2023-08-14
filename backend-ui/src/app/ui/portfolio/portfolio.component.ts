@@ -46,7 +46,7 @@ export class PortfolioComponent implements OnInit {
   }
 
   openDialog( index: number = null ): void {
-    const data = buildDataMap(this.data, index, INPUT_HELPERS, this.title, this.type)
+    const data = buildDataMap(this.data, index, INPUT_HELPERS, this.type, null)
     const dialogRef = this.matDialog.open(DialogComponent, { height: '65%', maxHeight: '100%', width: '80%', data })
 
     dialogRef.afterClosed().subscribe(result => {

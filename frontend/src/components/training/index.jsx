@@ -150,10 +150,12 @@ function mapStateToProps(state) {
     } = state;
 
     return {
-        training: sortElementsByTypeAndOrder(
-            trainings,
-            trainingTypes
-        ),
+        training: trainings && trainingTypes
+            ? sortElementsByTypeAndOrder(
+                trainings,
+                trainingTypes
+            )
+            : null,
         translations: Training,
         language
     };

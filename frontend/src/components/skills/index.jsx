@@ -101,21 +101,13 @@ class Skills extends Component {
 }
 
 function mapStateToProps(state) {
-    const {
-        data: {
-            resume: {
-                skills
-            } = {}
-        } = {},
-        language,
-        translations: {
-            [language]: { Skills } = {}
-        } = {}
-    } = state;
+    const skills = state?.data?.resume?.skills
+    const language = state?.data?.language
+    const translations = state?.data?.translations?.[language]?.['Skills']
 
     return {
-        skills: clasifyByType(skills),
-        translations: Skills,
+        skills: skills ? clasifyByType(skills) : [],
+        translations,
         language
     };
 }

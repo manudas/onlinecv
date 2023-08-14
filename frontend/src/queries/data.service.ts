@@ -37,6 +37,7 @@ export class DataService {
         this.url,
         this.httpOptions(JSON.stringify({ query, variables: vars }))
       );
+      if (!response.ok) return null
       return await response.json();
     } else {
       throw new Error(`Unsupported GraphQL query type: ${type}`)

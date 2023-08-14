@@ -10,7 +10,7 @@ export default
     """
     picture is String in GraphQL but Buffer in JS
     """
-    pictures: [String]!
+    pictures: [Picture]!
     url: String
   }
 
@@ -24,7 +24,7 @@ export default
     """
     picture is String in GraphQL but Buffer in JS
     """
-    pictures: [String]!
+    pictures: [PictureInput]!
     url: String
   }
 

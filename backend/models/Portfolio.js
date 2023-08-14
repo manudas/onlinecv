@@ -15,7 +15,14 @@ const PortfolioSchema = new Schema({
     language: String,
     order: Number,
     url: String,
-    pictures: [Schema.Types.Buffer],
+    pictures: [{
+        type: {
+            name: String,
+            description: String,
+            data: Schema.Types.Buffer,
+        },
+        default: undefined
+    }]
 }, {
     collection,
     versionKey: false

@@ -6,7 +6,7 @@ const queryFields = [
     'description',
     'keywords',
     'language',
-    'pictures',
+    'pictures {name, description, data}',
     'url',
     'order',
 ]

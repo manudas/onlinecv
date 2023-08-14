@@ -4,7 +4,11 @@ export type PortfolioDef = {
     description: string
     keywords: string[]
     language: string
-    pictures: string[]
+    pictures: Array<{
+        name: string
+        description: string
+        data: string
+    }>
     url: string
     order: number
 }

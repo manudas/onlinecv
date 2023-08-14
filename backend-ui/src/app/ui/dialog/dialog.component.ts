@@ -11,6 +11,11 @@ import { Observable } from 'rxjs'
 import { logEasy } from '@app/services/logging'
 import { AcceptedTypes, DataDialogDef, DataDialogMap, DialogButtonDef, InputType, InputTypeArr, MetadataDialog } from './helpers'
 
+
+
+import { dataType } from '@app/ui/file-upload/file-upload.component'
+
+
 type StoreType = { locale: LocaleStore }
 @Component({
     templateUrl: './dialog.component.html',
@@ -23,6 +28,7 @@ export class DialogComponent {
     placeholders: Map<string, string>   = new Map<string, string>()
     labels: Map<string, string>         = new Map<string, string>()
     helpBlock: Map<string, string>      = new Map<string, string>()
+    index: number                       = null
     isEdit: boolean                     = false
     elementName: string
     elementType: string
@@ -74,6 +80,7 @@ export class DialogComponent {
         }
         const meta = dataMap.get('metadata') as MetadataDialog
         if(meta?.formValidator) this.dataFormGroup.addValidators(meta.formValidator)
+        this.index = meta?.index ?? null
         this.isEdit = meta?.isEdit ?? false
         this.elementName = meta?.elementName ?? null
         this.elementType = meta?.elementType ?? null
@@ -86,7 +93,7 @@ export class DialogComponent {
         Object.values(this.dataFormGroup.controls).forEach(control => this.isFormArray(control) && control.updateValueAndValidity())
         this.dataFormGroup.updateValueAndValidity()
         if (this.dataFormGroup.valid) {
-            this.close(this.dataFormGroup.value)
+            this.close(!this.isEdit ? this.dataFormGroup.value : {index: this.index, [this.elementName.toLowerCase()] : this.dataFormGroup.value})
         } else {
           this.dataFormGroup.markAllAsTouched()
         }
@@ -145,11 +152,26 @@ export class DialogComponent {
     imageToCarouselCache: Record<string, Array<{thumbImage: string}>> = {}
     addImageToCarouselFunc = (control: FormArray, name: string) => {
         if (!this.addImageToCarouselCacheFunc[name]) {
-            this.addImageToCarouselCacheFunc[name] = (value: string | { data: string, metadata: unknown }) => {
+            this.addImageToCarouselCacheFunc[name] = (value: dataType | { data: dataType, metadata: unknown }) => {
+                                                   //(value: dataType | { data: dataType, metadata: unknown }) => {
                 const metadata: unknown = value && typeof value === 'object' && 'metadata' in value ? value.metadata : undefined
-                if (value && metadata == null) {
-                    control.push(new FormControl(value))
-                    this.buildImageCache(name, value)
+                /*
+                    value is:
+                    1 - object with data (picture)
+                    2 - object with data.data(picture)
+
+                    therefore value will always be an object
+                */
+                const pictureObj: string | dataType = value && typeof value === 'object' && 'data' in value ? value.data : undefined
+                const picture = pictureObj && typeof pictureObj === 'object' && 'data' in pictureObj ? pictureObj.data : pictureObj
+                const dataObj = metadata == null ? value : pictureObj
+                if (picture) {
+                    if (metadata != null) { // metadata is an index
+                        control.at(metadata as number).patchValue(dataObj)
+                    } else {
+                        control.push(new FormControl(dataObj))
+                        this.buildImageCache(name, picture)
+                    }
                 }
             }
         }
@@ -157,7 +179,7 @@ export class DialogComponent {
     }
     buildImageCache = (name, value) => {
         this.imageToCarouselCache[name] = [...this.imageToCarouselCache[name] ?? [], {
-            thumbImage: FILE_UTILS.attachUrlDataTypeToBase64(value),
+            thumbImage: FILE_UTILS.attachUrlDataTypeToBase64(value.data),
         }]
     }
     selectedImage: Record<string, number>  = {}

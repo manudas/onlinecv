@@ -1,9 +1,9 @@
 <app-table-card
     [cardIcon]="cardIcon"
-    [title]="type | titlecase | translate | async"
+    [title]="title | titlecase | translate | async"
     [columns]="inputData.colsToRender"
     [rows]="data"
-    [isDraggable]="true"
+    [isDraggable]=true
     (onDrop)="onDrop($event)"
     [editCallBack]="edit"
     [deleteCallBack]="openRemovalConfirmDialog"
