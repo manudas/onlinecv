@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import {
     attachUrlDataTypeToBase64,
-    bufferToBase64
 } from './../../helpers/files';
 
 import { translateString } from '../../helpers/translations';
@@ -93,9 +92,7 @@ function mapStateToProps(state) {
     const profileImage = details?.profileImage
     const translations = state?.translations?.[language]?.['ProfileResume']
     return {
-        profilePicture: profileImage
-            ? bufferToBase64(profileImage)
-            : null,
+        profilePicture: profileImage,
         details,
         translations,
         language

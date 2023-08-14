@@ -116,7 +116,7 @@ export const getUserFullResumeQuery = (lang: string) => {
                 'keywords',
                 'language',
                 'order',
-                'pictures',
+                'pictures { name, description, data }',
                 'url'
             ]
         },

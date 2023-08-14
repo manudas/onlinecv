@@ -318,7 +318,7 @@
             [accept]="acceptedDocumentFileType"
             [enableDescription]=true
             [resetOnDataChange]=true
-            [data]="getSelectedImage(control, name)"
+            [initialData]="getSelectedImage(control, name)"
         ></app-fileupload>
         <ng-image-slider
             *ngIf="control.value.length > 0"

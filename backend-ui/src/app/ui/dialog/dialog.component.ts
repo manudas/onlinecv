@@ -170,7 +170,7 @@ export class DialogComponent {
                         control.at(metadata as number).patchValue(dataObj)
                     } else {
                         control.push(new FormControl(dataObj))
-                        this.buildImageCache(name, picture)
+                        this.buildImageCache(name, dataObj)
                     }
                 }
             }
@@ -198,7 +198,7 @@ export class DialogComponent {
     getSelectedImage = (control:FormArray, name: string) => {
         if (this.selectedImage[name] != null) {
             return {
-                data: control.value[this.selectedImage[name]],
+                data: control.controls[this.selectedImage[name]].value,
                 metadata: this.selectedImage[name]
             }
         }

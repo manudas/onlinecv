@@ -74,10 +74,7 @@ class Skills extends Component {
         );
     }
 
-    renderTitle() {
-        if (!Object.keys(this.props.skills)?.length) return null;
-        return <TimeLineHeader name={this.props.name} />
-    }
+    renderTitle = () => <TimeLineHeader name={this.props.name} />
 
     render() {
         if (!Object.keys(this.props.skills)?.length) return null;

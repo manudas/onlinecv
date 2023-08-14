@@ -41,7 +41,7 @@ export function requestUserDataLoad(lang) {
         const { data: {unprotectedSettings, ...fullDetails} } = await dataService.readData(
             queryUserDetails,
             variablesUserDetails
-        ) ?? {data: { }};
+        ) ?? { data: { } };
 
         dispatch(settingsLoadAction( unprotectedSettings ));
         dispatch(fullResumeDetailsLoadAction({ resume: fullDetails }));

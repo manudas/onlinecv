@@ -1,5 +1,5 @@
 export type propDef = {
-    background: string | String | null
+    background: string | null | undefined
     introduction: unknown
     language: string
     resume: unknown

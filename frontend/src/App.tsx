@@ -11,7 +11,7 @@ import debounce from 'lodash/debounce'
 
 import InfoContainer from 'components/infoContainer'
 import PageLoader from 'components/pageloader'
-import { getBase64MimeType, bufferToBase64 } from 'helpers/files'
+import { attachUrlDataTypeToBase64 } from 'helpers/files'
 import { Memoization } from 'helpers/Memo'
 import { requestUserDataLoad, requestTranslations, setLanguage } from 'store/actions'
 import { getModuleTagPairs, getNotTranslatedTranslationsRequest, TRANSLATION_DOMAIN } from './helpers/translations'
@@ -39,7 +39,6 @@ class App extends Component<propDef, stateDef> {
          * We are going to use useMemo here in order to not refetch the data from
          * the backend if  the input (requested translations array), hasn't changed
          */
-        console.warn('review this memo, is it updating only when translation array changes?')
         this.debouncedHandler = Memoization<void>(
             debounce(
                 ([params, iso]) => {
@@ -79,10 +78,7 @@ class App extends Component<propDef, stateDef> {
         }
         if (this.props.resume !== _prevProps.resume) {
             // an element inside data that can be rendered has been found
-            setTimeout(
-                () => this.hideLoader(),
-                LOADER_UNMOUNT_TIMEOUT
-            ); // hide loader in 2 seconds time
+            setTimeout(() => this.hideLoader(), LOADER_UNMOUNT_TIMEOUT); // hide loader in 2 seconds time
         }
         this.requestTranslations()
     }
@@ -98,11 +94,7 @@ class App extends Component<propDef, stateDef> {
     showLoader = () => this.setState({ showPageLoader: true })
 
     render() {
-        let _backgroundImage = this.props.background
-            ? `url(data:${getBase64MimeType(
-                  this.props.background.toString()
-              )};base64,${this.props.background})`
-            : null
+        let _backgroundImage = this.props.background ? attachUrlDataTypeToBase64(this.props.background) : null
 
         return (
             <div
@@ -126,9 +118,7 @@ class App extends Component<propDef, stateDef> {
 function mapStateToProps(state: {
     data : {
         images: {
-            bgimage: {
-                value: string
-            }
+            bgimage: string,
         },
         introduction: unknown,
         resume: unknown
@@ -145,7 +135,7 @@ function mapStateToProps(state: {
     } = state;
 
     return {
-        background: bgimage ? bufferToBase64(bgimage.value) : null,
+        background: bgimage,
         language,
         introduction,
         resume

@@ -67,7 +67,7 @@
                 >
                 <input
                     *ngIf="enableDescription"
-                    FormsModule="description"
+                    [(ngModel)]="description"
                     class='form-control mt-1'
                     placeholder="{{ enableDescription ? ('Description (optional)' | translate | async) : null }}"
                 >

@@ -104,9 +104,7 @@ function mapStateToProps(state) {
     const data = state && state.data ? state.data : null;
     const interests = data && data.interests ? data.interests : null;
 
-    return {
-        interests: interests,
-    };
+    return { interests };
 }
 
 export default connect(mapStateToProps)(Interest);
