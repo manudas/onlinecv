@@ -6,6 +6,10 @@
     height: 255px;
 }
 
+.portfolio .line-content .keyword-tags {
+    font-size: 13px;
+}
+
 .portfolio-item {
     position: relative;
     cursor: crosshair !important;
@@ -123,3 +127,7 @@
   }
 
 /* End of special effects */
+
+.slick-arrow::before {
+    color: rgba(0, 0, 0, 0.20);
+}

@@ -63,8 +63,8 @@ export class FileuploadComponent implements OnInit, OnDestroy, OnChanges {
     const passedData: string = passedDataObj && typeof passedDataObj === 'object' && 'data' in passedDataObj ? passedDataObj.data : passedDataObj as string
     if (this.enableDescription && passedDataObj && typeof passedDataObj === 'object') {
       const { name = null, description = null } = passedDataObj
-      if ( name ) this.name = name
-      if ( description ) this.description = description
+      this.name = name
+      this.description = description
     }
     const metadata: unknown = data && typeof data === 'object' && 'metadata' in data ? data.metadata : undefined
     if (metadata != null) this.metadata = metadata

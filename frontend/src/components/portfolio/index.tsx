@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import Slider from 'react-slick'
 
 import { attachUrlDataTypeToBase64 } from '../../helpers/files'
-import { translateString } from '../../helpers/translations'
 import TimeLineHeader from 'components/timeLineHeader'
 import { PortfolioDef,PortfolioImage, PropDef, StateDef } from 'types/Portfolio'
 
@@ -78,11 +77,8 @@ class PortFolio extends PureComponent<PropDef, StateDef> {
             dots: true,
             infinite: true,
             speed: 500,
-            // slidesToShow: 1,
-            // slidesToScroll: 1
             autoSlidesToShow: true,
             variableWidth: true,
-
             autoplay: true,
             pauseOnHover: true,
         }
@@ -108,14 +104,16 @@ class PortFolio extends PureComponent<PropDef, StateDef> {
                 <div className="col-md-8 content-wrap bg1">
                     <div className="line-content">
                         {/* Subtitle */}
-                        <h3 className="section-item-title-1">
-                            { translateString( 'some_works', this ) }
-                        </h3>
+                        <h3 className="section-item-title-1"> { portfolioElement.name } </h3>
                         {/* /Subtitle */}
-                        {/* content */}
-                        <div className="portfolio-itens clearfix">
-                            { this.renderPortFolioItems(portfolioElement) }
-                        </div>
+                        { /* Description */}
+                        <p> { portfolioElement.description } </p>
+                        { /* /Description */}
+                        { /* Keywords */}
+                        { portfolioElement.keywords && <p className="keyword-tags"><i className="fa fa-tag"></i> { portfolioElement.keywords.join(', ') } </p> }
+                        { /* /Keywords */}
+                        {/* Content */}
+                        <div className="portfolio-itens clearfix"> { this.renderPortFolioItems(portfolioElement) } </div>
                         {/* /Content */}
                     </div>
                 </div>
@@ -129,15 +127,15 @@ class PortFolio extends PureComponent<PropDef, StateDef> {
     }
 
     renderGallerySlider(portfolioElement: PortfolioDef) {
-        const { photoIndex, isOpen } = this.state;
+        const { photoIndex, isOpen, portfolioName } = this.state;
         if ((this.imgRefList.get(portfolioElement.name) ?? []).length === 0) return null
         const selectedPortfolioImages = this.imgRefList.get(portfolioElement.name)
         return (
-            isOpen && (
+            isOpen && portfolioName === portfolioElement.name && (
                 <Lightbox
                     animationDuration={800}
-                    imageTitle={this.stripHtml(portfolioElement.name)}
-                    imageCaption={this.stripHtml(portfolioElement.description)}
+                    imageTitle={this.stripHtml(`${portfolioElement.name} ${portfolioElement.pictures[photoIndex].name ? ': ' + portfolioElement.pictures[photoIndex].name : '' }`)}
+                    imageCaption={this.stripHtml(portfolioElement.pictures[photoIndex].description)}
                     mainSrc={ selectedPortfolioImages?.[photoIndex]?.src ?? '' }
                     nextSrc={ selectedPortfolioImages?.[ (photoIndex + 1) % selectedPortfolioImages.length ]?.src }
                     prevSrc={ selectedPortfolioImages?.[ (photoIndex + selectedPortfolioImages.length - 1) % selectedPortfolioImages.length ]?.src }
@@ -157,7 +155,7 @@ class PortFolio extends PureComponent<PropDef, StateDef> {
                 ref={this.props.reference}
                 className="timeline portfolio"
                 id="portfolio"
-            >NO ESTA ABRIENDO LIGHT BOX
+            >
                 { this.renderTitle() }
                 {
                     this.props.portfolio.map(
