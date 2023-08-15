@@ -4,6 +4,8 @@
 }">
     <div [ngClass]="{
         'modalBox': true,
+        'd-flex': true,
+        'flex-column': true,
         'large': isLargeDocument
     }">
         <div id="dropArea"
@@ -55,11 +57,35 @@
         </div>
         <div class="name">
             <h1
-                *ngIf="name"
+                *ngIf="name || enableDescription"
             >
+                <input
+                    *ngIf="enableDescription"
+                    [(ngModel)]="name"
+                    class='form-control'
+                    placeholder="{{ enableDescription ? ('File name (optional)' | translate | async) : null }}"
+                >
+                <input
+                    *ngIf="enableDescription"
+                    [(ngModel)]="description"
+                    class='form-control mt-1'
+                    placeholder="{{ enableDescription ? ('Description (optional)' | translate | async) : null }}"
+                >
                 {{ name }}
             </h1>
         </div>
+        <button
+            *ngIf="addEditButton"
+            (click)="emitData()"
+            [ngClass]="{
+                'btn btn-outline-info mt-3': true,
+                'ml-auto': isLargeDocument
+            }"
+            type='button'
+            ngbButton
+        >
+            {{ (metadata != null ? 'Update' : 'Add') | translate | async }}
+        </button>
     </div>
     <input type="file"
         id="fileReference"

@@ -73,7 +73,7 @@ export class ExperienceEffects {
                     )
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of(COMMON_ACTIONS.FAIL(
                         {
                             message: errors.map(error => error.message)
@@ -115,7 +115,7 @@ export class ExperienceEffects {
                     })
                 ]),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     const messages = errors.map(({message = ''} = {}) => message)
                     return of(COMMON_ACTIONS.FAIL({
                         message: errors.map(error => error.message),
@@ -157,7 +157,7 @@ export class ExperienceEffects {
                     })
                 ]),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of(COMMON_ACTIONS.FAIL({
                         message: errors.map(error => error.message),
                         timeout: 2000

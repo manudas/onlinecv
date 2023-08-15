@@ -2,6 +2,7 @@ import { ReferenceDef, ReferencesFetched } from '@app/types/References'
 import { OthersType } from '@app/types/Others'
 import { createAction, props } from '@ngrx/store'
 import { ResumeDef, ResumeFetched, QuoteFetched, QuoteDef } from '@app/types'
+import { FETCH_PORTFOLIO } from './Portfolio'
 
 export const SAVE_REFERENCES =  createAction(
     '[Others Component] SaveData',
@@ -12,6 +13,8 @@ export const SAVE_REFERENCES =  createAction(
 
 export const FETCH = (type: OthersType) => {
     switch (type) {
+        case OthersType['portfolio']:
+            return FETCH_PORTFOLIO
         case OthersType['references']:
             return createAction(
                 '[Others Component] FetchReferences',
@@ -89,3 +92,11 @@ export const REMOVE_QUOTE = createAction(
         id: string
     }>()
 )
+
+export function REMOVE_PORTFOLIO(arg0: { id: any }): any {
+  throw new Error('Function not implemented.')
+}
+export function SAVE_PORTFOLIO(arg0: { portfolio: any }): any {
+  throw new Error('Function not implemented.')
+}
+

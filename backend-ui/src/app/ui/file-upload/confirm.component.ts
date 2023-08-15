@@ -11,13 +11,20 @@ import { FileOptions } from "@app/types/File";
 })
 export class ConfirmComponent {
 
+    allowDeselection: boolean
+    allowChange: boolean
 
     get FileOptions(): typeof FileOptions {
         return FileOptions
     }
 
     // we are not planning to pass data down to the constructor for now in this confirmation component
-    constructor( public dialogRef: MatDialogRef<ConfirmComponent>, @Inject(MAT_DIALOG_DATA) public data: never) { }
+    constructor( public dialogRef: MatDialogRef<ConfirmComponent>, @Inject(MAT_DIALOG_DATA) public data: {
+        allowDeselection: boolean, allowChange: boolean
+    }) {
+        this.allowDeselection = data?.allowDeselection ?? false
+        this.allowChange = data?.allowChange ?? false
+    }
 
     close(message: FileOptions) {
         /*

@@ -15,6 +15,6 @@ export type PropDef = {
     name: string
     language: string
     references: reference[]
-    reference: React.Ref<any>
+    reference: React.Ref<HTMLElement>
     translations: string[]
 }

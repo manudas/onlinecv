@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import { debounce } from 'lodash'
 
@@ -24,7 +24,7 @@ import { ComponentDef } from "helpers/types"
 
 import './cvcontainer.css'
 
-class CVContainer extends Component<PropDef> {
+class CVContainer extends PureComponent<PropDef> {
     private cvComponents: ComponentDef[] = []
 
     renderHeaderColors() {
@@ -95,7 +95,7 @@ class CVContainer extends Component<PropDef> {
         this.cvComponents.forEach(element => document.dispatchEvent(new CustomEvent(EventType[EventType.SECTION_ADDED], {detail: element} )))
     }
 
-    addToList(elem: React.Ref<any>, component_name: string) {
+    addToList(elem: React.Ref<HTMLElement>, component_name: string) {
         const name = translateString(component_name, this)
         this.cvComponents.push({
             component: elem,
@@ -149,7 +149,7 @@ class CVContainer extends Component<PropDef> {
                                     name={ translateString('Interest', this) }
                                 />
                                 <PortFolio
-                                    reference={ this.addToList(React.createRef(), 'PortFolio') }
+                                    reference={ this.addToList(React.createRef<HTMLElement>(), 'PortFolio') }
                                     name={ translateString('PortFolio', this) }
                                 />
                                 <References

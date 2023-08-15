@@ -70,7 +70,7 @@ export class AuthenticationEffects {
                     return AUTH_ACTIONS.checkTokenFailure({ Authentication: checkToken})
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)
@@ -153,7 +153,7 @@ export class AuthenticationEffects {
                     return AUTH_ACTIONS.checkAdminUserExistsFetched(data)
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)
@@ -180,7 +180,7 @@ export class AuthenticationEffects {
                     return AUTH_ACTIONS.getAdminUserFetched(data)
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)
@@ -217,7 +217,7 @@ export class AuthenticationEffects {
                     }
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)
@@ -252,7 +252,7 @@ export class AuthenticationEffects {
                     }
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)

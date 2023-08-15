@@ -64,7 +64,7 @@ export default {
                     _id: id
                 },
                 { justOne: true }
-            ); // true == remove one
+            );
             return WriteResult.deletedCount === 1;
         }
     }

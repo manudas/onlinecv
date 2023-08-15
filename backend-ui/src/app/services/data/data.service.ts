@@ -37,9 +37,14 @@ export class DataService {
             JSON.stringify({ query, variables: vars }),
             { headers: new HttpHeaders({ ...this.httpOptions.headers, ...headers }) }
         ).pipe(map(
-          (response) => response['data']
+          (response) => {
+            if (response['errors']) {
+              throw { error: response }
+            }
+            return response['data']
+          }
         ), catchError(e => {
-          return throwError(() => e)
+          return throwError(() => e['error'])
         })))
     } else {
       throw new Error(`Unsupported GraphQL query type: ${type}`)

@@ -17,6 +17,7 @@
         [columns]="inputData.colsToRender"
         [rows]="data[SkillsType[type]]"
         [isDraggable]="true"
+        (onDrop)="onDrop($event)"
         [editCallBack]="edit(type)"
         [deleteCallBack]="openRemovalConfirmDialog(type)"
     >

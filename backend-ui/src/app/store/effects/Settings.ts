@@ -57,7 +57,7 @@ export class SettingsEffects {
                     return SETTINGS.SETTINGS_FETCHED({...settings})
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)

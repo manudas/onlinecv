@@ -13,10 +13,19 @@ const PortfolioSchema = new Schema({
         default: undefined
     },
     language: String,
+    order: Number,
     url: String,
-    picture: Buffer
+    pictures: [{
+        type: {
+            name: String,
+            description: String,
+            data: Schema.Types.Buffer,
+        },
+        default: undefined
+    }]
 }, {
     collection,
+    versionKey: false
 });
 
 const PortfolioModel = model(collection, PortfolioSchema);

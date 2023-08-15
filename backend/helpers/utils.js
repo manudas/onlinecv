@@ -19,7 +19,7 @@ const cleanObject = (obj) => {
             if (Object.values(filteredElement).length) {
                 result[key] = filteredElement
             }
-        } else if (element != null) { // primitive, accepts 0
+        } else if (element != null && element !== "") { // primitive, accepts 0 and rejects empty strings
             result[key] = element
         }
     })
@@ -40,7 +40,7 @@ const cleanArray = a => {
             if (Object.values(filteredElement).length) {
                 result.push(filteredElement)
             }
-        } else if (element != null) { // primitive, accepts 0
+        } else if (element != null && element !== "") { // primitive, accepts 0 and rejects empty strings
             result.push(element)
         }
     })

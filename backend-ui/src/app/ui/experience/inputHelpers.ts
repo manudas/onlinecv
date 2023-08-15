@@ -9,7 +9,7 @@ export const dataDefaultInputTypes   = new Map<string, AcceptedTypes | AcceptedT
     ['type', assertValidAcceptedTypes<['hidden']>(['hidden'])],
     ['start_date', assertValidAcceptedTypes<['date', 'readonly']>(['date', 'readonly'])],
     ['finish_date', assertValidAcceptedTypes<['date', 'readonly']>(['date', 'readonly'])],
-    ['details', assertValidAcceptedTypes<['fullsize']>(['fullsize'])]
+    ['details', assertValidAcceptedTypes<['fullsize', 'array']>(['fullsize', 'array'])]
 ])
 export const dataInputValidators     = new Map([ ['type', [Validators.required]], ['role', [Validators.required]] ])
 export const dataInputErrors         = new Map([ ['role', 'You should provide a valid role for your experience'] ])

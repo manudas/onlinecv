@@ -6,6 +6,7 @@ import { ConfirmModule } from '@app/ui/confirm/confirm.module'
 import { FileuploadModule } from '@app/ui/file-upload/file-upload.module'
 import { TranslationServiceModule } from '@services/translation'
 import { OthersComponent } from './others.component'
+import { PortfolioModule } from '@app/ui/portfolio/portfolio.module'
 import { DialogModule } from '@app/ui/dialog/dialog.module'
 import { ReactiveFormsModule } from '@angular/forms'
 import { ReferencesModule } from '@app/ui/references/references.module'
@@ -21,6 +22,7 @@ import { ReferencesModule } from '@app/ui/references/references.module'
         DialogModule,
         FileuploadModule,
         FontAwesomeModule,
+        PortfolioModule,
         ReactiveFormsModule,
         ReferencesModule,
         TranslationServiceModule,

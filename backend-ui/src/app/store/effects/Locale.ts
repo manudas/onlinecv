@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs'
 
 import {
     switchMap,
-    map,
+    mergeMap,
     tap,
     catchError
 } from 'rxjs/operators'
@@ -47,23 +47,24 @@ export class LocaleEffects {
     public fetchLocaleEffect$: Observable<any> = createEffect(() => this.actions$.pipe(
         ofType(LOCALE_ACTIONS.FETCH_AVAILABLE_LOCALES),
         tap((action) =>
-            logEasy({
-                messages: [
+            logEasy(
                     `Action caught in ${this.constructor.name}:`,
                     action
-                ]
-            })
+            )
         ),
         switchMap(() =>
             // if a new Actions arrives, the old Observable will be canceled
             this.dataService.readData(LocaleQuery).pipe(
-                map(({ locales }: getLocaleTypeRequest) => {
-                    return LOCALE_ACTIONS.AVAILABLE_LOCALES_FETCHED(
-                        { payload: [...locales] }
-                    )
+                mergeMap(({ locales }: getLocaleTypeRequest) => {
+                    const selectedLocale = this.cookieService.get(LANG_COOKIE)
+                    const firstLocale = locales?.[0].iso ?? null
+                    return [
+                        LOCALE_ACTIONS.AVAILABLE_LOCALES_FETCHED({ payload: [...locales] }),
+                        ...(!selectedLocale && firstLocale ? [LOCALE_ACTIONS.SET_LOCALE({ iso: firstLocale })] : [])
+                    ]
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message),

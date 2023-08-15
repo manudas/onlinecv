@@ -48,7 +48,7 @@ export class MessagingSystemEffects {
                     return MESSAGING.MESSAGING_TYPES_FETCHED({ messageTypes: [...getMessageTypes] })
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)
@@ -78,7 +78,7 @@ export class MessagingSystemEffects {
                     return MESSAGING.GET_MESSAGES_FETCHED({ messages })
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)
@@ -115,7 +115,7 @@ export class MessagingSystemEffects {
                     COMMON_ACTIONS.SUCCESS({message: `${this.translate.getResolvedTranslation('Message sent', this)}`}),
                 ]),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of(COMMON_ACTIONS.FAIL({ message: errors.map(error => error.message), timeout: 2000}))
                 })
             )
@@ -145,7 +145,7 @@ export class MessagingSystemEffects {
                     COMMON_ACTIONS.SUCCESS({message: `${this.translate.getResolvedTranslation('Message removed', this)}`}),
                 ]),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of(COMMON_ACTIONS.FAIL({ message: errors.map(error => error.message), timeout: 2000}))
                 })
             )

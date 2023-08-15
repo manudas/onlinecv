@@ -8,8 +8,8 @@
         {{
             title ? title :
             isEdit === false
-                ? ('Add new' + (elementName ? ' ' + elementName + ': ' : ': ') | translate | async) + (elementType ? (elementType | translate | async | titlecase) : '')
-                : ('Editing' + (elementName ? ' ' + elementName + ': ' : ': ') | translate | async) + (elementType ? (elementType | translate | async | titlecase) : '')
+                ? ('Add new' + (elementName ? ' ' + elementName : ': ') | translate | async) + (elementType ? ': ' + (elementType | translate | async | titlecase) : '')
+                : ('Editing' + (elementName ? ' ' + elementName : ': ') | translate | async) + (elementType ? ': ' + (elementType | translate | async | titlecase) : '')
         }}
     </div>
 </h2>
@@ -85,7 +85,7 @@
     <div
         *ngIf="!types?.includes('hidden')"
         [ngClass]="{
-            'col-md-6': !types?.includes('fullsize'),
+            'col-md-6': !types?.includes('fullsize') && !types?.includes('carousel'),
             'col-sm-12': true
         }"
     >
@@ -117,13 +117,13 @@
                 {{ helpBlock | translate | async }}
             </p>
             <small
-                *ngIf="errors && control.touched && control.errors"
+                *ngIf="checkErrors(errors, control)"
                 [className]="'text-danger'"
             >
                 {{ errors | translate | async }}
             </small>
             <button
-                *ngIf="isFormArray(control)"
+                *ngIf="isFormArray(control) && !types?.includes('taglist') && !types?.includes('carousel')"
                 [className]="'btn btn-outline-info more-button float-right'"
                 type='button'
                 ngbButton
@@ -142,7 +142,7 @@
     let-placeholder="placeholder"
 >
     <ng-container
-        *ngIf="isFormArray(control)"
+        *ngIf="isFormArray(control) && !types?.includes('taglist') && !types?.includes('carousel')"
         [ngTemplateOutlet]="inputMultiTemplate"
         [ngTemplateOutletContext]="{
             name: name,
@@ -161,8 +161,12 @@
             placeholder: placeholder
         }"
     ></ng-container>
+    <!--
+        previous ngIf condition of the following ng-container:
+        (types?.includes('taglist') || types?.includes('carousel') || !isFormArray(control)) && !types?.includes('date')
+    -->
     <ng-container
-        *ngIf="!isFormArray(control) && !types?.includes('date')"
+        *ngIf="!types?.includes('date')"
         [ngTemplateOutlet]="inputTemplate"
         [ngTemplateOutletContext]="{
             name: name,
@@ -204,7 +208,7 @@
     let-placeholder="placeholder"
 >
     <div
-        *ngFor="let singleControl of control.controls; let i = index"
+        *ngFor="let singleControl of getControlsOfFormArrayOrEmptyControl(control); let i = index"
         class='d-flex align-items-center mb-2'
     >
         <ng-container
@@ -254,7 +258,7 @@
         [readOnly]="types?.includes('readonly')"
     ></textarea>
     <input
-        *ngIf="!types?.includes('textarea') && !types?.includes('date')"
+        *ngIf="isTextInput(types)"
         class='form-control'
         placeholder="{{ placeholder ? (placeholder | translate | async) : null }}"
         placement="top"
@@ -263,7 +267,7 @@
         [type]="types?.includes('number') ? 'number' : 'text'"
     >
     <input
-        *ngIf="!types?.includes('textarea') && types?.includes('date')"
+        *ngIf="types?.includes('date')"
         class='form-control'
         placeholder="{{ placeholder ? (placeholder | translate | async) : null }}"
         placement="top"
@@ -271,6 +275,58 @@
         [matDatepicker]="datePickerRef"
         [readOnly]="types?.includes('readonly')"
     >
+    <mat-form-field
+        *ngIf="types?.includes('taglist')"
+        class='w-100'
+        [formGroup]="dataFormGroup"
+    >
+        <mat-label>{{ name }}</mat-label>
+        <mat-chip-grid #chipGrid aria-label="Enter tags" [formArrayName]="name">
+
+            <mat-chip-row *ngFor="let tag of dataFormGroup.get(name).value"
+                        (removed)="removeTagFromTagList(control, tag)"
+                        [editable]="true"
+                        (edited)="editTagFromTagList(control, tag, $event)"
+                        [attr.aria-description]="'press enter to edit ' + tag">
+            {{ tag }}
+            <button matChipRemove [attr.aria-label]="'remove ' + tag">
+                <mat-icon>cancel</mat-icon>
+            </button>
+            </mat-chip-row>
+            <input
+                placeholder="{{ placeholder ? (placeholder | translate | async) : null }}"
+                [matChipInputFor]="chipGrid"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addTagToTagListOnBlur"
+                (matChipInputTokenEnd)="addTagToTagList(control, $event)"
+                [readOnly]="types?.includes('readonly')"
+            />
+        </mat-chip-grid>
+    </mat-form-field>
+    <div
+        *ngIf="types?.includes('carousel')"
+        class="w-100"
+    >
+        <app-fileupload
+            (dataChange)="addImageToCarouselFunc(control, name)($event)"
+            (onDeselect)="deselectCarouselImage(name)($event)"
+            (onDelete)="deleteCarouselImage(control, name)($event)"
+            (onOpenFileSelector)="setCarouselControlTouched(control)"
+            [addEditButton]=true
+            [allowDeselection]=true
+            [allowChange]=false
+            [accept]="acceptedDocumentFileType"
+            [enableDescription]=true
+            [resetOnDataChange]=true
+            [initialData]="getSelectedImage(control, name)"
+        ></app-fileupload>
+        <ng-image-slider
+            *ngIf="control.value.length > 0"
+            [imagePopup]=false
+            [images]="imageToCarouselCache[name]"
+            (imageClick)="loadCarouselImage(name)($event)"
+        ></ng-image-slider>
+    </div>
 </ng-template>
 
 <ng-template #buttonTemplate

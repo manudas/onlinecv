@@ -31,10 +31,6 @@ class ContactForm extends Component<PropDef, StateDef> {
 
     constructor(props: PropDef) {
         super(props)
-        console.log(
-            'INTERESANTE HACER REFERENCIAS . cambiar mensaje send por send another cuando segundo mensaje? en css tenemos popoup de mensaje enviado/fallo mensaje. usar? cambiar por toast?'
-        )
-
         this.state =  {
             contactForm : {
                 name: '',

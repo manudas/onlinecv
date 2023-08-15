@@ -124,6 +124,11 @@ export const MenuListItems: Array<MenuSelector> = [
 				type: MenuOptionType.option,
 			},
 			{
+				title: 'Portfolio',
+				urlSegments: [OthersType[OthersType['portfolio']]],
+				type: MenuOptionType.option,
+			},
+			{
 				title: 'Professional references',
 				urlSegments: [OthersType[OthersType['references']]],
 				type: MenuOptionType.option,

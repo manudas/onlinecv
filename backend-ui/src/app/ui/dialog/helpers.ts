@@ -1,7 +1,8 @@
 import { ValidatorFn } from "@angular/forms"
 
 /* Strong typing helpers for Data Dialog Inputs */
-type InputType = 'date' | 'number' | 'textarea'
+export const InputTypeArr = [ 'text', 'date', 'number', 'textarea', 'taglist', 'array', 'carousel' ] as const
+export type InputType = typeof InputTypeArr[number]
 type InternalAcceptedTypes = 'hidden' | 'readonly' | 'fullsize' | 'disabled'
 export type MetadataDialog = {
     isEdit?: boolean
@@ -41,6 +42,7 @@ export type DataDialogMap = Map<'metadata', MetadataDialog> & Map<'dataInputs', 
 export const buildDataMap = (dataSource, index, formDefinition, title, type) => {
     const data = dataSource?.[index]
     const metadata: MetadataDialog = {
+      index,
       isEdit: !!data,
       elementName: title,
       elementType: type,

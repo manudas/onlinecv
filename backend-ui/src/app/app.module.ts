@@ -24,6 +24,7 @@ import { LanguageEffects } from '@store_effects/Languages'
 import { LocaleEffects } from '@store_effects/Locale'
 import { MessagingSystemEffects } from '@store_effects/Messaging'
 import { OthersEffects } from '@store_effects/Others'
+import { PortfolioEffects } from '@store_effects/Portfolio'
 import { SkillEffects } from '@store_effects/Skills'
 import { SocialNetworksEffects } from '@store_effects/SocialNetworks'
 import { TrainingEffects } from '@store_effects/Training'
@@ -38,6 +39,7 @@ import { reducer as languageReducer } from '@store_reducers/Languages'
 import { reducer as localeReducer } from '@store_reducers/Locale'
 import { reducer as messageReducer } from '@store_reducers/Message'
 import { reducer as messagingReducer } from '@store_reducers/Messaging'
+import { reducer as portfolioReducer } from '@store_reducers/Portfolio'
 import { reducer as quoteReducer } from '@store_reducers/Quote'
 import { reducer as resumeReducer } from '@store_reducers/Resume'
 import { reducer as referencesReducer } from '@store_reducers/References'
@@ -79,6 +81,7 @@ if (environment.production) {
             LocaleEffects,
             MessagingSystemEffects,
             OthersEffects,
+            PortfolioEffects,
             SettingsEffects,
             SkillEffects,
             SocialNetworksEffects,
@@ -99,6 +102,7 @@ if (environment.production) {
             locale: localeReducer,
             message: messageReducer,
             messaging: messagingReducer,
+            portfolio: portfolioReducer,
             quote: quoteReducer,
             resume: resumeReducer,
             references: referencesReducer,

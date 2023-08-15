@@ -58,7 +58,7 @@ export class TranslationEffects {
                     };
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)
@@ -96,7 +96,7 @@ export class TranslationEffects {
                     };
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)
@@ -133,7 +133,7 @@ export class TranslationEffects {
                     })
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)
@@ -173,7 +173,7 @@ export class TranslationEffects {
                 }),
                 // handle failure
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)
@@ -212,7 +212,7 @@ export class TranslationEffects {
                 }),
                 // handle failure
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of({
                         type: COMMON_ACTIONS.FAIL.type,
                         message: errors.map(error => error.message)

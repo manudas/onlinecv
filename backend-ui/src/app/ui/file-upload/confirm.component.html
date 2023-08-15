@@ -39,6 +39,14 @@
                 {{ 'Delete' | translate | async }}
             </button>
             <button
+                *ngIf="allowDeselection"
+                [className]="'btn'"
+                ngbButton
+                (click)="close(FileOptions.deselect)"
+            >
+                {{ 'Deselect' | translate | async }}
+            </button>
+            <button
                 [className]="'btn'"
                 ngbButton
                 (click)="close(FileOptions.download)"
@@ -46,6 +54,7 @@
                 {{ 'Download' | translate | async }}
             </button>
             <button
+                *ngIf="allowChange"
                 [className]="'btn'"
                 ngbButton
                 (click)="close(FileOptions.change)"

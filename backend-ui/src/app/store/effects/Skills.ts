@@ -73,7 +73,7 @@ export class SkillEffects {
                     )
                 }),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of(COMMON_ACTIONS.FAIL(
                         {
                             message: errors.map(error => error.message)
@@ -114,7 +114,7 @@ export class SkillEffects {
                     })
                 ]),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of(COMMON_ACTIONS.FAIL(
                         {
                             message: errors.map(error => error.message)
@@ -155,7 +155,7 @@ export class SkillEffects {
                     })
                 ]),
                 catchError((response) => {
-                    const { error: {errors = []} = {} } = response || {}
+                    const { errors = [] } = response || {}
                     return of(COMMON_ACTIONS.FAIL({
                         message: errors.map(error => error.message),
                         timeout: 2000
